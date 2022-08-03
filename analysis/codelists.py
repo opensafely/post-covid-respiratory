@@ -335,32 +335,32 @@ copd = codelist_from_csv(
 )
 
 ## Respiratory outcomes
-breathlessness = codelist_from_csv(
+breathlessness_snomed = codelist_from_csv(
     "codelists/bristol/breathlessness/5ab57799.csv",
     system="snomed",
     column="code",
 )
-cough = codelist_from_csv(
+cough_snomed = codelist_from_csv(
     "codelists/bristol/cough/41a60464.csv",
     system="icd10",
     column="code",
 )
-urti = codelist_from_csv(
+urti_snomed = codelist_from_csv(
     "codelists/bristol/urti/7677aac4.csv",
     system="snomed",
     column="code",
 )
-pneunomia = codelist_from_csv(
+pneunomia_snomed = codelist_from_csv(
     "codelists/bristol/pneumonia_v2/0f871dfa.csv",
     system="snomed",
     column="code",
 )
-asthma_exacerbation = codelist_from_csv(
+asthma_exacerbation_snomed = codelist_from_csv(
     "codelists/bristol/asthma-exacerbations/73c4eace.csv",
     system="snomed",
     column="code",
 )
-copd_exacerbation = codelist_from_csv(
+copd_exacerbation_snomed = codelist_from_csv(
     "codelists/bristol/copd-exacerbations/2896912f.csv",
     system="snomed",
     column="code",

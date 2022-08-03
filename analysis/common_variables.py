@@ -137,6 +137,71 @@ def generate_common_variables(index_date_variable,end_date_variable):
 
 # DEFINE OUTCOMES ------------------------------------------------------
 ## First recording of the outcome in during the study period
+out_date_breathless=patients.with_these_clinical_events(
+    breathlessness_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
+
+out_date_cough=patients.with_these_clinical_events(
+    cough_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
+
+out_date_urti=patients.with_these_clinical_events(
+    urti_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
+
+out_date_pneumonia=patients.with_these_clinical_events(
+    pneumonia_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
+
+out_date_asthma_exac=patients.with_these_clinical_events(
+    asthma_exacerbation_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
+
+out_date_copd_exac=patients.with_these_clinical_events(
+    copd_exacerbation_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
+        "incidence": 0.3,
+        },
+    ),
 
 # DEFINE COVARIATES ------------------------------------------------------
 
@@ -398,6 +463,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
     cov_bin_dementia=patients.maximum_of(
         "tmp_cov_bin_dementia_snomed", "tmp_cov_bin_dementia_hes", "tmp_cov_bin_dementia_vascular_snomed", "tmp_cov_bin_dementia_vascular_hes",
     ),
+
     ## Liver disease
      ### Primary care
     tmp_cov_bin_liver_disease_snomed=patients.with_these_clinical_events(
