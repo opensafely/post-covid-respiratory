@@ -257,6 +257,72 @@
       "url": "https://codelists.opensafely.org/codelist/primis-covid19-vacc-uptake/sev_obesity/v1.2/",
       "downloaded_at": "2022-07-06 16:01:06.763966Z",
       "sha": "dfe3662bed703c590d1449e604e892cdd7a360c1"
+    },
+    "bristol-asthma-exacerbations.csv": {
+      "id": "bristol/asthma-exacerbations/73c4eace",
+      "url": "https://codelists.opensafely.org/codelist/bristol/asthma-exacerbations/73c4eace/",
+      "downloaded_at": "2022-08-03 13:18:21.198379Z",
+      "sha": "87bca086d1463f66bac93ea3a0b8ab1a192fccb5"
+    },
+    "bristol-breathlessness.csv": {
+      "id": "bristol/breathlessness/5ab57799",
+      "url": "https://codelists.opensafely.org/codelist/bristol/breathlessness/5ab57799/",
+      "downloaded_at": "2022-08-03 13:18:21.687556Z",
+      "sha": "90b9cdd3823161af9bbf0678635415fdfa649311"
+    },
+    "bristol-copd-exacerbations.csv": {
+      "id": "bristol/copd-exacerbations/2896912f",
+      "url": "https://codelists.opensafely.org/codelist/bristol/copd-exacerbations/2896912f/",
+      "downloaded_at": "2022-08-03 13:18:22.194437Z",
+      "sha": "cd99911a547ee5a18220f62d36579af015f3b793"
+    },
+    "bristol-cough.csv": {
+      "id": "bristol/cough/41a60464",
+      "url": "https://codelists.opensafely.org/codelist/bristol/cough/41a60464/",
+      "downloaded_at": "2022-08-03 13:18:22.639800Z",
+      "sha": "1cd29bc8447278305c3e7368d012bc42ae5230b4"
+    },
+    "bristol-urti.csv": {
+      "id": "bristol/urti/7677aac4",
+      "url": "https://codelists.opensafely.org/codelist/bristol/urti/7677aac4/",
+      "downloaded_at": "2022-08-03 13:18:23.415673Z",
+      "sha": "2d730ca56ccb2710a47c2b3d12e1a872fc754363"
+    },
+    "bristol-pneumonia_v2.csv": {
+      "id": "bristol/pneumonia_v2/0f871dfa",
+      "url": "https://codelists.opensafely.org/codelist/bristol/pneumonia_v2/0f871dfa/",
+      "downloaded_at": "2022-08-03 13:18:23.911489Z",
+      "sha": "605f08243a9a014083df78205dec5c176dc1b31f"
+    },
+    "opensafely-asthma-diagnosis-snomed.csv": {
+      "id": "opensafely/asthma-diagnosis-snomed/2020-04-15",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/asthma-diagnosis-snomed/2020-04-15/",
+      "downloaded_at": "2022-08-03 13:18:24.372660Z",
+      "sha": "884477b8c56a7e29ef1684d5a7ea3cfd6f75b566"
+    },
+    "opensafely-current-copd.csv": {
+      "id": "opensafely/current-copd/2020-05-06",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/current-copd/2020-05-06/",
+      "downloaded_at": "2022-08-03 13:18:24.850111Z",
+      "sha": "bab838b50e256ceef8b9d2f6ca1132491e522bda"
+    },
+    "user-RochelleKnight-prostate_cancer_snomed.csv": {
+      "id": "user/RochelleKnight/prostate_cancer_snomed/0437497e",
+      "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/prostate_cancer_snomed/0437497e/",
+      "downloaded_at": "2022-08-03 13:18:25.284237Z",
+      "sha": "7249bb62e32d2d60600b0d1e32562f23bd92c6aa"
+    },
+    "user-RochelleKnight-prostate_cancer_icd10.csv": {
+      "id": "user/RochelleKnight/prostate_cancer_icd10/6b27d648",
+      "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/prostate_cancer_icd10/6b27d648/",
+      "downloaded_at": "2022-08-03 13:18:25.791407Z",
+      "sha": "fc1791f84b1195fc21df000d3300015b1ff7d1ec"
+    },
+    "user-RochelleKnight-pregnancy_and_birth_snomed.csv": {
+      "id": "user/RochelleKnight/pregnancy_and_birth_snomed/1d46bcb3",
+      "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/pregnancy_and_birth_snomed/1d46bcb3/",
+      "downloaded_at": "2022-08-03 13:18:26.247803Z",
+      "sha": "3dec4001ddd33ddaf16ce92ec450c2206880ec40"
     }
   }
 }
