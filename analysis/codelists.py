@@ -175,6 +175,33 @@ sev_obesity_primis = codelist_from_csv(
     column="code",
 )
 
+# Asthma Diagnosis code
+ast_primis = codelist_from_csv(
+    "codelists/primis-covid19-vacc-uptake-ast.csv",
+    system="snomed",
+    column="code",
+)
+
+# Asthma Admission codes
+astadm_primis = codelist_from_csv(
+    "codelists/primis-covid19-vacc-uptake-astadm.csv",
+    system="snomed",
+    column="code",
+)
+
+# Asthma systemic steroid prescription codes
+astrx_primis = codelist_from_csv(
+    "codelists/primis-covid19-vacc-uptake-astrx.csv",
+    system="snomed",
+    column="code",
+)
+# Chronic Respiratory Disease
+resp_primis = codelist_from_csv(
+    "codelists/primis-covid19-vacc-uptake-resp_cov.csv",
+    system="snomed",
+    column="code",
+)
+
 # Chronic Neurological Disease including Significant Learning Disorder
 cns_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-cns_cov.csv",
@@ -262,29 +289,113 @@ immrx_primis = codelist_from_csv(
     column="code",
 )
 
-stroke_isch_icd10 = codelist_from_csv(
-    "codelists/user-RochelleKnight-stroke_isch_icd10.csv",
-    system="icd10",
-    column="code",
-)
-
 stroke_isch_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-stroke_isch_snomed.csv",
     system="snomed",
     column="code",
 )
 
-stroke_sah_hs_icd10 = codelist_from_csv(
-    "codelists/user-RochelleKnight-stroke_sah_hs_icd10.csv",
+stroke_icd10 = codelist_from_csv(
+    "codelists/user-RochelleKnight-stroke_isch_icd10.csv",
     system="icd10",
     column="code",
 )
 
-stroke_sah_hs_snomed_clinical = codelist_from_csv(
-    "codelists/user-elsie_horne-stroke_sah_hs_snomed.csv",
+dementia_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-dementia_snomed.csv",
     system="snomed",
     column="code",
 )
+
+dementia_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-dementia_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+dementia_vascular_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-dementia_vascular_snomed.csv",
+    system="snomed",
+    column="code",
+)
+
+dementia_vascular_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-dementia_vascular_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+liver_disease_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-liver_disease_snomed.csv",
+    system="snomed",
+    column="code",
+)
+
+liver_disease_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-liver_disease_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+ckd_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-ckd_snomed.csv",
+    system="snomed",
+    column="code",
+)
+
+ckd_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-ckd_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+cancer_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-cancer_snomed.csv",
+    system="snomed",
+    column="code",
+)
+
+cancer_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-cancer_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+hypertension_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-hypertension_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+hypertension_drugs_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-hypertension_drugs_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
+
+hypertension_snomed_clinical = codelist_from_csv(
+    "codelists/nhsd-primary-care-domain-refsets-hyp_cod.csv",
+    system="snomed",
+    column="code",
+)
+
+diabetes_icd10 = codelist_from_csv(
+    "codelists/user-elsie_horne-diabetes_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+diabetes_drugs_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-diabetes_drugs_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
+
+diabetes_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-diabetes_snomed.csv",
+    system="snomed",
+    column="code",
+)       
 
 ami_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-ami_snomed.csv",
@@ -322,46 +433,47 @@ pregnancy_snomed_clinical = codelist_from_csv(
     column="code",
 )
 
-# Pre-existing condition identifier
-asthma = codelist_from_csv(
-    "opensafely/asthma-diagnosis-snomed/2020-04-15.csv",
-    system="snomed",
-    column="code",
+## Preexisting respiratory condition
+
+copd_snomed = codelist_from_csv(
+    "codelists/opensafely-current-copd.csv",
+    system="ctv3",
+    column="CTV3ID",
 )
-copd = codelist_from_csv(
-    "opensafely/current-copd/2020-05-06",
+asthma_snomed = codelist_from_csv(
+    "codelists/opensafely-asthma-diagnosis-snomed.csv",
     system="snomed",
-    column="code",
+    column="id",
 )
 
 ## Respiratory outcomes
 breathlessness_snomed = codelist_from_csv(
-    "codelists/bristol/breathlessness/5ab57799.csv",
+    "codelists/bristol-breathlessness.csv",
     system="snomed",
     column="code",
 )
 cough_snomed = codelist_from_csv(
-    "codelists/bristol/cough/41a60464.csv",
+    "codelists/bristol-cough.csv",
     system="icd10",
     column="code",
 )
 urti_snomed = codelist_from_csv(
-    "codelists/bristol/urti/7677aac4.csv",
+    "codelists/bristol-urti.csv",
     system="snomed",
     column="code",
 )
 pneunomia_snomed = codelist_from_csv(
-    "codelists/bristol/pneumonia_v2/0f871dfa.csv",
+    "codelists/bristol-pneumonia_v2.csv",
     system="snomed",
     column="code",
 )
 asthma_exacerbation_snomed = codelist_from_csv(
-    "codelists/bristol/asthma-exacerbations/73c4eace.csv",
+    "codelists/bristol-asthma-exacerbations.csv",
     system="snomed",
     column="code",
 )
 copd_exacerbation_snomed = codelist_from_csv(
-    "codelists/bristol/copd-exacerbations/2896912f.csv",
+    "codelists/bristol-copd-exacerbations.csv",
     system="snomed",
     column="code",
 )

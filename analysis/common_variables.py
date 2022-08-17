@@ -143,9 +143,8 @@ out_date_breathless=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        # "incidence": 0.3},  problem with this code currently
     ),
 
 out_date_cough=patients.with_these_clinical_events(
@@ -154,9 +153,8 @@ out_date_cough=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        "incidence": 0.3},
     ),
 
 out_date_urti=patients.with_these_clinical_events(
@@ -165,9 +163,8 @@ out_date_urti=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        "incidence": 0.3},
     ),
 
 out_date_pneumonia=patients.with_these_clinical_events(
@@ -176,9 +173,8 @@ out_date_pneumonia=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        "incidence": 0.3},
     ),
 
 out_date_asthma_exac=patients.with_these_clinical_events(
@@ -187,9 +183,8 @@ out_date_asthma_exac=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        "incidence": 0.3},
     ),
 
 out_date_copd_exac=patients.with_these_clinical_events(
@@ -198,9 +193,25 @@ out_date_copd_exac=patients.with_these_clinical_events(
     on_or_after=f"{index_date_variable}",
     find_first_match_in_period=True,
     return_expectations={
-        "date": {"earliest"; f"{index_date_variable}", "latest" : "today"}
-        "incidence": 0.3,
-        },
+        "date": {"earliest": "1900-01-01", "latest" : "today"}
+        "incidence": 0.3},
+    ),
+
+# DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
+## Asthma diagnosed in the past 2 years 
+    cov_bin_asthma_recent_snomed=patients.with_these_clinical_events(
+        asthma_snomed,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable} - 730 days",
+        return_expectations={"incidence": 0.2},
+    ),
+
+## COPD event
+    cov_bin_copd_snomed=patients.with_these_clinical_events(
+        copd_snomed,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
     ),
 
 # DEFINE COVARIATES ------------------------------------------------------
@@ -410,6 +421,32 @@ out_date_copd_exac=patients.with_these_clinical_events(
         
     ) 
 
+    ## Acute myocardial infarction
+    ### Primary care
+    tmp_cov_bin_ami_snomed=patients.with_these_clinical_events(
+        ami_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_ami_prior_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=ami_prior_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    tmp_cov_bin_ami_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=ami_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_ami=patients.maximum_of(
+        "tmp_cov_bin_ami_snomed", "tmp_cov_bin_ami_prior_hes", "tmp_cov_bin_ami_hes",
+    ),
+    
     ## Ischaemic stroke
     ### Primary care
     tmp_cov_bin_stroke_isch_snomed=patients.with_these_clinical_events(
@@ -577,6 +614,16 @@ out_date_copd_exac=patients.with_these_clinical_events(
      cov_bin_diabetes = patients.maximum_of(
          "tmp_cov_bin_diabetes_snomed", "tmp_cov_bin_diabetes_dmd", "tmp_cov_bin_diabetes_snomed",
      ),
+
+# Pre-existing condition
+    ## Asthma
+    sub_bin_asthma = patients.with_these_clinical_events(
+         asthma_snomed,
+         returning='binary_flag',
+         between=[f"{index_date_variable}",f"{end_date_variable}"],
+         return_expectations={"incidence": 0.1},
+     ),
+
 
 # Define quality assurances
 
