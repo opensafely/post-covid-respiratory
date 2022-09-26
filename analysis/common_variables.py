@@ -103,7 +103,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
     ),
 
     has_died = patients.died_from_any_cause(
-        on_or_before = f"{index_date_variable}",
+        on_or_before = f"{index_date_variable} - 1 day",
         returning="binary_flag",
         return_expectations={"incidence": 0.01}
     ),
@@ -360,7 +360,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         most_recent_smoking_code=patients.with_these_clinical_events(
             smoking_clear,
             find_last_match_in_period=True,
-            on_or_before=f"{index_date_variable}",
+            on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
         ),
         ever_smoked=patients.with_these_clinical_events(
@@ -403,14 +403,14 @@ out_date_copd_exac=patients.with_these_clinical_events(
     tmp_cov_bin_obesity_snomed=patients.with_these_clinical_events(
         bmi_obesity_snomed_clinical,
         returning='binary_flag',
-        on_or_before=f"{index_date_variable}",
+        on_or_before=f"{index_date_variable} - 1 day",
         return_expectations={"incidence": 0.1},
     ),
     ### HES APC
     tmp_cov_bin_obesity_hes=patients.admitted_to_hospital(
         returning='binary_flag',
         with_these_diagnoses=bmi_obesity_icd10,
-        on_or_before=f"{index_date_variable}",
+        on_or_before=f"{index_date_variable} - 1 day",
         return_expectations={"incidence": 0.1},
     ),
     ### Combined
@@ -421,7 +421,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
     ## BMI
     # taken from: https://github.com/opensafely/BMI-and-Metabolic-Markers/blob/main/analysis/common_variables.py 
     cov_num_bmi=patients.most_recent_bmi(
-        on_or_before=f"{index_date_variable}",
+        on_or_before=f"{index_date_variable} - 1 day",
         minimum_age_at_measurement=18,
         include_measurement_date=True,
         date_format="YYYY-MM",
