@@ -301,6 +301,24 @@ stroke_icd10 = codelist_from_csv(
     column="code",
 )
 
+stroke_sah_hs_snomed_clinical = codelist_from_csv(
+    "codelists/user-elsie_horne-stroke_sah_hs_snomed.csv",
+    system="snomed",
+    column="code",
+)
+
+stroke_isch_icd10 = codelist_from_csv(
+    "codelists/user-RochelleKnight-stroke_isch_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
+stroke_sah_hs_icd10 = codelist_from_csv(
+    "codelists/user-RochelleKnight-stroke_sah_hs_icd10.csv",
+    system="icd10",
+    column="code",
+)
+
 dementia_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_snomed.csv",
     system="snomed",
@@ -397,6 +415,82 @@ diabetes_snomed_clinical = codelist_from_csv(
     column="code",
 )       
 
+# Type 1 diabetes
+diabetes_type1_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-type-1-diabetes.csv",
+    system="ctv3",
+    column="code",
+)
+
+# Type 1 diabetes secondary care
+diabetes_type1_icd10 = codelist_from_csv(
+    "codelists/opensafely-type-1-diabetes-secondary-care.csv",
+    system="icd10",
+    column="icd10_code",
+)
+
+# Type 2 diabetes
+diabetes_type2_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-type-2-diabetes.csv",
+    system="ctv3",
+    column="code",
+)
+
+# Type 2 diabetes secondary care
+diabetes_type2_icd10 = codelist_from_csv(
+    "codelists/user-r_denholm-type-2-diabetes-secondary-care-bristol.csv",
+    system="icd10",
+    column="code",
+)
+
+# Non-diagnostic diabetes codes
+diabetes_diagnostic_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-nondiagnostic-diabetes-codes.csv",
+    system="ctv3",
+    column="code",
+)
+
+# Other or non-specific diabetes
+diabetes_other_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-other-or-nonspecific-diabetes.csv",
+    system="ctv3",
+    column="code",
+)
+
+# Gestational diabetes
+diabetes_gestational_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-gestational-diabetes.csv",
+    system="ctv3",
+    column="code",
+)
+
+# Insulin medication 
+insulin_snomed_clinical = codelist_from_csv(
+     "codelists/opensafely-insulin-medication.csv",
+     system="snomed",
+     column="id",
+)
+
+# Antidiabetic drugs
+antidiabetic_drugs_snomed_clinical = codelist_from_csv(
+     "codelists/opensafely-antidiabetic-drugs.csv",
+     system="snomed",
+     column="id",
+)
+
+# Antidiabetic drugs - non metformin
+non_metformin_dmd = codelist_from_csv(
+    "codelists/user-r_denholm-non-metformin-antidiabetic-drugs_bristol.csv", 
+    system="snomed", 
+    column="id",
+)
+
+# HbA1c
+hba1c_new_codes = codelist(
+    ["XaPbt", "Xaeze", "Xaezd"], system="ctv3"
+)
+
+
 ami_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-ami_snomed.csv",
     system="snomed",
@@ -462,7 +556,7 @@ urti_snomed = codelist_from_csv(
     system="snomed",
     column="code",
 )
-pneunomia_snomed = codelist_from_csv(
+pneumonia_snomed = codelist_from_csv(
     "codelists/bristol-pneumonia_v2.csv",
     system="snomed",
     column="code",

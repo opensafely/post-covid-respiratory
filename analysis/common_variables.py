@@ -259,14 +259,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
         },
     ),
 
-    ## Sex 
-    cov_cat_sex = patients.sex(
-        return_expectations = {
-        "rate": "universal",
-        "category": {"ratios": {"M": 0.49, "F": 0.51}},
-    }
-    ),
-
     ## Ethnicity 
     cov_cat_ethnicity=patients.categorised_as(
         helpers.generate_ethnicity_dictionary(6),
@@ -452,7 +444,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
             },
         },
         
-    ) 
+    ), 
 
 ## Acute myocardial infarction
     ### Primary care
@@ -462,7 +454,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         on_or_before=f"{index_date_variable} - 1 day",
         return_expectations={"incidence": 0.1},
     ),
-    ### HES APC
+     ### HES APC
     tmp_cov_bin_ami_prior_hes=patients.admitted_to_hospital(
         returning='binary_flag',
         with_these_diagnoses=ami_prior_icd10,
@@ -702,14 +694,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
         "tmp_cov_bin_insulin_snomed", "tmp_cov_bin_antidiabetic_drugs_snomed",
     ),
 
-        ## Prediabetes
-    cov_bin_prediabetes=patients.with_these_clinical_events(
-        prediabetes_snomed,
-        returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-
 # Pre-existing condition
     ## Asthma
     sub_bin_asthma = patients.with_these_clinical_events(
@@ -768,23 +752,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
                 "rate": "uniform",
             },
         ),
-        # Define fixed covariates other than sex
-# NB: sex is required to determine vaccine eligibility covariates so is defined in study_definition_electively_unvaccinated.py
-
-    ## 2019 consultation rate
-        cov_num_consulation_rate=patients.with_gp_consultations(
-            between=[days(study_dates["pandemic_start"],-365), days(study_dates["pandemic_start"],-1)],
-            returning="number_of_matches_in_period",
-            return_expectations={
-                "int": {"distribution": "poisson", "mean": 5},
-            },
-        ),
-
-    ## Healthcare worker    
-    cov_bin_healthcare_worker=patients.with_healthcare_worker_flag_on_covid_vaccine_record(
-        returning='binary_flag', 
-        return_expectations={"incidence": 0.01},
-    ),
 
     )
     return dynamic_variables

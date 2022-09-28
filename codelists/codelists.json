@@ -336,6 +336,18 @@
       "downloaded_at": "2022-08-03 15:28:44.746749Z",
       "sha": "76b915a793f91c4675796295f217e74e2f467bae"
     },
+    "user-RochelleKnight-stroke_sah_hs_icd10.csv": {
+      "id": "user/RochelleKnight/stroke_sah_hs_icd10/0e7e0019",
+      "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/stroke_sah_hs_icd10/0e7e0019/",
+      "downloaded_at": "2022-09-27 20:36:57.167252Z",
+      "sha": "5b89d97b42ad643add51f045c847728a61d0c91e"
+    },
+    "user-RochelleKnight-tia_icd10.csv": {
+      "id": "user/RochelleKnight/tia_icd10/5c5f19ae",
+      "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/tia_icd10/5c5f19ae/",
+      "downloaded_at": "2022-09-27 20:36:57.643998Z",
+      "sha": "58e84d7962edf98d855ca79dd404d638c751aef3"
+    },
     "user-elsie_horne-cancer_snomed.csv": {
       "id": "user/elsie_horne/cancer_snomed/23271cdf",
       "url": "https://codelists.opensafely.org/codelist/user/elsie_horne/cancer_snomed/23271cdf/",
@@ -449,6 +461,96 @@
       "url": "https://codelists.opensafely.org/codelist/user/RochelleKnight/ami_icd10/3dea268d/",
       "downloaded_at": "2022-08-15 20:12:16.136679Z",
       "sha": "5152287e39c99ceed1fee19ac5a742b66f2bb3de"
+    },
+    "user-elsie_horne-stroke_sah_hs_snomed.csv": {
+      "id": "user/elsie_horne/stroke_sah_hs_snomed/6adc02f9",
+      "url": "https://codelists.opensafely.org/codelist/user/elsie_horne/stroke_sah_hs_snomed/6adc02f9/",
+      "downloaded_at": "2022-09-27 20:27:31.819929Z",
+      "sha": "581ddc923d2711c3c48251f88cd0c40bced047c8"
+    },
+    "user-hjforbes-type-1-diabetes.csv": {
+      "id": "user/hjforbes/type-1-diabetes/674fbd7a",
+      "url": "https://codelists.opensafely.org/codelist/user/hjforbes/type-1-diabetes/674fbd7a/",
+      "downloaded_at": "2022-09-27 20:58:41.702037Z",
+      "sha": "54a7772024e03c2129cb0c0c7ba77944eacd054a"
+    },
+    "user-hjforbes-type-2-diabetes.csv": {
+      "id": "user/hjforbes/type-2-diabetes/3530d710",
+      "url": "https://codelists.opensafely.org/codelist/user/hjforbes/type-2-diabetes/3530d710/",
+      "downloaded_at": "2022-09-27 20:58:42.102557Z",
+      "sha": "08421a5b1e92d07e47cbab2e12ecd71856cee98a"
+    },
+    "user-hjforbes-other-or-nonspecific-diabetes.csv": {
+      "id": "user/hjforbes/other-or-nonspecific-diabetes/0311f0a6",
+      "url": "https://codelists.opensafely.org/codelist/user/hjforbes/other-or-nonspecific-diabetes/0311f0a6/",
+      "downloaded_at": "2022-09-27 20:58:42.520937Z",
+      "sha": "1461877af2c069504535089d669e830616629f67"
+    },
+    "user-hjforbes-gestational-diabetes.csv": {
+      "id": "user/hjforbes/gestational-diabetes/1ed423d1",
+      "url": "https://codelists.opensafely.org/codelist/user/hjforbes/gestational-diabetes/1ed423d1/",
+      "downloaded_at": "2022-09-27 20:58:42.871563Z",
+      "sha": "4298a4affa79a1f04130cf5c630892a25819292c"
+    },
+    "opensafely-insulin-medication.csv": {
+      "id": "opensafely/insulin-medication/2020-04-26",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/insulin-medication/2020-04-26/",
+      "downloaded_at": "2022-09-27 20:58:43.285790Z",
+      "sha": "9d4c57c0b8738962da04b32ab43b7659cd64d774"
+    },
+    "opensafely-antidiabetic-drugs.csv": {
+      "id": "opensafely/antidiabetic-drugs/2020-07-16",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/antidiabetic-drugs/2020-07-16/",
+      "downloaded_at": "2022-09-27 20:58:43.692635Z",
+      "sha": "f0b93b0054d673e8dcfbeba8fea0cd54239f0725"
+    },
+    "user-r_denholm-non-metformin-antidiabetic-drugs_bristol.csv": {
+      "id": "user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58",
+      "url": "https://codelists.opensafely.org/codelist/user/r_denholm/non-metformin-antidiabetic-drugs_bristol/7207eb58/",
+      "downloaded_at": "2022-09-27 20:58:44.114577Z",
+      "sha": "43ff2e176f22e6050f6bf92e6d30deff40e97383"
+    },
+    "user-r_denholm-non-metformin-drugs.csv": {
+      "id": "user/r_denholm/non-metformin-drugs/74baab4e",
+      "url": "https://codelists.opensafely.org/codelist/user/r_denholm/non-metformin-drugs/74baab4e/",
+      "downloaded_at": "2022-09-27 20:58:44.533704Z",
+      "sha": "762748d73dde51020504ae8fca1d81ef3de48d62"
+    },
+    "user-r_denholm-non-metformin-drugs-dmd.csv": {
+      "id": "user/r_denholm/non-metformin-drugs-dmd/107cde7a",
+      "url": "https://codelists.opensafely.org/codelist/user/r_denholm/non-metformin-drugs-dmd/107cde7a/",
+      "downloaded_at": "2022-09-27 20:58:44.897203Z",
+      "sha": "6b51e927f83c2632d2b9dd1eb03a276cac4ff0ec"
+    },
+    "opensafely-glycated-haemoglobin-hba1c-tests-numerical-value.csv": {
+      "id": "opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/glycated-haemoglobin-hba1c-tests-numerical-value/5134e926/",
+      "downloaded_at": "2022-09-27 20:58:45.264406Z",
+      "sha": "bc7e48efd370be65686755f0a843058f1ec767e0"
+    },
+    "opensafely-type-1-diabetes-secondary-care.csv": {
+      "id": "opensafely/type-1-diabetes-secondary-care/2020-09-27",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/type-1-diabetes-secondary-care/2020-09-27/",
+      "downloaded_at": "2022-09-27 20:58:45.601584Z",
+      "sha": "e51303ce0e7eb6ac9e0d1763bd23e49b0f273429"
+    },
+    "user-r_denholm-type-2-diabetes-secondary-care-bristol.csv": {
+      "id": "user/r_denholm/type-2-diabetes-secondary-care-bristol/0b7f6cd4",
+      "url": "https://codelists.opensafely.org/codelist/user/r_denholm/type-2-diabetes-secondary-care-bristol/0b7f6cd4/",
+      "downloaded_at": "2022-09-27 20:58:45.970745Z",
+      "sha": "64dfc55f964cd811b59f0d142d661e1ad1b26f29"
+    },
+    "user-hjforbes-nondiagnostic-diabetes-codes.csv": {
+      "id": "user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b",
+      "url": "https://codelists.opensafely.org/codelist/user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b/",
+      "downloaded_at": "2022-09-27 20:58:46.432160Z",
+      "sha": "3b3bd24a816d04aeaaad93495d8c04772a12672f"
+    },
+    "opensafely-prediabetes-snomed.csv": {
+      "id": "opensafely/prediabetes-snomed/6bdbb7dd",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/prediabetes-snomed/6bdbb7dd/",
+      "downloaded_at": "2022-09-27 20:58:46.839256Z",
+      "sha": "a52da34bd7178717df884211fca799db460a6b43"
     }
   }
 }
