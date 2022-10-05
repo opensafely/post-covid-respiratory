@@ -369,11 +369,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
         ),
     ),
 
-    ## Healthcare worker    
-    cov_bin_healthcare_worker=patients.with_healthcare_worker_flag_on_covid_vaccine_record(
-        returning='binary_flag', 
-        return_expectations={"incidence": 0.01},
-    ),
 
     ## Care home status
     cov_bin_carehome_status=patients.care_home_status_as_of(
@@ -451,8 +446,20 @@ out_date_copd_exac=patients.with_these_clinical_events(
                 }
             },
         },
+     cov_num_bmi = patients.most_recent_bmi(
+        on_or_before=f"{index_date_variable} - 1 day",
+        minimum_age_at_measurement=18,
+        include_measurement_date=True,
+        date_format="YYYY-MM",
+        return_expectations={
+            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"}, ##How do we obtain these dates ? 
+            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
+            "incidence": 0.7,
+        },
+    ),
+
         
-    ) 
+    ),
 
 ## Acute myocardial infarction
     ### Primary care
@@ -771,14 +778,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         # Define fixed covariates other than sex
 # NB: sex is required to determine vaccine eligibility covariates so is defined in study_definition_electively_unvaccinated.py
 
-    ## 2019 consultation rate
-        cov_num_consulation_rate=patients.with_gp_consultations(
-            between=[days(study_dates["pandemic_start"],-365), days(study_dates["pandemic_start"],-1)],
-            returning="number_of_matches_in_period",
-            return_expectations={
-                "int": {"distribution": "poisson", "mean": 5},
-            },
-        ),
+
 
     ## Healthcare worker    
     cov_bin_healthcare_worker=patients.with_healthcare_worker_flag_on_covid_vaccine_record(
