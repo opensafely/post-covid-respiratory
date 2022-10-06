@@ -17,7 +17,7 @@ covid_primary_care_code = codelist_from_csv(
     "codelists/opensafely-covid-identification-in-primary-care-probable-covid-clinical-code.csv",
     system="ctv3",
     column="CTV3ID",
-)covid_primary_care_code
+)
 
 covid_primary_care_sequalae = codelist_from_csv(
     "codelists/opensafely-covid-identification-in-primary-care-probable-covid-sequelae.csv",
@@ -52,8 +52,6 @@ smoking_unclear = codelist_from_csv(
     column="CTV3Code",
     category_column="Category",
 )
-
-
 
 # BMI
 bmi_obesity_snomed_clinical = codelist_from_csv(
@@ -295,7 +293,7 @@ stroke_isch_snomed_clinical = codelist_from_csv(
     column="code",
 )
 
-stroke_icd10 = codelist_from_csv(
+stroke_isch_icd10 = codelist_from_csv(
     "codelists/user-RochelleKnight-stroke_isch_icd10.csv",
     system="icd10",
     column="code",
@@ -304,12 +302,6 @@ stroke_icd10 = codelist_from_csv(
 stroke_sah_hs_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-stroke_sah_hs_snomed.csv",
     system="snomed",
-    column="code",
-)
-
-stroke_isch_icd10 = codelist_from_csv(
-    "codelists/user-RochelleKnight-stroke_isch_icd10.csv",
-    system="icd10",
     column="code",
 )
 
