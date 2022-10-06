@@ -259,14 +259,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
         },
     ),
 
-        ## Sex 
-    cov_cat_sex = patients.sex(
-        return_expectations = {
-        "rate": "universal",
-        "category": {"ratios": {"M": 0.49, "F": 0.51}},
-    }
-    ),
-
     ## Ethnicity 
     cov_cat_ethnicity=patients.categorised_as(
         helpers.generate_ethnicity_dictionary(6),
@@ -446,18 +438,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
                 }
             },
         },
-             cov_num_bmi = patients.most_recent_bmi(
-        on_or_before=f"{index_date_variable} - 1 day",
-        minimum_age_at_measurement=18,
-        include_measurement_date=True,
-        date_format="YYYY-MM",
-        return_expectations={
-            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"}, ##How do we obtain these dates ? 
-            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
-            "incidence": 0.7,
-        },
-    ),
-
         
     ),
 
@@ -707,14 +687,6 @@ out_date_copd_exac=patients.with_these_clinical_events(
         "cov_bin_diabetes_type2_snomed", "cov_bin_diabetes_type2_hes",
         "cov_bin_diabetes_other", "cov_bin_diabetes_gestational",
         "tmp_cov_bin_insulin_snomed", "tmp_cov_bin_antidiabetic_drugs_snomed",
-    ),
-
-        ## Prediabetes
-    cov_bin_prediabetes=patients.with_these_clinical_events(
-        prediabetes_snomed,
-        returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
     ),
 
 # Pre-existing condition
