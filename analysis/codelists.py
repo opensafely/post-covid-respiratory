@@ -540,7 +540,7 @@ breathlessness_snomed = codelist_from_csv(
 )
 cough_snomed = codelist_from_csv(
     "codelists/bristol-cough.csv",
-    system="icd10",
+    system="snomed",
     column="code",
 )
 urti_snomed = codelist_from_csv(
