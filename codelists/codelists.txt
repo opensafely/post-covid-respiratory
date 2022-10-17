@@ -90,3 +90,6 @@ opensafely/type-1-diabetes-secondary-care/2020-09-27
 user/r_denholm/type-2-diabetes-secondary-care-bristol/0b7f6cd4
 user/hjforbes/nondiagnostic-diabetes-codes/50f30a3b
 opensafely/prediabetes-snomed/6bdbb7dd
+user/elsie_horne/cocp_dmd/1666a7a3
+user/elsie_horne/hrt_dmd/19196799
+

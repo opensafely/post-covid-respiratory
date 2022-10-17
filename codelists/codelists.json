@@ -551,6 +551,18 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/prediabetes-snomed/6bdbb7dd/",
       "downloaded_at": "2022-09-27 20:58:46.839256Z",
       "sha": "a52da34bd7178717df884211fca799db460a6b43"
+    },
+    "user-elsie_horne-cocp_dmd.csv": {
+      "id": "user/elsie_horne/cocp_dmd/1666a7a3",
+      "url": "https://codelists.opensafely.org/codelist/user/elsie_horne/cocp_dmd/1666a7a3/",
+      "downloaded_at": "2022-10-17 14:43:47.466700Z",
+      "sha": "8327c8ec4d2a3f1fcec7ffaa76a3e79cc1e5974a"
+    },
+    "user-elsie_horne-hrt_dmd.csv": {
+      "id": "user/elsie_horne/hrt_dmd/19196799",
+      "url": "https://codelists.opensafely.org/codelist/user/elsie_horne/hrt_dmd/19196799/",
+      "downloaded_at": "2022-10-17 14:43:47.780375Z",
+      "sha": "14aff592668a703f02cc68aa54c7ebab0774c62f"
     }
   }
 }

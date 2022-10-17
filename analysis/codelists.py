@@ -564,3 +564,27 @@ copd_exacerbation_snomed = codelist_from_csv(
     column="code",
 )
 
+# COCP
+cocp_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-cocp_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
+# HRT
+hrt_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-hrt_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
+
+# Prostate
+prostate_cancer_icd10 = codelist_from_csv(
+    "codelists/user-RochelleKnight-prostate_cancer_icd10.csv",
+    system="icd10",
+    column="code",
+)
+prostate_cancer_snomed_clinical = codelist_from_csv(
+    "codelists/user-RochelleKnight-prostate_cancer_snomed.csv",
+    system="snomed",
+    column="code",
+)

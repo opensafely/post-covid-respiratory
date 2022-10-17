@@ -87,6 +87,7 @@ df <- df %>%
                   ifelse(!is.na(exp_date_covid19_confirmed), "non_hospitalised", 
                          ifelse(is.na(exp_date_covid19_confirmed), "no_infection", NA)))) %>%
   mutate(across(sub_cat_covid19_hospital, factor))
+
 df <- df[!is.na(df$patient_id),]
 df[,c("sub_date_covid19_hospital")] <- NULL
 

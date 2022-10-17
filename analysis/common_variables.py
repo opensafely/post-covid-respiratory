@@ -440,6 +440,69 @@ out_date_copd_exac=patients.with_these_clinical_events(
 
         
     ),
+    ## Year of birth
+        qa_num_birth_year=patients.date_of_birth(
+            date_format="YYYY",
+            return_expectations={
+                "date": {"earliest": study_dates["earliest_expec"], "latest": "today"},
+                "rate": "uniform",
+            },
+        ),
+    ## Pregnancy
+        qa_bin_pregnancy=patients.with_these_clinical_events(
+            pregnancy_snomed_clinical,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+
+    ## Combined oral contraceptive pill
+    ### dmd: dictionary of medicines and devices
+    cov_bin_combined_oral_contraceptive_pill=patients.with_these_medications(
+        cocp_dmd, 
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable} - 1 day",
+        return_expectations={"incidence": 0.1},
+    ),
+
+    ## Hormone replacement therapy
+    cov_bin_hormone_replacement_therapy=patients.with_these_medications(
+        hrt_dmd, 
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable} - 1 day",
+        return_expectations={"incidence": 0.1},
+    ),
+
+        ## Prostate cancer
+        ### Primary care
+        prostate_cancer_snomed=patients.with_these_clinical_events(
+            prostate_cancer_snomed_clinical,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+        ### HES APC
+        prostate_cancer_hes=patients.admitted_to_hospital(
+            with_these_diagnoses=prostate_cancer_icd10,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+        ### ONS
+        prostate_cancer_death=patients.with_these_codes_on_death_certificate(
+            prostate_cancer_icd10,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.02
+            },
+        ),
+        ### Combined
+        qa_bin_prostate_cancer=patients.maximum_of(
+            "prostate_cancer_snomed", "prostate_cancer_hes", "prostate_cancer_death"
+        ),
 
 
     )
