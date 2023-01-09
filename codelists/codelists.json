@@ -551,6 +551,12 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/prediabetes-snomed/6bdbb7dd/",
       "downloaded_at": "2022-09-27 20:58:46.839256Z",
       "sha": "a52da34bd7178717df884211fca799db460a6b43"
+    },
+    "bristol-interstitial-lung-disease-pulmonary-fibrosis.csv": {
+      "id": "bristol/interstitial-lung-disease-pulmonary-fibrosis/5d71a08c",
+      "url": "https://codelists.opensafely.org/codelist/bristol/interstitial-lung-disease-pulmonary-fibrosis/5d71a08c/",
+      "downloaded_at": "2023-01-09 14:38:17.395695Z",
+      "sha": "556e6e1e189d97b7e10c9997a3d8f618a6ddddf0"
     }
   }
 }
