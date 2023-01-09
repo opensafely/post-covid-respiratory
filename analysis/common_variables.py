@@ -121,6 +121,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "rate": "uniform",
         "incidence": 0.01
         },
+
     ),
     # Define subgroups (for variables that don't have a corresponding covariate only)
     ## COVID-19 severity
@@ -233,6 +234,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
     sub_bin_asthma_recent_snomed=patients.with_these_clinical_events(
+
         asthma_snomed,
         returning='binary_flag',
         between=[f"{index_date_variable} - 730 days", f"{index_date_variable} - 1 day"],
@@ -246,6 +248,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
+
 
 # DEFINE COVARIATES ------------------------------------------------------
 
@@ -273,6 +276,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         ),
         cov_ethnicity_gp_primis=patients.with_these_clinical_events(
             primis_covid19_vacc_update_ethnicity,
+
             on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
             find_last_match_in_period=True,
