@@ -105,6 +105,7 @@ study = StudyDefinition(
     # Define vaccine eligibility variables
 
         **jcvi_variables, 
+        
     # Define common variables (e.g., exposures, outcomes, covariates) that require dynamic dates
 
         **dynamic_variables

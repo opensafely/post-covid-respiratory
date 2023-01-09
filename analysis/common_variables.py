@@ -120,7 +120,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "date": {"earliest": study_dates["pandemic_start"], "latest": "today"},
         "rate": "uniform",
         "incidence": 0.01
-    },
+        },
     ),
     # Define subgroups (for variables that don't have a corresponding covariate only)
     ## COVID-19 severity
@@ -232,18 +232,18 @@ out_date_copd_exac=patients.with_these_clinical_events(
 
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
-    cov_bin_asthma_recent_snomed=patients.with_these_clinical_events(
+    sub_bin_asthma_recent_snomed=patients.with_these_clinical_events(
         asthma_snomed,
         returning='binary_flag',
         between=[f"{index_date_variable} - 730 days", f"{index_date_variable} - 1 day"],
         return_expectations={"incidence": 0.2},
     ),
 
-## COPD event
-    cov_bin_copd_snomed=patients.with_these_clinical_events(
+## COPD diagnosed ever
+    sub_bin_copd_snomed=patients.with_these_clinical_events(
         copd_snomed,
         returning='binary_flag',
-        between=[f"{index_date_variable} - 730 days", f"{index_date_variable} - 1 day"],
+        on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
 
@@ -327,7 +327,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
 
     ## 2019 consultation rate
     cov_num_consulation_rate=patients.with_gp_consultations(
-        between=[days(study_dates["pandemic_start"],-365), days(study_dates["pandemic_start"],-1)],
+        between=["2019-01-01","2019-12-31"],
         returning="number_of_matches_in_period",
         return_expectations={
             "int": {"distribution": "poisson", "mean": 5},
@@ -391,28 +391,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         },
     ),
 
-    ## Obesity
-    ### Primary care
-    tmp_cov_bin_obesity_snomed=patients.with_these_clinical_events(
-        bmi_obesity_snomed_clinical,
-        returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-    ### HES APC
-    tmp_cov_bin_obesity_hes=patients.admitted_to_hospital(
-        returning='binary_flag',
-        with_these_diagnoses=bmi_obesity_icd10,
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-    ### Combined
-    cov_bin_obesity=patients.maximum_of(
-        "tmp_cov_bin_obesity_snomed", "tmp_cov_bin_obesity_hes",
-    ),
-  
-    
-     ### Categorising BMI
+    ### Categorising BMI
     cov_cat_bmi_groups = patients.categorised_as(
         {
             "Underweight": "cov_num_bmi < 18.5 AND cov_num_bmi > 12", 
