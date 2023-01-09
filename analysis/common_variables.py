@@ -391,7 +391,20 @@ out_date_copd_exac=patients.with_these_clinical_events(
         },
     ),
 
-    ### Categorising BMI
+    ## BMI
+    # taken from: https://github.com/opensafely/BMI-and-Metabolic-Markers/blob/main/analysis/common_variables.py 
+    cov_num_bmi=patients.most_recent_bmi(
+        on_or_before=f"{index_date_variable}",
+        minimum_age_at_measurement=18,
+        include_measurement_date=True,
+        date_format="YYYY-MM",
+        return_expectations={
+            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"},
+            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
+            "incidence": 0.7,
+        },
+    ),
+     ### Categorising BMI
     cov_cat_bmi_groups = patients.categorised_as(
         {
             "Underweight": "cov_num_bmi < 18.5 AND cov_num_bmi > 12", 
@@ -406,21 +419,13 @@ out_date_copd_exac=patients.with_these_clinical_events(
                 "ratios": {
                     "Underweight": 0.05, 
                     "Healthy_weight": 0.25, 
-                    "Overweight": 0.4,
-                    "Obese": 0.3, 
+                    "Overweight": 0.3,
+                    "Obese": 0.3,
+                    "Missing": 0.1, 
                 }
             },
         },
-        cov_num_bmi = patients.most_recent_bmi(
-        on_or_before=f"{index_date_variable} - 1 day",
-        minimum_age_at_measurement=18,
-        include_measurement_date=True,
-        date_format="YYYY-MM",
-        return_expectations={
-            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"}, ##How do we obtain these dates ? 
-            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
-            "incidence": 0.7,
-        },
+        
     ),
     
     ## Acute myocardial infarction
@@ -632,7 +637,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
     ## PNUEMONIA
     cov_bin_history_pneumonia_snomed=patients.with_these_clinical_events(
         pneumonia_snomed,
-        returning="binary_flag",
+        returning='binary_flag',
         on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
