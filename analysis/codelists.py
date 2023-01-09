@@ -564,7 +564,7 @@ copd_exacerbation_snomed = codelist_from_csv(
     column="code",
 )
 pulmonary_fibrosis_snomed = codelist_from_csv(
-    "codelist/bristol-interstitial-lung-disease-pulmonary-fibrosis.csv",
+    "codelists/bristol-interstitial-lung-disease-pulmonary-fibrosis.csv",
     system="snomed",
     column="code",
 )

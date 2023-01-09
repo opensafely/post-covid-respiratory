@@ -200,10 +200,6 @@ actions_list <- splice(
     )
   ),
   
-
-
-
-
 ## combine everything ----
 project_list <- splice(
   defaults_list,
