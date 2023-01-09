@@ -120,7 +120,8 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "date": {"earliest": study_dates["pandemic_start"], "latest": "today"},
         "rate": "uniform",
         "incidence": 0.01
-    },
+        },
+
     ),
     # Define subgroups (for variables that don't have a corresponding covariate only)
     ## COVID-19 severity
@@ -232,25 +233,22 @@ out_date_copd_exac=patients.with_these_clinical_events(
 
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
-    tmp_sub_bin_asthma_recent_snomed=patients.with_these_clinical_events(
+    sub_bin_asthma_recent_snomed=patients.with_these_clinical_events(
+
         asthma_snomed,
         returning='binary_flag',
         between=[f"{index_date_variable} - 730 days", f"{index_date_variable} - 1 day"],
         return_expectations={"incidence": 0.2},
     ),
 
-## COPD event
-    tmp_sub_bin_copd_snomed=patients.with_these_clinical_events(
+## COPD diagnosed ever
+    sub_bin_copd_snomed=patients.with_these_clinical_events(
         copd_snomed,
         returning='binary_flag',
-        between=[f"{index_date_variable} - 730 days", f"{index_date_variable} - 1 day"],
+        on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
 
-## Generate variable to identify subgroup with existing respiratory condition 
-    sub_bin_existing_respiratory=patients.maximum_of(
-        "tmp_sub_bin_asthma_recent_snomed","tmp_sub_bin_copd_snomed=patients"
-    ),
 
 # DEFINE COVARIATES ------------------------------------------------------
 
@@ -272,25 +270,26 @@ out_date_copd_exac=patients.with_these_clinical_events(
         ),
         cov_ethnicity_gp_opensafely=patients.with_these_clinical_events(
             opensafely_ethnicity_codes_6,
-            on_or_before=f"{index_date_variable}",
+            on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
             find_last_match_in_period=True,
         ),
         cov_ethnicity_gp_primis=patients.with_these_clinical_events(
             primis_covid19_vacc_update_ethnicity,
-            on_or_before=f"{index_date_variable}",
+
+            on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
             find_last_match_in_period=True,
         ),
         cov_ethnicity_gp_opensafely_date=patients.with_these_clinical_events(
             opensafely_ethnicity_codes_6,
-            on_or_before=f"{index_date_variable}",
+            on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
             find_last_match_in_period=True,
         ),
         cov_ethnicity_gp_primis_date=patients.with_these_clinical_events(
             primis_covid19_vacc_update_ethnicity,
-            on_or_before=f"{index_date_variable}",
+            on_or_before=f"{index_date_variable} - 1 day",
             returning="category",
             find_last_match_in_period=True,
         ),
@@ -332,11 +331,17 @@ out_date_copd_exac=patients.with_these_clinical_events(
 
     ## 2019 consultation rate
     cov_num_consulation_rate=patients.with_gp_consultations(
-        between=[days(study_dates["pandemic_start"],-365), days(study_dates["pandemic_start"],-1)],
+        between=["2019-01-01","2019-12-31"],
         returning="number_of_matches_in_period",
         return_expectations={
             "int": {"distribution": "poisson", "mean": 5},
         },
+    ),
+
+    ## Healthcare worker    
+    cov_bin_healthcare_worker=patients.with_healthcare_worker_flag_on_covid_vaccine_record(
+        returning='binary_flag', 
+        return_expectations={"incidence": 0.01},
     ),
 
     ## Smoking status
@@ -362,7 +367,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
         ),
         ever_smoked=patients.with_these_clinical_events(
             filter_codes_by_category(smoking_clear, include=["S", "E"]),
-            on_or_before=f"{index_date_variable}",
+            on_or_before=f"{index_date_variable} - 1 day",
         ),
     ),
 
@@ -390,27 +395,19 @@ out_date_copd_exac=patients.with_these_clinical_events(
         },
     ),
 
-    ## Obesity
-    ### Primary care
-    tmp_cov_bin_obesity_snomed=patients.with_these_clinical_events(
-        bmi_obesity_snomed_clinical,
-        returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
+    ## BMI
+    # taken from: https://github.com/opensafely/BMI-and-Metabolic-Markers/blob/main/analysis/common_variables.py 
+    cov_num_bmi=patients.most_recent_bmi(
+        on_or_before=f"{index_date_variable}",
+        minimum_age_at_measurement=18,
+        include_measurement_date=True,
+        date_format="YYYY-MM",
+        return_expectations={
+            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"},
+            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
+            "incidence": 0.7,
+        },
     ),
-    ### HES APC
-    tmp_cov_bin_obesity_hes=patients.admitted_to_hospital(
-        returning='binary_flag',
-        with_these_diagnoses=bmi_obesity_icd10,
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-    ### Combined
-    cov_bin_obesity=patients.maximum_of(
-        "tmp_cov_bin_obesity_snomed", "tmp_cov_bin_obesity_hes",
-    ),
-  
-    
      ### Categorising BMI
     cov_cat_bmi_groups = patients.categorised_as(
         {
@@ -426,89 +423,244 @@ out_date_copd_exac=patients.with_these_clinical_events(
                 "ratios": {
                     "Underweight": 0.05, 
                     "Healthy_weight": 0.25, 
-                    "Overweight": 0.4,
-                    "Obese": 0.3, 
+                    "Overweight": 0.3,
+                    "Obese": 0.3,
+                    "Missing": 0.1, 
                 }
             },
         },
-        cov_num_bmi = patients.most_recent_bmi(
-        on_or_before=f"{index_date_variable} - 1 day",
-        minimum_age_at_measurement=18,
-        include_measurement_date=True,
-        date_format="YYYY-MM",
-        return_expectations={
-            "date": {"earliest": "2010-02-01", "latest": "2022-02-01"}, ##How do we obtain these dates ? 
-            "float": {"distribution": "normal", "mean": 28, "stddev": 8},
-            "incidence": 0.7,
-        },
-    ),
-
         
     ),
-    ## Year of birth
-        qa_num_birth_year=patients.date_of_birth(
-            date_format="YYYY",
-            return_expectations={
-                "date": {"earliest": study_dates["earliest_expec"], "latest": "today"},
-                "rate": "uniform",
-            },
-        ),
-    ## Pregnancy
-        qa_bin_pregnancy=patients.with_these_clinical_events(
-            pregnancy_snomed_clinical,
-            returning='binary_flag',
-            return_expectations={
-                "incidence": 0.03,
-            },
-        ),
-
-    ## Combined oral contraceptive pill
-    ### dmd: dictionary of medicines and devices
-    cov_bin_combined_oral_contraceptive_pill=patients.with_these_medications(
-        cocp_dmd, 
+    
+    ## Acute myocardial infarction
+    ### Primary care
+    tmp_cov_bin_ami_snomed=patients.with_these_clinical_events(
+        ami_snomed_clinical,
         returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_ami_prior_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=ami_prior_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    tmp_cov_bin_ami_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=ami_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_ami=patients.maximum_of(
+        "tmp_cov_bin_ami_snomed", "tmp_cov_bin_ami_prior_hes", "tmp_cov_bin_ami_hes",
+    ),
+
+    ## All stroke
+    ### Primary care
+    tmp_cov_bin_stroke_isch_snomed=patients.with_these_clinical_events(
+        stroke_isch_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    tmp_cov_bin_stroke_sah_hs_snomed=patients.with_these_clinical_events(
+        stroke_sah_hs_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_stroke_isch_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=stroke_isch_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    tmp_cov_bin_stroke_sah_hs_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=stroke_sah_hs_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_all_stroke=patients.maximum_of(
+        "tmp_cov_bin_stroke_isch_hes", "tmp_cov_bin_stroke_isch_snomed", "tmp_cov_bin_stroke_sah_hs_hes", "tmp_cov_bin_stroke_sah_hs_snomed",
+    ),
+
+    ## Dementia
+    ### Primary care
+    tmp_cov_bin_dementia_snomed=patients.with_these_clinical_events(
+        dementia_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC (Hospital Episode Statistics Admitted Patient Care)
+    tmp_cov_bin_dementia_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=dementia_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Primary care - vascular
+    tmp_cov_bin_dementia_vascular_snomed=patients.with_these_clinical_events(
+        dementia_vascular_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC - vascular
+    tmp_cov_bin_dementia_vascular_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=dementia_vascular_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_dementia=patients.maximum_of(
+        "tmp_cov_bin_dementia_snomed", "tmp_cov_bin_dementia_hes", "tmp_cov_bin_dementia_vascular_snomed", "tmp_cov_bin_dementia_vascular_hes",
+    ),
+
+    ## Liver disease
+     ### Primary care
+    tmp_cov_bin_liver_disease_snomed=patients.with_these_clinical_events(
+        liver_disease_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_liver_disease_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=liver_disease_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_liver_disease=patients.maximum_of(
+        "tmp_cov_bin_liver_disease_snomed", "tmp_cov_bin_liver_disease_hes",
+    ),
+
+    ## Chronic kidney disease
+    ### Primary care
+    tmp_cov_bin_chronic_kidney_disease_snomed=patients.with_these_clinical_events(
+        ckd_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_chronic_kidney_disease_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=ckd_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_chronic_kidney_disease=patients.maximum_of(
+        "tmp_cov_bin_chronic_kidney_disease_snomed", "tmp_cov_bin_chronic_kidney_disease_hes",
+    ),
+
+    ## Cancer
+    ### Primary care
+    tmp_cov_bin_cancer_snomed=patients.with_these_clinical_events(
+        cancer_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_cancer_hes=patients.admitted_to_hospital(
+        returning='binary_flag',
+        with_these_diagnoses=cancer_icd10,
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_cancer=patients.maximum_of(
+        "tmp_cov_bin_cancer_snomed", "tmp_cov_bin_cancer_hes",
+    ),
+
+    ## Hypertension
+    ### Primary care
+    tmp_cov_bin_hypertension_snomed=patients.with_these_clinical_events(
+        hypertension_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_hypertension_hes=patients.admitted_to_hospital(
+       returning='binary_flag',
+       with_these_diagnoses=hypertension_icd10,
+       on_or_before=f"{index_date_variable}",
+       return_expectations={"incidence": 0.1},
+    ),
+    ### DMD
+    tmp_cov_bin_hypertension_drugs_dmd=patients.with_these_medications(
+        hypertension_drugs_dmd,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_hypertension=patients.maximum_of(
+        "tmp_cov_bin_hypertension_snomed", "tmp_cov_bin_hypertension_hes", "tmp_cov_bin_hypertension_drugs_dmd",
+    ),
+
+    ## Diabetes
+    ### Primary care
+     tmp_cov_bin_diabetes_snomed=patients.with_these_clinical_events(
+        diabetes_snomed_clinical,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### HES APC
+    tmp_cov_bin_diabetes_hes=patients.admitted_to_hospital(
+       returning='binary_flag',
+       with_these_diagnoses=diabetes_icd10,
+       on_or_before=f"{index_date_variable}",
+       return_expectations={"incidence": 0.1},
+    ),
+    ### DMD
+    tmp_cov_bin_diabetes_dmd=patients.with_these_clinical_events(
+        diabetes_drugs_dmd,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
+    ### Combined
+    cov_bin_diabetes = patients.maximum_of(
+        "tmp_cov_bin_diabetes_snomed", "tmp_cov_bin_diabetes_dmd", "tmp_cov_bin_diabetes_snomed",
+    ),
+
+    ## PNUEMONIA
+    cov_bin_history_pneumonia_snomed=patients.with_these_clinical_events(
+        pneumonia_snomed,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
 
-    ## Hormone replacement therapy
-    cov_bin_hormone_replacement_therapy=patients.with_these_medications(
-        hrt_dmd, 
+    ##ASTHMA
+    cov_bin_history_asthma_snomed=patients.with_these_clinical_events(
+        asthma_snomed,
         returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.2},
     ),
 
-        ## Prostate cancer
-        ### Primary care
-        prostate_cancer_snomed=patients.with_these_clinical_events(
-            prostate_cancer_snomed_clinical,
-            returning='binary_flag',
-            return_expectations={
-                "incidence": 0.03,
-            },
-        ),
-        ### HES APC
-        prostate_cancer_hes=patients.admitted_to_hospital(
-            with_these_diagnoses=prostate_cancer_icd10,
-            returning='binary_flag',
-            return_expectations={
-                "incidence": 0.03,
-            },
-        ),
-        ### ONS
-        prostate_cancer_death=patients.with_these_codes_on_death_certificate(
-            prostate_cancer_icd10,
-            returning='binary_flag',
-            return_expectations={
-                "incidence": 0.02
-            },
-        ),
-        ### Combined
-        qa_bin_prostate_cancer=patients.maximum_of(
-            "prostate_cancer_snomed", "prostate_cancer_hes", "prostate_cancer_death"
-        ),
-
+    ##PULMONARY FIBROSIS
+    cov_bin_history_pulmonary_fibrosis_snomed=patients.with_these_clinical_events(
+        pulmonary_fibrosis_snomed,
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable}",
+        return_expectations={"incidence": 0.1},
+    ),
 
     )
     return dynamic_variables

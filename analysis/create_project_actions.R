@@ -1,0 +1,218 @@
+library(tidyverse)
+library(yaml)
+library(here)
+library(glue)
+library(readr)
+library(dplyr)
+
+
+###########################
+# Load information to use #
+###########################
+
+## defaults ----
+defaults_list <- list(
+  version = "3.0",
+  expectations= list(population_size=10000L)
+)
+
+# active_analyses <- read_rds("lib/active_analyses.rds")
+# active_analyses_table <- subset(active_analyses, active_analyses$active =="TRUE")
+# outcomes_model <- active_analyses_table$outcome_variable %>% str_replace("out_date_", "")
+# cohort_to_run <- c("vaccinated", "electively_unvaccinated")
+# analyses <- c("main", "subgroups")
+
+# create action functions ----
+
+############################
+## generic action function #
+############################
+action <- function(
+  name,
+  run,
+  dummy_data_file=NULL,
+  arguments=NULL,
+  needs=NULL,
+  highly_sensitive=NULL,
+  moderately_sensitive=NULL
+){
+  
+  outputs <- list(
+    moderately_sensitive = moderately_sensitive,
+    highly_sensitive = highly_sensitive
+  )
+  outputs[sapply(outputs, is.null)] <- NULL
+  
+  action <- list(
+    run = paste(c(run, arguments), collapse=" "),
+    dummy_data_file = dummy_data_file,
+    needs = needs,
+    outputs = outputs
+  )
+  action[sapply(action, is.null)] <- NULL
+  
+  action_list <- list(name = action)
+  names(action_list) <- name
+  
+  action_list
+}
+
+
+## create comment function ----
+comment <- function(...){
+  list_comments <- list(...)
+  comments <- map(list_comments, ~paste0("## ", ., " ##"))
+  comments
+}
+
+
+## create function to convert comment "actions" in a yaml string into proper comments
+convert_comment_actions <-function(yaml.txt){
+  yaml.txt %>%
+    str_replace_all("\\\n(\\s*)\\'\\'\\:(\\s*)\\'", "\n\\1")  %>%
+    #str_replace_all("\\\n(\\s*)\\'", "\n\\1") %>%
+    str_replace_all("([^\\'])\\\n(\\s*)\\#\\#", "\\1\n\n\\2\\#\\#") %>%
+    str_replace_all("\\#\\#\\'\\\n", "\n")
+}
+
+
+# #################################################
+# ## Function for typical actions to analyse data #
+# #################################################
+# # Updated to a typical action running Cox models for one outcome
+# apply_model_function <- function(outcome, cohort){
+#   splice(
+#     comment(glue("Cox model for {outcome} - {cohort}")),
+#     action(
+#       name = glue("Analysis_cox_{outcome}_{cohort}"),
+#       run = "r:latest analysis/model/01_cox_pipeline.R",
+#       arguments = c(outcome,cohort),
+#       needs = list("stage1_data_cleaning_both", glue("stage1_end_date_table_{cohort}"),"select_covariates_for_hosp_covid"),
+#       moderately_sensitive = list(
+#         analyses_not_run = glue("output/review/model/analyses_not_run_{outcome}_{cohort}.csv"),
+#         compiled_hrs_csv = glue("output/review/model/suppressed_compiled_HR_results_{outcome}_{cohort}.csv"),
+#         compiled_hrs_csv_to_release = glue("output/review/model/suppressed_compiled_HR_results_{outcome}_{cohort}_to_release.csv"),
+#         compiled_event_counts_csv = glue("output/review/model/suppressed_compiled_event_counts_{outcome}_{cohort}.csv")
+#       )
+#     )
+#   )
+# }
+
+# table2 <- function(cohort){
+#   splice(
+#     comment(glue("Stage 4 - Table 2 - {cohort} cohort")),
+#     action(
+#       name = glue("stage4_table_2_{cohort}"),
+#       run = "r:latest analysis/descriptives/table_2.R",
+#       arguments = c(cohort),
+#       needs = list("stage1_data_cleaning_both",glue("stage1_end_date_table_{cohort}")),
+#       moderately_sensitive = list(
+#         input_table_2 = glue("output/review/descriptives/table2_{cohort}.csv")
+#       )
+#     )
+#   )
+# }
+
+# hosp_event_counts_by_covariate_level <- function(cohort){
+#   splice(
+#     comment(glue("Hospitalised event counts by covariate - {cohort}")),
+#     action(
+#       name = glue("hosp_event_counts_by_covariate_level_{cohort}"),
+#       run = "r:latest analysis/descriptives/hospitalised_events_split_by_time_period_and_covariate_level.R",
+#       arguments = c(cohort),
+#       needs = list("stage1_data_cleaning_both",glue("stage1_end_date_table_{cohort}")),
+#       moderately_sensitive = list(
+#         hosp_counts_by_covariate = glue("output/not-for-review/hospitalised_event_counts_by_covariate_level_{cohort}.csv")
+#       )
+#     )
+#   )
+# }
+
+
+
+
+
+##########################################################
+## Define and combine all actions into a list of actions #
+##########################################################
+actions_list <- splice(
+
+  comment("# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #",
+          "DO NOT EDIT project.yaml DIRECTLY",
+          "This file is created by create_project_actions.R",
+          "Edit and run create_project_actions.R to update the project.yaml",
+          "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
+  ),
+  
+  #comment("Generate vaccination eligibility information"),
+  action(
+    name = glue("vax_eligibility_inputs"),
+    run = "r:latest analysis/metadates.R",
+    highly_sensitive = list(
+      study_dates_json = glue("output/study_dates.json"),
+      vax_jcvi_groups= glue("output/vax_jcvi_groups.csv"),
+      vax_eligible_dates= ("output/vax_eligible_dates.csv")
+    )
+  ),
+  #comment("Generate dummy data for study_definition - population_prelim"),
+  action(
+    name = "generate_study_population_prelim",
+    run = "cohortextractor:latest generate_cohort --study-definition study_definition_prelim --output-format feather",
+    needs = list("vax_eligibility_inputs"),
+    highly_sensitive = list(
+      cohort = glue("output/input_prelim.feather")
+    )
+  ),
+  #comment("Generate dates for all study cohorts"),
+   action(
+    name = "generate_index_dates",
+    run = "r:latest analysis/prelim.R",
+    needs = list("vax_eligibility_inputs","generate_study_population_prelim"),
+    highly_sensitive = list(
+      index_dates = glue("output/index_dates.csv")
+    )
+  ),
+#comment("Generate dummy data for study_definition - prevax"),
+  action(
+    name = "generate_study_population_prevax",
+    run = "cohortextractor:latest generate_cohort --study-definition study_definition_prevax --output-format feather",
+    needs = list("vax_eligibility_inputs","generate_index_dates"),
+    highly_sensitive = list(
+      cohort = glue("output/input_prevax.feather")
+    )
+  ),
+#comment("Generate dummy data for study_definition - vax"),
+  action(
+    name = "generate_study_population_vax",
+    run = "cohortextractor:latest generate_cohort --study-definition study_definition_vax --output-format feather",
+    needs = list("generate_index_dates","vax_eligibility_inputs"),
+    highly_sensitive = list(
+      cohort = glue("output/input_vax.feather")
+    )
+  ),
+  #comment("Generate dummy data for study_definition - unvax"),
+  action(
+    name = "generate_study_population_unvax",
+    run = "cohortextractor:latest generate_cohort --study-definition study_definition_unvax --output-format feather",
+    needs = list("vax_eligibility_inputs","generate_index_dates"),
+    highly_sensitive = list(
+      cohort = glue("output/input_unvax.feather")
+    )
+  ),
+  
+## combine everything ----
+project_list <- splice(
+  defaults_list,
+  list(actions = actions_list)
+)
+  
+#####################################################################################
+## convert list to yaml, reformat comments and white space, and output a .yaml file #
+#####################################################################################
+as.yaml(project_list, indent=2) %>%
+  # convert comment actions to comments
+  convert_comment_actions() %>%
+  # add one blank line before level 1 and level 2 keys
+  str_replace_all("\\\n(\\w)", "\n\n\\1") %>%
+  str_replace_all("\\\n\\s\\s(\\w)", "\n\n  \\1") %>%
+  writeLines("project.yaml")
