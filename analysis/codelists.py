@@ -72,7 +72,6 @@ bmi_primis = codelist_from_csv(
     column="code",
 )
 
-
 # Total Cholesterol
 cholesterol_snomed = codelist_from_csv(
     "codelists/opensafely-cholesterol-tests-numerical-value.csv",
