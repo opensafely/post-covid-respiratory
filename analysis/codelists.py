@@ -72,26 +72,6 @@ bmi_primis = codelist_from_csv(
     column="code",
 )
 
-## Obesity
-    ### Primary care
-    tmp_cov_bin_obesity_snomed=patients.with_these_clinical_events(
-        bmi_obesity_snomed_clinical,
-        returning='binary_flag',
-        on_or_before=f"{index_date_variable} - 1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-    ### HES APC
-    tmp_cov_bin_obesity_hes=patients.admitted_to_hospital(
-        returning='binary_flag',
-        with_these_diagnoses=bmi_obesity_icd10,
-        on_or_before=f"{index_date_variable} -1 day",
-        return_expectations={"incidence": 0.1},
-    ),
-    ### Combined
-    cov_bin_obesity=patients.maximum_of(
-        "tmp_cov_bin_obesity_snomed", "tmp_cov_bin_obesity_hes",
-    ),
-
 # Total Cholesterol
 cholesterol_snomed = codelist_from_csv(
     "codelists/opensafely-cholesterol-tests-numerical-value.csv",
