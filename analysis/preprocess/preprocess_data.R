@@ -21,7 +21,7 @@ fs::dir_create(here::here("output", "review"))
 
 # Read cohort dataset ---------------------------------------------------------- 
 
-df <- arrow::read_feather(file = paste0("output/input_",cohort_name,".feather") )
+df <- read_csv(file = paste0("output/input_",cohort_name,".csv.gz") )
 
 message(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"))
 
@@ -39,8 +39,6 @@ message("Death date added!")
 df <- df %>%
   mutate(across(c(contains("_date")),
                 ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")),
- #        across(contains('_birth_year'),
- #               ~ format(as.Date(.), "%Y")),
          across(contains('_num') & !contains('date'), ~ as.numeric(.)),
          across(contains('_cat'), ~ as.factor(.)),
          across(contains('_bin'), ~ as.logical(.)))
@@ -48,11 +46,11 @@ df <- df %>%
 
 # Overwrite vaccination information for dummy data and vax cohort only --
 
-#if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") &&
-#   cohort_name %in% c("vax")) {
-#  source("analysis/preprocess/modify_dummy_vax_data.R")
-#  message("Vaccine information overwritten successfully")
-#}
+if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") &&
+   cohort_name %in% c("vax")) {
+  source("analysis/preprocess/modify_dummy_vax_data.R")
+  message("Vaccine information overwritten successfully")
+}
 
 
 # Describe data ----------------------------------------------------------------
@@ -67,13 +65,12 @@ message ("Cohort ",cohort_name, " description written successfully!")
 
 df$cov_bin_obesity <- ifelse(df$cov_bin_obesity == TRUE | 
                                df$cov_cat_bmi_groups=="Obese",TRUE,FALSE)
-#df[,c("cov_num_bmi")] <- NULL
 
 # QC for consultation variable--------------------------------------------------
 #max to 365 (average of one per day)
 df <- df %>%
-  mutate(cov_num_consulation_rate = replace(cov_num_consulation_rate, 
-                                            cov_num_consulation_rate > 365, 365))
+  mutate(cov_num_consultation_rate = replace(cov_num_consultation_rate, 
+                                            cov_num_consultation_rate > 365, 365))
 
 
 #COVID19 severity --------------------------------------------------------------
@@ -96,14 +93,8 @@ message("COVID19 severity determined successfully")
 #Preexisting respiratory condition -----------------------------------------------
 df <- df %>%
   mutate(pop_preexist_resp =
-           ifelse(!is.na(out_date_breathless) |
-                    !is.na(out_date_cough) |
-                    !is.na(out_date_urti) |
-                    !is.na(out_date_pneumonia) |
-                    !is.na(out_date_asthma_exac) |
-                    !is.na(out_date_copd_exac) |
-                    cov_bin_asthma_recent_snomed == "TRUE" |
-                    cov_bin_copd_snomed == "TRUE", TRUE, FALSE))
+           ifelse(sub_bin_asthma_recent_snomed == "TRUE" |
+                    sub_bin_copd_snomed == "TRUE", TRUE, FALSE))
 
 
 # Restrict columns and save analysis dataset ---------------------------------
@@ -117,8 +108,6 @@ df1 <- df%>% select(patient_id,"death_date",starts_with("index_date_"),
                      contains("exp_"), # Exposures
                      contains("out_"), # Outcomes
                      contains("cov_"), # Covariates
-#                     contains("qa_"), #quality assurance
-#                     contains("step"), # diabetes steps
                      contains("vax_date_eligible"), # Vaccination eligibility
                      contains("vax_date_"), # Vaccination dates and vax type 
                      contains("vax_cat_")# Vaccination products
@@ -130,7 +119,7 @@ df1[,colnames(df)[grepl("tmp_",colnames(df))]] <- NULL
 
 # Repo specific preprocessing 
 
-saveRDS(df1, file = paste0("output/input_",cohort_name,".rds"))
+saveRDS(df1, file = paste0("output/input_",cohort_name,".rds"), compress = "gzip")
 
 message(paste0("Input data saved successfully with N = ", nrow(df1), " rows"))
 
@@ -150,7 +139,7 @@ sink(paste0("output/not-for-review/describe_venn_",cohort_name,".txt"))
 print(Hmisc::describe(df2))
 sink()
 
-saveRDS(df2, file = paste0("output/venn_",cohort_name,".rds"))
+saveRDS(df2, file = paste0("output/venn_",cohort_name,".rds"), compress = "gzip")
 
 message("Venn diagram data saved successfully")
 tictoc::toc()
