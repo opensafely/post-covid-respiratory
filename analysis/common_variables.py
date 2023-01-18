@@ -330,7 +330,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
     ),
 
     ## 2019 consultation rate
-    cov_num_consulation_rate=patients.with_gp_consultations(
+    cov_num_consultation_rate=patients.with_gp_consultations(
         between=["2019-01-01","2019-12-31"],
         returning="number_of_matches_in_period",
         return_expectations={
