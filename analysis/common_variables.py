@@ -169,6 +169,34 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "tmp_sub_bin_covid19_confirmed_history_sgss","tmp_sub_bin_covid19_confirmed_history_snomed","tmp_sub_bin_covid19_confirmed_history_hes"
     ),
 
+    # Define smoking subgroup
+    sub_cat_smoking_status=patients.categorised_as(
+        {
+            "S": "sub_most_recent_smoking_code = 'S'",
+            "E": """
+                sub_most_recent_smoking_code = 'E' OR (
+                sub_most_recent_smoking_code = 'N' AND sub_ever_smoked
+                )
+            """,
+            "N": "sub_most_recent_smoking_code = 'N' AND NOT sub_ever_smoked",
+            "M": "DEFAULT",
+        },
+        return_expectations={
+            "category": {"ratios": {"S": 0.6, "E": 0.1, "N": 0.2, "M": 0.1}}
+        },
+        sub_most_recent_smoking_code=patients.with_these_clinical_events(
+            smoking_clear,
+            find_last_match_in_period=True,
+            on_or_before=f"{index_date_variable} - 1 day",
+            returning="category",
+        ),
+        sub_ever_smoked=patients.with_these_clinical_events(
+            filter_codes_by_category(smoking_clear, include=["S", "E"]),
+            on_or_before=f"{index_date_variable} - 1 day",
+        ),
+    ),
+
+
 # DEFINE OUTCOMES ------------------------------------------------------
 ## First recording of the outcome in during the study period
 out_date_breathless=patients.with_these_clinical_events(
@@ -371,6 +399,23 @@ out_date_copd_exac=patients.with_these_clinical_events(
         ),
     ),
 
+    ## Combined oral contraceptive pill
+    ### dmd: dictionary of medicines and devices
+    cov_bin_combined_oral_contraceptive_pill=patients.with_these_medications(
+        cocp_dmd, 
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable} - 1 day",
+        return_expectations={"incidence": 0.3},
+    ),
+
+    ## Hormone replacement therapy
+    cov_bin_hormone_replacement_therapy=patients.with_these_medications(
+        hrt_dmd, 
+        returning='binary_flag',
+        on_or_before=f"{index_date_variable} - 1 day",
+
+        return_expectations={"incidence": 0.3},
+    ),
 
     ## Care home status
     cov_bin_carehome_status=patients.care_home_status_as_of(
@@ -682,6 +727,55 @@ out_date_copd_exac=patients.with_these_clinical_events(
         on_or_before=f"{index_date_variable}",
         return_expectations={"incidence": 0.1},
     ),
+
+# Define quality assurances
+    ## Prostate cancer
+        ### Primary care
+        prostate_cancer_snomed=patients.with_these_clinical_events(
+            prostate_cancer_snomed_clinical,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+        ### HES APC
+        prostate_cancer_hes=patients.admitted_to_hospital(
+            with_these_diagnoses=prostate_cancer_icd10,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+        ### ONS
+        prostate_cancer_death=patients.with_these_codes_on_death_certificate(
+            prostate_cancer_icd10,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.02
+            },
+        ),
+        ### Combined
+        qa_bin_prostate_cancer=patients.maximum_of(
+            "prostate_cancer_snomed", "prostate_cancer_hes", "prostate_cancer_death"
+        ),
+
+    ## Pregnancy
+        qa_bin_pregnancy=patients.with_these_clinical_events(
+            pregnancy_snomed_clinical,
+            returning='binary_flag',
+            return_expectations={
+                "incidence": 0.03,
+            },
+        ),
+    
+    ## Year of birth
+        qa_num_birth_year=patients.date_of_birth(
+            date_format="YYYY",
+            return_expectations={
+                "date": {"earliest": study_dates["earliest_expec"], "latest": "today"},
+                "rate": "uniform",
+            },
+        ),
 
     )
     return dynamic_variables
