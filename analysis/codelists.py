@@ -441,7 +441,16 @@ pregnancy_snomed_clinical = codelist_from_csv(
     system="snomed",
     column="code",
 )
-
+cocp_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-cocp_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
+hrt_dmd = codelist_from_csv(
+    "codelists/user-elsie_horne-hrt_dmd.csv",
+    system="snomed",
+    column="dmd_id",
+)
 ## Preexisting respiratory condition
 
 copd_snomed = codelist_from_csv(
