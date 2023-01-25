@@ -40,31 +40,70 @@ actions:
 
   generate_study_population_prevax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_prevax
-      --output-format csv.gz
+      --output-format feather
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
     outputs:
       highly_sensitive:
-        cohort: output/input_prevax.csv.gz
+        cohort: output/input_prevax.feather
 
   generate_study_population_vax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_vax
-      --output-format csv.gz
+      --output-format feather
     needs:
     - generate_index_dates
     - vax_eligibility_inputs
     outputs:
       highly_sensitive:
-        cohort: output/input_vax.csv.gz
+        cohort: output/input_vax.feather
 
   generate_study_population_unvax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_unvax
-      --output-format csv.gz
+      --output-format feather
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
     outputs:
       highly_sensitive:
-        cohort: output/input_unvax.csv.gz
+        cohort: output/input_unvax.feather
+
+  preprocess_data_prevax:
+    run: r:latest analysis/preprocess/preprocess_data.R prevax
+    needs:
+    - generate_index_dates
+    - generate_study_population_prevax
+    outputs:
+      moderately_sensitive:
+        describe: output/not-for-review/describe_input_prevax_stage0.txt
+        describe_venn: output/not-for-review/describe_venn_prevax.txt
+      highly_sensitive:
+        cohort: output/input_prevax.rds
+        venn: output/venn_prevax.rds
+
+  preprocess_data_vax:
+    run: r:latest analysis/preprocess/preprocess_data.R vax
+    needs:
+    - generate_index_dates
+    - generate_study_population_vax
+    outputs:
+      moderately_sensitive:
+        describe: output/not-for-review/describe_input_vax_stage0.txt
+        descrive_venn: output/not-for-review/describe_venn_vax.txt
+      highly_sensitive:
+        cohort: output/input_vax.rds
+        venn: output/venn_vax.rds
+
+  preprocess_data_unvax:
+    run: r:latest analysis/preprocess/preprocess_data.R unvax
+    needs:
+    - generate_index_dates
+    - generate_study_population_unvax
+    outputs:
+      moderately_sensitive:
+        describe: output/not-for-review/describe_input_unvax_stage0.txt
+        describe_venn: output/not-for-review/describe_venn_unvax.txt
+      highly_sensitive:
+        cohort: output/input_unvax.rds
+        venn: output/venn_unvax.rds
 
