@@ -4,7 +4,7 @@
 set.seed(1)
 
 # Change first jab date so that they have roughly correct distribution  
-df_vax<- df %>%
+df <- df %>%
   mutate(
     vax_date_Pfizer_1 = as.Date(vax_date_eligible) + days(round(rnorm(nrow(.), mean = 10, sd = 3))),
     vax_date_AstraZeneca_1 = as.Date(vax_date_eligible) + days(round(rnorm(nrow(.), mean = 10, sd = 3))),
