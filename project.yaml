@@ -123,3 +123,13 @@ actions:
       highly_sensitive:
         cohort: output/input_*.rds
 
+  stage2_missing_table1_all:
+    run: r:latest analysis/descriptives/Stage2_missing_table1.R all
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        Missing_RangeChecks: output/not-for-review/Check_missing_range_*.csv
+        DateChecks: output/not-for-review/Check_dates_range_*.csv
+        Descriptive_Table: output/review/descriptives/Table1_*.csv
+
