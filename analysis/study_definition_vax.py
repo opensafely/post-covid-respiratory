@@ -111,7 +111,7 @@ study = StudyDefinition(
         returning_type = 'date'
     ), 
     vax_date_Pfizer_2 = patients.with_value_from_file(
-        f_path = 'output/index_dates.cs.',
+        f_path = 'output/index_dates.csv',
         returning = 'vax_date_Pfizer_2',
         returning_type = 'date'
     ),
