@@ -123,6 +123,30 @@ actions:
       highly_sensitive:
         cohort: output/input_*.rds
 
+  describe_file-input_prevax_stage1:
+    run: r:latest analysis/describe_file.R input_prevax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_prevax_stage1.txt
+
+  describe_file-input_vax_stage1:
+    run: r:latest analysis/describe_file.R input_vax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_vax_stage1.txt
+
+  describe_file-input_unvax_stage1:
+    run: r:latest analysis/describe_file.R input_unvax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_unvax_stage1.txt
+
   stage2_missing_table1_all:
     run: r:latest analysis/descriptives/Stage2_missing_table1.R all
     needs:
