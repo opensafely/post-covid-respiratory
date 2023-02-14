@@ -259,6 +259,16 @@ out_date_copd_exac=patients.with_these_clinical_events(
         "incidence": 0.3},
     ),
 
+out_date_pulmonary_fibrosis=patients.with_these_clinical_events(
+    pulmonary_fibrosis_snomed,
+    returning="date",
+    on_or_after=f"{index_date_variable}",
+    find_first_match_in_period=True,
+    return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+    ),
+        
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
     sub_bin_asthma_recent_snomed=patients.with_these_clinical_events(

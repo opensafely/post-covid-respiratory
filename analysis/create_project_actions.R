@@ -260,6 +260,33 @@ actions_list <- splice(
     )
   ),
 
+action(
+    name = glue("describe_file-input_prevax_stage1"),
+    run = glue("r:latest analysis/describe_file.R input_prevax_stage1 rds"),
+    needs = list("stage1_data_cleaning_all"),
+    moderately_sensitive = list(
+      describe_model_input = glue("output/describe-input_prevax_stage1.txt")
+    )
+  ),
+  
+  action(
+    name = glue("describe_file-input_vax_stage1"),
+    run = glue("r:latest analysis/describe_file.R input_vax_stage1 rds"),
+    needs = list("stage1_data_cleaning_all"),
+    moderately_sensitive = list(
+      describe_model_input = glue("output/describe-input_vax_stage1.txt")
+    )
+  ),
+  
+  action(
+    name = glue("describe_file-input_unvax_stage1"),
+    run = glue("r:latest analysis/describe_file.R input_unvax_stage1 rds"),
+    needs = list("stage1_data_cleaning_all"),
+    moderately_sensitive = list(
+      describe_model_input = glue("output/describe-input_unvax_stage1.txt")
+    )
+  ),
+  
   # #comment("Stage 2 - Missing - Table 1"),
   action(
     name = "stage2_missing_table1_all",

@@ -59,15 +59,9 @@ all_covars <- paste0("cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation
                      "cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;",
                      "cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes")
 
-#Specific covars below are only confounders for the specific outcomes below
-#specific_covars <- 
-#specific_outcomes <- 
-
-
-
 # Specify populations and cohorts --------------------------------------------------------------
 
-populations <- c("no_pre-existing","pre-existing")
+populations <- c("no_preexisting","preexisting")
 
 cohorts <- c("vax","unvax","prevax")
 
@@ -78,8 +72,8 @@ outcomes_runall <- c("out_date_breathless",
                       "out_date_urti",
                       "out_date_pneumonia",
                       "out_date_asthma_exac",
-                      "out_date_copd_exac")
-#outcomes_runmain <- 
+                      "out_date_copd_exac",
+                      "out_date_pulmonary_fibrosis")
                       
 
 
