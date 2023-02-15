@@ -452,7 +452,7 @@ out_date_pulmonary_fibrosis=patients.with_these_clinical_events(
     ## BMI
     # taken from: https://github.com/opensafely/BMI-and-Metabolic-Markers/blob/main/analysis/common_variables.py 
     cov_num_bmi=patients.most_recent_bmi(
-        on_or_before=f"{index_date_variable} - 1",
+        on_or_before=f"{index_date_variable} - 1 day",
         minimum_age_at_measurement=18,
         include_measurement_date=True,
         date_format="YYYY-MM",
