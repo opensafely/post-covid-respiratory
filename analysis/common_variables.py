@@ -169,32 +169,6 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "tmp_sub_bin_covid19_confirmed_history_sgss","tmp_sub_bin_covid19_confirmed_history_snomed","tmp_sub_bin_covid19_confirmed_history_hes"
     ),
 
-    # Define smoking subgroup
-    sub_cat_smoking_status=patients.categorised_as(
-        {
-            "S": "sub_most_recent_smoking_code = 'S'",
-            "E": """
-                sub_most_recent_smoking_code = 'E' OR (
-                sub_most_recent_smoking_code = 'N' AND sub_ever_smoked
-                )
-            """,
-            "N": "sub_most_recent_smoking_code = 'N' AND NOT sub_ever_smoked",
-            "M": "DEFAULT",
-        },
-        return_expectations={
-            "category": {"ratios": {"S": 0.6, "E": 0.1, "N": 0.2, "M": 0.1}}
-        },
-        sub_most_recent_smoking_code=patients.with_these_clinical_events(
-            smoking_clear,
-            find_last_match_in_period=True,
-            on_or_before=f"{index_date_variable} - 1 day",
-            returning="category",
-        ),
-        sub_ever_smoked=patients.with_these_clinical_events(
-            filter_codes_by_category(smoking_clear, include=["S", "E"]),
-            on_or_before=f"{index_date_variable} - 1 day",
-        ),
-    ),
 
 
 # DEFINE OUTCOMES ------------------------------------------------------
