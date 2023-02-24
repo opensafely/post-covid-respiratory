@@ -16,7 +16,8 @@ defaults_list <- list(
   expectations= list(population_size=10000L)
 )
 
-active_analyses <- read_rds("lib/active_analyses.rds")
+active_analyses <- read_rds("lib/active_analyses.rds") %>%
+  filter(outcome == "out_date_asthma_exac")
 active_analyses <- active_analyses[order(active_analyses$analysis,active_analyses$cohort,active_analyses$outcome),]
 cohorts <- unique(active_analyses$cohort)
 

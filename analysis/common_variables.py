@@ -177,6 +177,7 @@ out_date_breathless=patients.with_these_clinical_events(
     breathlessness_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -187,6 +188,7 @@ out_date_cough=patients.with_these_clinical_events(
     cough_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -197,6 +199,7 @@ out_date_urti=patients.with_these_clinical_events(
     urti_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -207,6 +210,7 @@ out_date_pneumonia=patients.with_these_clinical_events(
     pneumonia_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -217,6 +221,7 @@ out_date_asthma_exac=patients.with_these_clinical_events(
     asthma_exacerbation_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -227,6 +232,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
     copd_exacerbation_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -237,6 +243,7 @@ out_date_pulmonary_fibrosis=patients.with_these_clinical_events(
     pulmonary_fibrosis_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
