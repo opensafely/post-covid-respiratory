@@ -124,6 +124,27 @@ convert_comment_actions <-function(yaml.txt){
   )
 }
 
+# Create function to make Table 2 ----------------------------------------------
+
+table2 <- function(cohort){
+  
+  table2_names <- gsub("out_date_","",unique(active_analyses[active_analyses$cohort=={cohort},]$name))
+  
+  splice(
+    comment(glue("Table 2 - {cohort}")),
+    action(
+      name = glue("table2_{cohort}"),
+      run = "r:latest analysis/table2.R",
+      arguments = c(cohort),
+      needs = c(as.list(paste0("make_model_input-",table2_names))),
+      moderately_sensitive = list(
+        table2 = glue("output/table2_{cohort}.csv"),
+        table2_rounded = glue("output/table2_{cohort}_rounded.csv")
+      )
+    )
+  )
+}
+
 
 ##########################################################
 ## Define and combine all actions into a list of actions #
@@ -324,15 +345,12 @@ actions_list <- splice(
   ),
 
   comment("Make Table 2"),
-  action(
-     name = "table2",
-     run = "r:latest analysis/table2.R",
-     needs = as.list(paste0("make_model_input-",active_analyses$name)),
-     moderately_sensitive = list(
-       table2 = glue("output/table2.csv"),
-       table2_rounded = glue("output/table2_rounded.csv")
-     )
-   )
+  splice(
+    unlist(lapply(unique(active_analyses$cohort), 
+                  function(x) table2(cohort = x)), 
+           recursive = FALSE
+    )
+  )
 
   # comment("Stage 6 - make model output"),
   # action(
