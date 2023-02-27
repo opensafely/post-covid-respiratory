@@ -169,32 +169,6 @@ def generate_common_variables(index_date_variable,end_date_variable):
         "tmp_sub_bin_covid19_confirmed_history_sgss","tmp_sub_bin_covid19_confirmed_history_snomed","tmp_sub_bin_covid19_confirmed_history_hes"
     ),
 
-    # Define smoking subgroup
-    sub_cat_smoking_status=patients.categorised_as(
-        {
-            "S": "sub_most_recent_smoking_code = 'S'",
-            "E": """
-                sub_most_recent_smoking_code = 'E' OR (
-                sub_most_recent_smoking_code = 'N' AND sub_ever_smoked
-                )
-            """,
-            "N": "sub_most_recent_smoking_code = 'N' AND NOT sub_ever_smoked",
-            "M": "DEFAULT",
-        },
-        return_expectations={
-            "category": {"ratios": {"S": 0.6, "E": 0.1, "N": 0.2, "M": 0.1}}
-        },
-        sub_most_recent_smoking_code=patients.with_these_clinical_events(
-            smoking_clear,
-            find_last_match_in_period=True,
-            on_or_before=f"{index_date_variable} - 1 day",
-            returning="category",
-        ),
-        sub_ever_smoked=patients.with_these_clinical_events(
-            filter_codes_by_category(smoking_clear, include=["S", "E"]),
-            on_or_before=f"{index_date_variable} - 1 day",
-        ),
-    ),
 
 
 # DEFINE OUTCOMES ------------------------------------------------------
@@ -203,6 +177,7 @@ out_date_breathless=patients.with_these_clinical_events(
     breathlessness_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -213,6 +188,7 @@ out_date_cough=patients.with_these_clinical_events(
     cough_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -223,6 +199,7 @@ out_date_urti=patients.with_these_clinical_events(
     urti_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -233,6 +210,7 @@ out_date_pneumonia=patients.with_these_clinical_events(
     pneumonia_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -243,6 +221,7 @@ out_date_asthma_exac=patients.with_these_clinical_events(
     asthma_exacerbation_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -253,6 +232,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
     copd_exacerbation_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
@@ -263,6 +243,7 @@ out_date_pulmonary_fibrosis=patients.with_these_clinical_events(
     pulmonary_fibrosis_snomed,
     returning="date",
     on_or_after=f"{index_date_variable}",
+    date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},

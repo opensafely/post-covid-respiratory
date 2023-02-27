@@ -11,6 +11,7 @@ actions:
   ## This file is created by create_project_actions.R 
   ## Edit and run create_project_actions.R to update the project.yaml 
   ## # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+  ## Generate vaccination eligibility information 
 
   vax_eligibility_inputs:
     run: r:latest analysis/metadates.R
@@ -19,6 +20,8 @@ actions:
         study_dates_json: output/study_dates.json
         vax_jcvi_groups: output/vax_jcvi_groups.csv
         vax_eligible_dates: output/vax_eligible_dates.csv
+
+  ## Generate dummy data for study_definition - population_prelim 
 
   generate_study_population_prelim:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_prelim
@@ -29,6 +32,8 @@ actions:
       highly_sensitive:
         cohort: output/input_prelim.feather
 
+  ## Generate dates for all study cohorts 
+
   generate_index_dates:
     run: r:latest analysis/prelim.R
     needs:
@@ -37,6 +42,8 @@ actions:
     outputs:
       highly_sensitive:
         index_dates: output/index_dates.csv
+
+  ## Generate dummy data for study_definition - prevax 
 
   generate_study_population_prevax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_prevax
@@ -48,6 +55,8 @@ actions:
       highly_sensitive:
         cohort: output/input_prevax.csv.gz
 
+  ## Generate dummy data for study_definition - vax 
+
   generate_study_population_vax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_vax
       --output-format csv.gz
@@ -58,6 +67,8 @@ actions:
       highly_sensitive:
         cohort: output/input_vax.csv.gz
 
+  ## Generate dummy data for study_definition - unvax 
+
   generate_study_population_unvax:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_unvax
       --output-format csv.gz
@@ -67,6 +78,8 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
+
+  ## Preprocess data -prevax 
 
   preprocess_data_prevax:
     run: r:latest analysis/preprocess/preprocess_data.R prevax
@@ -81,6 +94,8 @@ actions:
         cohort: output/input_prevax.rds
         venn: output/venn_prevax.rds
 
+  ## Preprocess data - vax 
+
   preprocess_data_vax:
     run: r:latest analysis/preprocess/preprocess_data.R vax
     needs:
@@ -94,6 +109,8 @@ actions:
         cohort: output/input_vax.rds
         venn: output/venn_vax.rds
 
+  ## Preprocess data -unvax 
+
   preprocess_data_unvax:
     run: r:latest analysis/preprocess/preprocess_data.R unvax
     needs:
@@ -106,6 +123,8 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.rds
         venn: output/venn_unvax.rds
+
+  ## Stage 1 - Data cleaning - all cohorts 
 
   stage1_data_cleaning_all:
     run: r:latest analysis/preprocess/Stage1_data_cleaning.R all
@@ -147,13 +166,2347 @@ actions:
       moderately_sensitive:
         describe_model_input: output/describe-input_unvax_stage1.txt
 
-  stage2_missing_table1_all:
-    run: r:latest analysis/descriptives/Stage2_missing_table1.R all
+  ## Stage 5 - Run models 
+
+  make_model_input-cohort_prevax-main-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-main-asthma_exac-no_preexisting
     needs:
     - stage1_data_cleaning_all
     outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-main-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-main-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-main-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-main-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-main-asthma_exac-no_preexisting
+    outputs:
       moderately_sensitive:
-        Missing_RangeChecks: output/not-for-review/Check_missing_range_*.csv
-        DateChecks: output/not-for-review/Check_dates_range_*.csv
-        Descriptive_Table: output/review/descriptives/Table1_*.csv
+        model_output: output/model_output-cohort_prevax-main-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-main-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-main-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-main-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-main-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-main-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-main-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-main-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-main-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-main-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-main-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-main-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-main-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-main-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-main-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-main-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-main-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-main-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-main-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-main-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-main-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-main-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-main-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-main-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-main-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-main-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-main-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-main-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-main-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-main-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-main-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-main-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-main-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-main-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-main-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-main-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-main-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-main-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-main-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-main-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-main-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_18_39-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_18_39-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_18_39-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_18_39-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_18_39-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_18_39-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_18_39-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_18_39-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_18_39-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_40_59-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_40_59-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_40_59-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_40_59-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_40_59-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_40_59-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_40_59-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_40_59-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_40_59-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_60_79-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_60_79-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_60_79-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_60_79-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_60_79-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_60_79-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_60_79-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_60_79-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_60_79-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_age_80_110-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_prevax-sub_age_80_110-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_age_80_110-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_age_80_110-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_unvax-sub_age_80_110-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_age_80_110-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_age_80_110-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=FALSE --df_output=model_output-cohort_vax-sub_age_80_110-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_age_80_110-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_history-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_history-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_history-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_history-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_history-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_history-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_history-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_history-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_history-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_history-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_history-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_history-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_history-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_sex_female-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_sex_female-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_sex_female-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_sex_female-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_sex_female-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_sex_female-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_sex_female-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_sex_female-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_sex_female-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_sex_female-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_sex_female-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_sex_female-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_sex_male-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_sex_male-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_sex_male-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_sex_male-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_sex_male-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_sex_male-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_sex_male-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_sex_male-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_sex_male-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_sex_male-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=NULL
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_sex_male-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_sex_male-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_current-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_current-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_current-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_current-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_current-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_current-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_current-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_current-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_current-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_ever-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_ever-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_ever-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_prevax-sub_smoking_never-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2020-01-01 --study_stop=2021-06-01
+      --cut_points=28;197;535 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_prevax-sub_smoking_never-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_prevax-sub_smoking_never-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_unvax-sub_smoking_never-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_unvax-sub_smoking_never-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_unvax-sub_smoking_never-asthma_exac-preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never-asthma_exac-no_preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting.csv
+
+  make_model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting:
+    run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never-asthma_exac-preexisting
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        model_input: output/model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting.rds
+
+  cox_ipw-cohort_vax-sub_smoking_never-asthma_exac-preexisting:
+    run: cox-ipw:v0.0.21 --df_input=model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting.rds
+      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=cov_cat_region --covariate_sex=cov_cat_sex
+      --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;cov_bin_carehome_status;cov_bin_obesity;cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes
+      --cox_start=index_date --cox_stop=end_date --study_start=2021-06-01 --study_stop=2021-12-14
+      --cut_points=28;197 --controls_per_case=20 --total_event_threshold=50 --episode_event_threshold=5
+      --covariate_threshold=5 --age_spline=TRUE --df_output=model_output-cohort_vax-sub_smoking_never-asthma_exac-preexisting.csv
+    needs:
+    - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        model_output: output/model_output-cohort_vax-sub_smoking_never-asthma_exac-preexisting.csv
+
+  ## Make Table 2 
+
+  table2:
+    run: r:latest analysis/table2.R
+    needs:
+    - make_model_input-cohort_prevax-main-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-main-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-main-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-main-asthma_exac-preexisting
+    - make_model_input-cohort_vax-main-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-main-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting
+    - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting
+    - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        table2: output/table2.csv
+        table2_rounded: output/table2_rounded.csv
 
