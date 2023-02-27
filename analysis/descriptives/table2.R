@@ -1,8 +1,12 @@
+# Load libraries ---------------------------------------------------------------
+print('Load libraries')
+
 library(readr)
 library(dplyr)
 library(magrittr)
 
 # Specify redaction threshold --------------------------------------------------
+print('Specify redaction threshold')
 
 threshold <- 6
 
@@ -10,6 +14,17 @@ threshold <- 6
 print('Source common functions')
 
 source("analysis/utility.R")
+
+# Specify arguments ------------------------------------------------------------
+print('Specify arguments')
+
+args <- commandArgs(trailingOnly=TRUE)
+
+if(length(args)==0){
+  cohort <- "vax"
+} else {
+  cohort <- args[[1]]
+}
 
 # Load active analyses ---------------------------------------------------------
 print('Load active analyses')
@@ -76,18 +91,18 @@ for (i in 1:nrow(active_analyses)) {
 
 }
 
+# Save Table 2 -----------------------------------------------------------------
+print('Save Table 2')
+
+write.csv(table2, "output/table2_",cohort,".csv")
 
 # Perform redaction ------------------------------------------------------------
+print('Perform redaction')
 
 table2[,setdiff(colnames(table2),c("name","cohort","exposure","outcome","analysis","population"))] <- lapply(table2[,setdiff(colnames(table2),c("name","cohort","exposure","outcome","analysis","population"))],
                                             FUN=function(y){roundmid_any(as.numeric(y), to=threshold)})
 
 # Save Table 2 -----------------------------------------------------------------
-print('Save Table 2')
+print('Save rounded Table 2')
 
-write.csv(table2, "output/table2.csv")
-
-table2_rounded <- table2[,c("name","cohort","exposure","outcome","analysis","population",
-                            colnames(table2)[grepl("_rounded",colnames(table2))])]
-
-write.csv(table2_rounded, "output/table2_rounded.csv")
+write.csv(table2, "output/table2_",cohort,"_rounded.csv")

@@ -2395,118 +2395,139 @@ actions:
         model_output: output/model_output-cohort_vax-sub_smoking_never-asthma_exac-preexisting.csv
 
   ## Make Table 2 
+  ## Table 2 - prevax 
 
-  table2:
-    run: r:latest analysis/table2.R
+  table2_prevax:
+    run: r:latest analysis/table2.R prevax
     needs:
     - make_model_input-cohort_prevax-main-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-main-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-main-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-main-asthma_exac-preexisting
-    - make_model_input-cohort_vax-main-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-main-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_age_18_39-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_age_40_59-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_age_60_79-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_age_80_110-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_covid_hospitalised-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_covid_nonhospitalised-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_asian-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_black-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_mixed-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_other-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_ethnicity_white-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_sex_female-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_sex_male-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_smoking_current-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_smoking_ever-asthma_exac-preexisting
-    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting
-    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting
-    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting
-    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting
     - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-no_preexisting
     - make_model_input-cohort_prevax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        table2: output/table2_prevax.csv
+        table2_rounded: output/table2_prevax_rounded.csv
+
+  ## Table 2 - unvax 
+
+  table2_unvax:
+    run: r:latest analysis/table2.R unvax
+    needs:
+    - make_model_input-cohort_unvax-main-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-main-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_18_39-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_40_59-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_60_79-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_age_80_110-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_history-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_hospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_asian-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_black-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_mixed-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_other-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_ethnicity_white-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_sex_female-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_sex_male-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_smoking_current-asthma_exac-preexisting
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-no_preexisting
+    - make_model_input-cohort_unvax-sub_smoking_ever-asthma_exac-preexisting
     - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-no_preexisting
     - make_model_input-cohort_unvax-sub_smoking_never-asthma_exac-preexisting
+    outputs:
+      moderately_sensitive:
+        table2: output/table2_unvax.csv
+        table2_rounded: output/table2_unvax_rounded.csv
+
+  ## Table 2 - vax 
+
+  table2_vax:
+    run: r:latest analysis/table2.R vax
+    needs:
+    - make_model_input-cohort_vax-main-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-main-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_18_39-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_40_59-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_60_79-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_age_80_110-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_history-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_hospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_covid_nonhospitalised-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_asian-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_black-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_mixed-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_other-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_ethnicity_white-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_sex_female-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_sex_male-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_smoking_current-asthma_exac-preexisting
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-no_preexisting
+    - make_model_input-cohort_vax-sub_smoking_ever-asthma_exac-preexisting
     - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-no_preexisting
     - make_model_input-cohort_vax-sub_smoking_never-asthma_exac-preexisting
     outputs:
       moderately_sensitive:
-        table2: output/table2.csv
-        table2_rounded: output/table2_rounded.csv
+        table2: output/table2_vax.csv
+        table2_rounded: output/table2_vax_rounded.csv
 
