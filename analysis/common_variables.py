@@ -28,7 +28,7 @@ import study_definition_helper_functions as helpers
 pandemic_start = study_dates["pandemic_start"]
 # Define common variables function
 
-def generate_common_variables(index_date_variable,end_date_variable):
+def generate_common_variables(index_date_variable,exposure_end_date_variable,outcome_end_date_variable):
     dynamic_variables = dict(
 
 # DEFINE EXPOSURES ------------------------------------------------------
@@ -40,7 +40,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
         returning="date",
         find_first_match_in_period=True,
         date_format="YYYY-MM-DD",
-        between=[f"{index_date_variable}",f"{end_date_variable}"],
+        between=[f"{index_date_variable}",f"{exposure_end_date_variable}"],
         return_expectations={
             "date": {"earliest": study_dates["pandemic_start"], "latest" : "today"},
             "rate": "uniform",
@@ -55,7 +55,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
             covid_primary_care_sequalae,
         ),
         returning="date",
-        between=[f"{index_date_variable}",f"{end_date_variable}"],
+        between=[f"{index_date_variable}",f"{exposure_end_date_variable}"],
         date_format="YYYY-MM-DD",
         find_first_match_in_period=True,
         return_expectations={
@@ -68,7 +68,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
     tmp_exp_date_covid19_confirmed_hes=patients.admitted_to_hospital(
         with_these_diagnoses=covid_codes,
         returning="date_admitted",
-        between=[f"{index_date_variable}",f"{end_date_variable}"],
+        between=[f"{index_date_variable}",f"{exposure_end_date_variable}"],
         date_format="YYYY-MM-DD",
         find_first_match_in_period=True,
         return_expectations={
@@ -81,7 +81,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
     tmp_exp_date_covid19_confirmed_death=patients.with_these_codes_on_death_certificate(
         covid_codes,
         returning="date_of_death",
-        between=[f"{index_date_variable}",f"{end_date_variable}"],
+        between=[f"{index_date_variable}",f"{exposure_end_date_variable}"],
         match_only_underlying_cause=True,
         date_format="YYYY-MM-DD",
         return_expectations={
@@ -114,7 +114,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
   
     dereg_date=patients.date_deregistered_from_all_supported_practices(
         
-        between=[f"{index_date_variable}",f"{end_date_variable}"],
+        between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
         date_format = 'YYYY-MM-DD',
         return_expectations={
         "date": {"earliest": study_dates["pandemic_start"], "latest": "today"},
@@ -176,7 +176,7 @@ def generate_common_variables(index_date_variable,end_date_variable):
 out_date_breathless=patients.with_these_clinical_events(
     breathlessness_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -187,7 +187,7 @@ out_date_breathless=patients.with_these_clinical_events(
 out_date_cough=patients.with_these_clinical_events(
     cough_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -198,7 +198,7 @@ out_date_cough=patients.with_these_clinical_events(
 out_date_urti=patients.with_these_clinical_events(
     urti_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -209,7 +209,7 @@ out_date_urti=patients.with_these_clinical_events(
 out_date_pneumonia=patients.with_these_clinical_events(
     pneumonia_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -220,7 +220,7 @@ out_date_pneumonia=patients.with_these_clinical_events(
 out_date_asthma_exac=patients.with_these_clinical_events(
     asthma_exacerbation_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -231,7 +231,7 @@ out_date_asthma_exac=patients.with_these_clinical_events(
 out_date_copd_exac=patients.with_these_clinical_events(
     copd_exacerbation_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={
@@ -242,7 +242,7 @@ out_date_copd_exac=patients.with_these_clinical_events(
 out_date_pulmonary_fibrosis=patients.with_these_clinical_events(
     pulmonary_fibrosis_snomed,
     returning="date",
-    on_or_after=f"{index_date_variable}",
+    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
     date_format="YYYY-MM-DD",
     find_first_match_in_period=True,
     return_expectations={

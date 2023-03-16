@@ -27,7 +27,7 @@ import study_definition_helper_functions as helpers
 from common_variables import generate_common_variables
 (
     dynamic_variables
-) = generate_common_variables(index_date_variable="index_date_unvax", end_date_variable="end_date_unvax")
+) = generate_common_variables(index_date_variable="index_date_unvax", exposure_end_date_variable="end_date_exposure", outcome_end_date_variable="end_date_outcome")
 
 ## Variables for deriving JCVI groups
 from grouping_variables import (
@@ -47,9 +47,15 @@ study = StudyDefinition(
         returning_type = 'date', 
         date_format = 'YYYY-MM-DD',     
     ),
-    end_date_unvax = patients.with_value_from_file(
+     end_date_exposure = patients.with_value_from_file(
         f_path = 'output/index_dates.csv',
-        returning = 'end_unvax',
+        returning = 'end_unvax_exposure',
+        returning_type = 'date', 
+        date_format = 'YYYY-MM-DD',
+    ),
+     end_date_outcome = patients.with_value_from_file(
+        f_path = 'output/index_dates.csv',
+        returning = 'end_unvax_outcome',
         returning_type = 'date', 
         date_format = 'YYYY-MM-DD',
     ),
