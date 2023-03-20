@@ -22,21 +22,21 @@ cohorts <- unique(active_analyses$cohort)
 
 # Determine which outputs are ready --------------------------------------------
 
-# success <- readxl::read_excel("C:/Users/hk19914/OneDrive - University of Bristol/Documents - grp-EHR/Projects/post-covid-outcome-tracker.xlsx",
-#                                sheet = "respiratory",
-#                                col_types = c("text", "text", "text", "text", "text",
-#                                              "text", "text", "text", "text", "text",
-#                                              "text", "text", "text", "text", "text",
-#                                              "text", "text", "text", "text", "text",
-#                                              "text", "skip", "skip"))
+success <- readxl::read_excel("C:/Users/hk19914/OneDrive - University of Bristol/Documents - grp-EHR/Projects/post-covid-outcome-tracker.xlsx",
+                               sheet = "respiratory",
+                               col_types = c("text", "text", "text", "text", "text",
+                                             "text", "text", "text", "text", "text",
+                                             "text", "text", "text", "text", "text",
+                                             "text", "text", "text", "text", "text",
+                                             "text", "skip", "skip"))
 
-# success <- tidyr::pivot_longer(success,
-#                                 cols = setdiff(colnames(success),c("outcome","cohort", "population")),
-#                                 names_to = "analysis")
+success <- tidyr::pivot_longer(success,
+                                cols = setdiff(colnames(success),c("outcome","cohort", "population")),
+                                names_to = "analysis")
 
-# success$name <- paste0("cohort_",success$cohort, "-",success$analysis, "-",success$outcome, "-", success$population)
+success$name <- paste0("cohort_",success$cohort, "-",success$analysis, "-",success$outcome, "-", success$population)
 
-# success <- success[grepl("success",success$value, ignore.case = TRUE),]
+success <- success[grepl("success",success$value, ignore.case = TRUE),]
 
 # create action functions ----
 
@@ -349,17 +349,17 @@ actions_list <- splice(
                   function(x) table2(cohort = x)), 
            recursive = FALSE
     )
-  )
+  ),
 
-  # comment("Stage 6 - make model output"),
-  # action(
-  #   name = "make_model_output",
-  #   run = "r:latest analysis/model/make_model_output.R",
-  #   needs = as.list(paste0("cox_ipw-",success$name)),
-  #   moderately_sensitive = list(
-  #     model_output = glue("output/model_output.csv")
-  #   )
-  # ),
+  comment("Stage 6 - make model output"),
+  action(
+    name = "make_model_output",
+    run = "r:latest analysis/model/make_model_output.R",
+    needs = as.list(paste0("cox_ipw-",success$name)),
+    moderately_sensitive = list(
+      model_output = glue("output/model_output.csv")
+    )
+  )
 
 
 )
