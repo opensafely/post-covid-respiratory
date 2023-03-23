@@ -166,6 +166,18 @@ actions:
       moderately_sensitive:
         describe_model_input: output/describe-input_unvax_stage1.txt
 
+  ## Stage 2 - Missing - Table 1 
+
+  stage2_missing_table1_all:
+    run: r:latest analysis/descriptives/Stage2_missing_table1.R all
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        Missing_RangeChecks: output/not-for-review/Check_missing_range_*.csv
+        DateChecks: output/not-for-review/Check_dates_range_*.csv
+        Descriptive_Table: output/review/descriptives/Table1_*.csv
+
   ## Stage 5 - Run models 
 
   make_model_input-cohort_prevax-main-asthma_exac-no_preexisting:
