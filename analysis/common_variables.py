@@ -11,6 +11,37 @@ from cohortextractor import (
     codelist_from_csv,
 )
 
+# function for recurring clinical events
+def clinical_event_date_X(
+  name, index_date, n, codelist, return_expectations
+):
+  # emeregency attendance dates
+  def var_signature(name, on_or_after, codelist, return_expectations):
+    return {
+      name: patients.with_these_clinical_events(
+                codelist,
+                returning="date",
+                on_or_after=on_or_after,
+                date_format="YYYY-MM-DD",
+                find_first_match_in_period=True,
+                return_expectations=return_expectations
+                ),
+    }
+  variables=var_signature(
+     name=f"{name}_1_date", 
+     on_or_after=index_date, 
+     codelist=codelist, 
+     return_expectations=return_expectations
+     )
+  for i in range(2, n+1):
+      variables.update(var_signature(
+         name=f"{name}_{i}_date", 
+         on_or_after=f"{name}_{i-1}_date + 1 day",
+         codelist=codelist, 
+         return_expectations=return_expectations
+         ))
+  return variables
+
 #study dates
 from grouping_variables import (
     study_dates,
@@ -173,16 +204,26 @@ def generate_common_variables(index_date_variable,end_date_variable):
 
 # DEFINE OUTCOMES ------------------------------------------------------
 ## First recording of the outcome in during the study period
-out_date_breathless=patients.with_these_clinical_events(
-    breathlessness_snomed,
-    returning="date",
-    on_or_after=f"{index_date_variable}",
-    date_format="YYYY-MM-DD",
-    find_first_match_in_period=True,
-    return_expectations={
+**clinical_event_date_X(
+  name="out_date_breathless", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=breathlessness_snomed, 
+  return_expectations={
         "date": {"earliest": "1900-01-01", "latest" : "today"},
-         "incidence": 0.3}, 
-    ),
+         "incidence": 0.3
+         }
+),
+# out_date_breathless=patients.with_these_clinical_events(
+#     breathlessness_snomed,
+#     returning="date",
+#     on_or_after=f"{index_date_variable}",
+#     date_format="YYYY-MM-DD",
+#     find_first_match_in_period=True,
+#     return_expectations={
+#         "date": {"earliest": "1900-01-01", "latest" : "today"},
+#          "incidence": 0.3}, 
+#     ),
 
 out_date_cough=patients.with_these_clinical_events(
     cough_snomed,
