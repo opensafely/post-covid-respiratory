@@ -38,7 +38,7 @@ strata <- "cov_cat_region"
 covariate_sex <- "cov_cat_sex"
 covariate_age <- "cov_num_age"
 cox_start <- "index_date"
-cox_stop <- "end_date"
+cox_stop <- "end_date_outcome"
 controls_per_case <- 20L
 total_event_threshold <- 50L
 episode_event_threshold <- 5L
@@ -47,11 +47,10 @@ covariate_threshold <- 5L
 #study_dates <- fromJSON("output/study_dates.json")
 
 prevax_start <- "2020-01-01"
-prevax_stop<- "2021-06-01"
 vax_unvax_start<-"2021-06-01"
-vax_unvax_stop <-"2021-12-14"
+study_stop <-"2021-12-14"
 ##Cut points 
-prevax_cuts <- "28;197;535"
+prevax_cuts <- "28;197;365;714"
 vax_unvax_cuts <- "28;197"
 all_covars <- paste0("cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;",
                      "cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;",
@@ -98,7 +97,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -120,7 +119,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -142,7 +141,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -166,7 +165,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = vax_unvax_start,
-                                study_stop = vax_unvax_stop,
+                                study_stop = study_stop,
                                 cut_points = vax_unvax_cuts,
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -189,7 +188,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -211,7 +210,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -233,7 +232,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -255,7 +254,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -277,7 +276,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -299,7 +298,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -321,7 +320,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -343,7 +342,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -365,7 +364,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -387,7 +386,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -409,7 +408,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -431,7 +430,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -453,7 +452,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
@@ -475,7 +474,7 @@ for (p in populations) {
                                 cox_start = cox_start,
                                 cox_stop = cox_stop,
                                 study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
-                                study_stop = ifelse(c=="prevax", prevax_stop, vax_unvax_stop),
+                                study_stop = study_stop,
                                 cut_points = ifelse(c=="prevax", prevax_cuts, vax_unvax_cuts),
                                 controls_per_case = controls_per_case,
                                 total_event_threshold = total_event_threshold,
