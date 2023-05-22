@@ -79,6 +79,20 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
 
+  ## Summarise number of events 
+
+  summarise_number_of_events:
+    run: r:latest analysis/Count_outcomes.R
+    needs:
+    - generate_study_population_prevax
+    - generate_study_population_vax
+    - generate_study_population_unvax
+    outputs:
+      highly_sensitive:
+        prevax_summary: output/Count_outcomes_prevax.txt
+        vax_summary: output/Count_outcomes_vax.txt
+        unvax_summary: output/Count_outcomes_unvax.txt
+
   ## Preprocess data -prevax 
 
   preprocess_data_prevax:
