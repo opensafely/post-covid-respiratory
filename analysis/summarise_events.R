@@ -17,7 +17,7 @@ results <- data.frame(cohort = character(),
 # Generate summary data for each cohort ----------------------------------------
 print('Generate summary data for each cohort')
 
-for (cohort in c("vax")) {
+for (cohort in c("prevax","vax","unvax")) {
   
   print(paste0('Cohort: ',cohort))
   
