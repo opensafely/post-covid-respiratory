@@ -218,15 +218,13 @@ actions_list <- splice(
     )
   ),
 
-  comment("Summarise number of events"),
+  comment("Summarise events"),
   action(
-    name = "summarise_number_of_events",
-    run = "r:latest analysis/Count_outcomes.R",
+    name = "summarise_events",
+    run = "r:latest analysis/summarise_events.R",
     needs = list("generate_study_population_prevax","generate_study_population_vax","generate_study_population_unvax"),
-    highly_sensitive = list(
-      prevax_summary = glue("output/Count_outcomes_prevax.txt"),
-      vax_summary = glue("output/Count_outcomes_vax.txt"),
-      unvax_summary = glue("output/Count_outcomes_unvax.txt")
+    moderately_sensitive = list(
+      summarise_events = glue("output/summarise_events.csv")
     )
   ),
   
