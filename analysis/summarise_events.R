@@ -70,4 +70,4 @@ for (cohort in c("vax")) {
 # Save results -----------------------------------------------------------------
 print('Save results')
 
-write.csv(results, paste0("output/summarize_events.csv"), row.names = FALSE)
+write.csv(results, paste0("output/summarise_events.csv"), row.names = FALSE)
