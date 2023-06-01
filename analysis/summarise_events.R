@@ -46,11 +46,13 @@ for (cohort in c("prevax","vax","unvax")) {
       # Calculate summary statisics ----------------------------------------------
       print(paste0('Calculate summary statisics for ', j))
       
-      results[nrow(results)+1,] <- c(cohort,j,"Min",paste0(min(tmp, na.rm = TRUE), collapse = ";"))
-      results[nrow(results)+1,] <- c(cohort,j,"Median",paste0(median(tmp, na.rm = TRUE), collapse = ";"))
-      results[nrow(results)+1,] <- c(cohort,j,"Mean",paste0(mean(tmp, na.rm = TRUE), collapse = ";"))
-      results[nrow(results)+1,] <- c(cohort,j,"Max",paste0(max(tmp, na.rm = TRUE), collapse = ";"))
-      results[nrow(results)+1,] <- c(cohort,j,"Missing",paste0(sum(is.na(tmp)), collapse = ";"))
+      print(c(cohort,j,"Min",paste0(min(tmp, na.rm = TRUE), collapse = ";")))
+      
+      results[nrow(results)+1,] <- c(cohort,j,"Min",min(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Median",median(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Mean",mean(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Max",max(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Missing",sum(is.na(tmp)))
       
     } else{
       
