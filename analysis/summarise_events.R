@@ -48,11 +48,20 @@ for (cohort in c("prevax","vax","unvax")) {
       
       print(c(cohort,j,"Min",paste0(min(tmp, na.rm = TRUE), collapse = ";")))
       
-      results[nrow(results)+1,] <- c(cohort,j,"Min",min(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Median",median(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Mean",mean(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Max",max(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Missing",sum(is.na(tmp)))
+      stat <- min(tmp, na.rm = TRUE)
+      results[nrow(results)+1,] <- c(cohort,j,"Min",stat)
+      
+      stat <- median(tmp, na.rm = TRUE)
+      results[nrow(results)+1,] <- c(cohort,j,"Median",stat)
+      
+      stat <- mean(tmp, na.rm = TRUE)
+      results[nrow(results)+1,] <- c(cohort,j,"Mean",stat)
+      
+      stat <- max(tmp, na.rm = TRUE)
+      results[nrow(results)+1,] <- c(cohort,j,"Max",stat)
+      
+      stat <- sum(is.na(tmp))
+      results[nrow(results)+1,] <- c(cohort,j,"Missing",stat)
       
     } else{
       
