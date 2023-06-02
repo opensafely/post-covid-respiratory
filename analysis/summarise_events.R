@@ -2,6 +2,8 @@
 
 library(Hmisc)
 library(readr)
+library(magrittr)
+library(dplyr)
 
 outcomes <- c("out_date_breathless", "out_date_cough", "out_date_urti", "out_date_asthma_exac", "out_date_copd_exac")
 
