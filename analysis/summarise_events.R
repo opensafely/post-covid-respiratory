@@ -1,29 +1,73 @@
-# Code by Alex Whitmarsh
-
-library(Hmisc)
 library(readr)
-library(magrittr)
-library(dplyr)
+library(tidyr)
 
-outcomes <- c("out_date_breathless", "out_date_cough", "out_date_urti", "out_date_asthma_exac", "out_date_copd_exac")
+# Specify event prefix ---------------------------------------------------------
+print('Specify event prefix')
 
-#read datasets
-prevax <- readr::read_csv("output/input_prevax.csv.gz") %>%
-  select_if(names(.) %in% outcomes)
-vax <- readr::read_csv("output/input_vax.csv.gz") %>%
-  select_if(names(.) %in% outcomes)
-unvax <- readr::read_csv("output/input_unvax.csv.gz") %>%
-  select_if(names(.) %in% outcomes)
+var_name <- "out_date_" 
 
-#summary data 
-describe_data <- function(data) {
-  file_name <- paste0("output/summarize_events-", deparse(substitute(data)), ".txt")
-  sink(file_name)
-  print(Hmisc::describe(data))
-  sink()
-  message(paste0("Counts of ", deparse(substitute(data)), " written to ", file_name, " successfully!"))
+# Generate empty dataset for results -------------------------------------------
+print('Generate empty datasets for results')
+
+results <- data.frame(cohort = character(),
+                      variable = character(),
+                      statistic = character(),
+                      value = numeric())
+
+# Generate summary data for each cohort ----------------------------------------
+print('Generate summary data for each cohort')
+
+for (cohort in c("vax")) {
+  
+  print(paste0('Cohort: ',cohort))
+  
+  # Load cohort data -----------------------------------------------------------
+  print('Load cohort data')
+  
+  df <- readr::read_csv(file = paste0("output/input_",cohort,".csv.gz") )
+  print(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"))
+  
+  # Restrict to relevant variables ---------------------------------------------
+  print('Restrict to relevant variables')
+  
+  df <- df[,c("patient_id",colnames(df)[grepl(var_name,colnames(df))])]
+  
+  # Repeat for each variable ---------------------------------------------------
+  
+  for (j in colnames(df)[grepl(var_name,colnames(df))]) {
+    
+    tmp <- get(j, df)
+    
+    # Check variables are numeric ----------------------------------------------
+    print(paste0('Check ',j,' is numeric'))
+    
+    if (is.numeric(tmp)==TRUE) {
+      
+      # Calculate summary statisics ----------------------------------------------
+      print(paste0('Calculate summary statisics for ', j))
+      
+      results[nrow(results)+1,] <- c(cohort,j,"Min",min(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Median",median(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Mean",mean(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Max",max(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"Missing",sum(is.na(tmp)))
+      
+    } else{
+      
+      print(paste0(j,' is not numeric'))
+      
+    }
+    
+  }
+  
+  # Pivot to wide format -------------------------------------------------------
+  print('Pivot to wide format')
+  
+  results <- tidyr::pivot_wider(results, names_from = "statistic", values_from = "value")
+  
 }
 
-describe_data(prevax)
-describe_data(vax)
-describe_data(unvax)
+# Save results -----------------------------------------------------------------
+print('Save results')
+
+write.csv(results, paste0("output/summarise_events.csv"), row.names = FALSE)
