@@ -223,7 +223,7 @@ actions_list <- splice(
     name = "summarise_number_of_events",
     run = "r:latest analysis/Count_outcomes.R",
     needs = list("generate_study_population_prevax","generate_study_population_vax","generate_study_population_unvax"),
-    highly_sensitive = list(
+    moderately_sensitive = list(
       prevax_summary = glue("output/Count_outcomes_prevax.txt"),
       vax_summary = glue("output/Count_outcomes_vax.txt"),
       unvax_summary = glue("output/Count_outcomes_unvax.txt")

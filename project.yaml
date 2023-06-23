@@ -88,7 +88,7 @@ actions:
     - generate_study_population_vax
     - generate_study_population_unvax
     outputs:
-      highly_sensitive:
+      moderately_sensitive:
         prevax_summary: output/Count_outcomes_prevax.txt
         vax_summary: output/Count_outcomes_vax.txt
         unvax_summary: output/Count_outcomes_unvax.txt
