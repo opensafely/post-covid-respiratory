@@ -17,7 +17,7 @@ results <- data.frame(cohort = character(),
 # Generate summary data for each cohort ----------------------------------------
 print('Generate summary data for each cohort')
 
-for (cohort in c("vax")) {
+for (cohort in c("prevax", "unvax", "vax")) {
   
   print(paste0('Cohort: ',cohort))
   
@@ -46,9 +46,15 @@ for (cohort in c("vax")) {
       # Calculate summary statisics ----------------------------------------------
       print(paste0('Calculate summary statisics for ', j))
       
-      results[nrow(results)+1,] <- c(cohort,j,"Min",min(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Median",median(tmp, na.rm = TRUE))
-      results[nrow(results)+1,] <- c(cohort,j,"Mean",mean(tmp, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"1%",quantile(tmp, 0.01, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"5%",quantile(tmp, 0.05, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"10%",quantile(tmp, 0.1, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"25%",quantile(tmp, 0.25, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"50%",quantile(tmp, 0.5, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"75%",quantile(tmp, 0.75, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"90%",quantile(tmp, 0.9, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"95%",quantile(tmp, 0.95, na.rm = TRUE))
+      results[nrow(results)+1,] <- c(cohort,j,"99%",quantile(tmp, 0.99, na.rm = TRUE))
       results[nrow(results)+1,] <- c(cohort,j,"Max",max(tmp, na.rm = TRUE))
       results[nrow(results)+1,] <- c(cohort,j,"Missing",sum(is.na(tmp)))
       
@@ -60,12 +66,12 @@ for (cohort in c("vax")) {
     
   }
   
-  # Pivot to wide format -------------------------------------------------------
+}
+
+ # Pivot to wide format -------------------------------------------------------
   print('Pivot to wide format')
   
   results <- tidyr::pivot_wider(results, names_from = "statistic", values_from = "value")
-  
-}
 
 # Save results -----------------------------------------------------------------
 print('Save results')
