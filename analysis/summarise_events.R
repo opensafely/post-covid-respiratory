@@ -3,17 +3,7 @@ library(tidyverse)
 # Generate empty dataset for results -------------------------------------------
 print('Generate empty datasets for results')
 
-results_all <- data.frame(cohort = character(),
-                      name = character(),
-                      events_0 = numeric(),
-                      events_1 = numeric(),
-                      events_2 = numeric(),
-                      events_3_4 = numeric(),
-                      events_5_9 = numeric(),
-                      events_10_19 = numeric(),
-                      events_20_49 = numeric(),
-                      events_50_99 = numeric()
-                     )
+results_all <- tibble() 
 
 # Generate summary data for each cohort ----------------------------------------
 print('Generate summary data for each cohort')
@@ -45,38 +35,30 @@ results <- df %>%
   ungroup() %>%
   pivot_wider(names_from = value, values_from = n) %>%
   # replace NAs with zeros
-  mutate(across(where(is.numeric), ~ replace_na(.x, 0L))) 
+  mutate(across(where(is.numeric), ~ replace_na(.x, 0L))) %>% 
+  # add cohort column
+  mutate(cohort = cohort, .before = 1)
 
-# rename variables and add cohort
-  results <- results %>% 
-    mutate(cohort = cohort, .before = 1) %>% 
-    rename(events_0 = `[0,1)`,
-            events_1 = `[1,2)`,
-            events_2 = `[2,3)`,
-            events_3_4 = `[3,5)`,
-            events_5_9 = `[5,10)`,
-            events_10_19 = `[10,20)`
-            events_20_49 = `[20,50),
-            events_50_99 = `[50,100)
-            )
-  
+# bind and add cohort
   results_all <- rbind(results_all, results)
-
-  }
-
-  roundmid_any <- function(x, to=1){
-    # like ceiling_any, but centers on (integer) midpoint of the rounding points
-    ceiling(x/to)*to - (floor(to/2)*(x!=0))
-  }
   
-  # save unrounded results
-  results_all %>%
-    mutate(total = rowSums(across(where(is.numeric)))) %>%
-    write.csv("output/summarise_events_counts.csv", row.names = FALSE)  
+  rm(results, df)
+
+}
+
+roundmid_any <- function(x, to=1){
+  # like ceiling_any, but centers on (integer) midpoint of the rounding points
+  ceiling(x/to)*to - (floor(to/2)*(x!=0))
+}
   
-  # save midpoint6 results
-  results_all %>%
-    mutate(across(where(is.numeric), ~roundmid_any(.x, to = 6))) %>%
-    mutate(total = rowSums(across(where(is.numeric)))) %>%
-    write.csv("output/summarise_events_counts_midpoint6.csv", row.names = FALSE)  
+# save unrounded results
+results_all %>%
+  mutate(total = rowSums(across(where(is.numeric)))) %>%
+  write.csv("output/summarise_events_counts.csv", row.names = FALSE)  
+
+# save midpoint6 results
+results_all %>%
+  mutate(across(where(is.numeric), ~roundmid_any(.x, to = 6))) %>%
+  mutate(total = rowSums(across(where(is.numeric)))) %>%
+  write.csv("output/summarise_events_counts_midpoint6.csv", row.names = FALSE)  
   
