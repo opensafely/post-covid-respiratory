@@ -40,7 +40,7 @@ results <- df %>%
   mutate(cohort = cohort, .before = 1)
 
 # bind and add cohort
-  results_all <- rbind(results_all, results)
+  results_all <- bind_rows(results_all, results)
   
   rm(results, df)
 
