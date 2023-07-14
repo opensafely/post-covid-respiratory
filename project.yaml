@@ -89,7 +89,7 @@ actions:
     - generate_study_population_unvax
     outputs:
       moderately_sensitive:
-        summarise_events: output/summarise_events*.csv
+        summarise_events: output/summarise_*.csv
 
   ## Preprocess data -prevax 
 
