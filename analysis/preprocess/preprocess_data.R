@@ -4,6 +4,7 @@ library(magrittr)
 library(dplyr)
 library(tidyverse)
 library(lubridate)
+set.seed(1)
 
 # Specify command arguments ----------------------------------------------------
 args <- commandArgs(trailingOnly=TRUE)
@@ -43,6 +44,33 @@ df <- df %>%
          across(contains('_cat'), ~ as.factor(.)),
          across(contains('_bin'), ~ as.logical(.)))
 
+
+# Apply rules to outcome variables for dummy data-------------------------------
+for (i in c("out_date_breathless", 
+                      "out_date_cough",
+                      "out_date_urti",
+                      "out_date_asthma_exac",
+                      "out_date_copd_exac")) {
+  for (j in 2:5) {
+  
+    lhs <- paste0(i,"_date_", j)
+    rhs <- paste0(i,"_date_", j-1)
+  
+    df <- df %>%
+      mutate(
+        across(
+          matches(lhs),
+          ~ if_else(
+            !is.na(.x),
+            !!sym(rhs) + sample(x = 1:100, size = nrow(df), replace = TRUE),
+            .x
+            )
+          )
+        )
+  
+  }
+
+}
 
 # Overwrite vaccination information for dummy data and vax cohort only --
 

@@ -11,6 +11,37 @@ from cohortextractor import (
     codelist_from_csv,
 )
 
+# function for recurring clinical events
+def clinical_event_date_X(
+  name, index_date, n, codelist, return_expectations
+):
+  # emeregency attendance dates
+  def var_signature(name, on_or_after, codelist, return_expectations):
+    return {
+      name: patients.with_these_clinical_events(
+                codelist,
+                returning="date",
+                on_or_after=on_or_after,
+                date_format="YYYY-MM-DD",
+                find_first_match_in_period=True,
+                return_expectations=return_expectations
+                ),
+    }
+  variables=var_signature(
+     name=f"{name}_date_1", 
+     on_or_after=index_date, 
+     codelist=codelist, 
+     return_expectations=return_expectations
+     )
+  for i in range(2, n+1):
+      variables.update(var_signature(
+         name=f"{name}_date_{i}", 
+         on_or_after=f"{name}_date_{i-1} + 1 day",
+         codelist=codelist, 
+         return_expectations=return_expectations
+         ))
+  return variables
+  
 #study dates
 from grouping_variables import (
     study_dates,
@@ -172,41 +203,56 @@ def generate_common_variables(index_date_variable,exposure_end_date_variable,out
 
 
 # DEFINE OUTCOMES ------------------------------------------------------
-## First recording of the outcome in during the study period
-out_date_breathless=patients.with_these_clinical_events(
-    breathlessness_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6}, 
-    ),
+## First n outcomes in the study period
+**clinical_event_date_X(
+  name="out_date_breathless", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=breathlessness_snomed,
+  return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+),
 
-out_date_cough=patients.with_these_clinical_events(
-    cough_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
+**clinical_event_date_X(
+  name="out_date_cough", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=cough_snomed,
+  return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+),
 
-out_date_urti=patients.with_these_clinical_events(
-    urti_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
+**clinical_event_date_X(
+  name="out_date_urti", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=urti_snomed,
+  return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+),        
 
-out_date_asthma_exac=patients.with_these_clinical_events(
-    asthma_exacerbation_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
+**clinical_event_date_X(
+  name="out_date_asthma_exac", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=asthma_exacerbation_snomed,
+  return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+),
 
-out_date_copd_exac=patients.with_these_clinical_events(
-    copd_exacerbation_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
+**clinical_event_date_X(
+  name="out_date_copd_exac", 
+  index_date=f"{index_date_variable}", 
+  n=5, 
+  codelist=copd_exacerbation_snomed,
+  return_expectations={
+        "date": {"earliest": "1900-01-01", "latest" : "today"},
+        "incidence": 0.3},
+),
         
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
