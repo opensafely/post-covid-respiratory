@@ -144,6 +144,23 @@ convert_comment_actions <-function(yaml.txt){
 #   )
 # }
 
+extract_repeat_events <- function(cohort) {
+  outpath <- glue("output/input_repeat_events_{cohort}.csv.gz")
+  action(
+    name = glue("extract_repeat_events_{cohort}"),
+    run = glue(
+      "cohortextractor:latest generate_cohort",
+      " --study-definition study_definition_repeat_events",
+      " --output-file ", outpath,
+      " --param cohort={cohort}"
+    ),
+    needs = list("vax_eligibility_inputs", "preprocess_repeat_events"),
+    highly_sensitive = lst(
+      cohort = outpath
+    )
+  )
+}
+
 
 ##########################################################
 ## Define and combine all actions into a list of actions #
@@ -218,15 +235,36 @@ actions_list <- splice(
     )
   ),
 
-  comment("Summarise events"),
+  # comment("Summarise events"),
+  # action(
+  #   name = "summarise_events",
+  #   run = "r:latest analysis/summarise_events.R",
+  #   needs = list("generate_study_population_prevax","generate_study_population_vax","generate_study_population_unvax"),
+  #   moderately_sensitive = list(
+  #     summarise_events = glue("output/summarise_*.csv")
+  #   )
+  # ),
+  
+  comment("Preprocess repeat events"),
   action(
-    name = "summarise_events",
-    run = "r:latest analysis/summarise_events.R",
-    needs = list("generate_study_population_prevax","generate_study_population_vax","generate_study_population_unvax"),
+    name = "preprocess_repeat_events",
+    run = "r:latest analysis/preprocess/preprocess_repeat_events.R",
+    needs = list(
+      "generate_study_population_prevax",
+      "generate_study_population_vax",
+      "generate_study_population_unvax"
+      ),
+    highly_sensitive = list(
+      out_date_5 = "output/preprocess/out_date_5_*.csv.gz"
+    ),
     moderately_sensitive = list(
-      summarise_events = glue("output/summarise_*.csv")
+      max_events = glue("output/preprocess/max_events.json")
     )
   ),
+  
+  extract_repeat_events("prevax"),
+  extract_repeat_events("vax"),
+  extract_repeat_events("unvax"),
   
   comment("Preprocess data -prevax"),
   action(
