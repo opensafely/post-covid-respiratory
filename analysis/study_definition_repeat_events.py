@@ -36,7 +36,7 @@ with open("output/study_dates.json") as f:
 cohort=params["cohort"]
 
 # extract repeat events
-def out_date_n(name, n, codelist, cohort=cohort):
+def out_date_n(name, cohort=cohort, max_events=max_events):
     # function for creating the out_date_5 variable
     def out_date_5(name, cohort):
         return {
@@ -52,14 +52,11 @@ def out_date_n(name, n, codelist, cohort=cohort):
        clinical_event_date_X(
             name=name,
             index_date=f"out_date_{name}_5",
-            n=n,
-            codelist=codelist,
+            n=int(max_events[cohort][name]),
             index_from=6,
        )
     )
     return variables
-
-
 
 # define study definition
 study = StudyDefinition(
@@ -75,16 +72,10 @@ study = StudyDefinition(
         f_path=f"output/preprocess/out_date_5_{cohort}.csv.gz"
         ), 
 
-    **out_date_n(
-       name="breathless",
-       n=10, 
-       codelist=breathlessness_snomed,
-       cohort=cohort
-       ),
-
-    # **out_date_n("breathless"),
-    # **out_date_n("copd_exac"),
-    # **out_date_n("cough"),
-    # **out_date_n("urti"),
+    **out_date_n(name="breathless"),
+    **out_date_n(name="asthma_exac"),
+    **out_date_n(name="copd_exac"),
+    **out_date_n(name="cough"),
+    **out_date_n(name="urti"), 
 
 )
