@@ -13,8 +13,14 @@ from cohortextractor import (
 
 # function for recurring clinical events
 def clinical_event_date_X(
-  name, index_date, n, codelist, index_from=1
+  name, index_date, n, index_from=1
 ):
+  # define the codelist based on the name
+  if name=="breathless": codelist=breathlessness_snomed
+  if name=="asthma_exac": codelist=asthma_exacerbation_snomed
+  if name=="copd_exac": codelist=copd_exacerbation_snomed
+  if name=="cough": codelist=cough_snomed
+  if name=="urti": codelist=urti_snomed
   # emeregency attendance dates
   def var_signature(name, on_or_after, codelist):
     return {
@@ -245,36 +251,31 @@ out_n_copd_exac=patients.with_these_clinical_events(
 **clinical_event_date_X(
   name="breathless", 
   index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=breathlessness_snomed,
+  n=5,
 ),
 
 **clinical_event_date_X(
   name="cough", 
   index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=cough_snomed,
+  n=5,
 ),
 
 **clinical_event_date_X(
   name="urti", 
   index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=urti_snomed,
+  n=5,
 ),        
 
 **clinical_event_date_X(
   name="asthma_exac", 
   index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=asthma_exacerbation_snomed,
+  n=5,
 ),
 
 **clinical_event_date_X(
   name="copd_exac", 
   index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=copd_exacerbation_snomed,
+  n=5,
 ),
         
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
