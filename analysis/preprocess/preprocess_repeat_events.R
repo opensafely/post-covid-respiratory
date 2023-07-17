@@ -23,10 +23,8 @@ for (cohort in c("prevax", "unvax", "vax")) {
   # reshape data to get percentiles
   df_n <- df %>%
     select(patient_id, starts_with("out_n_")) %>%
-    pivot_longer(
-      cols = -patient_id,
-      names_transform = ~str_remove(.x, "out_n_")
-      ) %>%
+    pivot_longer(cols = -patient_id) %>%
+    mutate(across(name, ~str_remove(.x, "out_n_"))) %>%
     # get the 99.999th percentile
     # this means we can say we have all events for 99.999% of the patients
     group_by(name) %>%
