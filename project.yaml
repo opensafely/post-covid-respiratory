@@ -79,17 +79,42 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
 
-  ## Summarise events 
+  ## Generate dummy data for study_definition - repeat_events_1 
 
-  summarise_events:
-    run: r:latest analysis/summarise_events.R
+  generate_study_population_repeat_events_1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_1
+      --output-format csv.gz
     needs:
-    - generate_study_population_prevax
-    - generate_study_population_vax
-    - generate_study_population_unvax
+    - vax_eligibility_inputs
+    - generate_index_dates
+    outputs:
+      highly_sensitive:
+        cohort: output/input_repeat_events_1.csv.gz
+
+  ## Preprocess repeat_events_1 
+
+  preprocess_repeat_events_1:
+    run: r:latest analysis/preprocess/preprocess_repeat_events_1.R
+    needs:
+    - generate_study_population_repeat_events_1
     outputs:
       moderately_sensitive:
-        summarise_events: output/summarise_*.csv
+        max_events: output/preprocess/max_events.json
+      highly_sensitive:
+        out_date_5: output/preprocess/out_date_5.csv.gz
+
+  ## Generate dummy data for study_definition - repeat_events_2 
+
+  generate_study_population_repeat_events_2:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_2
+      --output-format csv.gz
+    needs:
+    - vax_eligibility_inputs
+    - generate_index_dates
+    - preprocess_repeat_events_1
+    outputs:
+      highly_sensitive:
+        cohort: output/input_repeat_events_2.csv.gz
 
   ## Preprocess data -prevax 
 

@@ -13,32 +13,44 @@ from cohortextractor import (
 
 # function for recurring clinical events
 def clinical_event_date_X(
-  name, index_date, n, codelist, return_expectations
+  name, index_date, n, index_from=1
 ):
+  # define the codelist based on the name
+  if name=="breathless": codelist=breathlessness_snomed
+  if name=="asthma_exac": codelist=asthma_exacerbation_snomed
+  if name=="copd_exac": codelist=copd_exacerbation_snomed
+  if name=="cough": codelist=cough_snomed
+  if name=="urti": codelist=urti_snomed
+
   # emeregency attendance dates
-  def var_signature(name, on_or_after, codelist, return_expectations):
+  def var_signature(name, on_or_after, codelist):
     return {
       name: patients.with_these_clinical_events(
                 codelist,
                 returning="date",
+                # although it would be more efficient to use 'between'
+                # (to avoid extracting unecessary data)
+                # instead of 'on_or_after', we can't, because there will
+                # end up with cases where between[date1,date2] and date1>date2
                 on_or_after=on_or_after,
                 date_format="YYYY-MM-DD",
                 find_first_match_in_period=True,
-                return_expectations=return_expectations
+                return_expectations={
+                   "date": {"earliest": "1900-01-01", "latest" : "today"},
+                   "incidence": 0.3
+                   },
                 ),
     }
   variables=var_signature(
-     name=f"{name}_date_1", 
+     name=f"out_date_{name}_{index_from}", 
      on_or_after=index_date, 
      codelist=codelist, 
-     return_expectations=return_expectations
      )
-  for i in range(2, n+1):
+  for i in range(index_from+1, n+1):
       variables.update(var_signature(
-         name=f"{name}_date_{i}", 
-         on_or_after=f"{name}_date_{i-1} + 1 day",
+         name=f"out_date_{name}_{i}", 
+         on_or_after=f"out_date_{name}_{i-1} + 1 day",
          codelist=codelist, 
-         return_expectations=return_expectations
          ))
   return variables
   
@@ -199,60 +211,6 @@ def generate_common_variables(index_date_variable,exposure_end_date_variable,out
     sub_bin_covid19_confirmed_history=patients.maximum_of(
         "tmp_sub_bin_covid19_confirmed_history_sgss","tmp_sub_bin_covid19_confirmed_history_snomed","tmp_sub_bin_covid19_confirmed_history_hes"
     ),
-
-
-
-# DEFINE OUTCOMES ------------------------------------------------------
-## First n outcomes in the study period
-**clinical_event_date_X(
-  name="out_date_breathless", 
-  index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=breathlessness_snomed,
-  return_expectations={
-        "date": {"earliest": "1900-01-01", "latest" : "today"},
-        "incidence": 0.3},
-),
-
-**clinical_event_date_X(
-  name="out_date_cough", 
-  index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=cough_snomed,
-  return_expectations={
-        "date": {"earliest": "1900-01-01", "latest" : "today"},
-        "incidence": 0.3},
-),
-
-**clinical_event_date_X(
-  name="out_date_urti", 
-  index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=urti_snomed,
-  return_expectations={
-        "date": {"earliest": "1900-01-01", "latest" : "today"},
-        "incidence": 0.3},
-),        
-
-**clinical_event_date_X(
-  name="out_date_asthma_exac", 
-  index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=asthma_exacerbation_snomed,
-  return_expectations={
-        "date": {"earliest": "1900-01-01", "latest" : "today"},
-        "incidence": 0.3},
-),
-
-**clinical_event_date_X(
-  name="out_date_copd_exac", 
-  index_date=f"{index_date_variable}", 
-  n=5, 
-  codelist=copd_exacerbation_snomed,
-  return_expectations={
-        "date": {"earliest": "1900-01-01", "latest" : "today"},
-        "incidence": 0.3},
-),
         
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
@@ -773,4 +731,3 @@ def generate_common_variables(index_date_variable,exposure_end_date_variable,out
 
     )
     return dynamic_variables
-
