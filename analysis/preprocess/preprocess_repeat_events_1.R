@@ -35,11 +35,12 @@ rm(df_n)
 
 # Save ids and 5th outcome date for anyone with >5 events for any outcome ------
 df_dates <- df %>%
-  # only keep the dates of the 5th events
+  # only keep the patients with >5 of any event type
+  filter_at(vars(starts_with("out_n_")), any_vars(.>5)) %>%
+  # only keep the dates of their 5th events
   select(patient_id, matches("out_date_\\w+_5")) %>%
-  mutate(across(matches("out_date_\\w+_5"), as.Date)) %>%
-  # only keep rows where at least one date is nonmissing
-  filter_at(vars(starts_with("out_date_")), any_vars(!is.na(.)))
+  # make sure dates are formatted correctly
+  mutate(across(matches("out_date_\\w+_5"), as.Date)) 
 write_csv(
   df_dates,
   file.path(outdir, glue::glue("out_date_5.csv.gz"))
