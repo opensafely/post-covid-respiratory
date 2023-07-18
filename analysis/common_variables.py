@@ -21,12 +21,17 @@ def clinical_event_date_X(
   if name=="copd_exac": codelist=copd_exacerbation_snomed
   if name=="cough": codelist=cough_snomed
   if name=="urti": codelist=urti_snomed
+
   # emeregency attendance dates
   def var_signature(name, on_or_after, codelist):
     return {
       name: patients.with_these_clinical_events(
                 codelist,
                 returning="date",
+                # although it would be more efficient to use 'between'
+                # (to avoid extracting unecessary data)
+                # instead of 'on_or_after', we can't, because there will
+                # end up with cases where between[date1,date2] and date1>date2
                 on_or_after=on_or_after,
                 date_format="YYYY-MM-DD",
                 find_first_match_in_period=True,
@@ -206,77 +211,6 @@ def generate_common_variables(index_date_variable,exposure_end_date_variable,out
     sub_bin_covid19_confirmed_history=patients.maximum_of(
         "tmp_sub_bin_covid19_confirmed_history_sgss","tmp_sub_bin_covid19_confirmed_history_snomed","tmp_sub_bin_covid19_confirmed_history_hes"
     ),
-
-
-
-# DEFINE OUTCOMES ------------------------------------------------------
-
-## Number of recordings of the outcome in during the study period
-out_n_breathless=patients.with_these_clinical_events(
-    breathlessness_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6}, 
-    ),
-
-out_n_cough=patients.with_these_clinical_events(
-    cough_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
-
-out_n_urti=patients.with_these_clinical_events(
-    urti_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
-
-out_n_asthma_exac=patients.with_these_clinical_events(
-    asthma_exacerbation_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
-
-out_n_copd_exac=patients.with_these_clinical_events(
-    copd_exacerbation_snomed,
-    returning="number_of_matches_in_period",
-    between=[f"{index_date_variable}",f"{outcome_end_date_variable}"],
-    return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
-    ),
-
-## First n outcomes in the study period
-**clinical_event_date_X(
-  name="breathless", 
-  index_date=f"{index_date_variable}", 
-  n=5,
-),
-
-**clinical_event_date_X(
-  name="cough", 
-  index_date=f"{index_date_variable}", 
-  n=5,
-),
-
-**clinical_event_date_X(
-  name="urti", 
-  index_date=f"{index_date_variable}", 
-  n=5,
-),        
-
-**clinical_event_date_X(
-  name="asthma_exac", 
-  index_date=f"{index_date_variable}", 
-  n=5,
-),
-
-**clinical_event_date_X(
-  name="copd_exac", 
-  index_date=f"{index_date_variable}", 
-  n=5,
-),
         
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT ------------------------------------------------------
 ## Asthma diagnosed in the past 2 years 
@@ -797,4 +731,3 @@ out_n_copd_exac=patients.with_these_clinical_events(
 
     )
     return dynamic_variables
-
