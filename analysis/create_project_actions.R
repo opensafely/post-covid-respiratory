@@ -16,6 +16,7 @@ defaults_list <- list(
   expectations= list(population_size=10000L)
 )
 
+repeat_events_increments <- read_csv(here::here("lib", "repeat_events_increments.csv"))
 active_analyses <- read_rds("lib/active_analyses.rds")
 active_analyses <- active_analyses[order(active_analyses$analysis,active_analyses$cohort,active_analyses$outcome),]
 cohorts <- unique(active_analyses$cohort)
@@ -144,6 +145,7 @@ convert_comment_actions <-function(yaml.txt){
 #   )
 # }
 
+
 ##########################################################
 ## Define and combine all actions into a list of actions #
 ##########################################################
@@ -217,13 +219,17 @@ actions_list <- splice(
     )
   ),
   
+  comment("SHIFT REPEAT EVENTS ACTIONS TO AFTER STAGE 1"),
   comment("Generate dummy data for study_definition - repeat_events_1"),
   action(
     name = "generate_study_population_repeat_events_1",
-    run = "cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_1 --output-format csv.gz",
+    run = glue("cohortextractor:latest generate_cohort",
+               " --study-definition study_definition_repeat_events_1",
+               " --output-file output/repeat_events/input_repeat_events_1.csv.gz"
+               ),
     needs = list("vax_eligibility_inputs","generate_index_dates"),
     highly_sensitive = list(
-      cohort = "output/input_repeat_events_1.csv.gz"
+      cohort = "output/repeat_events/input_repeat_events_1.csv.gz"
     )
   ),
   
@@ -233,21 +239,42 @@ actions_list <- splice(
     run = "r:latest analysis/preprocess/preprocess_repeat_events_1.R",
     needs = list("generate_study_population_repeat_events_1"),
     highly_sensitive = list(
-      out_date_5 = "output/preprocess/out_date_5.csv.gz"
+      out_date_x = "output/repeat_events/out_date_*.csv.gz"
     ),
     moderately_sensitive = list(
-      max_events = glue("output/preprocess/max_events.json")
+      max_events = glue("output/repeat_events/max_events.json")
     )
   ),
   
-  comment("Generate dummy data for study_definition - repeat_events_2"),
-  action(
-    name = "generate_study_population_repeat_events_2",
-    run = "cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_2 --output-format csv.gz",
-    needs = list("vax_eligibility_inputs","generate_index_dates","preprocess_repeat_events_1"),
-    highly_sensitive = list(
-      cohort = "output/input_repeat_events_2.csv.gz"
-    )
+  unlist(
+    lapply(
+      seq_along(repeat_events_increments$min)[-1],
+      function (x)
+      {
+        n_min <- repeat_events_increments$min[x]
+        n_max <- repeat_events_increments$max[x]
+        actions <- 
+          splice(
+            comment(glue("Generate dummy data for study_definition - repeat_events_{n_min}to{n_max}")),
+            action(
+              name = glue("generate_study_population_repeat_events_{n_min}to{n_max}"),
+              run = glue(
+                "cohortextractor:latest generate_cohort",
+                " --study-definition study_definition_repeat_events_x",
+                " --output-file output/repeat_events/input_repeat_events_{n_min}to{n_max}.csv.gz",
+                " --param n_min={n_min}",
+                " --param n_max={n_max}"
+                ),
+              needs = list("vax_eligibility_inputs","generate_index_dates", "preprocess_repeat_events_1"),
+              highly_sensitive = list(
+                cohort = glue("output/repeat_events/input_repeat_events_{n_min}to{n_max}.csv.gz")
+              )
+            )
+          )
+        return(actions)
+      }
+    ),
+    recursive = FALSE
   ),
 
   comment("Preprocess data -prevax"),
