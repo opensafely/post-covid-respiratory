@@ -24,6 +24,13 @@ import json
 # import clinical_event_date_X function
 from common_variables import clinical_event_date_X
 
+# repeat_events_increments
+import pandas as pd
+repeat_events_increments = pd.read_csv(
+    filepath_or_buffer='./lib/repeat_events_increments.csv',
+    dtype=int
+)
+
 # max_n for each outcome
 with open("output/repeat_events/max_events.json") as f:
    max_events = json.load(f)
@@ -33,9 +40,11 @@ with open("output/study_dates.json") as f:
   study_dates = json.load(f)
 
 # params
-n_min=int(params["n_min"])
-n_max=int(params["n_max"])
-index_event = n_min - 1
+step=int(params["step"])
+# remember indexing starts at 0 in python, so take an extra -1 from step compared to R
+index_event=repeat_events_increments["max"][step-2] 
+n_min=repeat_events_increments["min"][step-1]
+n_max=repeat_events_increments["max"][step-1]
 
 # extract repeat events
 def out_date_n(
@@ -46,12 +55,12 @@ def out_date_n(
       max_events=max_events
       ):
     # redefine n_max to be the maximum of n_max and max_events["name"]
-    n_max = min(n_max, int(max_events[name]))
+    n_max=min(n_max, int(max_events[name]))
     # function for creating the out_date_5 variable
     def out_date_index(name, index_event):
         return {
             f"out_date_{name}_{index_event}": patients.with_value_from_file(
-                f_path=f"output/repeat_events/out_date_{index_event}.csv.gz",
+                f_path=f"output/repeat_events/out_date_{step}.csv.gz",
                 returning=f"out_date_{name}_{index_event}", 
                 returning_type="date", 
                 date_format='YYYY-MM-DD',
@@ -79,7 +88,7 @@ study = StudyDefinition(
     },
 
     population=patients.which_exist_in_file(
-        f_path=f"output/repeat_events/out_date_{index_event}.csv.gz"
+        f_path=f"output/repeat_events/out_date_{step}.csv.gz"
         ), 
 
     **out_date_n(name="breathless"),
