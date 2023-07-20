@@ -220,57 +220,75 @@ actions_list <- splice(
   ),
   
   comment("SHIFT REPEAT EVENTS ACTIONS TO AFTER STAGE 1"),
-  comment("Generate dummy data for study_definition - repeat_events_1"),
-  action(
-    name = "generate_study_population_repeat_events_1",
-    run = glue("cohortextractor:latest generate_cohort",
-               " --study-definition study_definition_repeat_events_1",
-               " --output-file output/repeat_events/input_repeat_events_1.csv.gz"
-               ),
-    needs = list("vax_eligibility_inputs","generate_index_dates"),
-    highly_sensitive = list(
-      cohort = "output/repeat_events/input_repeat_events_1.csv.gz"
-    )
-  ),
-  
-  comment("Preprocess repeat_events_1"),
-  action(
-    name = "preprocess_repeat_events_1",
-    run = "r:latest analysis/preprocess/preprocess_repeat_events_1.R",
-    needs = list("generate_study_population_repeat_events_1"),
-    highly_sensitive = list(
-      out_date_x = "output/repeat_events/out_date_*.csv.gz"
-    ),
-    moderately_sensitive = list(
-      max_events = glue("output/repeat_events/max_events.json")
-    )
-  ),
-  
   unlist(
     lapply(
-      seq_along(repeat_events_increments$min)[-1],
+      repeat_events_increments$step,
       function (x)
       {
-        n_min <- repeat_events_increments$min[x]
-        n_max <- repeat_events_increments$max[x]
+        
+        studydef_needs <- list("vax_eligibility_inputs", "generate_index_dates")
+        preflight_needs <- list(glue("generate_study_population_repeat_events_{x}"))
+        preflight_high_sens <- list(
+          out_date = glue("output/repeat_events/out_date_{x+1}.csv.gz")
+        )
+        if (x==1) {
+          studydef_file <- "study_definition_repeat_events_1"
+          params <- ""
+          preflight_high_sens <- splice(
+            preflight_high_sens,
+            patient_ids = "output/repeat_events/patient_ids_*.rds"
+          )
+          preflight_mod_sens <- list(
+            max_events = glue("output/repeat_events/max_events.json")
+            )
+        } else {
+          studydef_file <- "study_definition_repeat_events_x"
+          params <- " --param step={x}"
+          studydef_needs <- splice(unique(c(
+            studydef_needs,
+            "preflight_repeat_events_2",
+            glue("preflight_repeat_events_{x}")
+          )))
+          preflight_needs <- splice(
+            preflight_needs,
+            "preflight_repeat_events_2"
+          )
+          preflight_mod_sens <- NULL
+        }
+        
         actions <- 
           splice(
-            comment(glue("Generate dummy data for study_definition - repeat_events_{n_min}to{n_max}")),
+            comment(glue("Study_definition - repeat events step {x}")),
             action(
-              name = glue("generate_study_population_repeat_events_{n_min}to{n_max}"),
+              name = glue("generate_study_population_repeat_events_{x}"),
               run = glue(
                 "cohortextractor:latest generate_cohort",
-                " --study-definition study_definition_repeat_events_x",
-                " --output-file output/repeat_events/input_repeat_events_{n_min}to{n_max}.csv.gz",
-                " --param n_min={n_min}",
-                " --param n_max={n_max}"
+                " --study-definition {studydef_file}",
+                " --output-file output/repeat_events/input_repeat_events_{x}.csv.gz",
+                params
                 ),
-              needs = list("vax_eligibility_inputs","generate_index_dates", "preprocess_repeat_events_1"),
+              needs = studydef_needs,
               highly_sensitive = list(
-                cohort = glue("output/repeat_events/input_repeat_events_{n_min}to{n_max}.csv.gz")
+                cohort = glue("output/repeat_events/input_repeat_events_{x}.csv.gz")
               )
             )
           )
+        
+        if (x < max(repeat_events_increments$step)) {
+          actions <- splice(
+            actions,
+            comment(glue("Preflight - repeat events step {x+1}")),
+            action(
+              name = glue("preflight_repeat_events_{x+1}"),
+              run = "r:latest analysis/repeat_events/preflight_repeat_events.R",
+              arguments = x+1,
+              needs = preflight_needs,
+              highly_sensitive = preflight_high_sens,
+              moderately_sensitive = preflight_mod_sens
+            )
+          )
+        }
+        
         return(actions)
       }
     ),
