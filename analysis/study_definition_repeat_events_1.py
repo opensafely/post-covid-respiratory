@@ -1,3 +1,11 @@
+###################################################################################
+# 
+# This study definition extracts the first repeat_events_steps$upper[1] events
+# for each individual (out_date_{name}_{n}), and counts the total number of events
+# for each outcome type in the full follow-up period (out_n_{name})
+# 
+###################################################################################
+
 ## Set seed
 import numpy as np
 np.random.seed(123456)
