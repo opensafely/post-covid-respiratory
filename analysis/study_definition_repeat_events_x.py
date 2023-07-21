@@ -1,3 +1,14 @@
+###################################################################################
+# 
+# This study definition:
+# - Takes the paramenter `step`
+# - Selects patients with >= repeat_events_steps$lower[step] of any event type
+# - Reads the vairables out_date_{name}_{repeat_events_steps$upper[step-1]}
+# - Extracts out_date_{name}_{repeat_events_steps$lower[step]} to
+#   out_date_{name}_{repeat_events_steps$upper[step]}
+# 
+###################################################################################
+
 # Import statements
 
 ## Set seed
@@ -24,14 +35,14 @@ import json
 # import clinical_event_date_X function
 from common_variables import clinical_event_date_X
 
-# repeat_events_increments
+# repeat_events_steps
 import pandas as pd
-repeat_events_increments = pd.read_csv(
-    filepath_or_buffer='./lib/repeat_events_increments.csv',
+repeat_events_steps = pd.read_csv(
+    filepath_or_buffer='./lib/repeat_events_steps.csv',
     dtype=int
 )
 
-# max_n for each outcome
+# max events for each outcome
 with open("output/repeat_events/max_events.json") as f:
    max_events = json.load(f)
 
@@ -42,20 +53,20 @@ with open("output/study_dates.json") as f:
 # params
 step=int(params["step"])
 # remember indexing starts at 0 in python, so take an extra -1 from step compared to R
-index_event=repeat_events_increments["max"][step-2] 
-n_min=repeat_events_increments["min"][step-1]
-n_max=repeat_events_increments["max"][step-1]
+index_event=repeat_events_steps["upper"][step-2] 
+n_lower=repeat_events_steps["lower"][step-1]
+n_upper=repeat_events_steps["upper"][step-1]
 
 # extract repeat events
 def out_date_n(
       name, 
       index_event=index_event,
-      n_min=n_min, 
-      n_max=n_max, 
+      n_lower=n_lower, 
+      n_upper=n_upper, 
       max_events=max_events
       ):
-    # redefine n_max to be the maximum of n_max and max_events["name"]
-    n_max=min(n_max, int(max_events[name]))
+    # redefine n_upper to be the maximum of n_upper and max_events["name"]
+    n_upper=min(n_upper, int(max_events[name]))
     # function for creating the out_date_5 variable
     def out_date_index(name, index_event):
         return {
@@ -71,8 +82,8 @@ def out_date_n(
        clinical_event_date_X(
             name=name,
             index_date=f"out_date_{name}_{index_event}",
-            n=n_max,
-            index_from=n_min,
+            n=n_upper,
+            index_from=n_lower,
        )
     )
     return variables
