@@ -79,42 +79,69 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
 
-  ## Generate dummy data for study_definition - repeat_events_1 
+  ## SHIFT REPEAT EVENTS ACTIONS TO AFTER STAGE 1 
+  ## Study_definition - repeat events step 1 
 
   generate_study_population_repeat_events_1:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_1
-      --output-format csv.gz
+      --output-file output/repeat_events/input_repeat_events_1.csv.gz
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
     outputs:
       highly_sensitive:
-        cohort: output/input_repeat_events_1.csv.gz
+        cohort: output/repeat_events/input_repeat_events_1.csv.gz
 
-  ## Preprocess repeat_events_1 
+  ## Preflight - repeat events step 2 
 
-  preprocess_repeat_events_1:
-    run: r:latest analysis/preprocess/preprocess_repeat_events_1.R
+  preflight_repeat_events_2:
+    run: r:latest analysis/repeat_events/preflight_repeat_events.R 2
     needs:
     - generate_study_population_repeat_events_1
     outputs:
       moderately_sensitive:
-        max_events: output/preprocess/max_events.json
+        max_events: output/repeat_events/max_events.json
       highly_sensitive:
-        out_date_5: output/preprocess/out_date_5.csv.gz
+        out_date: output/repeat_events/out_date_2.csv.gz
+        patient_ids: output/repeat_events/patient_ids_*.rds
 
-  ## Generate dummy data for study_definition - repeat_events_2 
+  ## Study_definition - repeat events step 2 
 
   generate_study_population_repeat_events_2:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_2
-      --output-format csv.gz
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
+      --output-file output/repeat_events/input_repeat_events_2.csv.gz --param step=2
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
-    - preprocess_repeat_events_1
+    - preflight_repeat_events_2
     outputs:
       highly_sensitive:
-        cohort: output/input_repeat_events_2.csv.gz
+        cohort: output/repeat_events/input_repeat_events_2.csv.gz
+
+  ## Preflight - repeat events step 3 
+
+  preflight_repeat_events_3:
+    run: r:latest analysis/repeat_events/preflight_repeat_events.R 3
+    needs:
+    - generate_study_population_repeat_events_2
+    - preflight_repeat_events_2
+    outputs:
+      highly_sensitive:
+        out_date: output/repeat_events/out_date_3.csv.gz
+
+  ## Study_definition - repeat events step 3 
+
+  generate_study_population_repeat_events_3:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
+      --output-file output/repeat_events/input_repeat_events_3.csv.gz --param step=3
+    needs:
+    - vax_eligibility_inputs
+    - generate_index_dates
+    - preflight_repeat_events_2
+    - preflight_repeat_events_3
+    outputs:
+      highly_sensitive:
+        cohort: output/repeat_events/input_repeat_events_3.csv.gz
 
   ## Preprocess data -prevax 
 

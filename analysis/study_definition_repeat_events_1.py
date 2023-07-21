@@ -1,3 +1,11 @@
+###################################################################################
+# 
+# This study definition extracts the first repeat_events_steps$upper[1] events
+# for each individual (out_date_{name}_{n}), and counts the total number of events
+# for each outcome type in the full follow-up period (out_n_{name})
+# 
+###################################################################################
+
 ## Set seed
 import numpy as np
 np.random.seed(123456)
@@ -13,6 +21,7 @@ from cohortextractor import (
   codelist,
   filter_codes_by_category,
   combine_codelists,
+  params
 )
 ## Codelists from codelist.py (which pulls them from the codelist folder)
 from codelists import *
@@ -41,35 +50,35 @@ study = StudyDefinition(
         breathlessness_snomed,
         returning="number_of_matches_in_period",
         between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
-        return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6}, 
+        return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6}, 
         ),
 
     out_n_cough=patients.with_these_clinical_events(
         cough_snomed,
         returning="number_of_matches_in_period",
         between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
-        return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
+        return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_urti=patients.with_these_clinical_events(
         urti_snomed,
         returning="number_of_matches_in_period",
         between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
-        return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
+        return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_asthma_exac=patients.with_these_clinical_events(
         asthma_exacerbation_snomed,
         returning="number_of_matches_in_period",
         between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
-        return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
+        return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_copd_exac=patients.with_these_clinical_events(
         copd_exacerbation_snomed,
         returning="number_of_matches_in_period",
         between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
-        return_expectations={"int" : {"distribution": "poisson", "mean": 5}, "incidence" : 0.6},
+        return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     ## First 5 outcomes in the study period
