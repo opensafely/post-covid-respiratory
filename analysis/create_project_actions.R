@@ -16,7 +16,7 @@ defaults_list <- list(
   expectations= list(population_size=10000L)
 )
 
-repeat_events_increments <- read_csv(here::here("lib", "repeat_events_increments.csv"))
+source(here::here("analysis", "repeat_events", "repeat_events_steps.R"))
 active_analyses <- read_rds("lib/active_analyses.rds")
 active_analyses <- active_analyses[order(active_analyses$analysis,active_analyses$cohort,active_analyses$outcome),]
 cohorts <- unique(active_analyses$cohort)
@@ -222,7 +222,7 @@ actions_list <- splice(
   comment("SHIFT REPEAT EVENTS ACTIONS TO AFTER STAGE 1"),
   unlist(
     lapply(
-      repeat_events_increments$step,
+      repeat_events_steps$step,
       function (x)
       {
         
@@ -274,7 +274,7 @@ actions_list <- splice(
             )
           )
         
-        if (x < max(repeat_events_increments$step)) {
+        if (x < max(repeat_events_steps$step)) {
           actions <- splice(
             actions,
             comment(glue("Preflight - repeat events step {x+1}")),
