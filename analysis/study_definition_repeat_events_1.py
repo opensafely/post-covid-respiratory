@@ -43,7 +43,7 @@ study = StudyDefinition(
     # Define the study population 
      
     # NB: all inclusions and exclusions are performed in stage 1
-    population = patients.all(), 
+    population = patients.which_exist_in_file("output/stage1_ids.csv"), 
 
     ## Number of recordings of the outcome in during the study period
     out_n_breathless=patients.with_these_clinical_events(

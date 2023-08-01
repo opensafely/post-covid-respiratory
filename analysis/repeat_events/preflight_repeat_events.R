@@ -39,8 +39,8 @@ print(glue("Preflight for step {step}"))
 # source rather than loading so that it runs checks
 source(here::here("analysis", "repeat_events", "repeat_events_steps.R"))
 
-# Load repeat_events_1 data ----------------------------------------------------
-print(glue("Load input_repeat_events_{step}.csv.gz"))
+# Load repeat_events_{step-1} data ----------------------------------------------------
+print(glue("Load input_repeat_events_{step-1}.csv.gz"))
 
 df <- readr::read_csv(glue("output/repeat_events/input_repeat_events_{step-1}.csv.gz"))
 print(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"))

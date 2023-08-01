@@ -345,6 +345,21 @@ print(paste0(cohort_name, " ", nrow(input), " rows in the input file after commo
     
     saveRDS(input, file = file.path("output", paste0("input_",cohort_name, "_stage1",".rds")), compress = "gzip")
 
+
+    #-----------------------------------------#
+    # 5. Create list of IDs from each dataset #
+    #-----------------------------------------#
+    
+    #saveRDS(input$patient_id, file = file.path("output", paste0("input_",cohort_name, "_stage1_ids",".rds")), compress = "gzip")
+
+
+    input_ids <- input %>%
+    select(patient_id)
+    
+    saveRDS(input_ids, file = file.path("output", paste0("input_",cohort_name, "_stage1_ids",".rds")), compress = "gzip")
+
+
+
 }
 
 # Run function using outcome group
@@ -357,3 +372,14 @@ if (cohort_name == "all") {
 } else{
   stage1(cohort_name)
 }
+
+
+
+prevax_stage1_ids <- read_rds(file.path("output", "input_prevax_stage1_ids.rds"))
+unvax_stage1_ids <- read_rds(file.path("output", "input_unvax_stage1_ids.rds"))
+vax_stage1_ids <- read_rds(file.path("output", "input_vax_stage1_ids.rds"))
+
+stage1_ids <- rbind(prevax_stage1_ids, unvax_stage1_ids)
+
+write.csv(stage1_ids, file = file.path("output", "stage1_ids.csv") , row.names=F)
+    
