@@ -77,16 +77,18 @@ data_repeat_events_dates <- data_repeat_events %>%
 
 
 data_repeat_events_dates <- data_repeat_events_dates %>%
-  mutate(
-    across(
-      contains("out_date_"),
-        ~ ifelse(!is.na(.x) & (.x < index_date | .x > end_date_outcome),
-              as.character(NA),
-              as.character(.x))
-        )
-    )
+  pivot_longer(
+    cols = starts_with("out_date_"),
+    names_to = "event",
+    values_to = "out_date",
+    values_drop_na = TRUE
+  ) %>%
+  mutate(across(event, ~str_remove_all(.x, "out_date_|_\\d+"))) %>%
+  filter(between(out_date, index_date, end_date_outcome))
+  # I'm not sure if you need to keep index_date and end_date_outcome in this 
+  # dataset? If not, remove to avoid taking up unecessary storage.
 
-saveRDS(data_repeat_events_dates, file = file.path("output", paste0("repeat_events_",cohort,".rds")), compress = "gzip")
+saveRDS(data_repeat_events_dates, file = file.path("output", paste0("repeat_events_long_",cohort,".rds")), compress = "gzip")
 
 rm(data_repeat_events_dates)
 
