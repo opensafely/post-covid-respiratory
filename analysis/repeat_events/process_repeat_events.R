@@ -77,13 +77,19 @@ data_repeat_events_dates <- data_repeat_events %>%
 
 
 data_repeat_events_dates <- data_repeat_events_dates %>%
+  # reshape to long
   pivot_longer(
+    # select columns to reshape
     cols = starts_with("out_date_"),
+    # set names of columns in the long data
     names_to = "event",
     values_to = "out_date",
+    # drop rows where is.na(out_date)
     values_drop_na = TRUE
   ) %>%
+  # tidy up the event column so it only shows the event type
   mutate(across(event, ~str_remove_all(.x, "out_date_|_\\d+"))) %>%
+  # only rows where out_date is between index_date and end_date_outcome (inclusive)
   filter(between(out_date, index_date, end_date_outcome))
   # I'm not sure if you need to keep index_date and end_date_outcome in this 
   # dataset? If not, remove to avoid taking up unecessary storage.
