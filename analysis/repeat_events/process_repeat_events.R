@@ -35,14 +35,6 @@ if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations")) {
   message("Repeat events IDs overwritten successfully")
 }
 
-# TODO
-# run some checks to make sure that the max events extracted matches those in max_events.json
-# for each cohort:
-# - filter the events to only keep those that occured when the patient was under follow-up
-# - create episodes from the filtered data
-# - etc.
-
-
 # Check number of outcome variables matches the max number of events for each outcome -----------
 
 max_events_JSON <- fromJSON(file = "output/repeat_events/max_events.json")
@@ -63,20 +55,11 @@ for (i in c("asthma_exac",
 
 }
 
-
-# Remove events occurring outside study period for each cohort
-for (cohort in c("prevax", "unvax", "vax")) {
-
-stage1_cohort <- read_rds(file.path("output", paste0("input_", cohort, "_stage1.rds")))
-
-stage1_cohort <- stage1_cohort %>%
-  select(patient_id, index_date, end_date_outcome)
-
-data_repeat_events_dates <- data_repeat_events %>%
-  inner_join(stage1_cohort, by = "patient_id")
-
-
-data_repeat_events_dates <- data_repeat_events_dates %>%
+# Reshape and save repeat events data ------------------------------------------
+# load study dates
+study_dates <- fromJSON(file = "output/study_dates.json")
+# reshape data
+data_repeat_events_long <- data_repeat_events %>%
   # reshape to long
   pivot_longer(
     # select columns to reshape
@@ -89,14 +72,14 @@ data_repeat_events_dates <- data_repeat_events_dates %>%
   ) %>%
   # tidy up the event column so it only shows the event type
   mutate(across(event, ~str_remove_all(.x, "out_date_|_\\d+"))) %>%
-  # only rows where out_date is between index_date and end_date_outcome (inclusive)
-  filter(between(out_date, index_date, end_date_outcome))
-  # I'm not sure if you need to keep index_date and end_date_outcome in this 
-  # dataset? If not, remove to avoid taking up unecessary storage.
+  # only keep rows in which the date is before study_dates$end_date (assuming 
+  # this is the latest possible date of follow-up?)
+  # note: it wasn't possible to do this in the study definition because we could
+  # have ended up with between[date1,date2] and date2<date1
+  filter(out_date <= study_dates$end_date)
 
-saveRDS(data_repeat_events_dates, file = file.path("output", paste0("repeat_events_long_",cohort,".rds")), compress = "gzip")
-
-rm(data_repeat_events_dates)
-
-}
-
+saveRDS(
+  data_repeat_events_long, 
+  file = file.path("output", "repeat_events", "data_repeat_events_long.rds"), 
+  compress = "gzip"
+  )
