@@ -1,19 +1,9 @@
 # Set seed ---------------------------------------------------------------------
 set.seed(1)
 
-# Get stage 1 IDs --------------------------------------------------------------
-stage1_ids_prevax <- read_rds(file.path("output/input_prevax_stage1.rds")) %>%
-  select(patient_id)
-stage1_ids_unvax <- read_rds(file.path("output/input_unvax_stage1.rds")) %>%
-  select(patient_id)
-stage1_ids_vax <- read_rds(file.path("output/input_vax_stage1.rds")) %>%
-  select(patient_id)
-
-stage1_ids <- rbind(stage1_ids_prevax, stage1_ids_unvax, stage1_ids_vax) %>%
-  unique()
-
-
 # Replace IDs in repeat events data with stage1 IDs-----------------------------
+stage1_ids <- readr::read_csv("output/stage1_ids.csv")
+
 data_repeat_events <- data_repeat_events %>%
     slice_sample(n = nrow(stage1_ids))
 
