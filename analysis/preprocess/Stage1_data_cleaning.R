@@ -345,21 +345,6 @@ print(paste0(cohort_name, " ", nrow(input), " rows in the input file after commo
     
     saveRDS(input, file = file.path("output", paste0("input_",cohort_name, "_stage1",".rds")), compress = "gzip")
 
-
-    #-----------------------------------------#
-    # 5. Create list of IDs from each dataset #
-    #-----------------------------------------#
-    
-    #saveRDS(input$patient_id, file = file.path("output", paste0("input_",cohort_name, "_stage1_ids",".rds")), compress = "gzip")
-
-
-    input_ids <- input %>%
-    select(patient_id)
-    
-    saveRDS(input_ids, file = file.path("output", paste0("input_",cohort_name, "_stage1_ids",".rds")), compress = "gzip")
-
-
-
 }
 
 # Run function using outcome group
