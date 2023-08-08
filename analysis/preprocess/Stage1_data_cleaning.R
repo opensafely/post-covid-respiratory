@@ -372,14 +372,3 @@ if (cohort_name == "all") {
 } else{
   stage1(cohort_name)
 }
-
-
-
-prevax_stage1_ids <- read_rds(file.path("output", "input_prevax_stage1_ids.rds"))
-unvax_stage1_ids <- read_rds(file.path("output", "input_unvax_stage1_ids.rds"))
-vax_stage1_ids <- read_rds(file.path("output", "input_vax_stage1_ids.rds"))
-
-stage1_ids <- rbind(prevax_stage1_ids, unvax_stage1_ids)
-
-write.csv(stage1_ids, file = file.path("output", "stage1_ids.csv") , row.names=F)
-    
