@@ -166,6 +166,14 @@ actions:
       moderately_sensitive:
         describe_model_input: output/describe-input_unvax_stage1.txt
 
+  create_stage1_ids:
+    run: r:latest analysis/preprocess/Stage1_ids.R
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        stage1_ids: output/stage1_ids.csv
+
   ## Study_definition - repeat events step 1 
 
   generate_study_population_repeat_events_1:

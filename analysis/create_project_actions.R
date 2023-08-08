@@ -307,6 +307,14 @@ actions_list <- splice(
     )
   ),
   
+  action(
+    name = "create_stage1_ids",
+    run = glue("r:latest analysis/preprocess/Stage1_ids.R"),
+    needs = list("stage1_data_cleaning_all"),
+    moderately_sensitive = list(
+      stage1_ids = glue("output/stage1_ids.csv")
+    )
+  ),
 
   unlist(
     lapply(
