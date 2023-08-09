@@ -182,6 +182,7 @@ actions:
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
+    - create_stage1_ids
     outputs:
       highly_sensitive:
         cohort: output/repeat_events/input_repeat_events_1.csv.gz
@@ -207,6 +208,7 @@ actions:
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
+    - create_stage1_ids
     - preflight_repeat_events_2
     outputs:
       highly_sensitive:
@@ -231,6 +233,7 @@ actions:
     needs:
     - vax_eligibility_inputs
     - generate_index_dates
+    - create_stage1_ids
     - preflight_repeat_events_2
     - preflight_repeat_events_3
     outputs:

@@ -322,7 +322,7 @@ actions_list <- splice(
       function (x)
       {
         
-        studydef_needs <- list("vax_eligibility_inputs", "generate_index_dates")
+        studydef_needs <- list("vax_eligibility_inputs", "generate_index_dates", "create_stage1_ids")
         preflight_needs <- list(glue("generate_study_population_repeat_events_{x}"))
         preflight_high_sens <- list(
           out_date = glue("output/repeat_events/out_date_{x+1}.csv.gz")
