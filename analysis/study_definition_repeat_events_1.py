@@ -27,7 +27,7 @@ from cohortextractor import (
 from codelists import *
 
 ## Variables for deriving JCVI groups
-from grouping_variables import study_dates
+from grouping_variables import (study_dates, days)
 
 from common_variables import clinical_event_date_X
 
@@ -43,72 +43,72 @@ study = StudyDefinition(
     # Define the study population 
      
     # NB: all inclusions and exclusions are performed in stage 1
-    population = patients.all(), 
+    population = patients.which_exist_in_file("output/stage1_ids.csv"), 
 
     ## Number of recordings of the outcome in during the study period
     out_n_breathless=patients.with_these_clinical_events(
         breathlessness_snomed,
         returning="number_of_matches_in_period",
-        between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
+        between=[days(study_dates["pandemic_start"], -14), study_dates["omicron_date"]],
         return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6}, 
         ),
 
     out_n_cough=patients.with_these_clinical_events(
         cough_snomed,
         returning="number_of_matches_in_period",
-        between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
+        between=[days(study_dates["pandemic_start"], -14), study_dates["omicron_date"]],
         return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_urti=patients.with_these_clinical_events(
         urti_snomed,
         returning="number_of_matches_in_period",
-        between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
+        between=[days(study_dates["pandemic_start"], -14), study_dates["omicron_date"]],
         return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_asthma_exac=patients.with_these_clinical_events(
         asthma_exacerbation_snomed,
         returning="number_of_matches_in_period",
-        between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
+        between=[days(study_dates["pandemic_start"], -14), study_dates["omicron_date"]],
         return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     out_n_copd_exac=patients.with_these_clinical_events(
         copd_exacerbation_snomed,
         returning="number_of_matches_in_period",
-        between=[study_dates["pandemic_start"],study_dates["omicron_date"]],
+        between=[days(study_dates["pandemic_start"], -14), study_dates["omicron_date"]],
         return_expectations={"int" : {"distribution": "poisson", "mean": 15}, "incidence" : 0.6},
         ),
 
     ## First 5 outcomes in the study period
     **clinical_event_date_X(
       name="breathless", 
-      index_date=study_dates["pandemic_start"], 
+      index_date=days(study_dates["pandemic_start"], -14), 
       n=5,
     ),
 
     **clinical_event_date_X(
       name="cough", 
-      index_date=study_dates["pandemic_start"], 
+      index_date=days(study_dates["pandemic_start"], -14), 
       n=5,
     ),
 
     **clinical_event_date_X(
       name="urti", 
-      index_date=study_dates["pandemic_start"], 
+      index_date=days(study_dates["pandemic_start"], -14), 
       n=5,
     ),        
 
     **clinical_event_date_X(
       name="asthma_exac", 
-      index_date=study_dates["pandemic_start"], 
+      index_date=days(study_dates["pandemic_start"], -14), 
       n=5,
     ),
 
     **clinical_event_date_X(
       name="copd_exac", 
-      index_date=study_dates["pandemic_start"], 
+      index_date=days(study_dates["pandemic_start"], -14), 
       n=5,
     ),
 

@@ -79,70 +79,6 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
 
-  ## SHIFT REPEAT EVENTS ACTIONS TO AFTER STAGE 1 
-  ## Study_definition - repeat events step 1 
-
-  generate_study_population_repeat_events_1:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_1
-      --output-file output/repeat_events/input_repeat_events_1.csv.gz
-    needs:
-    - vax_eligibility_inputs
-    - generate_index_dates
-    outputs:
-      highly_sensitive:
-        cohort: output/repeat_events/input_repeat_events_1.csv.gz
-
-  ## Preflight - repeat events step 2 
-
-  preflight_repeat_events_2:
-    run: r:latest analysis/repeat_events/preflight_repeat_events.R 2
-    needs:
-    - generate_study_population_repeat_events_1
-    outputs:
-      moderately_sensitive:
-        max_events: output/repeat_events/max_events.json
-      highly_sensitive:
-        out_date: output/repeat_events/out_date_2.csv.gz
-        patient_ids: output/repeat_events/patient_ids_*.rds
-
-  ## Study_definition - repeat events step 2 
-
-  generate_study_population_repeat_events_2:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
-      --output-file output/repeat_events/input_repeat_events_2.csv.gz --param step=2
-    needs:
-    - vax_eligibility_inputs
-    - generate_index_dates
-    - preflight_repeat_events_2
-    outputs:
-      highly_sensitive:
-        cohort: output/repeat_events/input_repeat_events_2.csv.gz
-
-  ## Preflight - repeat events step 3 
-
-  preflight_repeat_events_3:
-    run: r:latest analysis/repeat_events/preflight_repeat_events.R 3
-    needs:
-    - generate_study_population_repeat_events_2
-    - preflight_repeat_events_2
-    outputs:
-      highly_sensitive:
-        out_date: output/repeat_events/out_date_3.csv.gz
-
-  ## Study_definition - repeat events step 3 
-
-  generate_study_population_repeat_events_3:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
-      --output-file output/repeat_events/input_repeat_events_3.csv.gz --param step=3
-    needs:
-    - vax_eligibility_inputs
-    - generate_index_dates
-    - preflight_repeat_events_2
-    - preflight_repeat_events_3
-    outputs:
-      highly_sensitive:
-        cohort: output/repeat_events/input_repeat_events_3.csv.gz
-
   ## Preprocess data -prevax 
 
   preprocess_data_prevax:
@@ -187,4 +123,120 @@ actions:
       highly_sensitive:
         cohort: output/input_unvax.rds
         venn: output/venn_unvax.rds
+
+  ## Stage 1 - Data cleaning - all cohorts 
+
+  stage1_data_cleaning_all:
+    run: r:latest analysis/preprocess/Stage1_data_cleaning.R all
+    needs:
+    - preprocess_data_prevax
+    - preprocess_data_vax
+    - preprocess_data_unvax
+    - vax_eligibility_inputs
+    outputs:
+      moderately_sensitive:
+        refactoring: output/not-for-review/meta_data_factors_*.csv
+        QA_rules: output/review/descriptives/QA_summary_*.csv
+        IE_criteria: output/review/descriptives/Cohort_flow_*.csv
+        histograms: output/not-for-review/numeric_histograms_*.svg
+      highly_sensitive:
+        cohort: output/input_*.rds
+
+  describe_file-input_prevax_stage1:
+    run: r:latest analysis/describe_file.R input_prevax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_prevax_stage1.txt
+
+  describe_file-input_vax_stage1:
+    run: r:latest analysis/describe_file.R input_vax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_vax_stage1.txt
+
+  describe_file-input_unvax_stage1:
+    run: r:latest analysis/describe_file.R input_unvax_stage1 rds
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      moderately_sensitive:
+        describe_model_input: output/describe-input_unvax_stage1.txt
+
+  create_stage1_ids:
+    run: r:latest analysis/preprocess/Stage1_ids.R
+    needs:
+    - stage1_data_cleaning_all
+    outputs:
+      highly_sensitive:
+        stage1_ids: output/stage1_ids.csv
+
+  ## Study_definition - repeat events step 1 
+
+  generate_study_population_repeat_events_1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_1
+      --output-file output/repeat_events/input_repeat_events_1.csv.gz
+    needs:
+    - vax_eligibility_inputs
+    - generate_index_dates
+    - create_stage1_ids
+    outputs:
+      highly_sensitive:
+        cohort: output/repeat_events/input_repeat_events_1.csv.gz
+
+  ## Preflight - repeat events step 2 
+
+  preflight_repeat_events_2:
+    run: r:latest analysis/repeat_events/preflight_repeat_events.R 2
+    needs:
+    - generate_study_population_repeat_events_1
+    outputs:
+      moderately_sensitive:
+        max_events: output/repeat_events/max_events.json
+      highly_sensitive:
+        out_date: output/repeat_events/out_date_2.csv.gz
+        patient_ids: output/repeat_events/patient_ids_*.rds
+
+  ## Study_definition - repeat events step 2 
+
+  generate_study_population_repeat_events_2:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
+      --output-file output/repeat_events/input_repeat_events_2.csv.gz --param step=2
+    needs:
+    - vax_eligibility_inputs
+    - generate_index_dates
+    - create_stage1_ids
+    - preflight_repeat_events_2
+    outputs:
+      highly_sensitive:
+        cohort: output/repeat_events/input_repeat_events_2.csv.gz
+
+  ## Preflight - repeat events step 3 
+
+  preflight_repeat_events_3:
+    run: r:latest analysis/repeat_events/preflight_repeat_events.R 3
+    needs:
+    - generate_study_population_repeat_events_2
+    - preflight_repeat_events_2
+    outputs:
+      highly_sensitive:
+        out_date: output/repeat_events/out_date_3.csv.gz
+
+  ## Study_definition - repeat events step 3 
+
+  generate_study_population_repeat_events_3:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_repeat_events_x
+      --output-file output/repeat_events/input_repeat_events_3.csv.gz --param step=3
+    needs:
+    - vax_eligibility_inputs
+    - generate_index_dates
+    - create_stage1_ids
+    - preflight_repeat_events_2
+    - preflight_repeat_events_3
+    outputs:
+      highly_sensitive:
+        cohort: output/repeat_events/input_repeat_events_3.csv.gz
 
