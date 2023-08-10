@@ -171,7 +171,7 @@ actions:
     needs:
     - stage1_data_cleaning_all
     outputs:
-      moderately_sensitive:
+      highly_sensitive:
         stage1_ids: output/stage1_ids.csv
 
   ## Study_definition - repeat events step 1 
