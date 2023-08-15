@@ -36,7 +36,7 @@ def clinical_event_date_X(
                 date_format="YYYY-MM-DD",
                 find_first_match_in_period=True,
                 return_expectations={
-                   "date": {"earliest": "1900-01-01", "latest" : "today"},
+                   "date": {"earliest": study_dates["pandemic_start"], "latest" : study_dates["omicron_date"]},
                    "incidence": 0.3
                    },
                 ),

@@ -240,3 +240,18 @@ actions:
       highly_sensitive:
         cohort: output/repeat_events/input_repeat_events_3.csv.gz
 
+  ## Process repeat events 
+
+  process_repeat_events:
+    run: r:latest analysis/repeat_events/process_repeat_events.R
+    needs:
+    - stage1_data_cleaning_all
+    - create_stage1_ids
+    - generate_study_population_repeat_events_1
+    - preflight_repeat_events_2
+    - generate_study_population_repeat_events_2
+    - generate_study_population_repeat_events_3
+    outputs:
+      highly_sensitive:
+        repeat_events: output/repeat_events/repeat_events_*.rds
+
