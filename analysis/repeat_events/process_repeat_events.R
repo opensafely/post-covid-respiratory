@@ -121,31 +121,51 @@ for (cohort in c("prevax", "unvax", "vax")) {
                 diff = c(as.integer(diff(out_date_end)), episode_length + 1),
                 diff_lag = lag(diff, default = episode_length + 1)
                 ) %>%
-                 ungroup() %>%
-                    mutate(
-                      out_date_end_new = if_else(
-                        diff <= episode_length,
-                        lead(out_date_end), 
-                        out_date_end)
-                      ) %>%
-                        filter(diff_lag > episode_length) %>%
-                          select(patient_id, episode_start = out_date, episode_end = out_date_end_new) %>%
+        ungroup() %>%
+        mutate(
+          episode_start_indicator = case_when(
+            # flag the start of episodes of length 1
+            (diff > episode_length) & (diff_lag > episode_length) ~ TRUE,
+            # flag the start of episodes of length > 1
+            (diff <= episode_length) & (diff_lag > episode_length) ~ TRUE,
+            # otherwise not an episode start
+            TRUE ~ FALSE
+            ),
+          # create a distinct id for each episode
+          episode_id = cumsum(episode_start_indicator)
+        ) %>% 
+        # within episode id, get the earliest out_date and latest out_date_end
+        # note: don't need to patient_id in group_by(), episode_id is sufficient
+        group_by(episode_id) %>%
+        summarise(
+          # first(patient_id) is quicker than grouping by patient id
+          patient_id = first(patient_id),
+          episode_start = min(out_date),
+          episode_end = max(out_date_end),
+          .groups = "drop"
+        ) %>%
+        mutate(episode_length = as.integer(episode_end - episode_start))
+      
+      stopifnot(
+        "Some values of `data_repeat_events_episodes$episode_length` are less than `episode_length`." = 
+          all(data_repeat_events_episodes$episode_length >= episode_length)
+      )
+      
+      data_repeat_events_episodes_long <- data_repeat_events_episodes %>%
+        select(-episode_id, -episode_length) %>%
                             pivot_longer(
                               cols = starts_with("episode"),
                               names_to = "date_label",
-                              values_to = "date")
+                              values_to = "date") 
 
       # Add index_date, exposure_date, end_date_outcome ------------------------------------
-      data_repeat_events_episodes <- data_repeat_events_episodes %>%
+      data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
        rbind(stage1_cohort_long) %>%
-         group_by(patient_id) %>%
-           arrange(date, .by_group = TRUE)
+        arrange(patient_id, date)
       
       # Remove if episode end date is after end_date_outcome -------------------------------
-      data_repeat_events_episodes <- data_repeat_events_episodes %>%
-        merge(stage1_cohort[, c("patient_id", "end_date_outcome")], by = "patient_id") %>%
-          filter(!(date_label == "episode_end" & date >= end_date_outcome)) %>%
-            select(!end_date_outcome)
+      data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
+          filter(!((date_label == "episode_end") & (date >= stage1_cohort$end_date_outcome[1]))) 
 
     # Save data --------------------------------------------------------------------------
     saveRDS(data_repeat_events_episodes, file = file.path("output", "repeat_events", paste0("repeat_events_", cohort, "_", outcome_name, "_", population, ".rds")), compress = "gzip")
