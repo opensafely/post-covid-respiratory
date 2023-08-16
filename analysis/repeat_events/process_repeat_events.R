@@ -25,6 +25,8 @@ for (i in repeat_events_steps$step[-1]) {
   data_repeat_events <- data_repeat_events %>%
     left_join(data_repeat_events_i, by = "patient_id")
   
+  rm(data_repeat_events_i)
+  
 }
 
 
@@ -52,8 +54,12 @@ for (i in c("asthma_exac",
   if (max_events[[i]] != ncol(data_repeat_events_outcome)-1) {
     stop(paste0("Number of ", i, " outcome variables does not match maximum number of ", i, " events"))
   }
+  
+  rm(data_repeat_events_outcome)
 
 }
+
+rm(max_events, max_events_JSON)
 
 # Remove events occurring outside study period --------------------------------------------
 for (cohort in c("prevax", "unvax", "vax")) {
@@ -64,6 +70,10 @@ for (cohort in c("prevax", "unvax", "vax")) {
       !is.na(exposure_date) & (exposure_date < index_date | exposure_date >= end_date_outcome),
       as.Date(NA),
       as.Date(exposure_date)))
+  
+  # store here as it is constant within cohorts, so means we don't have to keep
+  # stage1_cohort in memory for the whole loop
+  end_date_outcome <- stage1_cohort$end_date_outcome[1]
 
   data_repeat_events_cohort <- data_repeat_events %>%
     inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
@@ -86,6 +96,8 @@ for (cohort in c("prevax", "unvax", "vax")) {
     # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
     filter(between(out_date, index_date, end_date_outcome)) %>%
     select(!c("index_date", "end_date_outcome"))
+  
+  rm(data_repeat_events_cohort)
 
   # Reshape stage1 data ----------------------------------------------------------
   stage1_cohort_long <- stage1_cohort %>%
@@ -95,6 +107,8 @@ for (cohort in c("prevax", "unvax", "vax")) {
       values_to = "date",
       values_drop_na = TRUE
     )
+  
+  rm(stage1_cohort)
 
   # Create episode data ----------------------------------------------------------
   population_episode_length <- tibble(
@@ -157,7 +171,9 @@ for (cohort in c("prevax", "unvax", "vax")) {
                               cols = starts_with("episode"),
                               names_to = "date_label",
                               values_to = "date") 
-
+      
+      rm(data_repeat_events_episodes)
+      
       # Add index_date, exposure_date, end_date_outcome ------------------------------------
       data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
        rbind(stage1_cohort_long) %>%
@@ -165,13 +181,21 @@ for (cohort in c("prevax", "unvax", "vax")) {
       
       # Remove if episode end date is after end_date_outcome -------------------------------
       data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-          filter(!((date_label == "episode_end") & (date >= stage1_cohort$end_date_outcome[1]))) 
+          filter(!((date_label == "episode_end") & (date >= end_date_outcome))) 
 
     # Save data --------------------------------------------------------------------------
-    saveRDS(data_repeat_events_episodes, file = file.path("output", "repeat_events", paste0("repeat_events_", cohort, "_", outcome_name, "_", population, ".rds")), compress = "gzip")
+    saveRDS(
+      data_repeat_events_episodes_long, 
+      file = file.path("output", "repeat_events", paste0("repeat_events_long_", cohort, "_", outcome_name, "_", population, ".rds")), 
+      compress = "gzip"
+      )
 
+    rm(data_repeat_events_episodes_long)
+      
     }
 
   }
+  
+  rm(data_repeat_events_long, stage1_cohort_long)
 
 }

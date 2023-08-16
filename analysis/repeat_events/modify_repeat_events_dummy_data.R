@@ -11,3 +11,5 @@ data_repeat_events <- data_repeat_events %>%
     select(!patient_id) 
 
 data_repeat_events <- cbind(patient_id = stage1_ids, data_repeat_events)
+
+rm(stage1_ids)
