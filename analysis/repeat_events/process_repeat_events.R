@@ -68,17 +68,6 @@ for (cohort in c("prevax", "unvax", "vax")) {
   data_repeat_events <- data_repeat_events %>%
     inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
 
-  data_repeat_events <- data_repeat_events %>%
-    mutate(
-      across(
-        contains("out_date_"),
-          ~ if_else(!is.na(.x) & (.x < index_date | .x > end_date_outcome),
-                as.Date(NA),
-                as.Date(.x))
-          )
-      ) %>%
-        select(!c("index_date", "end_date_outcome"))
-
   # Reshape repeat events data ----------------------------------------------------
   # reshape data
   data_repeat_events_long <- data_repeat_events %>%
@@ -93,7 +82,10 @@ for (cohort in c("prevax", "unvax", "vax")) {
       values_drop_na = TRUE
     ) %>%
     # tidy up the outcome column so it only shows the event type
-    mutate(across(outcome, ~str_remove_all(.x, "out_date_|_\\d+")))
+    mutate(across(outcome, ~str_remove_all(.x, "out_date_|_\\d+"))) %>%
+    # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
+    filter(between(out_date, index_date, end_date_outcome)) %>%
+    select(!c("index_date", "end_date_outcome"))
 
   # Reshape stage1 data ----------------------------------------------------------
   stage1_cohort_long <- stage1_cohort %>%
