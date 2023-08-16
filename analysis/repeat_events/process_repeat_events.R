@@ -60,9 +60,10 @@ for (cohort in c("prevax", "unvax", "vax")) {
 
   stage1_cohort <- read_rds(file.path("output", paste0("input_", cohort, "_stage1.rds"))) %>%
     select(patient_id, index_date, exposure_date =exp_date_covid19_confirmed, end_date_outcome) %>%
-      mutate(exposure_date = if_else(exposure_date < index_date | exposure_date >= end_date_outcome,
-                                                  as.Date(NA),
-                                                  as.Date(exposure_date)))
+    mutate(exposure_date = if_else(
+      !is.na(exposure_date) & (exposure_date < index_date | exposure_date >= end_date_outcome),
+      as.Date(NA),
+      as.Date(exposure_date)))
 
   data_repeat_events <- data_repeat_events %>%
     inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
