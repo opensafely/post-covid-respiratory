@@ -65,12 +65,12 @@ for (cohort in c("prevax", "unvax", "vax")) {
       as.Date(NA),
       as.Date(exposure_date)))
 
-  data_repeat_events <- data_repeat_events %>%
+  data_repeat_events_cohort <- data_repeat_events %>%
     inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
 
   # Reshape repeat events data ----------------------------------------------------
   # reshape data
-  data_repeat_events_long <- data_repeat_events %>%
+  data_repeat_events_long <- data_repeat_events_cohort %>%
     # reshape to long
     pivot_longer(
       # select columns to reshape
