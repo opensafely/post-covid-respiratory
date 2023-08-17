@@ -71,10 +71,6 @@ for (cohort in c("prevax", "unvax", "vax")) {
       as.Date(NA),
       as.Date(exposure_date)))
   
-  # store here as it is constant within cohorts, so means we don't have to keep
-  # stage1_cohort in memory for the whole loop
-  end_date_outcome <- stage1_cohort$end_date_outcome[1]
-
   data_repeat_events_cohort <- data_repeat_events %>%
     inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
 
@@ -101,12 +97,18 @@ for (cohort in c("prevax", "unvax", "vax")) {
 
   # Reshape stage1 data ----------------------------------------------------------
   stage1_cohort_long <- stage1_cohort %>%
+    select(-exposure_date) %>%
     pivot_longer(
       cols = contains("date"),
       names_to = "date_label",
       values_to = "date",
       values_drop_na = TRUE
     )
+  
+  # Keep exposure dates for later -----------------------------------------------
+  data_exposure_dates <- stage1_cohort %>%
+    select(patient_id, exposure_date) %>%
+    filter(!is.na(exposure_date))
   
   rm(stage1_cohort)
 
@@ -181,7 +183,15 @@ for (cohort in c("prevax", "unvax", "vax")) {
       
       # Remove if episode end date is after end_date_outcome -------------------------------
       data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-          filter(!((date_label == "episode_end") & (date >= end_date_outcome))) 
+        group_by(patient_id) %>%
+        # remove any dates after the patient's outcome date where date_label != "end_date_outcome"
+        # note: this only works when grouped by patient_id
+        filter(!((date >= date[date_label == "end_date_outcome"]) & date_label != "end_date_outcome")) %>%
+        ungroup()
+      
+      # add column of exposure dates -------------------------------------------
+      data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
+        left_join(data_exposure_dates, by = "patient_id")
 
     # Save data --------------------------------------------------------------------------
     saveRDS(
