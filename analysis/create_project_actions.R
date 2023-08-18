@@ -422,6 +422,21 @@ actions_list <- splice(
       }
     ),
     recursive = FALSE
+  ),
+
+  comment("Process repeat events"),
+  action(
+    name = "process_repeat_events",
+    run = glue("r:latest analysis/repeat_events/process_repeat_events.R"),
+    needs = list("stage1_data_cleaning_all",
+                 "create_stage1_ids",
+                 "generate_study_population_repeat_events_1",
+                 "preflight_repeat_events_2",
+                 "generate_study_population_repeat_events_2",
+                 "generate_study_population_repeat_events_3"),
+    highly_sensitive = list(
+      repeat_events = glue("output/repeat_events/repeat_events_*.rds")
+    )
   )
 
 
