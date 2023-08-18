@@ -20,7 +20,7 @@ args <- commandArgs(trailingOnly=TRUE)
 
 if(length(args)==0){
   # use for interactive testing
-  cohort_name <- "all"
+  cohort_name <- "vax"
   
 } else {
   cohort_name <- args[[1]]
@@ -40,9 +40,9 @@ mixed_vax_threshold<-as.Date("2021-05-07")
 start_date_delta = as.Date(study_dates$delta_date, format="%Y-%m-%d")
 end_date_delta = as.Date(study_dates$omicron_date, format="%Y-%m-%d") 
 
-stage1 <- function(cohort_name){
-    input <- read_rds(file.path("output", paste0("input_",cohort_name,".rds")))
-    print(paste0(cohort_name,  " ", nrow(input), " rows in the input file"))
+#input cohort file
+input <- read_rds(file.path("output", paste0("input_",cohort_name,".rds")))
+print(paste0(cohort_name,  " ", nrow(input), " rows in the input file"))
     
 #Rename the index_date_vax/unvax/prevax to index_date   
     input<- input %>%
@@ -329,7 +329,7 @@ print(paste0(cohort_name, " ", nrow(input), " rows in the input file after commo
     numeric_vars <- input %>% dplyr::select(contains("_num"))
     numeric_title <- colnames(numeric_vars)
     
-    svglite::svglite(file = file.path("output/not-for-review/", paste0("numeric_histograms_", cohort_name, "_",  ".svg")), width = 15, height = 8)
+    svglite::svglite(file = file.path("output/not-for-review/", paste0("numeric_histograms_", cohort_name, ".svg")), width = 15, height = 8)
     g <- ggplot(gather(numeric_vars), aes(value)) + 
       geom_histogram(bins = 10) + 
       facet_wrap(~key, scales = 'free_x')
@@ -345,15 +345,3 @@ print(paste0(cohort_name, " ", nrow(input), " rows in the input file after commo
     
     saveRDS(input, file = file.path("output", paste0("input_",cohort_name, "_stage1",".rds")), compress = "gzip")
 
-}
-
-# Run function using outcome group
-
-
-if (cohort_name == "all") {
-  stage1("prevax")
-  stage1("vax")
-  stage1("unvax")
-} else{
-  stage1(cohort_name)
-}
