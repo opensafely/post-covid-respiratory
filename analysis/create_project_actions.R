@@ -264,53 +264,86 @@ actions_list <- splice(
     )
   ),
 
-  comment("Stage 1 - Data cleaning - all cohorts"),
+  comment("Stage 1 - Data cleaning - prevax"),
   action(
-    name = "stage1_data_cleaning_all",
-    run = "r:latest analysis/preprocess/Stage1_data_cleaning.R all",
-    needs = list("preprocess_data_prevax","preprocess_data_vax", "preprocess_data_unvax","vax_eligibility_inputs"),
+    name = "stage1_data_cleaning_prevax",
+    run = "r:latest analysis/preprocess/Stage1_data_cleaning.R prevax",
+    needs = list("preprocess_data_prevax","vax_eligibility_inputs"),
     moderately_sensitive = list(
-      refactoring = glue("output/not-for-review/meta_data_factors_*.csv"),
-      QA_rules = glue("output/review/descriptives/QA_summary_*.csv"),
-      IE_criteria = glue("output/review/descriptives/Cohort_flow_*.csv"),
-      histograms = glue("output/not-for-review/numeric_histograms_*.svg")
+      refactoring = glue("output/not-for-review/meta_data_factors_prevax.csv"),
+      QA_rules = glue("output/review/descriptives/QA_summary_prevax.csv"),
+      IE_criteria = glue("output/review/descriptives/Cohort_flow_prevax.csv"),
+      histograms = glue("output/not-for-review/numeric_histograms_prevax.svg")
     ),
     highly_sensitive = list(
-      cohort = glue("output/input_*.rds")
+      cohort = glue("output/input_prevax_stage1.rds")
     )
   ),
 
   action(
     name = glue("describe_file-input_prevax_stage1"),
     run = glue("r:latest analysis/describe_file.R input_prevax_stage1 rds"),
-    needs = list("stage1_data_cleaning_all"),
+    needs = list("stage1_data_cleaning_prevax"),
     moderately_sensitive = list(
       describe_model_input = glue("output/describe-input_prevax_stage1.txt")
     )
   ),
-  
+
+  comment("Stage 1 - Data cleaning - vax"),
+  action(
+    name = "stage1_data_cleaning_vax",
+    run = "r:latest analysis/preprocess/Stage1_data_cleaning.R vax",
+    needs = list("preprocess_data_vax","vax_eligibility_inputs"),
+    moderately_sensitive = list(
+      refactoring = glue("output/not-for-review/meta_data_factors_vax.csv"),
+      QA_rules = glue("output/review/descriptives/QA_summary_vax.csv"),
+      IE_criteria = glue("output/review/descriptives/Cohort_flow_vax.csv"),
+      histograms = glue("output/not-for-review/numeric_histograms_vax.svg")
+    ),
+    highly_sensitive = list(
+      cohort = glue("output/input_vax_stage1.rds")
+    )
+  ),
+
   action(
     name = glue("describe_file-input_vax_stage1"),
     run = glue("r:latest analysis/describe_file.R input_vax_stage1 rds"),
-    needs = list("stage1_data_cleaning_all"),
+    needs = list("stage1_data_cleaning_vax"),
     moderately_sensitive = list(
       describe_model_input = glue("output/describe-input_vax_stage1.txt")
     )
   ),
-  
+
+  comment("Stage 1 - Data cleaning - unvax"),
+  action(
+    name = "stage1_data_cleaning_unvax",
+    run = "r:latest analysis/preprocess/Stage1_data_cleaning.R unvax",
+    needs = list("preprocess_data_unvax","vax_eligibility_inputs"),
+    moderately_sensitive = list(
+      refactoring = glue("output/not-for-review/meta_data_factors_unvax.csv"),
+      QA_rules = glue("output/review/descriptives/QA_summary_unvax.csv"),
+      IE_criteria = glue("output/review/descriptives/Cohort_flow_unvax.csv"),
+      histograms = glue("output/not-for-review/numeric_histograms_unvax.svg")
+    ),
+    highly_sensitive = list(
+      cohort = glue("output/input_unvax_stage1.rds")
+    )
+  ),
+
   action(
     name = glue("describe_file-input_unvax_stage1"),
     run = glue("r:latest analysis/describe_file.R input_unvax_stage1 rds"),
-    needs = list("stage1_data_cleaning_all"),
+    needs = list("stage1_data_cleaning_unvax"),
     moderately_sensitive = list(
       describe_model_input = glue("output/describe-input_unvax_stage1.txt")
     )
   ),
-  
+
+  comment("Stage 1 IDs"),
   action(
     name = "create_stage1_ids",
     run = glue("r:latest analysis/preprocess/Stage1_ids.R"),
-    needs = list("stage1_data_cleaning_all"),
+    needs = list("stage1_data_cleaning_prevax", "stage1_data_cleaning_vax", "stage1_data_cleaning_unvax"),
     highly_sensitive = list(
       stage1_ids = glue("output/stage1_ids.csv")
     )

@@ -124,52 +124,86 @@ actions:
         cohort: output/input_unvax.rds
         venn: output/venn_unvax.rds
 
-  ## Stage 1 - Data cleaning - all cohorts 
+  ## Stage 1 - Data cleaning - prevax 
 
-  stage1_data_cleaning_all:
-    run: r:latest analysis/preprocess/Stage1_data_cleaning.R all
+  stage1_data_cleaning_prevax:
+    run: r:latest analysis/preprocess/Stage1_data_cleaning.R prevax
     needs:
     - preprocess_data_prevax
-    - preprocess_data_vax
-    - preprocess_data_unvax
     - vax_eligibility_inputs
     outputs:
       moderately_sensitive:
-        refactoring: output/not-for-review/meta_data_factors_*.csv
-        QA_rules: output/review/descriptives/QA_summary_*.csv
-        IE_criteria: output/review/descriptives/Cohort_flow_*.csv
-        histograms: output/not-for-review/numeric_histograms_*.svg
+        refactoring: output/not-for-review/meta_data_factors_prevax.csv
+        QA_rules: output/review/descriptives/QA_summary_prevax.csv
+        IE_criteria: output/review/descriptives/Cohort_flow_prevax.csv
+        histograms: output/not-for-review/numeric_histograms_prevax.svg
       highly_sensitive:
-        cohort: output/input_*.rds
+        cohort: output/input_prevax_stage1.rds
 
   describe_file-input_prevax_stage1:
     run: r:latest analysis/describe_file.R input_prevax_stage1 rds
     needs:
-    - stage1_data_cleaning_all
+    - stage1_data_cleaning_prevax
     outputs:
       moderately_sensitive:
         describe_model_input: output/describe-input_prevax_stage1.txt
 
+  ## Stage 1 - Data cleaning - vax 
+
+  stage1_data_cleaning_vax:
+    run: r:latest analysis/preprocess/Stage1_data_cleaning.R vax
+    needs:
+    - preprocess_data_vax
+    - vax_eligibility_inputs
+    outputs:
+      moderately_sensitive:
+        refactoring: output/not-for-review/meta_data_factors_vax.csv
+        QA_rules: output/review/descriptives/QA_summary_vax.csv
+        IE_criteria: output/review/descriptives/Cohort_flow_vax.csv
+        histograms: output/not-for-review/numeric_histograms_vax.svg
+      highly_sensitive:
+        cohort: output/input_vax_stage1.rds
+
   describe_file-input_vax_stage1:
     run: r:latest analysis/describe_file.R input_vax_stage1 rds
     needs:
-    - stage1_data_cleaning_all
+    - stage1_data_cleaning_vax
     outputs:
       moderately_sensitive:
         describe_model_input: output/describe-input_vax_stage1.txt
 
+  ## Stage 1 - Data cleaning - unvax 
+
+  stage1_data_cleaning_unvax:
+    run: r:latest analysis/preprocess/Stage1_data_cleaning.R unvax
+    needs:
+    - preprocess_data_unvax
+    - vax_eligibility_inputs
+    outputs:
+      moderately_sensitive:
+        refactoring: output/not-for-review/meta_data_factors_unvax.csv
+        QA_rules: output/review/descriptives/QA_summary_unvax.csv
+        IE_criteria: output/review/descriptives/Cohort_flow_unvax.csv
+        histograms: output/not-for-review/numeric_histograms_unvax.svg
+      highly_sensitive:
+        cohort: output/input_unvax_stage1.rds
+
   describe_file-input_unvax_stage1:
     run: r:latest analysis/describe_file.R input_unvax_stage1 rds
     needs:
-    - stage1_data_cleaning_all
+    - stage1_data_cleaning_unvax
     outputs:
       moderately_sensitive:
         describe_model_input: output/describe-input_unvax_stage1.txt
 
+  ## Stage 1 IDs 
+
   create_stage1_ids:
     run: r:latest analysis/preprocess/Stage1_ids.R
     needs:
-    - stage1_data_cleaning_all
+    - stage1_data_cleaning_prevax
+    - stage1_data_cleaning_vax
+    - stage1_data_cleaning_unvax
     outputs:
       highly_sensitive:
         stage1_ids: output/stage1_ids.csv
