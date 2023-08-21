@@ -274,12 +274,11 @@ actions:
       highly_sensitive:
         cohort: output/repeat_events/input_repeat_events_3.csv.gz
 
-  ## Process repeat events 
+  ## Join repeat events 
 
-  process_repeat_events:
-    run: r:latest analysis/repeat_events/process_repeat_events.R
+  join_repeat_events:
+    run: r:latest analysis/repeat_events/join_repeat_events.R
     needs:
-    - stage1_data_cleaning_all
     - create_stage1_ids
     - generate_study_population_repeat_events_1
     - preflight_repeat_events_2
@@ -287,5 +286,38 @@ actions:
     - generate_study_population_repeat_events_3
     outputs:
       highly_sensitive:
-        repeat_events: output/repeat_events/repeat_events_*.rds
+        repeat_events: output/repeat_events/data_repeat_events.rds
+
+  ## Process repeat events - prevax 
+
+  process_repeat_events_prevax:
+    run: r:latest analysis/repeat_events/process_repeat_events.R prevax
+    needs:
+    - stage1_data_cleaning_prevax
+    - join_repeat_events
+    outputs:
+      highly_sensitive:
+        repeat_events: output/repeat_events/repeat_events_prevax_*.csv
+
+  ## Process repeat events - vax 
+
+  process_repeat_events_vax:
+    run: r:latest analysis/repeat_events/process_repeat_events.R vax
+    needs:
+    - stage1_data_cleaning_vax
+    - join_repeat_events
+    outputs:
+      highly_sensitive:
+        repeat_events: output/repeat_events/repeat_events_vax_*.csv
+
+  ## Process repeat events - unvax 
+
+  process_repeat_events_unvax:
+    run: r:latest analysis/repeat_events/process_repeat_events.R unvax
+    needs:
+    - stage1_data_cleaning_unvax
+    - join_repeat_events
+    outputs:
+      highly_sensitive:
+        repeat_events: output/repeat_events/repeat_events_unvax_*.csv
 

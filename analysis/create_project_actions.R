@@ -424,18 +424,50 @@ actions_list <- splice(
     recursive = FALSE
   ),
 
-  comment("Process repeat events"),
+  comment("Join repeat events"),
   action(
-    name = "process_repeat_events",
-    run = glue("r:latest analysis/repeat_events/process_repeat_events.R"),
-    needs = list("stage1_data_cleaning_all",
-                 "create_stage1_ids",
+    name = "join_repeat_events",
+    run = glue("r:latest analysis/repeat_events/join_repeat_events.R"),
+    needs = list("create_stage1_ids",
                  "generate_study_population_repeat_events_1",
                  "preflight_repeat_events_2",
                  "generate_study_population_repeat_events_2",
                  "generate_study_population_repeat_events_3"),
     highly_sensitive = list(
-      repeat_events = glue("output/repeat_events/repeat_events_*.rds")
+      repeat_events = glue("output/repeat_events/data_repeat_events.rds")
+    )
+  ),
+
+  comment("Process repeat events - prevax"),
+  action(
+    name = "process_repeat_events_prevax",
+    run = glue("r:latest analysis/repeat_events/process_repeat_events.R prevax"),
+    needs = list("stage1_data_cleaning_prevax",
+                 "join_repeat_events"),
+    highly_sensitive = list(
+      repeat_events = glue("output/repeat_events/repeat_events_prevax_*.csv")
+    )
+  ),
+
+  comment("Process repeat events - vax"),
+  action(
+    name = "process_repeat_events_vax",
+    run = glue("r:latest analysis/repeat_events/process_repeat_events.R vax"),
+    needs = list("stage1_data_cleaning_vax",
+                 "join_repeat_events"),
+    highly_sensitive = list(
+      repeat_events = glue("output/repeat_events/repeat_events_vax_*.csv")
+    )
+  ),
+
+  comment("Process repeat events - unvax"),
+  action(
+    name = "process_repeat_events_unvax",
+    run = glue("r:latest analysis/repeat_events/process_repeat_events.R unvax"),
+    needs = list("stage1_data_cleaning_unvax",
+                 "join_repeat_events"),
+    highly_sensitive = list(
+      repeat_events = glue("output/repeat_events/repeat_events_unvax_*.csv")
     )
   )
 
