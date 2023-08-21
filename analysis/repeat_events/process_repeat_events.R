@@ -1,69 +1,21 @@
 library(tidyverse)
-library(jsonlite)
-library(here)
-library(glue)
 
-# Load repeat_events_steps ------------------------------------------------
-# source rather than loading so that it runs checks
-source(here::here("analysis", "repeat_events", "repeat_events_steps.R"))
+# Specify command arguments ----------------------------------------------------
 
-input_repeat_events_path <- "input_repeat_events_{i}.csv.gz"
+args <- commandArgs(trailingOnly=TRUE)
 
-i<-1
-data_repeat_events <- 
-  read_csv(here("output", "repeat_events", glue(input_repeat_events_path))) %>%
-  select(patient_id, starts_with("out_date_"))
-
-for (i in repeat_events_steps$step[-1]) {
+if(length(args)==0){
+  # use for interactive testing
+  cohort <- "vax"
   
-  index_event <- repeat_events_steps$upper[i-1]
-  
-  data_repeat_events_i <- 
-    read_csv(here("output", "repeat_events", glue(input_repeat_events_path))) %>%
-    select(-matches(glue("out_date_\\w+_{index_event}")))
-  
-  data_repeat_events <- data_repeat_events %>%
-    left_join(data_repeat_events_i, by = "patient_id")
-  
-  rm(data_repeat_events_i)
-  
+} else {
+  cohort <- args[[1]]
 }
 
-
-# Modify dummy data so that IDs match those from stage1 -----------------------
-
-if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations")) {
-  source("analysis/repeat_events/modify_repeat_events_dummy_data.R")
-  message("Repeat events IDs overwritten successfully")
-}
-
-# Check number of outcome variables matches the max number of events for each outcome -----------
-
-max_events_JSON <- fromJSON("output/repeat_events/max_events.json")
-max_events <- as.data.frame(max_events_JSON)
-
-for (i in c("asthma_exac",
-            "breathless",
-            "copd_exac",
-            "cough",
-            "urti")) {
-
-  data_repeat_events_outcome <- data_repeat_events %>%
-    select(patient_id, contains(i))
-
-  if (max_events[[i]] != ncol(data_repeat_events_outcome)-1) {
-    stop(paste0("Number of ", i, " outcome variables does not match maximum number of ", i, " events"))
-  }
-  
-  rm(data_repeat_events_outcome)
-
-}
-
-rm(max_events, max_events_JSON)
+# Input repeat events file ----------------------------------------------------------------
+data_repeat_events <- read_rds(file.path("output", "repeat_events", "data_repeat_events.rds"))
 
 # Remove events occurring outside study period --------------------------------------------
-for (cohort in c("prevax", "unvax", "vax")) {
-
   stage1_cohort <- read_rds(file.path("output", paste0("input_", cohort, "_stage1.rds"))) %>%
     select(patient_id, index_date, exposure_date =exp_date_covid19_confirmed, end_date_outcome) %>%
     mutate(exposure_date = if_else(
@@ -176,12 +128,12 @@ for (cohort in c("prevax", "unvax", "vax")) {
       
       rm(data_repeat_events_episodes)
       
-      # Add index_date, exposure_date, end_date_outcome ------------------------------------
+      # Add index_date and end_date_outcome ------------------------------------
       data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
        rbind(stage1_cohort_long) %>%
         arrange(patient_id, date)
       
-      # Remove if episode end date is after end_date_outcome -------------------------------
+      # Remove if episode start or end is >= end_date_outcome -------------------------------
       data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
         group_by(patient_id) %>%
         # remove any dates after the patient's outcome date where date_label != "end_date_outcome"
@@ -194,18 +146,12 @@ for (cohort in c("prevax", "unvax", "vax")) {
         left_join(data_exposure_dates, by = "patient_id")
 
     # Save data --------------------------------------------------------------------------
-    saveRDS(
-      data_repeat_events_episodes_long, 
-      file = file.path("output", "repeat_events", paste0("repeat_events_long_", cohort, "_", outcome_name, "_", population, ".rds")), 
-      compress = "gzip"
-      )
+      write.csv(data_repeat_events_episodes_long,
+                file = file.path("output", "repeat_events", paste0("repeat_events_", cohort, "_", outcome_name, "_", population, ".csv")),
+                row.names=FALSE)
 
     rm(data_repeat_events_episodes_long)
       
     }
 
   }
-  
-  rm(data_repeat_events_long, stage1_cohort_long)
-
-}
