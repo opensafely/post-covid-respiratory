@@ -84,31 +84,36 @@ study = StudyDefinition(
     ## First 5 outcomes in the study period
     **clinical_event_date_X(
       name="breathless", 
-      index_date=days(study_dates["pandemic_start"], -14), 
+      start_date=days(study_dates["pandemic_start"], -14), 
+      end_date=study_dates["omicron_date"],
       n=5,
     ),
 
     **clinical_event_date_X(
       name="cough", 
-      index_date=days(study_dates["pandemic_start"], -14), 
+      start_date=days(study_dates["pandemic_start"], -14), 
+      end_date=study_dates["omicron_date"],
       n=5,
     ),
 
     **clinical_event_date_X(
       name="urti", 
-      index_date=days(study_dates["pandemic_start"], -14), 
+      start_date=days(study_dates["pandemic_start"], -14), 
+      end_date=study_dates["omicron_date"],
       n=5,
     ),        
 
     **clinical_event_date_X(
       name="asthma_exac", 
-      index_date=days(study_dates["pandemic_start"], -14), 
+      start_date=days(study_dates["pandemic_start"], -14), 
+      end_date=study_dates["omicron_date"],
       n=5,
     ),
 
     **clinical_event_date_X(
       name="copd_exac", 
-      index_date=days(study_dates["pandemic_start"], -14), 
+      start_date=days(study_dates["pandemic_start"], -14), 
+      end_date=study_dates["omicron_date"],
       n=5,
     ),
 

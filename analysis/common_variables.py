@@ -13,7 +13,7 @@ from cohortextractor import (
 
 # function for recurring clinical events
 def clinical_event_date_X(
-  name, index_date, n, index_from=1
+  name, start_date, end_date, n, index_from=1
 ):
   # define the codelist based on the name
   if name=="breathless": codelist=breathlessness_snomed
@@ -23,16 +23,12 @@ def clinical_event_date_X(
   if name=="urti": codelist=urti_snomed
 
   # emeregency attendance dates
-  def var_signature(name, on_or_after, codelist):
+  def var_signature(name, start_date, end_date, codelist):
     return {
       name: patients.with_these_clinical_events(
                 codelist,
                 returning="date",
-                # although it would be more efficient to use 'between'
-                # (to avoid extracting unecessary data)
-                # instead of 'on_or_after', we can't, because there will
-                # end up with cases where between[date1,date2] and date1>date2
-                on_or_after=on_or_after,
+                between=[start_date, end_date],
                 date_format="YYYY-MM-DD",
                 find_first_match_in_period=True,
                 return_expectations={
@@ -43,13 +39,15 @@ def clinical_event_date_X(
     }
   variables=var_signature(
      name=f"out_date_{name}_{index_from}", 
-     on_or_after=index_date, 
+     start_date=start_date,
+     end_date=end_date, 
      codelist=codelist, 
      )
   for i in range(index_from+1, n+1):
       variables.update(var_signature(
          name=f"out_date_{name}_{i}", 
-         on_or_after=f"out_date_{name}_{i-1} + 1 day",
+         start_date=f"out_date_{name}_{i-1} + 1 day",
+         end_date=end_date,
          codelist=codelist, 
          ))
   return variables

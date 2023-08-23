@@ -81,7 +81,8 @@ def out_date_n(
     variables.update(
        clinical_event_date_X(
             name=name,
-            index_date=f"out_date_{name}_{index_event}",
+            start_date=f"out_date_{name}_{index_event}",
+            end_date=study_dates["omicron_date"],
             n=n_upper,
             index_from=n_lower,
        )
