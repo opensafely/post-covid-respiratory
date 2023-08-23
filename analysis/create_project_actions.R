@@ -434,7 +434,7 @@ actions_list <- splice(
                  "generate_study_population_repeat_events_2",
                  "generate_study_population_repeat_events_3"),
     highly_sensitive = list(
-      repeat_events = glue("output/repeat_events/data_repeat_events.rds")
+      repeat_events = glue("output/repeat_events/data_repeat_events_long.rds")
     )
   ),
 
