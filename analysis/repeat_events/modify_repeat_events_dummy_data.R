@@ -17,8 +17,6 @@ rm(stage1_ids)
 
 # Increase number of patients with no events ----------------------------------
 
-data_repeat_events <- data_repeat_events
-
 for (outcome in c("asthma_exac",
                          "breathless",
                          "copd_exac",
