@@ -15,36 +15,25 @@ if(length(args)==0){
 # Input stage 1 cohort file ----------------------------------------------------
 stage1_cohort <- read_rds(file.path("output", paste0("input_", cohort, "_stage1.rds"))) %>%
   select(patient_id, index_date, exposure_date =exp_date_covid19_confirmed, end_date_outcome) %>%
+  # remove exposure dates that do not occur during cohort follow-up
   mutate(exposure_date = if_else(
     !is.na(exposure_date) & (exposure_date < index_date | exposure_date >= end_date_outcome),
     as.Date(NA),
     as.Date(exposure_date)))
 
-# Input repeat events file ----------------------------------------------------------------
-data_repeat_events_cohort <- read_rds(file.path("output", "repeat_events", "data_repeat_events.rds")) %>%
-  # Remove events occurring outside study period
-  inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id")
+# Input repeat events long file ------------------------------------------------
+data_repeat_events_long <- 
+  read_rds(file.path("output", "repeat_events", "data_repeat_events_long.rds")) 
 
-# Reshape repeat events data ----------------------------------------------------
-# reshape data
-data_repeat_events_long <- data_repeat_events_cohort %>%
-  # reshape to long
-  pivot_longer(
-    # select columns to reshape
-    cols = starts_with("out_date_"),
-    # set names of columns in the long data
-    names_to = "outcome",
-    values_to = "out_date",
-    # drop rows where is.na(out_date)
-    values_drop_na = TRUE
-  ) %>%
-  # tidy up the outcome column so it only shows the event type
-  mutate(across(outcome, ~str_remove_all(.x, "out_date_|_\\d+"))) %>%
+# Inner join data_repeat_events_long and stage1_cohort -------------------------
+# (this will include patients in the cohort who have at least one outcome event)
+data_repeat_events_long_cohort <- data_repeat_events_long %>%
+  inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id") %>%
   # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
   filter(between(out_date, index_date, end_date_outcome)) %>%
   select(!c("index_date", "end_date_outcome"))
 
-rm(data_repeat_events_cohort)
+rm(data_repeat_events_long)
 
 # Reshape stage1 data ----------------------------------------------------------
 stage1_cohort_long <- stage1_cohort %>%
@@ -79,7 +68,7 @@ for (population in c("no_preexisting", "preexisting")) {
                          "cough",
                          "urti")) {
     
-    data_repeat_events_episodes <- data_repeat_events_long %>%
+    data_repeat_events_episodes <- data_repeat_events_long_cohort %>%
       filter(outcome == outcome_name) %>%
       arrange(patient_id, out_date) %>%
       group_by(patient_id) %>%

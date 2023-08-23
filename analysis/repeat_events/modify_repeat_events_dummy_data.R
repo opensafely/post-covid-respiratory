@@ -13,3 +13,28 @@ data_repeat_events <- data_repeat_events %>%
 data_repeat_events <- cbind(patient_id = stage1_ids, data_repeat_events)
 
 rm(stage1_ids)
+
+
+# Increase number of patients with no events ----------------------------------
+
+for (outcome in c("asthma_exac",
+                         "breathless",
+                         "copd_exac",
+                         "cough",
+                         "urti")) {
+
+data_repeat_events <- data_repeat_events %>%
+    mutate(rand_num = runif(n = nrow(data_repeat_events))) %>%
+    mutate(
+        across(
+            contains(outcome),
+            ~ if_else(rand_num <0.35,
+            as.Date(NA),
+            as.Date(.x))
+        )
+    )
+}
+
+data_repeat_events <- data_repeat_events %>%
+    select(!rand_num)
+

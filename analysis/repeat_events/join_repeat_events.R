@@ -57,9 +57,24 @@ for (i in c("asthma_exac",
 
 }
 
+# Reshape repeat events data ----------------------------------------------------
+data_repeat_events_long <- data_repeat_events %>%
+  # reshape to long
+  pivot_longer(
+    # select columns to reshape
+    cols = starts_with("out_date_"),
+    # set names of columns in the long data
+    names_to = "outcome",
+    values_to = "out_date",
+    # drop rows where is.na(out_date)
+    values_drop_na = TRUE
+  ) %>%
+  # tidy up the outcome column so it only shows the event type
+  mutate(across(outcome, ~ factor(str_remove_all(.x, "out_date_|_\\d+"))))
+
 # Save data --------------------------------------------------------------------------
 saveRDS(
-  data_repeat_events, 
-    file = file.path("output", "repeat_events", "data_repeat_events.rds"), 
+  data_repeat_events_long, 
+    file = file.path("output", "repeat_events", "data_repeat_events_long.rds"), 
     compress = "gzip"
 )
