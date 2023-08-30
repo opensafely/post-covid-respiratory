@@ -25,49 +25,29 @@ stage1_cohort <- read_rds(file.path("output", paste0("input_", cohort, "_stage1.
 data_repeat_events_long <- 
   read_rds(file.path("output", "repeat_events", "data_repeat_events_long.rds")) 
 
-# Inner join data_repeat_events_long and stage1_cohort -------------------------
-# (this will include patients in the cohort who have at least one outcome event)
-data_repeat_events_long_cohort <- data_repeat_events_long %>%
-  inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id") %>%
-  # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
-  filter(between(out_date, index_date, end_date_outcome)) %>%
-  select(!c("index_date", "end_date_outcome"))
-
-rm(data_repeat_events_long)
-
-# Reshape stage1 data ----------------------------------------------------------
-stage1_cohort_long <- stage1_cohort %>%
-  select(-exposure_date) %>%
-  pivot_longer(
-    cols = contains("date"),
-    names_to = "date_label",
-    values_to = "date",
-    values_drop_na = TRUE
-  )
-
-# Keep exposure dates for later -----------------------------------------------
-data_exposure_dates <- stage1_cohort %>%
-  select(patient_id, exposure_date) %>%
-  filter(!is.na(exposure_date))
-
-rm(stage1_cohort)
-
 # Create episode data ----------------------------------------------------------
 population_episode_length <- tibble(
   no_preexisting = 7,
   preexisting = 14
 )
 
-for (population in c("no_preexisting", "preexisting")) {
-  
+for (population in c("no_preexisting", "preexisting")) { 
   episode_length <- population_episode_length[[population]]
-  
+
+  # Inner join data_repeat_events_long and stage1_cohort -------------------------
+  # (this will include patients in the cohort who have at least one outcome event)
+  data_repeat_events_long_cohort <- data_repeat_events_long %>%
+    inner_join(stage1_cohort, by = "patient_id") %>%
+    # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
+    filter(between(out_date, index_date - episode_length, end_date_outcome)) %>%
+    select(!c("index_date", "end_date_outcome"))
+
   for (outcome_name in c("asthma_exac",
                          "breathless",
                          "copd_exac",
                          "cough",
                          "urti")) {
-    
+  
     data_repeat_events_episodes <- data_repeat_events_long_cohort %>%
       filter(outcome == outcome_name) %>%
       arrange(patient_id, out_date) %>%
@@ -98,6 +78,7 @@ for (population in c("no_preexisting", "preexisting")) {
         patient_id = first(patient_id),
         episode_start = min(out_date),
         episode_end = max(out_date_end),
+        exposure_date = first(exposure_date),
         .groups = "drop"
       ) %>%
       mutate(episode_length = as.integer(episode_end - episode_start))
@@ -114,13 +95,44 @@ for (population in c("no_preexisting", "preexisting")) {
         names_to = "date_label",
         values_to = "date") 
     
+    # Update index date with end of first episode ---------------------------
+    # if patient was in an episode at index date
+    stage1_cohort_index <- data_repeat_events_episodes %>%
+      select(-episode_id, -episode_length) %>%
+      group_by(patient_id) %>%
+        filter(row_number()==1) %>%
+          inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id") %>%
+            mutate(index_date = if_else(
+              episode_start <= index_date,
+              episode_end,
+              index_date)
+            ) %>%
+              select(!c("episode_start", "episode_end"))
+
     rm(data_repeat_events_episodes)
-    
+
+    # Reshape stage1 data ----------------------------------------------------------
+    stage1_cohort_long <- stage1_cohort_index %>%
+        pivot_longer(
+        cols = c("index_date", "end_date_outcome"),
+        names_to = "date_label",
+        values_to = "date",
+        values_drop_na = TRUE
+      )
+
     # Add index_date and end_date_outcome ------------------------------------
     data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
       rbind(stage1_cohort_long) %>%
       arrange(patient_id, date)
+
+    # Remove episodes before index date
+    data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
+      inner_join(stage1_cohort_index[, c("patient_id", "index_date")], by = "patient_id") %>%
+        filter(!((date_label == "episode_start" | date_label == "episode_end") & date <= index_date)) %>%
+          select(!index_date)
     
+    rm(stage1_cohort_index)
+
     # Remove if episode start or end is >= end_date_outcome -------------------------------
     data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
       group_by(patient_id) %>%
@@ -128,10 +140,6 @@ for (population in c("no_preexisting", "preexisting")) {
       # note: this only works when grouped by patient_id
       filter(!((date >= date[date_label == "end_date_outcome"]) & date_label != "end_date_outcome")) %>%
       ungroup()
-    
-    # add column of exposure dates -------------------------------------------
-    data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-      left_join(data_exposure_dates, by = "patient_id")
     
     # Save data --------------------------------------------------------------------------
     write.csv(data_repeat_events_episodes_long,
