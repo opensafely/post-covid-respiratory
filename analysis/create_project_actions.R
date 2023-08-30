@@ -446,6 +446,9 @@ actions_list <- splice(
                  "join_repeat_events"),
     highly_sensitive = list(
       repeat_events = glue("output/repeat_events/repeat_events_prevax_*.csv")
+    ),
+    moderately_sensitive = list(
+      remove_patients = glue("output/repeat_events/patients_removed_prevax.csv")
     )
   ),
 
@@ -457,6 +460,9 @@ actions_list <- splice(
                  "join_repeat_events"),
     highly_sensitive = list(
       repeat_events = glue("output/repeat_events/repeat_events_vax_*.csv")
+    ),
+    moderately_sensitive = list(
+      remove_patients = glue("output/repeat_events/patients_removed_vax.csv")
     )
   ),
 
@@ -468,6 +474,9 @@ actions_list <- splice(
                  "join_repeat_events"),
     highly_sensitive = list(
       repeat_events = glue("output/repeat_events/repeat_events_unvax_*.csv")
+    ),
+    moderately_sensitive = list(
+      remove_patients = glue("output/repeat_events/patients_removed_unvax.csv")
     )
   )
 

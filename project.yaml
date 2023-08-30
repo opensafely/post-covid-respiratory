@@ -296,6 +296,8 @@ actions:
     - stage1_data_cleaning_prevax
     - join_repeat_events
     outputs:
+      moderately_sensitive:
+        remove_patients: output/repeat_events/patients_removed_prevax.csv
       highly_sensitive:
         repeat_events: output/repeat_events/repeat_events_prevax_*.csv
 
@@ -307,6 +309,8 @@ actions:
     - stage1_data_cleaning_vax
     - join_repeat_events
     outputs:
+      moderately_sensitive:
+        remove_patients: output/repeat_events/patients_removed_vax.csv
       highly_sensitive:
         repeat_events: output/repeat_events/repeat_events_vax_*.csv
 
@@ -318,6 +322,8 @@ actions:
     - stage1_data_cleaning_unvax
     - join_repeat_events
     outputs:
+      moderately_sensitive:
+        remove_patients: output/repeat_events/patients_removed_unvax.csv
       highly_sensitive:
         repeat_events: output/repeat_events/repeat_events_unvax_*.csv
 
