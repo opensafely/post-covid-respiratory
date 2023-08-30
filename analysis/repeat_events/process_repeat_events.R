@@ -31,6 +31,9 @@ population_episode_length <- tibble(
   preexisting = 14
 )
 
+# empty tibble for output
+patients_removed <- tibble()
+
 for (population in c("no_preexisting", "preexisting")) { 
   episode_length <- population_episode_length[[population]]
 
@@ -38,7 +41,8 @@ for (population in c("no_preexisting", "preexisting")) {
   # (this will include patients in the cohort who have at least one outcome event)
   data_repeat_events_long_cohort <- data_repeat_events_long %>%
     inner_join(stage1_cohort, by = "patient_id") %>%
-    # drop outcome events that don't happen between index_date and end_date_outcome (inclusive)
+    # drop outcome events that don't happen between index_date - episode_length
+    # and end_date_outcome (inclusive)
     filter(between(out_date, index_date - episode_length, end_date_outcome)) %>%
     select(!c("index_date", "end_date_outcome"))
 
@@ -81,73 +85,99 @@ for (population in c("no_preexisting", "preexisting")) {
         exposure_date = first(exposure_date),
         .groups = "drop"
       ) %>%
-      mutate(episode_length = as.integer(episode_end - episode_start))
+      select(patient_id, episode_start, episode_end)
     
     stopifnot(
       "Some values of `data_repeat_events_episodes$episode_length` are less than `episode_length`." = 
-        all(data_repeat_events_episodes$episode_length >= episode_length)
+        all(
+          data_repeat_events_episodes %>%
+            transmute(check = as.integer(episode_end - episode_start) >= episode_length) %>%
+            pull()
+        )
     )
-    
-    data_repeat_events_episodes_long <- data_repeat_events_episodes %>%
-      select(-episode_id, -episode_length) %>%
-      pivot_longer(
-        cols = starts_with("episode"),
-        names_to = "date_label",
-        values_to = "date") 
     
     # Update index date with end of first episode ---------------------------
     # if patient was in an episode at index date
-    stage1_cohort_index <- data_repeat_events_episodes %>%
-      select(-episode_id, -episode_length) %>%
-      group_by(patient_id) %>%
-        filter(row_number()==1) %>%
-          inner_join(stage1_cohort[, c("patient_id", "index_date", "end_date_outcome")], by = "patient_id") %>%
-            mutate(index_date = if_else(
-              episode_start <= index_date,
-              episode_end,
-              index_date)
-            ) %>%
-              select(!c("episode_start", "episode_end"))
-
-    rm(data_repeat_events_episodes)
-
-    # Reshape stage1 data ----------------------------------------------------------
-    stage1_cohort_long <- stage1_cohort_index %>%
-        pivot_longer(
-        cols = c("index_date", "end_date_outcome"),
+    stage1_cohort_index <- stage1_cohort %>%
+      # left join to keep all patients in the cohort, regardless of if they had 
+      # an episode
+      left_join(
+        data_repeat_events_episodes %>%
+          group_by(patient_id) %>%
+          # get the first episode per patient (already sorted on episode dates)
+          slice(1) %>%
+          ungroup(),
+        by = "patient_id"
+      ) %>%
+      # update index_date
+      mutate(
+        index_date = if_else(
+          !is.na(episode_start) & (episode_start <= index_date),
+          episode_end,
+          index_date
+        )
+      ) %>%
+      # remove patients where updated index_date >= end_date_outcome
+      filter(index_date < end_date_outcome) %>%
+      select(!c("episode_start", "episode_end"))
+    
+    # save the number of patients removed due to the updated index date
+    patients_removed <- bind_rows(
+      patients_removed,
+      tibble(
+        population = population,
+        outcome_name = outcome_name,
+        patients_removed = nrow(stage1_cohort) - nrow(stage1_cohort_index)
+        )
+    )
+    
+    # Reshape data_repeat_events_episodes --------------------------------------
+    data_repeat_events_episodes_long <- stage1_cohort_index %>%
+      # left join to keep all patients in the cohort, regardless of if they had 
+      # an episode
+      left_join(data_repeat_events_episodes, by = "patient_id") %>%
+      mutate(
+        # the following means episodes can start on index_date and end_date_outcome, 
+        # is this what we want? change <= to < below if not.
+        episode_start = if_else(
+          index_date <= episode_start & episode_start <= end_date_outcome,
+          episode_start,
+          as.Date(NA_character_)
+        ),
+        # the following removes episodes that end on or before index_date
+        # and on or after end_date_outcome. I think this is correct as we have 
+        # already replaced index_date with episode_end, and we always want the 
+        # last row within a patient to be end_date_outcome
+        episode_end = if_else(
+          index_date < episode_end & episode_end < end_date_outcome,
+          episode_end,
+          as.Date(NA_character_)
+        )
+      ) %>%
+      # reshape
+      pivot_longer(
+        cols = c(starts_with("episode"), index_date, end_date_outcome),
         names_to = "date_label",
         values_to = "date",
         values_drop_na = TRUE
-      )
-
-    # Add index_date and end_date_outcome ------------------------------------
-    data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-      rbind(stage1_cohort_long) %>%
+        ) %>%
+      # apply distinct() to get rid of duplicate index_date and end_date_outcome rows
+      distinct() %>%
       arrange(patient_id, date)
-
-    # Remove episodes before index date
-    data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-      inner_join(stage1_cohort_index[, c("patient_id", "index_date")], by = "patient_id") %>%
-        filter(!((date_label == "episode_start" | date_label == "episode_end") & date <= index_date)) %>%
-          select(!index_date)
-    
-    rm(stage1_cohort_index)
-
-    # Remove if episode start or end is >= end_date_outcome -------------------------------
-    data_repeat_events_episodes_long <- data_repeat_events_episodes_long %>%
-      group_by(patient_id) %>%
-      # remove any dates after the patient's outcome date where date_label != "end_date_outcome"
-      # note: this only works when grouped by patient_id
-      filter(!((date >= date[date_label == "end_date_outcome"]) & date_label != "end_date_outcome")) %>%
-      ungroup()
     
     # Save data --------------------------------------------------------------------------
     write.csv(data_repeat_events_episodes_long,
               file = file.path("output", "repeat_events", paste0("repeat_events_", cohort, "_", outcome_name, "_", population, ".csv")),
               row.names=FALSE)
     
-    rm(data_repeat_events_episodes_long)
+    rm(data_repeat_events_episodes, data_repeat_events_episodes_long, stage1_cohort_index)
     
   }
   
 }
+
+# save the number of patients removed across all populations and outcomes
+write_csv(
+  patients_removed,
+  file.path("output", "repeat_events", paste0("patients_removed_", cohort, ".csv"))
+)
