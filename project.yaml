@@ -208,6 +208,39 @@ actions:
       highly_sensitive:
         stage1_ids: output/stage1_ids.csv
 
+  ## Table1 - prevax 
+
+  table1_prevax:
+    run: r:latest analysis/descriptives/table1.R prevax
+    needs:
+    - stage1_data_cleaning_prevax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1_prevax.csv
+        table1_rounded: output/table1_prevax_rounded.csv
+
+  ## Table1 - vax 
+
+  table1_vax:
+    run: r:latest analysis/descriptives/table1.R vax
+    needs:
+    - stage1_data_cleaning_vax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1_vax.csv
+        table1_rounded: output/table1_vax_rounded.csv
+
+  ## Table1 - unvax 
+
+  table1_unvax:
+    run: r:latest analysis/descriptives/table1.R unvax
+    needs:
+    - stage1_data_cleaning_unvax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1_unvax.csv
+        table1_rounded: output/table1_unvax_rounded.csv
+
   ## Study_definition - repeat events step 1 
 
   generate_study_population_repeat_events_1:
