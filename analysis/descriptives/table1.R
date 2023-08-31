@@ -108,7 +108,7 @@ df$characteristic <- factor(df$characteristic,
                                           "Sex",
                                           "Age, years",
                                           "Ethnicity",
-                                          "Index of multuple deprivation quintile",
+                                          "Index of multiple deprivation quintile",
                                           "Smoking status",
                                           "Region",
                                           "Care home resident"))
