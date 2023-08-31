@@ -65,7 +65,7 @@ def out_date_n(
       n_upper=n_upper, 
       max_events=max_events
       ):
-    # redefine n_upper to be the maximum of n_upper and max_events["name"]
+    # redefine n_upper to be the minimum of n_upper and max_events["name"]
     n_upper=min(n_upper, int(max_events[name]))
     # function for creating the out_date_5 variable
     def out_date_index(name, index_event):
