@@ -137,19 +137,17 @@ for (population in c("no_preexisting", "preexisting")) {
       # an episode
       left_join(data_repeat_events_episodes, by = "patient_id") %>%
       mutate(
-        # the following means episodes can start on index_date and end_date_outcome, 
-        # is this what we want? change <= to < below if not.
+        # replace episode_start with NA unless between index_date and 
+        # end_date_outcome (inclusive)
         episode_start = if_else(
           index_date <= episode_start & episode_start <= end_date_outcome,
           episode_start,
           as.Date(NA_character_)
         ),
-        # the following removes episodes that end on or before index_date
-        # and on or after end_date_outcome. I think this is correct as we have 
-        # already replaced index_date with episode_end, and we always want the 
-        # last row within a patient to be end_date_outcome
+        # replace episode_end with NA unless between index_date and 
+        # end_date_outcome (not inclusive of index_date)
         episode_end = if_else(
-          index_date < episode_end & episode_end < end_date_outcome,
+          index_date < episode_end & episode_end <= end_date_outcome,
           episode_end,
           as.Date(NA_character_)
         )
