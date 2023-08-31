@@ -349,6 +349,39 @@ actions_list <- splice(
     )
   ),
 
+  comment("Table1 - prevax"),
+  action(
+    name = "table1_prevax",
+    run = "r:latest analysis/descriptives/table1.R prevax",
+    needs = list("stage1_data_cleaning_prevax"),
+    moderately_sensitive = list(
+      table1 = glue("output/table1_prevax.csv"),
+      table1_rounded = glue("output/table1_prevax_rounded.csv")
+      )
+  ),
+
+  comment("Table1 - vax"),
+  action(
+    name = "table1_vax",
+    run = "r:latest analysis/descriptives/table1.R vax",
+    needs = list("stage1_data_cleaning_vax"),
+    moderately_sensitive = list(
+      table1 = glue("output/table1_vax.csv"),
+      table1_rounded = glue("output/table1_vax_rounded.csv")
+      )
+  ),
+
+  comment("Table1 - unvax"),
+  action(
+    name = "table1_unvax",
+    run = "r:latest analysis/descriptives/table1.R unvax",
+    needs = list("stage1_data_cleaning_unvax"),
+    moderately_sensitive = list(
+      table1 = glue("output/table1_unvax.csv"),
+      table1_rounded = glue("output/table1_unvax_rounded.csv")
+      )
+  ),
+
   unlist(
     lapply(
       repeat_events_steps$step,
@@ -473,17 +506,7 @@ actions_list <- splice(
 
 
 
-  # comment("Stage 2 - Missing - Table 1"),
-  # action(
-  #   name = "stage2_missing_table1_all",
-  #   run = "r:latest analysis/descriptives/Stage2_missing_table1.R all",
-  #   needs = list("stage1_data_cleaning_all"),
-  #   moderately_sensitive = list(
-  #     Missing_RangeChecks = glue("output/not-for-review/Check_missing_range_*.csv"),
-  #     DateChecks = glue("output/not-for-review/Check_dates_range_*.csv"),
-  #     Descriptive_Table = glue("output/review/descriptives/Table1_*.csv")
-  #   )
-  # ),
+
 
   # comment("Stage 5 - Run models"),
   # splice(
