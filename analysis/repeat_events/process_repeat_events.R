@@ -132,39 +132,45 @@ for (population in c("no_preexisting", "preexisting")) {
     )
     
     # Reshape data_repeat_events_episodes --------------------------------------
-    data_repeat_events_episodes_long <- stage1_cohort_index %>%
+    data_repeat_events_episodes_wide <- stage1_cohort_index %>%
       # left join to keep all patients in the cohort, regardless of if they had 
       # an episode
       left_join(data_repeat_events_episodes, by = "patient_id") %>%
+      # replace episode_start and episode_end with NA unless between index_date  
+      # and end_date_outcome (inclusive)
       mutate(
-        # replace episode_start with NA unless between index_date and 
-        # end_date_outcome (inclusive)
-        episode_start = if_else(
-          index_date <= episode_start & episode_start <= end_date_outcome,
-          episode_start,
-          as.Date(NA_character_)
-        ),
-        # replace episode_end with NA unless between index_date and 
-        # end_date_outcome (not inclusive of index_date)
-        episode_end = if_else(
-          index_date < episode_end & episode_end <= end_date_outcome,
-          episode_end,
-          as.Date(NA_character_)
-        )
-      ) %>%
-      # reshape
-      pivot_longer(
-        cols = c(starts_with("episode"), index_date, end_date_outcome),
-        names_to = "date_label",
-        values_to = "date",
-        values_drop_na = TRUE
+        across(
+          c(episode_start, episode_end),
+          ~ if_else(
+            index_date <= .x & .x <= end_date_outcome, 
+            .x, 
+            as.Date(NA_character_)
+            )
+          )
         ) %>%
-      # apply distinct() to get rid of duplicate index_date and end_date_outcome rows
+      pivot_longer(
+        cols = c(index_date, exposure_date, end_date_outcome, episode_start, episode_end), 
+        values_drop_na = TRUE,
+        values_to = "date"
+        ) %>%
+      # need to run distinct as variables from stage1_cohort_index will be 
+      # repeated for patients with > 1 episodes
       distinct() %>%
+      mutate(tmp = 1L) %>%
+      pivot_wider(
+        names_from = name, 
+        values_from = tmp
+        ) %>%
+      mutate(
+        across(
+          c(index_date, exposure_date, end_date_outcome, episode_start, episode_end),
+          ~replace_na(.x, 0L)
+          )
+        ) %>%
       arrange(patient_id, date)
     
     # Save data --------------------------------------------------------------------------
-    write.csv(data_repeat_events_episodes_long,
+    write.csv(data_repeat_events_episodes_wide,
               file = file.path("output", "repeat_events", paste0("repeat_events_", cohort, "_", outcome_name, "_", population, ".csv")),
               row.names=FALSE)
     
