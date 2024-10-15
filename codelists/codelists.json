@@ -438,6 +438,12 @@
       "downloaded_at": "2024-10-15 22:00:37.972863Z",
       "sha": "9d97d2f8dd93c7942db9463b4e5e300a5ec35a85"
     },
+    "opensafely-hypertension.csv": {
+      "id": "opensafely/hypertension/2020-04-28",
+      "url": "https://www.opencodelists.org/codelist/opensafely/hypertension/2020-04-28/",
+      "downloaded_at": "2024-10-15 23:48:50.352865Z",
+      "sha": "b0d7bbf6ea767366db458bc6f6d37955ae331cc7"
+    },
     "nhsd-primary-care-domain-refsets-hyp_cod.csv": {
       "id": "nhsd-primary-care-domain-refsets/hyp_cod/20210127",
       "url": "https://www.opencodelists.org/codelist/nhsd-primary-care-domain-refsets/hyp_cod/20210127/",
