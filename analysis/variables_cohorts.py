@@ -105,44 +105,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     tmp_exp_date_covid19_confirmed_death = case(
         when(tmp_exp_covid19_confirmed_death).then(tmp_exp_date_death)
     )
-    ## Define individual temporary variables (for outcomes) first
-
-        ### Acute myocardial infarction (AMI)
-
-    tmp_out_date_ami_snomed = (
-        first_matching_event_clinical_snomed_between(
-            ami_snomed_clinical, index_date, end_date_out
-        )
-        .date
-    )
-
-    tmp_out_date_ami_apc = (
-        first_matching_event_apc_between(
-            ami_icd10 + ami_prior_icd10, index_date, end_date_out
-        )
-        .admission_date
-    )
-    
-    tmp_out_date_ami_opa = (
-        first_matching_event_opa_between(
-            ami_icd10 + ami_prior_icd10, index_date, end_date_out
-        )
-        .appointment_date
-    )
-
-    tmp_out_ami_death = (
-        matching_death_between(
-            ami_icd10 + ami_prior_icd10, index_date, end_date_out
-        )
-    )
-
-    tmp_out_date_death = ons_deaths.date
-
-    tmp_out_date_ami_death = case(
-        when(tmp_out_ami_death).then(tmp_out_date_death)
-    )
-
-        ### other outcomes 
 
     ## Define individual temporary variables (subgroup variables) first before using them in the dictrionary
 
@@ -242,21 +204,54 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
 # Outcomes---------------------------------------------------------------------------------------------------
 
-        ### Outcomes---AMI for example
+    ## ---First recording of the outcome in during the study period
 
-        ### Acute myocardial infarction (AMI)
-
-        tmp_out_date_ami_snomed=tmp_out_date_ami_snomed, #can delete here if we do not want them in the dataset 
-        tmp_out_date_ami_apc=tmp_out_date_ami_apc,
-        tmp_out_date_ami_opa=tmp_out_date_ami_opa,
-        tmp_out_date_ami_death=tmp_out_date_ami_death,
-        
-        out_date_ami=minimum_of(
-            tmp_out_date_ami_snomed, 
-            tmp_out_date_ami_apc,
-            tmp_out_date_ami_opa,
-            tmp_out_date_ami_death,
+      ### Pneumonia
+        out_date_pneumonia= (
+            first_matching_event_clinical_snomed_between(
+            pneumonia_snomed, index_date, end_date_out
+            )
+        .date
         ),
+
+      ### Asthma
+        out_date_asthma= (
+            first_matching_event_clinical_snomed_between(
+            asthma_snomed, index_date, end_date_out
+            )
+        .date
+        ),
+
+      ### COPD
+        out_date_asthma= (
+            first_matching_event_clinical_ctv3_between(
+            copd_ctv3, index_date, end_date_out
+            )
+        .date
+        ),
+
+      ### Pulmonary Fibrosis
+        out_date_pulmonary_fibrosis= (
+            first_matching_event_clinical_snomed_between(
+            pulmonary_fibrosis_snomed, index_date, end_date_out
+            )
+        .date
+        ),
+
+# DEFINE EXISTING RESPIRATORY CONDITION COHORT --------------------------------------------------------------
+        sub_bin_asthma_recent_snomed= (
+            first_matching_event_clinical_ctv3_between(
+            copd_ctv3, index_date-days(730), index_date-days(1)
+            )
+        .exists_for_patient()        
+        ),
+# COPD diagnosed ever----------------------------------------------------------------------------------------       
+        sub_bin_copd_ctv3=(
+            last_matching_event_clinical_ctv3_before(
+            copd_ctv3, index_date
+            )    
+        .exists_for_patient()       
+        )
 
 # Covariates-------------------------------------------------------------------------------------------------  
 
@@ -290,9 +285,20 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         ## Region
         cov_cat_region=practice_registrations.for_patient_on(index_date).practice_nuts1_region_name,
+        ## Consultation rate (these codes can run locally but fail in GitHub action test, details see https://docs.opensafely.org/ehrql/reference/schemas/tpp/#appointments)
+#cov_num_consultation_rate = appointments.where(
+#    appointments.status.is_in([
+#        "Arrived",
+#        "In Progress",
+#        "Finished",
+#        "Visit",
+#        "Waiting",
+#        "Patient Walked Out",
+#    ]) & appointments.start_date.is_on_or_between(study_start_date - days(365), study_start_date)
+#).count_for_patient()
 
-        ## Smoking status
-        cov_cat_smoking=last_matching_event_clinical_ctv3_before(
+        ## Smoking status (check this)
+        cov_cat_smoking_status=last_matching_event_clinical_ctv3_before(
             smoking_clear, index_date
         ).ctv3_code.to_category(smoking_clear),
 
@@ -472,7 +478,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_sub_bin_priorcovid19_confirmed_snomed=tmp_sub_bin_priorcovid19_confirmed_snomed,
         tmp_sub_bin_priorcovid19_confirmed_apc=tmp_sub_bin_priorcovid19_confirmed_apc,
         tmp_sub_bin_priorcovid19_confirmed_opa=tmp_sub_bin_priorcovid19_confirmed_opa,
-        sub_priorcovid19=(
+        sub_bin_covid19_confirmed_history=(
             tmp_sub_bin_priorcovid19_confirmed_sgss |
             tmp_sub_bin_priorcovid19_confirmed_snomed |
             tmp_sub_bin_priorcovid19_confirmed_apc |
@@ -496,6 +502,8 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         was_alive = (((patients.date_of_death.is_null()) | (patients.date_of_death.is_after(index_date))) & 
         ((ons_deaths.date.is_null()) | (ons_deaths.date.is_after(index_date)))),
+
+        has_died = (patients.date_of_death.is_before(index_date) | ons_deaths.date.is_before(index_date))
 
 
     # Quality assurance variables---------------------------------------------------------------------------------------------------------- 
