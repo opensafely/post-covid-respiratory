@@ -410,7 +410,7 @@ hrt_dmd = codelist_from_csv(
 )
 ## Preexisting respiratory condition
 
-copd_snomed = codelist_from_csv(
+copd_ctv3 = codelist_from_csv(
     "codelists/opensafely-current-copd.csv",
     column="CTV3ID"
 )
