@@ -52,6 +52,11 @@ smoking_unclear = codelist_from_csv(
     category_column="Category"
 )
 
+ever_current_smoke = codelist_from_csv(
+    "codelists/bristol-smoke-and-eversmoke.csv",
+    column="code"
+)
+
 # BMI
 bmi_obesity_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-bmi_obesity_snomed.csv",
