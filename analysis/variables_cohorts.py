@@ -515,7 +515,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         was_alive = (((patients.date_of_death.is_null()) | (patients.date_of_death.is_after(index_date))) & 
         ((ons_deaths.date.is_null()) | (ons_deaths.date.is_after(index_date)))),
 
-        has_died = (patients.date_of_death.is_before(index_date) | ons_deaths.date.is_before(index_date))
+        has_died = (patients.date_of_death.is_before(index_date) | ons_deaths.date.is_before(index_date)),
 
 
     # Quality assurance variables---------------------------------------------------------------------------------------------------------- 
