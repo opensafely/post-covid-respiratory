@@ -3,6 +3,7 @@ opensafely/covid-identification-in-primary-care-probable-covid-clinical-code/202
 opensafely/covid-identification-in-primary-care-probable-covid-sequelae/2020-07-16
 opensafely/ethnicity/2020-04-27
 opensafely/smoking-unclear/2020-04-29
+bristol/smoke-and-eversmoke/16ff650f
 opensafely/smoking-clear/2020-04-29
 opensafely/cholesterol-tests-numerical-value/7e3a22f3
 bristol/hdl-cholesterol/64775990

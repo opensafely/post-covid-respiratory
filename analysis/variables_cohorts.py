@@ -175,7 +175,19 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .appointment_date
     )
 
+    ## prepare for smoking status
 
+    tmp_most_recent_smoking_cat = last_matching_event_clinical_ctv3_before(smoking_clear, baseline_date).ctv3_code.to_category(smoking_clear)
+    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_smoking, baseline_date).ctv3_code.to_category(smoking_clear) # uses a different codelist with ONLY smoking codes
+    dataset.cov_cat_smoking_status = case(
+        when(tmp_most_recent_smoking_cat == "S").then("S"),
+        when(tmp_most_recent_smoking_cat == "E").then("E"),
+        when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True)).then("E"),
+        when(tmp_most_recent_smoking_cat == "N").then("N"),
+        when((tmp_most_recent_smoking_cat == "M") & (tmp_ever_smoked == True)).then("E"),
+        when(tmp_most_recent_smoking_cat == "M").then("M"),
+        otherwise = "M"
+        )
 
     ## Combine the variables into the final dictionary
     dynamic_variables = dict(
@@ -251,7 +263,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             copd_ctv3, index_date
             )    
         .exists_for_patient()       
-        )
+        ),
 
 # Covariates-------------------------------------------------------------------------------------------------  
 

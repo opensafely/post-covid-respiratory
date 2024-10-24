@@ -18,6 +18,12 @@ from ehrql.tables.tpp import (
     emergency_care_attendances,
 )
 
+def ever_matching_event_clinical_ctv3_before(codelist, start_date, where=True):
+    return(
+        clinical_events.where(where)
+        .where(clinical_events.ctv3_code.is_in(codelist))
+        .where(clinical_events.date.is_before(start_date))
+    )
 
 def last_matching_event_clinical_ctv3_before(codelist, start_date, where=True):
     return(

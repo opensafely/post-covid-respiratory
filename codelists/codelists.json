@@ -30,6 +30,12 @@
       "downloaded_at": "2024-10-15 22:00:09.602674Z",
       "sha": "d9dad3e9d9491f765863b2617114c521957b6db1"
     },
+    "bristol-smoke-and-eversmoke.csv": {
+      "id": "bristol/smoke-and-eversmoke/16ff650f",
+      "url": "https://www.opencodelists.org/codelist/bristol/smoke-and-eversmoke/16ff650f/",
+      "downloaded_at": "2024-10-24 16:15:35.413881Z",
+      "sha": "c3e7edc73c29dd335433274151560fc4c5df91b8"
+    },
     "opensafely-smoking-clear.csv": {
       "id": "opensafely/smoking-clear/2020-04-29",
       "url": "https://www.opencodelists.org/codelist/opensafely/smoking-clear/2020-04-29/",
