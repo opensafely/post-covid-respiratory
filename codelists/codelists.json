@@ -348,6 +348,18 @@
       "downloaded_at": "2024-10-15 22:00:31.357607Z",
       "sha": "5b89d97b42ad643add51f045c847728a61d0c91e"
     },
+    "opensafely-stroke-updated.csv": {
+      "id": "opensafely/stroke-updated/2020-06-02",
+      "url": "https://www.opencodelists.org/codelist/opensafely/stroke-updated/2020-06-02/",
+      "downloaded_at": "2024-10-24 17:13:54.648767Z",
+      "sha": "e62a8af49698022220de1e1e438d6b6c611e666e"
+    },
+    "opensafely-stroke-secondary-care.csv": {
+      "id": "opensafely/stroke-secondary-care/2020-10-05",
+      "url": "https://www.opencodelists.org/codelist/opensafely/stroke-secondary-care/2020-10-05/",
+      "downloaded_at": "2024-10-24 17:13:55.019521Z",
+      "sha": "04aeb4b87dcf27651e34c287fdffe023bce38591"
+    },
     "user-RochelleKnight-tia_icd10.csv": {
       "id": "user/RochelleKnight/tia_icd10/5c5f19ae",
       "url": "https://www.opencodelists.org/codelist/user/RochelleKnight/tia_icd10/5c5f19ae/",

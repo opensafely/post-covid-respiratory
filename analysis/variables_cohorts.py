@@ -177,17 +177,13 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## prepare for smoking status
 
-    tmp_most_recent_smoking_cat = last_matching_event_clinical_ctv3_before(smoking_clear, baseline_date).ctv3_code.to_category(smoking_clear)
-    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_smoking, baseline_date).ctv3_code.to_category(smoking_clear) # uses a different codelist with ONLY smoking codes
-    dataset.cov_cat_smoking_status = case(
-        when(tmp_most_recent_smoking_cat == "S").then("S"),
-        when(tmp_most_recent_smoking_cat == "E").then("E"),
-        when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True)).then("E"),
-        when(tmp_most_recent_smoking_cat == "N").then("N"),
-        when((tmp_most_recent_smoking_cat == "M") & (tmp_ever_smoked == True)).then("E"),
-        when(tmp_most_recent_smoking_cat == "M").then("M"),
-        otherwise = "M"
+    tmp_most_recent_smoking_cat = (
+        last_matching_event_clinical_ctv3_before(smoking_clear, baseline_date)
+        .ctv3_code.to_category(smoking_clear)
         )
+
+    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_current_smoke, baseline_date)   # uses a different codelist with ONLY smoking codes
+
 
     ## Combine the variables into the final dictionary
     dynamic_variables = dict(
@@ -235,7 +231,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ),
 
       ### COPD
-        out_date_asthma= (
+        out_date_copd= (
             first_matching_event_clinical_ctv3_between(
             copd_ctv3, index_date, end_date_out
             )
@@ -310,10 +306,24 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 #).count_for_patient()
 
         ## Smoking status (check this)
-        cov_cat_smoking_status=last_matching_event_clinical_ctv3_before(
-            smoking_clear, index_date
-        ).ctv3_code.to_category(smoking_clear),
+        cov_cat_smoking_status= case(
+            when(tmp_most_recent_smoking_cat == "S").then("S"),
+            when(tmp_most_recent_smoking_cat == "E").then("E"),
+            when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True)).then("E"),
+            when(tmp_most_recent_smoking_cat == "N").then("N"),
+            when((tmp_most_recent_smoking_cat == "M") & (tmp_ever_smoked == True)).then("E"),
+            when(tmp_most_recent_smoking_cat == "M").then("M"),
+            otherwise = "M"
+        ),
 
+        ## Combined oral contraceptive pill
+        cov_bin_combined_oral_contraceptive_pill=last_matching_med_dmd_before(
+            cocp_dmd, index_date
+        ).exists_for_patient(),
+
+        cov_bin_hormone_replacement_therapy=last_matching_med_dmd_before(
+            hrt_dmd, index_date
+        ).exists_for_patient(),
 
         ## Obesity 
         cov_bin_obesity=(
@@ -340,10 +350,23 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ).exists_for_patient(),
 
         ## Care home status
-        cov_bin_carehome=(
+        cov_bin_carehome_status=(
             addresses.for_patient_on(index_date).care_home_is_potential_match |
             addresses.for_patient_on(index_date).care_home_requires_nursing |
             addresses.for_patient_on(index_date).care_home_does_not_require_nursing
+        ),
+
+        ## Acute myocardial infarction
+        cov_bin_ami=(
+            (last_matching_event_clinical_snomed_before(
+                ami_snomed_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                ami_icd10 + ami_prior_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                ami_icd10 + ami_prior_icd10, index_date
+            ).exists_for_patient())
         ),
 
         ## Dementia
@@ -428,35 +451,42 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Diabetes # to add hba1c?
         cov_bin_diabetes=(
             (last_matching_event_clinical_snomed_before(
-                hypertension_snomed_clinical, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_clinical_ctv3_before(
-                diabetes_type1_ctv3 + diabetes_type2_ctv3 + diabetes_diagnostic_ctv3 + diabetes_other_ctv3 + diabetes_gestational_ctv3, index_date
+                diabetes_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_med_dmd_before(
-                insulin_dmd + antidiabetic_drugs_dmd + non_metformin_dmd, index_date
+                diabetes_drugs_dmd, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                diabetes_type1_icd10 + diabetes_type2_icd10, index_date
+                diabetes_icd10, index_date
             ).exists_for_patient()) |
             (last_matching_event_opa_before(
-                diabetes_type1_icd10 + diabetes_type2_icd10, index_date
+                diabetes_icd10, index_date
             ).exists_for_patient())
         ),
 
-        ## COPD
-        cov_bin_copd=(
-            (last_matching_event_clinical_snomed_before(
-                copd_snomed_clinical, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_apc_before(
-                copd_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                copd_icd10, index_date
-            ).exists_for_patient())
+      ## Pneumonia
+        cov_bin_history_pneumonia_snomed= (
+            last_matching_event_clinical_snomed_before(
+            pneumonia_snomed, index_date
+            )
+        .exists_for_patient()
         ),
 
+      ## Asthma
+        cov_bin_history_asthma_snomed= (
+            last_matching_event_clinical_snomed_before(
+            asthma_snomed, index_date
+            )
+        .exists_for_patient()
+        ),
+
+      ## Pulmonary Fibrosis
+        cov_bin_history_pulmonary_fibrosis_snomed= (
+            last_matching_event_clinical_snomed_before(
+            pulmonary_fibrosis_snomed, index_date
+            )
+        .exists_for_patient()
+        ),
 
         ## Ischaemic stroke
         cov_bin_stroke_isch=(
@@ -471,16 +501,19 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient())
         ),
 
-        ## All stroke
+        ## All stroke (included the all-stroke codelists)
         cov_bin_stroke=(
             (last_matching_event_clinical_ctv3_before(
                 stroke_codes, index_date
             ).exists_for_patient()) |
+            (last_matching_event_clinical_snomed_before(
+                stroke_isch_snomed_clinical + stroke_sah_hs_snomed_clinical, index_date
+            ).exists_for_patient()) |           
             (last_matching_event_apc_before(
-                stroke_icd10, index_date
+                stroke_isch_icd10 + stroke_sah_hs_icd10 + stroke_icd10, index_date
             ).exists_for_patient()) |
             (last_matching_event_opa_before(
-                stroke_icd10, index_date
+                stroke_isch_icd10 + stroke_sah_hs_icd10 + stroke_icd10, index_date
             ).exists_for_patient())
         ),
 # Others
@@ -531,7 +564,10 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_opa_before(
                 prostate_cancer_icd10, index_date
-            ).exists_for_patient())
+            ).exists_for_patient()) |
+            (matching_death_before(
+                prostate_cancer_icd10, index_date
+            ))
         ),
 
         ## Pregnancy
