@@ -67,6 +67,7 @@ user/elsie_horne/dementia_snomed/7bd3364c
 user/elsie_horne/dementia_icd10/2df21cb7
 user/elsie_horne/dementia_vascular_icd10/27c5e93c
 user/elsie_horne/dementia_vascular_snomed/0eb67607
+opensafely/dementia/2020-04-22
 user/elsie_horne/liver_disease_icd10/75a702d1
 user/elsie_horne/liver_disease_snomed/5c978f9c
 user/elsie_horne/diabetes_snomed/43881c67

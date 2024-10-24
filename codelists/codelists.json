@@ -414,6 +414,12 @@
       "downloaded_at": "2024-10-15 22:00:35.151711Z",
       "sha": "47a67ea3a18239dbdff6c0f514ea81fe6d2d1bec"
     },
+    "opensafely-dementia.csv": {
+      "id": "opensafely/dementia/2020-04-22",
+      "url": "https://www.opencodelists.org/codelist/opensafely/dementia/2020-04-22/",
+      "downloaded_at": "2024-10-24 18:12:11.678961Z",
+      "sha": "9d40ff3a5c2428af4651c765f2c418de3a3ad4b4"
+    },
     "user-elsie_horne-liver_disease_icd10.csv": {
       "id": "user/elsie_horne/liver_disease_icd10/75a702d1",
       "url": "https://www.opencodelists.org/codelist/user/elsie_horne/liver_disease_icd10/75a702d1/",

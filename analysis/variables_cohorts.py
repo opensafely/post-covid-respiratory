@@ -31,6 +31,7 @@ from codelists import *
 
 # Call functions from variable_helper_functions
 from variable_helper_functions import (
+    ever_matching_event_clinical_ctv3_before,
     first_matching_event_clinical_ctv3_between,
     first_matching_event_clinical_snomed_between,
     first_matching_med_dmd_between,
@@ -178,11 +179,11 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## prepare for smoking status
 
     tmp_most_recent_smoking_cat = (
-        last_matching_event_clinical_ctv3_before(smoking_clear, baseline_date)
+        last_matching_event_clinical_ctv3_before(smoking_clear, index_date)
         .ctv3_code.to_category(smoking_clear)
         )
 
-    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_current_smoke, baseline_date)   # uses a different codelist with ONLY smoking codes
+    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_current_smoke, index_date)   # uses a different codelist with ONLY smoking codes
 
 
     ## Combine the variables into the final dictionary
@@ -397,11 +398,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 liver_disease_icd10, index_date
             ).exists_for_patient())
         ),
-
-        ## Chronic liver disease
-        cov_bin_chronic_liver_disease=last_matching_event_clinical_ctv3_before(
-            cld_ctv3, index_date
-        ).exists_for_patient(),
 
         ## Chronic kidney disease
         cov_bin_chronic_kidney_disease=(

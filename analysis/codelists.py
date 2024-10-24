@@ -297,7 +297,7 @@ stroke_codes = codelist_from_csv(
     column="CTV3ID"
 )
 
-# Dementia
+# Dementia (added ctv3)
 dementia_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_snomed.csv",
     column="code"
@@ -306,6 +306,11 @@ dementia_snomed_clinical = codelist_from_csv(
 dementia_icd10 = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_icd10.csv",
     column="code"
+)
+
+dementia_ctv3 = codelist_from_csv(
+    "codelists/opensafely-dementia.csv",
+    column="CTV3ID"
 )
 
 dementia_vascular_snomed_clinical = codelist_from_csv(
