@@ -38,7 +38,7 @@ strata <- "cov_cat_region"
 covariate_sex <- "cov_cat_sex"
 covariate_age <- "cov_num_age"
 cox_start <- "index_date"
-cox_stop <- "end_date_outcome"
+cox_stop <- "end_date_out"
 controls_per_case <- 20L
 total_event_threshold <- 50L
 episode_event_threshold <- 5L
@@ -52,10 +52,10 @@ study_stop <-"2021-12-14"
 ##Cut points 
 prevax_cuts <- "1;28;197;365;714"
 vax_unvax_cuts <- "1;28;197"
-all_covars <- paste0("cov_cat_ethnicity;cov_cat_deprivation;cov_num_consultation_rate;cov_bin_healthcare_worker;",
+all_covars <- paste0("cov_cat_ethnicity;cov_cat_imd;cov_num_consultation_rate;cov_bin_healthcare_worker;",
                      "cov_cat_smoking_status;cov_bin_carehome_status;cov_bin_obesity;",
                      "cov_bin_history_pneumonia_snomed;cov_bin_history_asthma_snomed;cov_bin_history_pulmonary_fibrosis_snomed;",
-                     "cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia;cov_bin_liver_disease;",
+                     "cov_bin_ami;cov_bin_all_stroke;cov_bin_dementia_combined;cov_bin_liver_disease;",
                      "cov_bin_chronic_kidney_disease;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes")
 
 # Specify populations and cohorts --------------------------------------------------------------
@@ -498,7 +498,9 @@ df$name <- paste0("cohort_",df$cohort, "-",
 df <- df[df$population != "preexisting" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
 
 # Check names are unique and save active analyses list -------------------------
-
+if (!dir.exists("lib")) {
+  dir.create("lib")
+}
 if (length(unique(df$name))==nrow(df)) {
   saveRDS(df, file = "lib/active_analyses.rds", compress = "gzip")
 } else {
