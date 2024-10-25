@@ -498,7 +498,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ),
 
         ## All stroke (included the all-stroke codelists)
-        cov_bin_stroke=(
+        cov_bin_all_stroke=(
             (last_matching_event_clinical_ctv3_before(
                 stroke_codes, index_date
             ).exists_for_patient()) |
