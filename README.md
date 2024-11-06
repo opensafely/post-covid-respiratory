@@ -13,6 +13,6 @@
 
 -   The [`lib/`](./lib) directory contains a list of active analyses.
 
--   The [`project.yaml`](.project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project.R`](./analysis/create_project.R) script which generates all the actions.
+-   The [`project.yaml`](./project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project.R`](analysis/create_project.R) script which generates all the actions.
 
 -   Descriptive and Model outputs, including figures and tables are in the [`released_outputs`](./release_outputs) directory.
