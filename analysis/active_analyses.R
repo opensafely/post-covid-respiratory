@@ -2,9 +2,6 @@
 
 fs::dir_create(here::here("lib"))
 
-
-
-
 # Create empty data frame ------------------------------------------------------
 
 df <- data.frame(population = character(),
@@ -38,7 +35,7 @@ strata <- "cov_cat_region"
 covariate_sex <- "cov_cat_sex"
 covariate_age <- "cov_num_age"
 cox_start <- "index_date"
-cox_stop <- "end_date_out"
+cox_stop <- "end_date_outcome"
 controls_per_case <- 20L
 total_event_threshold <- 50L
 episode_event_threshold <- 5L
@@ -74,8 +71,6 @@ outcomes_runall <- c("out_date_pneumonia",
                      "out_date_asthma",
                      "out_date_copd",
                      "out_date_pulmonary_fibrosis")
-                      
-
 
 # Add active analyses ----------------------------------------------------------
 
@@ -490,8 +485,6 @@ for (p in populations) {
 
 }
 
-
-
 df$name <- paste0("cohort_",df$cohort, "-", 
                   df$analysis, "-", 
                   gsub("out_date_","",df$outcome), "-", 
@@ -500,7 +493,15 @@ df$name <- paste0("cohort_",df$cohort, "-",
 # Pre-existing populations only run the outcomes Pneumonia and Pulmonary fibrosis
 # Remove Pre-existing & asthma/copd rows
 df <- df[df$population != "preexisting" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
-
+# Remove history of asthma from covariates
+df$covariate_other <- ifelse(
+  df$population == "preexisting",
+  sapply(
+    strsplit(df$covariate_other, ";"), 
+    function(covars) paste0(covars[covars != "cov_bin_history_asthma_snomed"], collapse = ";")
+  ),
+  df$covariate_other
+)
 # Check names are unique and save active analyses list -------------------------
 if (!dir.exists("lib")) {
   dir.create("lib")
