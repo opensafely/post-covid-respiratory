@@ -80,7 +80,7 @@ generate_study_population <- function(cohort){
 }
 
 
-# Define and combine all actions into a list of actions ------------------------
+# Define and combine all actions into a list of actions ------------------------------0
 
 actions_list <- splice(
   
@@ -145,4 +145,18 @@ as.yaml(project_list, indent=2) %>%
 
 # Return number of actions -----------------------------------------------------
 
-print(paste0("YAML created with ",length(actions_list)," actions."))
+count_run_elements <- function(x) {
+
+  if (!is.list(x)) {
+    return(0)
+  }
+
+  # Check if any names of this list are "run"
+  current_count <- sum(names(x) == "run", na.rm = TRUE)
+  
+  # Recursively check all elements in the list
+  return(current_count + sum(sapply(x, count_run_elements)))
+
+}
+
+print(paste0("YAML created with ",count_run_elements(actions_list)," actions."))
