@@ -139,128 +139,129 @@ nonshield_primis = codelist_from_csv(
     column="code"
 )
 
-# For JCVI groups--------------------------------------------------------------------------
-# Pregnancy codes
+# For JCVI groups
+
+## Pregnancy codes
 preg_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-preg.csv",
     column="code"
 )
 
-# Pregnancy or Delivery codes
+## Pregnancy or Delivery codes
 pregdel_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-pregdel.csv",
     column="code"
 )
 
-# All BMI coded terms
+## All BMI coded terms
 bmi_stage_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-bmi_stage.csv",
     column="code"
 )
 
-# Severe Obesity code recorded
+## Severe Obesity code recorded
 sev_obesity_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-sev_obesity.csv",
     column="code"
 )
 
-# Asthma Diagnosis code
+## Asthma Diagnosis code
 ast_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-ast.csv",
     column="code"
 )
 
-# Asthma Admission codes
+## Asthma Admission codes
 astadm_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-astadm.csv",
     column="code"
 )
 
-# Asthma systemic steroid prescription codes
+## Asthma systemic steroid prescription codes
 astrx_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-astrx.csv",
     column="code"
 )
 
-# Chronic Respiratory Disease
+## Chronic Respiratory Disease
 resp_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-resp_cov.csv",
     column="code"
 )
 
-# Chronic Neurological Disease including Significant Learning Disorder
+## Chronic Neurological Disease including Significant Learning Disorder
 cns_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-cns_cov.csv",
     column="code"
 )
 
-# Asplenia or Dysfunction of the Spleen codes
+## Asplenia or Dysfunction of the Spleen codes
 spln_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-spln_cov.csv",
     column="code"
 )
 
-# Diabetes diagnosis codes
+## Diabetes diagnosis codes
 diab_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-diab.csv",
     column="code"
 )
 
-# Diabetes resolved codes
+## Diabetes resolved codes
 dmres_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-dmres.csv",
     column="code"
 )
 
-# Severe Mental Illness codes
+## Severe Mental Illness codes
 sev_mental_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-sev_mental.csv",
     column="code"
 )
 
-# Remission codes relating to Severe Mental Illness
+## Remission codes relating to Severe Mental Illness
 smhres_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-smhres.csv",
     column="code"
 )
 
-# Chronic heart disease codes
+## Chronic heart disease codes
 chd_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-chd_cov.csv",
     column="code"
 )
 
-# Chronic kidney disease diagnostic codes
+## Chronic kidney disease diagnostic codes
 ckd_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-ckd_cov.csv",
     column="code"
 )
 
-# Chronic kidney disease codes - all stages
+## Chronic kidney disease codes - all stages
 ckd15_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-ckd15.csv",
     column="code"
 )
 
-# Chronic kidney disease codes-stages 3 - 5
+## Chronic kidney disease codes-stages 3 - 5
 ckd35_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-ckd35.csv",
     column="code"
 )
 
-# Chronic Liver disease codes
+## Chronic Liver disease codes
 cld_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-cld.csv",
     column="code"
 )
 
-# Immunosuppression diagnosis codes
+## Immunosuppression diagnosis codes
 immdx_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-immdx_cov.csv",
     column="code"
 )
 
-# Immunosuppression medication codes
+## Immunosuppression medication codes
 immrx_primis = codelist_from_csv(
     "codelists/primis-covid19-vacc-uptake-immrx.csv",
     column="code"
@@ -406,7 +407,7 @@ ami_prior_icd10 = codelist_from_csv(
     column="code"
 )
 
-##Quality assurance codes 
+#Quality assurance codes 
 
 prostate_cancer_snomed_clinical = codelist_from_csv(
     "codelists/user-RochelleKnight-prostate_cancer_snomed.csv",
@@ -428,7 +429,8 @@ hrt_dmd = codelist_from_csv(
     "codelists/user-elsie_horne-hrt_dmd.csv",
     column="dmd_id"
 )
-## Preexisting respiratory condition
+
+# Preexisting respiratory condition
 
 copd_ctv3 = codelist_from_csv(
     "codelists/opensafely-current-copd.csv",
@@ -439,13 +441,16 @@ asthma_snomed = codelist_from_csv(
     column="id"
 )
 
-## Respiratory outcomes
+# Respiratory outcome(s)
+
 pneumonia_snomed = codelist_from_csv(
     "codelists/bristol-pneumonia-snomed.csv",
     column="code"
 )
-# asthma and copd snomed codes are above under 'Preexisting respiratory condition' - same codes and variable names to be used for outcomes
+
 pulmonary_fibrosis_snomed = codelist_from_csv(
     "codelists/bristol-ild-snomed.csv",
     column="code"
 )
+
+# asthma and copd snomed codes are above under 'Preexisting respiratory condition' - same codes and variable names to be used for outcomes
