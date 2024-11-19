@@ -493,7 +493,7 @@ df$name <- paste0("cohort_",df$cohort, "-",
 # Pre-existing populations only run the outcomes Pneumonia and Pulmonary fibrosis
 # Remove Pre-existing & asthma/copd rows
 df <- df[df$population != "preexisting" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
-# Remove history of asthma from covariates
+# Remove history of asthma from covariates for the sample with no preexisiting condition
 df$covariate_other <- ifelse(
   df$population == "no_preexisting",
   sapply(
