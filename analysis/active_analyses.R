@@ -495,7 +495,7 @@ df$name <- paste0("cohort_",df$cohort, "-",
 df <- df[df$population != "preexisting" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
 # Remove history of asthma from covariates
 df$covariate_other <- ifelse(
-  df$population == "preexisting",
+  df$population == "no_preexisting",
   sapply(
     strsplit(df$covariate_other, ";"), 
     function(covars) paste0(covars[covars != "cov_bin_history_asthma_snomed"], collapse = ";")
