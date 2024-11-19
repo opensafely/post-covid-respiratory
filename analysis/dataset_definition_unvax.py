@@ -14,9 +14,9 @@ class index_dates(PatientFrame):
     end_unvax_outcome = Series(date)
 
 index_date = index_dates.index_unvax
-end_date_exp = index_dates.end_unvax_exposure
-end_date_out = index_dates.end_unvax_outcome
+end_date_exposure = index_dates.end_unvax_exposure
+end_date_outcome = index_dates.end_unvax_outcome
 
 # Create dataset
 
-dataset = generate_dataset(index_date, end_date_exp, end_date_out)
+dataset = generate_dataset(index_date, end_date_exposure, end_date_outcome)
