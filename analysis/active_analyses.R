@@ -64,7 +64,7 @@ respiratory_covars <- c(
 )
 
 # Combine both vectors into a single vector for analysis
-all_covars <- paste0(c(core_covars, project_covars), collapse = ";")
+all_covars <- paste0(c(core_covars, respiratory_covars), collapse = ";")
 
 # Specify populations and cohorts --------------------------------------------------------------
 
