@@ -49,19 +49,26 @@ study_stop <-"2021-12-14"
 ##Cut points 
 prevax_cuts <- "1;28;197;365;714"
 vax_unvax_cuts <- "1;28;197"
-all_covars <- paste0(
-    c("cov_cat_ethnicity", "cov_cat_imd", "cov_num_consultation_rate", 
-      "cov_bin_healthcare_worker", "cov_cat_smoking_status", "cov_bin_carehome_status", 
-      "cov_bin_obesity", "cov_bin_history_pneumonia_snomed", "cov_bin_history_asthma_snomed", 
-      "cov_bin_history_pulmonary_fibrosis_snomed", "cov_bin_ami", "cov_bin_all_stroke", 
-      "cov_bin_dementia_combined", "cov_bin_liver_disease", "cov_bin_chronic_kidney_disease", 
-      "cov_bin_cancer", "cov_bin_hypertension", "cov_bin_diabetes"), 
-    collapse = ";"
+# Define core covariates (common across projects)
+core_covars <- c(
+    "cov_cat_ethnicity", "cov_cat_imd", "cov_num_consultation_rate", 
+    "cov_bin_healthcare_worker", "cov_cat_smoking_status", "cov_bin_carehome_status", 
+    "cov_bin_obesity", "cov_bin_ami", "cov_bin_dementia_combined", "cov_bin_liver_disease",
+    "cov_bin_chronic_kidney_disease", "cov_bin_cancer", "cov_bin_hypertension", "cov_bin_diabetes"
 )
+
+# Define project-specific covariates (specific to respiratory project)
+respiratory_covars <- c(
+    "cov_bin_history_pneumonia_snomed", "cov_bin_history_asthma_snomed", 
+    "cov_bin_history_pulmonary_fibrosis_snomed", "cov_bin_all_stroke"
+)
+
+# Combine both vectors into a single vector for analysis
+all_covars <- paste0(c(core_covars, project_covars), collapse = ";")
 
 # Specify populations and cohorts --------------------------------------------------------------
 
-populations <- c("no_preexisting","preexisting")
+populations <- c("preex_FALSE","preex_TRUE")
 
 cohorts <- c("vax","unvax","prevax")
 
@@ -492,12 +499,12 @@ df$name <- paste0("cohort_",df$cohort, "-",
 
 # Pre-existing populations only run the outcomes Pneumonia and Pulmonary fibrosis
 # Remove Pre-existing & asthma/copd rows
-df <- df[df$population != "preexisting" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
+df <- df[df$population != "preex_TRUE" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
 # Remove history of asthma from covariates for the sample with no preexisiting condition
 df$covariate_other <- ifelse(
-  df$population == "no_preexisting",
+  df$population == "preex_FALSE",
   sapply(
-    strsplit(df$covariate_other, ";"), 
+    strsplit(df$covariate_other, ";"),
     function(covars) paste0(covars[covars != "cov_bin_history_asthma_snomed"], collapse = ";")
   ),
   df$covariate_other
