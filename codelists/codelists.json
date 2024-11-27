@@ -342,24 +342,6 @@
       "downloaded_at": "2024-10-15 22:00:30.970902Z",
       "sha": "76b915a793f91c4675796295f217e74e2f467bae"
     },
-    "user-RochelleKnight-stroke_sah_hs_icd10.csv": {
-      "id": "user/RochelleKnight/stroke_sah_hs_icd10/0e7e0019",
-      "url": "https://www.opencodelists.org/codelist/user/RochelleKnight/stroke_sah_hs_icd10/0e7e0019/",
-      "downloaded_at": "2024-10-15 22:00:31.357607Z",
-      "sha": "5b89d97b42ad643add51f045c847728a61d0c91e"
-    },
-    "opensafely-stroke-updated.csv": {
-      "id": "opensafely/stroke-updated/2020-06-02",
-      "url": "https://www.opencodelists.org/codelist/opensafely/stroke-updated/2020-06-02/",
-      "downloaded_at": "2024-10-24 17:13:54.648767Z",
-      "sha": "e62a8af49698022220de1e1e438d6b6c611e666e"
-    },
-    "opensafely-stroke-secondary-care.csv": {
-      "id": "opensafely/stroke-secondary-care/2020-10-05",
-      "url": "https://www.opencodelists.org/codelist/opensafely/stroke-secondary-care/2020-10-05/",
-      "downloaded_at": "2024-10-24 17:13:55.019521Z",
-      "sha": "04aeb4b87dcf27651e34c287fdffe023bce38591"
-    },
     "user-RochelleKnight-tia_icd10.csv": {
       "id": "user/RochelleKnight/tia_icd10/5c5f19ae",
       "url": "https://www.opencodelists.org/codelist/user/RochelleKnight/tia_icd10/5c5f19ae/",
@@ -491,12 +473,6 @@
       "url": "https://www.opencodelists.org/codelist/user/RochelleKnight/ami_icd10/3dea268d/",
       "downloaded_at": "2024-10-15 22:00:39.520069Z",
       "sha": "5152287e39c99ceed1fee19ac5a742b66f2bb3de"
-    },
-    "user-elsie_horne-stroke_sah_hs_snomed.csv": {
-      "id": "user/elsie_horne/stroke_sah_hs_snomed/6adc02f9",
-      "url": "https://www.opencodelists.org/codelist/user/elsie_horne/stroke_sah_hs_snomed/6adc02f9/",
-      "downloaded_at": "2024-10-15 22:00:39.892792Z",
-      "sha": "581ddc923d2711c3c48251f88cd0c40bced047c8"
     },
     "user-hjforbes-type-1-diabetes.csv": {
       "id": "user/hjforbes/type-1-diabetes/674fbd7a",
