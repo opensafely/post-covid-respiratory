@@ -307,7 +307,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 #    ]) & appointments.start_date.is_on_or_between(study_start_date - days(365), study_start_date)
 #).count_for_patient()
 
-        ## Smoking status (check this)
+        ## Smoking status
         cov_cat_smoking_status= case(
             when(tmp_most_recent_smoking_cat == "S").then("S"),
             when((tmp_most_recent_smoking_cat == "E") | ((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True))).then("E"),
