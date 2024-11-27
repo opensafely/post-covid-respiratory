@@ -25,6 +25,7 @@ from ehrql.tables.tpp import (
     ons_deaths,
 )
 
+import codelists_ehrQL as codelists
 # Codelists from codelists.py (which pulls all variables from the codelist folder)
 from codelists import *
 
@@ -185,7 +186,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     )
 
     tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(
-        (filter_codes_by_category(codelists.clear_smoking_codes, include=["S", "E"])), index_date)
+        (filter_codes_by_category(smoking_clear, include=["S", "E"])), index_date)
 
     ## Combine the variables into the final dictionary
     dynamic_variables = dict(
