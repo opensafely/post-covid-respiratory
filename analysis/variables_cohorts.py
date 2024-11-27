@@ -295,17 +295,18 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         ## Region
         cov_cat_region=practice_registrations.for_patient_on(index_date).practice_nuts1_region_name,
+
         ## Consultation rate (these codes can run locally but fail in GitHub action test, details see https://docs.opensafely.org/ehrql/reference/schemas/tpp/#appointments)
-#cov_num_consultation_rate = appointments.where(
-#    appointments.status.is_in([
-#        "Arrived",
-#        "In Progress",
-#        "Finished",
-#        "Visit",
-#        "Waiting",
-#        "Patient Walked Out",
-#    ]) & appointments.start_date.is_on_or_between(study_start_date - days(365), study_start_date)
-#).count_for_patient()
+        cov_num_consultation_rate = appointments.where(
+            appointments.status.is_in([
+                "Arrived",
+                "In Progress",
+                "Finished",
+                "Visit",
+                "Waiting",
+                "Patient Walked Out",
+                ]) & appointments.start_date.is_on_or_between(index_date - days(365), index_date)
+                ).count_for_patient(),
 
         ## Smoking status
         cov_cat_smoking_status= case(
