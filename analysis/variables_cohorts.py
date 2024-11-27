@@ -442,7 +442,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient())
         ),
 
-        ## Diabetes # to add hba1c?
+        ## Diabetes 
         cov_bin_diabetes=(
             (last_matching_event_clinical_snomed_before(
                 diabetes_snomed_clinical, index_date
@@ -550,8 +550,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## the latest deregistration_date before index date
         tmp_dereg_date_before_index_date = (
-            practice_registrations.where(where)
-            .where(practice_registrations.end_date.is_not_null())
+            practice_registrations.where(practice_registrations.end_date.is_not_null())
             .where(practice_registrations.end_date.is_before(index_date))
             .sort_by(practice_registrations.end_date)
             .last_for_patient()
@@ -559,8 +558,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ),
     ## the first deregistration_date on/after index date
         tmp_dereg_date_after_index_date= (
-            practice_registrations.where(where)
-            .where(practice_registrations.end_date.is_not_null())
+            practice_registrations.where(practice_registrations.end_date.is_not_null())
             .where(practice_registrations.end_date.is_on_or_after(index_date))
             .sort_by(practice_registrations.end_date)
             .first_for_patient()
