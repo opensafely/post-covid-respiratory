@@ -312,7 +312,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             when(tmp_most_recent_smoking_cat == "S").then("S"),
             when((tmp_most_recent_smoking_cat == "E") | ((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True))).then("E"),
             when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == False)).then("N"),
-            default="M"
+            otherwise="M"
         ),
 
         ## Combined oral contraceptive pill
