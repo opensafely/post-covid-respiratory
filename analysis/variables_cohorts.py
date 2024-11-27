@@ -25,7 +25,6 @@ from ehrql.tables.tpp import (
     ons_deaths,
 )
 
-import codelists_ehrQL as codelists
 # Codelists from codelists.py (which pulls all variables from the codelist folder)
 from codelists import *
 
