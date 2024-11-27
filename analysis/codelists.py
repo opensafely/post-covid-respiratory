@@ -278,26 +278,6 @@ stroke_isch_icd10 = codelist_from_csv(
     column="code"
 )
 
-stroke_sah_hs_snomed_clinical = codelist_from_csv(
-    "codelists/user-elsie_horne-stroke_sah_hs_snomed.csv",
-    column="code"
-)
-
-stroke_sah_hs_icd10 = codelist_from_csv(
-    "codelists/user-RochelleKnight-stroke_sah_hs_icd10.csv",
-    column="code"
-)
-
-stroke_icd10 = codelist_from_csv(
-    "codelists/opensafely-stroke-secondary-care.csv", 
-    column="icd"
-)
-
-stroke_codes = codelist_from_csv(
-    "codelists/opensafely-stroke-updated.csv",
-    column="CTV3ID"
-)
-
 # Dementia (added ctv3)
 dementia_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_snomed.csv",

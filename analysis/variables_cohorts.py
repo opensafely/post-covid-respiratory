@@ -495,21 +495,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient())
         ),
 
-        ## All stroke (included the all-stroke codelists)
-        cov_bin_all_stroke=(
-            (last_matching_event_clinical_ctv3_before(
-                stroke_codes, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_clinical_snomed_before(
-                stroke_isch_snomed_clinical + stroke_sah_hs_snomed_clinical, index_date
-            ).exists_for_patient()) |           
-            (last_matching_event_apc_before(
-                stroke_isch_icd10 + stroke_sah_hs_icd10 + stroke_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                stroke_isch_icd10 + stroke_sah_hs_icd10 + stroke_icd10, index_date
-            ).exists_for_patient())
-        ),
 # Others
     ## History of Covid-19 Combined
 
