@@ -176,3 +176,7 @@ def matching_death_between(codelist, start_date, end_date, where=True):
         for column_name in (["underlying_cause_of_death"] + [f"cause_of_death_{i:02d}" for i in range(1, 16)])
     ]
     return any_of(conditions) & ons_deaths.date.is_on_or_between(start_date, end_date)
+
+# filter a codelist based on whether its values included a specified set of allowed values (include)
+def filter_codes_by_category(codelist, include):
+    return {k:v for k,v in codelist.items() if v in include}

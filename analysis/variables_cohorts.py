@@ -46,6 +46,7 @@ from variable_helper_functions import (
     last_matching_event_opa_before,
     last_matching_event_ec_snomed_before,
     matching_death_before,
+    filter_codes_by_category,
 )
 
 
@@ -181,10 +182,10 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     tmp_most_recent_smoking_cat = (
         last_matching_event_clinical_ctv3_before(smoking_clear, index_date)
         .ctv3_code.to_category(smoking_clear)
-        )
+    )
 
-    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(ever_current_smoke, index_date)   # uses a different codelist with ONLY smoking codes
-
+    tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(
+        (filter_codes_by_category(codelists.clear_smoking_codes, include=["S", "E"])), index_date)
 
     ## Combine the variables into the final dictionary
     dynamic_variables = dict(
@@ -309,12 +310,9 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Smoking status (check this)
         cov_cat_smoking_status= case(
             when(tmp_most_recent_smoking_cat == "S").then("S"),
-            when(tmp_most_recent_smoking_cat == "E").then("E"),
-            when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True)).then("E"),
-            when(tmp_most_recent_smoking_cat == "N").then("N"),
-            when((tmp_most_recent_smoking_cat == "M") & (tmp_ever_smoked == True)).then("E"),
-            when(tmp_most_recent_smoking_cat == "M").then("M"),
-            otherwise = "M"
+            when((tmp_most_recent_smoking_cat == "E") | ((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == True))).then("E"),
+            when((tmp_most_recent_smoking_cat == "N") & (tmp_ever_smoked == False)).then("N"),
+            default="M"
         ),
 
         ## Combined oral contraceptive pill
@@ -532,11 +530,10 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     # Inclusion/exclusion variables ----------------------------------------------------------------------------------------------------
 
-
     ## Registered for a minimum of 6 months prior to the study start date # line 98: https://github.com/opensafely/comparative-booster-spring2023/blob/main/analysis/dataset_definition.py 
 
-        has_follow_up_previous_6months = (practice_registrations.for_patient_on(
-            index_date - days(180)
+        has_follow_up_previous_6months = (practice_registrations.spanning(
+            index_date - days(180), index_date
             )).exists_for_patient(),
 
     ## Alive on the study start date
@@ -546,6 +543,29 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         has_died = (patients.date_of_death.is_before(index_date) | ons_deaths.date.is_before(index_date)),
 
+
+    # Deregistration variables (define it here rather than variables_dates.py, as this variable depends on the index dates----------------------------------------------------------------------------------------------------------
+
+    ## Deregistration date before/after index date (deregistered from all supported practices)
+
+    ## the latest deregistration_date before index date
+        tmp_dereg_date_before_index_date = (
+            practice_registrations.where(where)
+            .where(practice_registrations.end_date.is_not_null())
+            .where(practice_registrations.end_date.is_before(index_date))
+            .sort_by(practice_registrations.end_date)
+            .last_for_patient()
+            .end_date
+        ),
+    ## the first deregistration_date on/after index date
+        tmp_dereg_date_after_index_date= (
+            practice_registrations.where(where)
+            .where(practice_registrations.end_date.is_not_null())
+            .where(practice_registrations.end_date.is_on_or_after(index_date))
+            .sort_by(practice_registrations.end_date)
+            .first_for_patient()
+            .end_date
+        ),
 
     # Quality assurance variables---------------------------------------------------------------------------------------------------------- 
 

@@ -43,7 +43,7 @@ vax3_earliest = study_dates["vax3_earliest"]  # earliest expectation date for 3r
 all_eligible = study_dates["all_eligible"]  # all 18+ are eligible for vax on this date (protocol)
 end_date = study_dates["end_date"]  # last date of available vaccination data. NEED TO ALSO CHECK END DATES FOR OTHER DATA SOURCES
 
-# Import preliminary date variables (death date, deregistered date, vax dates)
+# Import preliminary date variables (death date, vax dates)
 
 from variables_dates import prelim_date_variables
 
@@ -64,11 +64,11 @@ for var_name, var_value in jcvi_variables.items():
 dataset.index_prevax = minimum_of(pandemic_start, pandemic_start)
 
 dataset.end_prevax_exposure = minimum_of(
-    dataset.deregistration_date, dataset.death_date, dataset.vax_date_covid_1, dataset.vax_date_eligible, all_eligible
+    dataset.death_date, dataset.vax_date_covid_1, dataset.vax_date_eligible, all_eligible
 )
 
 dataset.end_prevax_outcome = minimum_of(
-    dataset.death_date, omicron_date, dataset.deregistration_date
+    dataset.death_date, omicron_date
 )
 
 dataset.index_vax = maximum_of(
@@ -76,7 +76,7 @@ dataset.index_vax = maximum_of(
     delta_date
 )
 dataset.end_vax_exposure = minimum_of(
-    dataset.death_date, omicron_date, dataset.deregistration_date
+    dataset.death_date, omicron_date
 )
 
 dataset.end_vax_outcome = dataset.end_vax_exposure
@@ -86,8 +86,8 @@ dataset.index_unvax = maximum_of(
     delta_date
 )
 dataset.end_unvax_exposure = minimum_of(
-    dataset.death_date, omicron_date, dataset.vax_date_covid_1, dataset.deregistration_date
+    dataset.death_date, omicron_date, dataset.vax_date_covid_1
 )
 dataset.end_unvax_outcome = minimum_of(
-    dataset.death_date, omicron_date, dataset.deregistration_date
+    dataset.death_date, omicron_date
 )

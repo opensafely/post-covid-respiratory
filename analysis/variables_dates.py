@@ -399,27 +399,6 @@ ons_died_from_any_cause_date = case(
 
 death_date = minimum_of(primary_care_death_date, ons_died_from_any_cause_date)
 
-# Deregistration date- no support from any practices ---------------------------------------------
-
-    ## the latest deregistration_date
-tmp_deregistration_date = (
-    practice_registrations.where(
-        practice_registrations.end_date.is_not_null()
-        )
-        .sort_by(practice_registrations.end_date)
-        .last_for_patient()
-        .end_date
-)
-    ## whether the patient has no support from any practices 
-registration = (practice_registrations.where(
-    practice_registrations.end_date.is_null()
-    ).exists_for_patient()
-)
-
-deregistration_date = case(
-    when(registration == False).then(tmp_deregistration_date)
-)
-
 # add vaccination dates----------------------------------------------------------------------------
 
 # COVID-19 Vaccination (identified by target diseases of the vaccination)
@@ -565,10 +544,9 @@ vax_num_Moderna = (
     .count_for_patient()
 )
 
-# Define a dictionary of preliminary date variables (Death, Deregistration, Vaccination) created above 
+# Define a dictionary of preliminary date variables (Death, Vaccination) created above 
 prelim_date_variables = dict(
     death_date=death_date,
-    deregistration_date=deregistration_date,
     vax_date_covid_1=vax_date_covid_1,
     vax_date_covid_2=vax_date_covid_2,
     vax_date_covid_3=vax_date_covid_3,
