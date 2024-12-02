@@ -12,7 +12,7 @@ library(readr)
 args <- commandArgs(trailingOnly=TRUE)
 print(length(args))
 if(length(args)==0){
-  cohort_name <- "prevax_extf"
+  cohort_name <- "vax"
 } else {
   cohort_name <- args[[1]]
 }
@@ -30,10 +30,8 @@ message("Column names found")
 
 cat_cols <- c("patient_id", grep("_cat", all_cols, value = TRUE))
 
-bin_cols <- c(grep("_bin", all_cols, value = TRUE), 
-              grep("prostate_cancer_", all_cols, value = TRUE),
-              "has_follow_up_previous_6months", "has_died", "registered_at_start",
-              "tmp_cocp","tmp_hrt")
+bin_cols <- c(grep("_bin", all_cols, value = TRUE),
+              "has_follow_up_previous_6months", "was_alive", "has_died")
 
 num_cols <- c(grep("_num", all_cols, value = TRUE),
               grep("vax_jcvi_age_", all_cols, value = TRUE))
@@ -62,18 +60,6 @@ df <- read_csv(paste0("output/input_",cohort_name,".csv.gz"),
 
 message(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"))
 
-# Add death_date and deregistration_date from prelim data ----------------------
-
-prelim_data <- read_csv("output/index_dates.csv.gz")
-prelim_data <- prelim_data[,c("patient_id","death_date","deregistration_date")]
-prelim_data$patient_id <- as.character(prelim_data$patient_id)
-prelim_data$death_date <- as.Date(prelim_data$death_date)
-prelim_data$deregistration_date <- as.Date(prelim_data$deregistration_date)
-
-df <- df %>% inner_join(prelim_data,by="patient_id")
-
-message("Death and deregistration dates added!")
-
 # Format columns ---------------------------------------------------------------
 
 df <- df %>%
@@ -89,7 +75,7 @@ df <- df %>%
 
 if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") &&
    cohort_name %in% c("vax")) {
-  source("analysis/modify_dummy_vax_data.R")
+  source("analysis/preprocess/modify_dummy_vax_data.R")
   message("Vaccine information overwritten successfully")
 }
 
