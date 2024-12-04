@@ -459,6 +459,19 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient())
         ),
 
+        ## Depression
+        cov_bin_depression=(
+            (last_matching_event_clinical_snomed_before(
+                depression_snomed_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                depression_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                depression_icd10, index_date
+            ).exists_for_patient())
+        ),
+
       ## Pneumonia
         cov_bin_history_pneumonia_snomed= (
             last_matching_event_clinical_snomed_before(

@@ -371,6 +371,17 @@ diabetes_snomed_clinical = codelist_from_csv(
     column="code"
 )   
 
+# Depression
+depression_snomed_clinical = codelist_from_csv(
+    "codelists/user-hjforbes-depression-symptoms-and-diagnoses.csv",
+    column="code"
+)
+
+depression_icd10 = codelist_from_csv(
+    "codelists/user-kurttaylor-depression_icd10.csv",
+    column="code",
+)
+
 # AMI (Acute Myocardial Infarction)
 ami_snomed_clinical = codelist_from_csv(
     "codelists/user-elsie_horne-ami_snomed.csv",

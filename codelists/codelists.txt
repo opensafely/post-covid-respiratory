@@ -73,6 +73,8 @@ user/elsie_horne/diabetes_drugs_dmd/3228dace
 user/elsie_horne/hypertension_icd10/1a48296e
 user/elsie_horne/hypertension_drugs_dmd/0009f464
 opensafely/hypertension/2020-04-28
+user/hjforbes/depression-symptoms-and-diagnoses/499814eb
+user/kurttaylor/depression_icd10/4dc56a05
 nhsd-primary-care-domain-refsets/hyp_cod/20210127
 user/elsie_horne/ami_snomed/36d11028
 user/elsie_horne/ami_prior_icd10/360a5c99
