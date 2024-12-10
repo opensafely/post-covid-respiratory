@@ -483,7 +483,7 @@ df$covariate_other <- ifelse(
   grepl("preex_FALSE", df$analysis),
   sapply(
     strsplit(df$covariate_other, ";"),
-    function(covars) paste0(covars[!covars %in% c("cov_bin_history_asthma_snomed", "cov_bin_copd")], collapse = ";")
+    function(covars) paste0(covars[!covars %in% c("cov_bin_history_asthma_snomed", "cov_bin_history_copd")], collapse = ";")
   ),
   df$covariate_other
 )
