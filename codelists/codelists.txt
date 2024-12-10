@@ -48,8 +48,10 @@ bristol/copd-exacerbations/2896912f
 bristol/cough/41a60464
 bristol/urti/7677aac4
 bristol/pneumonia_v2/0f871dfa
+opensafely/pneumonia-secondary-care/2020-10-05
 opensafely/asthma-diagnosis-snomed/2020-04-15
 opensafely/current-copd/2020-05-06
+opensafely/copd-secondary-care/35734162
 user/RochelleKnight/prostate_cancer_snomed/0437497e
 user/RochelleKnight/prostate_cancer_icd10/6b27d648
 user/RochelleKnight/pregnancy_and_birth_snomed/1d46bcb3
