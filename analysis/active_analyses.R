@@ -4,7 +4,7 @@ fs::dir_create(here::here("lib"))
 
 # Create empty data frame ------------------------------------------------------
 
-df <- data.frame(population = character(),
+df <- data.frame(subgroup = character(),
                  cohort = character(),
                  exposure = character(), 
                  outcome = character(), 
@@ -54,7 +54,7 @@ core_covars <- c(
     "cov_cat_ethnicity", "cov_cat_imd", "cov_num_consultation_rate", 
     "cov_bin_healthcare_worker", "cov_cat_smoking_status", "cov_bin_carehome_status", 
     "cov_bin_obesity", "cov_bin_ami", "cov_bin_dementia_combined", "cov_bin_liver_disease",
-    "cov_bin_chronic_kidney_disease", "cov_bin_cancer", "cov_bin_hypertension", "cov_bin_diabetes"
+    "cov_bin_chronic_kidney_disease", "cov_bin_cancer", "cov_bin_hypertension", "cov_bin_diabetes", "cov_bin_depression", "cov_bin_history_copd"
 )
 
 # Define project-specific covariates (specific to respiratory project)
@@ -66,9 +66,9 @@ respiratory_covars <- c(
 # Combine both vectors into a single vector for analysis
 all_covars <- paste0(c(core_covars, respiratory_covars), collapse = ";")
 
-# Specify populations and cohorts --------------------------------------------------------------
+# Specify subgroups and cohorts --------------------------------------------------------------
 
-populations <- c("preex_FALSE","preex_TRUE")
+subgroups <- c("preex_FALSE","preex_TRUE")
 
 cohorts <- c("vax","unvax","prevax")
 
@@ -81,14 +81,14 @@ outcomes_runall <- c("out_date_pneumonia",
 
 # Add active analyses ----------------------------------------------------------
 
-for (p in populations) {
+for (p in subgroups) {
 
     for (c in cohorts) {
         
         for (i in outcomes_runall) { 
             
             ## analysis: main ----------------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -110,7 +110,7 @@ for (p in populations) {
                                 analysis = "main")
 
             ## analysis: sub_covid_hospitalised ----------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -132,7 +132,7 @@ for (p in populations) {
                                 analysis = "sub_covid_hospitalised")
 
             ## analysis: sub_covid_nonhospitalised ----------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -156,7 +156,7 @@ for (p in populations) {
             ## analysis: sub_covid_history ----------------------------------------
             if (c!="prevax") {
 
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -179,7 +179,7 @@ for (p in populations) {
             }
 
             ## analysis: sub_sex_female----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -201,7 +201,7 @@ for (p in populations) {
                                 analysis = "sub_sex_female")
 
             ## analysis: sub_sex_male----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -223,7 +223,7 @@ for (p in populations) {
                                 analysis = "sub_sex_male")
 
             ## analysis: sub_age_18_39----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -245,7 +245,7 @@ for (p in populations) {
                                 analysis = "sub_age_18_39")
 
             ## analysis: sub_age_40_59----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -267,7 +267,7 @@ for (p in populations) {
                                 analysis = "sub_age_40_59")
 
             ## analysis: sub_age_60_79----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -289,7 +289,7 @@ for (p in populations) {
                                 analysis = "sub_age_60_79")
 
             ## analysis: sub_age_80_110----------------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -311,7 +311,7 @@ for (p in populations) {
                                 analysis = "sub_age_80_110")
             
             ## analysis: sub_ethnicity_white -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -333,7 +333,7 @@ for (p in populations) {
                                 analysis = "sub_ethnicity_white")
             
             ## analysis: sub_ethnicity_black -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -355,7 +355,7 @@ for (p in populations) {
                                 analysis = "sub_ethnicity_black")
             
             ## analysis: sub_ethnicity_mixed -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -377,7 +377,7 @@ for (p in populations) {
                                 analysis = "sub_ethnicity_mixed")
             
             ## analysis: sub_ethnicity_asian -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -399,7 +399,7 @@ for (p in populations) {
                                 analysis = "sub_ethnicity_asian")
             
             ## analysis: sub_ethnicity_other -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -421,7 +421,7 @@ for (p in populations) {
                                 analysis = "sub_ethnicity_other")
             
             ## analysis: sub_smoking_never -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -443,7 +443,7 @@ for (p in populations) {
                                 analysis = "sub_smoking_never")
             
             ## analysis: sub_smoking_ever -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -465,7 +465,7 @@ for (p in populations) {
                                 analysis = "sub_smoking_ever")
             
             ## analysis: sub_smoking_current -----------------------------------------------
-            df[nrow(df)+1,] <- c(population = p,
+            df[nrow(df)+1,] <- c(subgroup = p,
                                 cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
@@ -495,17 +495,17 @@ for (p in populations) {
 df$name <- paste0("cohort_",df$cohort, "-", 
                   df$analysis, "-", 
                   gsub("out_date_","",df$outcome), "-", 
-                  df$population)
+                  df$subgroup)
 
-# Pre-existing populations only run the outcomes Pneumonia and Pulmonary fibrosis
+# Pre-existing subgroup only run the outcomes Pneumonia and Pulmonary fibrosis
 # Remove Pre-existing & asthma/copd rows
-df <- df[df$population != "preex_TRUE" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
-# Remove history of asthma from covariates for the sample with no preexisiting condition
+df <- df[df$subgroup != "preex_TRUE" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
+# Remove history of asthma/copd from covariates for the sample with no preexisiting condition
 df$covariate_other <- ifelse(
-  df$population == "preex_FALSE",
+  df$subgroup == "preex_FALSE",
   sapply(
     strsplit(df$covariate_other, ";"),
-    function(covars) paste0(covars[covars != "cov_bin_history_asthma_snomed"], collapse = ";")
+    function(covars) paste0(covars[!covars %in% c("cov_bin_history_asthma_snomed", "cov_bin_copd")], collapse = ";")
   ),
   df$covariate_other
 )
