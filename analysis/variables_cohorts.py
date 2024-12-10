@@ -538,7 +538,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             when(
                 (exp_date_covid19_confirmed.is_not_null()) &
                 (sub_date_covid19_hospital.is_not_null()) &
-                (DateDifference(sub_date_covid19_hospital - exp_date_covid19_confirmed).days >= 0) &
+                ((sub_date_covid19_hospital - exp_date_covid19_confirmed).days >= 0) &
                 ((sub_date_covid19_hospital - exp_date_covid19_confirmed).days < 29)
                 ).then("hospitalised"),
             when(exp_date_covid19_confirmed.is_not_null()).then("non_hospitalised"),
