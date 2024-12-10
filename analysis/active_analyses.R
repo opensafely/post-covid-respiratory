@@ -66,30 +66,30 @@ respiratory_covars <- c(
 # Combine both vectors into a single vector for analysis
 all_covars <- paste0(c(core_covars, respiratory_covars), collapse = ";")
 
-# Specify subgroups and cohorts --------------------------------------------------------------
-
-subgroups <- c("preex_FALSE","preex_TRUE")
-
+# Specify cohorts --------------------------------------------------------------
 cohorts <- c("vax","unvax","prevax")
 
 # Specify outcomes -------------------------------------------------------------
+outcomes_preex <- c("out_date_copd",
+                    "out_date_asthma")
 
-outcomes_runall <- c("out_date_pneumonia",
-                     "out_date_asthma",
-                     "out_date_copd",
-                     "out_date_pulmonary_fibrosis")
+outcomes_all <- c(outcomes_preex,
+                  "out_date_pneumonia",
+                  "out_date_pulmonary_fibrosis")
 
 # Add active analyses ----------------------------------------------------------
 
-for (p in subgroups) {
+for (c in cohorts) {
+    
+    for (i in outcomes_all) {
 
-    for (c in cohorts) {
-        
-        for (i in outcomes_runall) { 
+# Pre-existing subgroup only run the outcomes Pneumonia and Pulmonary fibrosis      
+      preex <- if (i %in% outcomes_preex) "preex_FALSE" else c("preex_FALSE", "preex_TRUE")
+
+      for (p in preex) {
             
             ## analysis: main ----------------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -107,11 +107,10 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "main")
+                                analysis = paste0("main","-",p))
 
             ## analysis: sub_covid_hospitalised ----------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -129,11 +128,10 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_covid_hospitalised")
+                                analysis = paste0("sub_covid_hospitalised","-",p))
 
             ## analysis: sub_covid_nonhospitalised ----------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -151,13 +149,12 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_covid_nonhospitalised")    
+                                analysis = paste0("sub_covid_nonhospitalised","-",p))    
 
             ## analysis: sub_covid_history ----------------------------------------
             if (c!="prevax") {
 
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -175,7 +172,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_covid_history")
+                                analysis = paste0("sub_covid_history","-",p))
             }
 
             ## analysis: sub_sex_female----------------------------------------------------
@@ -198,7 +195,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_sex_female")
+                                analysis = paste0("sub_sex_female","-",p))
 
             ## analysis: sub_sex_male----------------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -220,7 +217,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_sex_male")
+                                analysis = paste0("sub_sex_male","-",p))
 
             ## analysis: sub_age_18_39----------------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -242,7 +239,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = FALSE,
-                                analysis = "sub_age_18_39")
+                                analysis = paste0("sub_age_18_39","-",p))
 
             ## analysis: sub_age_40_59----------------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -264,7 +261,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = FALSE,
-                                analysis = "sub_age_40_59")
+                                analysis = paste0("sub_age_40_59","-",p))
 
             ## analysis: sub_age_60_79----------------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -286,7 +283,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = FALSE,
-                                analysis = "sub_age_60_79")
+                                analysis = paste0("sub_age_60_79","-",p))
 
             ## analysis: sub_age_80_110----------------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -308,7 +305,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = FALSE,
-                                analysis = "sub_age_80_110")
+                                analysis = paste0("sub_age_80_110","-",p))
             
             ## analysis: sub_ethnicity_white -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -330,7 +327,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_ethnicity_white")
+                                analysis = paste0("sub_ethnicity_white","-",p))
             
             ## analysis: sub_ethnicity_black -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -352,7 +349,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_ethnicity_black")
+                                analysis = paste0("sub_ethnicity_black","-",p))
             
             ## analysis: sub_ethnicity_mixed -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -374,7 +371,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_ethnicity_mixed")
+                                analysis = paste0("sub_ethnicity_mixed","-",p))
             
             ## analysis: sub_ethnicity_asian -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -396,7 +393,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_ethnicity_asian")
+                                analysis = paste0("sub_ethnicity_asian","-",p))
             
             ## analysis: sub_ethnicity_other -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -418,7 +415,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_ethnicity_other")
+                                analysis = paste0("sub_ethnicity_other","-",p))
             
             ## analysis: sub_smoking_never -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -440,7 +437,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_smoking_never")
+                                analysis = paste0("sub_smoking_never","-",p))
             
             ## analysis: sub_smoking_ever -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -462,7 +459,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_smoking_ever")
+                                analysis = paste0("sub_smoking_ever","-",p))
             
             ## analysis: sub_smoking_current -----------------------------------------------
             df[nrow(df)+1,] <- c(subgroup = p,
@@ -484,7 +481,7 @@ for (p in subgroups) {
                                 episode_event_threshold = episode_event_threshold,
                                 covariate_threshold = covariate_threshold,
                                 age_spline = TRUE,
-                                analysis = "sub_smoking_current")
+                                analysis = paste0("sub_smoking_current","-",p))
     
         }
 
@@ -494,15 +491,11 @@ for (p in subgroups) {
 
 df$name <- paste0("cohort_",df$cohort, "-", 
                   df$analysis, "-", 
-                  gsub("out_date_","",df$outcome), "-", 
-                  df$subgroup)
+                  gsub("out_date_","",df$outcome))
 
-# Pre-existing subgroup only run the outcomes Pneumonia and Pulmonary fibrosis
-# Remove Pre-existing & asthma/copd rows
-df <- df[df$subgroup != "preex_TRUE" | !df$outcome %in% c("out_date_asthma", "out_date_copd"),]
 # Remove history of asthma/copd from covariates for the sample with no preexisiting condition
 df$covariate_other <- ifelse(
-  df$subgroup == "preex_FALSE",
+  grepl("preex_FALSE", df$analysis),
   sapply(
     strsplit(df$covariate_other, ";"),
     function(covars) paste0(covars[!covars %in% c("cov_bin_history_asthma_snomed", "cov_bin_copd")], collapse = ";")
