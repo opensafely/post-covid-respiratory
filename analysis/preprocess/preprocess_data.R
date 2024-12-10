@@ -155,4 +155,3 @@ sink()
 saveRDS(df2, file = paste0("output/venn_",cohort_name,".rds"), compress = TRUE)
 
 message("Venn diagram data saved successfully")
-tictoc::toc()
