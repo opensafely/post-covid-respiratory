@@ -177,7 +177,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .appointment_date
     )
 
-    ## prepare for smoking status
+    ## 3. Smoking status
 
     tmp_most_recent_smoking_cat = (
         last_matching_event_clinical_ctv3_before(smoking_clear, index_date)
@@ -545,18 +545,9 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     # Deregistration variables (define it here rather than variables_dates.py, as this variable depends on the index dates----------------------------------------------------------------------------------------------------------
 
-    ## Deregistration date before/after index date (deregistered from all supported practices)
+    ## First deregistration_date on/after index date (deregistered from all supported practices)
 
-    ## the latest deregistration_date before index date
-        tmp_dereg_date_before_index_date = (
-            practice_registrations.where(practice_registrations.end_date.is_not_null())
-            .where(practice_registrations.end_date.is_before(index_date))
-            .sort_by(practice_registrations.end_date)
-            .last_for_patient()
-            .end_date
-        ),
-    ## the first deregistration_date on/after index date
-        tmp_dereg_date_after_index_date= (
+        dereg_date_after_index_date= (
             practice_registrations.where(practice_registrations.end_date.is_not_null())
             .where(practice_registrations.end_date.is_on_or_after(index_date))
             .sort_by(practice_registrations.end_date)
