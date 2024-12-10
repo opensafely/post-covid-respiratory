@@ -4,8 +4,7 @@ fs::dir_create(here::here("lib"))
 
 # Create empty data frame ------------------------------------------------------
 
-df <- data.frame(subgroup = character(),
-                 cohort = character(),
+df <- data.frame(cohort = character(),
                  exposure = character(), 
                  outcome = character(), 
                  ipw = logical(), 
@@ -83,7 +82,7 @@ for (c in cohorts) {
     
     for (i in outcomes_all) {
 
-# Pre-existing subgroup only run the outcomes Pneumonia and Pulmonary fibrosis      
+      # Pre-existing subgroup only run the outcomes Pneumonia and Pulmonary fibrosis      
       preex <- if (i %in% outcomes_preex) "preex_FALSE" else c("preex_FALSE", "preex_TRUE")
 
       for (p in preex) {
@@ -176,8 +175,7 @@ for (c in cohorts) {
             }
 
             ## analysis: sub_sex_female----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -198,8 +196,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_sex_female","-",p))
 
             ## analysis: sub_sex_male----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -220,8 +217,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_sex_male","-",p))
 
             ## analysis: sub_age_18_39----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -242,8 +238,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_age_18_39","-",p))
 
             ## analysis: sub_age_40_59----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -264,8 +259,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_age_40_59","-",p))
 
             ## analysis: sub_age_60_79----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -286,8 +280,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_age_60_79","-",p))
 
             ## analysis: sub_age_80_110----------------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -308,8 +301,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_age_80_110","-",p))
             
             ## analysis: sub_ethnicity_white -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -330,8 +322,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_ethnicity_white","-",p))
             
             ## analysis: sub_ethnicity_black -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -352,8 +343,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_ethnicity_black","-",p))
             
             ## analysis: sub_ethnicity_mixed -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -374,8 +364,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_ethnicity_mixed","-",p))
             
             ## analysis: sub_ethnicity_asian -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -396,8 +385,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_ethnicity_asian","-",p))
             
             ## analysis: sub_ethnicity_other -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -418,8 +406,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_ethnicity_other","-",p))
             
             ## analysis: sub_smoking_never -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -440,8 +427,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_smoking_never","-",p))
             
             ## analysis: sub_smoking_ever -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
@@ -462,8 +448,7 @@ for (c in cohorts) {
                                 analysis = paste0("sub_smoking_ever","-",p))
             
             ## analysis: sub_smoking_current -----------------------------------------------
-            df[nrow(df)+1,] <- c(subgroup = p,
-                                cohort = c,
+            df[nrow(df)+1,] <- c(cohort = c,
                                 exposure = exposure, 
                                 outcome = i,
                                 ipw = ipw, 
