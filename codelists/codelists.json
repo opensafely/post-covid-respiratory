@@ -300,6 +300,12 @@
       "downloaded_at": "2024-10-15 22:00:28.211059Z",
       "sha": "605f08243a9a014083df78205dec5c176dc1b31f"
     },
+    "opensafely-pneumonia-secondary-care.csv": {
+      "id": "opensafely/pneumonia-secondary-care/2020-10-05",
+      "url": "https://www.opencodelists.org/codelist/opensafely/pneumonia-secondary-care/2020-10-05/",
+      "downloaded_at": "2024-12-10 12:27:54.681386Z",
+      "sha": "866ab4f0ff144330c1a0ea28116c9d2073cf379a"
+    },
     "opensafely-asthma-diagnosis-snomed.csv": {
       "id": "opensafely/asthma-diagnosis-snomed/2020-04-15",
       "url": "https://www.opencodelists.org/codelist/opensafely/asthma-diagnosis-snomed/2020-04-15/",
@@ -311,6 +317,12 @@
       "url": "https://www.opencodelists.org/codelist/opensafely/current-copd/2020-05-06/",
       "downloaded_at": "2024-10-15 22:00:28.978700Z",
       "sha": "bab838b50e256ceef8b9d2f6ca1132491e522bda"
+    },
+    "opensafely-copd-secondary-care.csv": {
+      "id": "opensafely/copd-secondary-care/35734162",
+      "url": "https://www.opencodelists.org/codelist/opensafely/copd-secondary-care/35734162/",
+      "downloaded_at": "2024-12-10 12:27:55.858826Z",
+      "sha": "83bc1fc962ce3c09248be11d58cd22b3128ddc51"
     },
     "user-RochelleKnight-prostate_cancer_snomed.csv": {
       "id": "user/RochelleKnight/prostate_cancer_snomed/0437497e",
@@ -449,6 +461,18 @@
       "url": "https://www.opencodelists.org/codelist/opensafely/hypertension/2020-04-28/",
       "downloaded_at": "2024-10-15 23:48:50.352865Z",
       "sha": "b0d7bbf6ea767366db458bc6f6d37955ae331cc7"
+    },
+    "user-hjforbes-depression-symptoms-and-diagnoses.csv": {
+      "id": "user/hjforbes/depression-symptoms-and-diagnoses/499814eb",
+      "url": "https://www.opencodelists.org/codelist/user/hjforbes/depression-symptoms-and-diagnoses/499814eb/",
+      "downloaded_at": "2024-12-10 12:28:05.268229Z",
+      "sha": "fb7d78483687797b51f106137a809c0e469ca6c0"
+    },
+    "user-kurttaylor-depression_icd10.csv": {
+      "id": "user/kurttaylor/depression_icd10/4dc56a05",
+      "url": "https://www.opencodelists.org/codelist/user/kurttaylor/depression_icd10/4dc56a05/",
+      "downloaded_at": "2024-12-10 12:28:05.620758Z",
+      "sha": "ae1ab7bb89c1636e7f582b9cb2a164221b1b1f46"
     },
     "nhsd-primary-care-domain-refsets-hyp_cod.csv": {
       "id": "nhsd-primary-care-domain-refsets/hyp_cod/20210127",
