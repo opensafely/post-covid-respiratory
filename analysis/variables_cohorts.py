@@ -52,7 +52,7 @@ from variable_helper_functions import (
 
 def generate_variables(index_date, end_date_exp, end_date_out):  
 
-    ## Define individual temporary variables (for exposures) first
+    ## Define individual temporary variables (for exposures) first before using them in the dictrionary
 
         ### Covid
     tmp_exp_date_covid19_confirmed_sgss = (
@@ -106,6 +106,14 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     tmp_exp_date_covid19_confirmed_death = case(
         when(tmp_exp_covid19_confirmed_death).then(tmp_exp_date_death)
+    )
+    
+    exp_date_covid19_confirmed=minimum_of(
+        tmp_exp_date_covid19_confirmed_sgss, 
+        tmp_exp_date_covid19_confirmed_snomed,
+        tmp_exp_date_covid19_confirmed_apc,
+        tmp_exp_date_covid19_confirmed_opa,
+        tmp_exp_date_covid19_confirmed_death
     )
 
     ## Define individual temporary variables (subgroup variables) first before using them in the dictrionary
@@ -176,6 +184,8 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .first_for_patient()
         .appointment_date
     )
+    
+    sub_date_covid19_hospital = minimum_of(tmp_sub_date_severecovid19_apc, tmp_sub_date_severecovid19_opa)
 
     ## 3. Smoking status
 
@@ -186,6 +196,18 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     tmp_ever_smoked = ever_matching_event_clinical_ctv3_before(
         (filter_codes_by_category(smoking_clear, include=["S", "E"])), index_date)
+    
+    ## 4. Consultation rate
+    tmp_cov_num_consultation_rate = appointments.where(
+        appointments.status.is_in([
+            "Arrived",
+            "In Progress",
+            "Finished",
+            "Visit",
+            "Waiting",
+            "Patient Walked Out",
+            ]) & appointments.start_date.is_on_or_between(index_date - days(365), index_date)
+            ).count_for_patient()    
 
     ## Combine the variables into the final dictionary
     dynamic_variables = dict(
@@ -200,17 +222,8 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_exp_date_covid19_confirmed_opa=tmp_exp_date_covid19_confirmed_opa,
         tmp_exp_date_death=tmp_exp_date_death,
         tmp_exp_covid19_confirmed_death=tmp_exp_covid19_confirmed_death,
-        tmp_exp_date_covid19_confirmed_death=tmp_exp_date_covid19_confirmed_death,
-        
-        exp_date_covid19_confirmed=minimum_of(
-            tmp_exp_date_covid19_confirmed_sgss, 
-            tmp_exp_date_covid19_confirmed_snomed,
-            tmp_exp_date_covid19_confirmed_apc,
-            tmp_exp_date_covid19_confirmed_opa,
-            tmp_exp_date_covid19_confirmed_death
-        ),
-
-
+        tmp_exp_date_covid19_confirmed_death=tmp_exp_date_covid19_confirmed_death,       
+        exp_date_covid19_confirmed=exp_date_covid19_confirmed,
 
 # Outcomes---------------------------------------------------------------------------------------------------
 
@@ -297,16 +310,9 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         cov_cat_region=practice_registrations.for_patient_on(index_date).practice_nuts1_region_name,
 
         ## Consultation rate (these codes can run locally but fail in GitHub action test, details see https://docs.opensafely.org/ehrql/reference/schemas/tpp/#appointments)
-        cov_num_consultation_rate = appointments.where(
-            appointments.status.is_in([
-                "Arrived",
-                "In Progress",
-                "Finished",
-                "Visit",
-                "Waiting",
-                "Patient Walked Out",
-                ]) & appointments.start_date.is_on_or_between(index_date - days(365), index_date)
-                ).count_for_patient(),
+        cov_num_consultation_rate=case(
+            when(tmp_cov_num_consultation_rate <= 365).then(tmp_cov_num_consultation_rate).otherwise(365)
+        ),
 
         ## Smoking status
         cov_cat_smoking_status= case(
@@ -525,7 +531,18 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## Covid_19 severity
 
-        sub_date_covid19_hospital = minimum_of(tmp_sub_date_severecovid19_apc, tmp_sub_date_severecovid19_opa),
+        sub_date_covid19_hospital = sub_date_covid19_hospital,
+        # case(*when_thens, otherwise=None) the conditions are evaluated in order https://docs.opensafely.org/ehrql/reference/language/#case
+        sub_cat_covid19_hospital = case(
+            when(
+                (exp_date_covid19_confirmed.is_not_null()) &
+                (sub_date_covid19_hospital.is_not_null()) &
+                ((sub_date_covid19_hospital - exp_date_covid19_confirmed) >= 0) &
+                ((sub_date_covid19_hospital - exp_date_covid19_confirmed) < 29)
+                ).then("hospitalised"),
+            when(exp_date_covid19_confirmed.is_not_null()).then("non_hospitalised"),
+            when(exp_date_covid19_confirmed.is_null()).then("no_infection")
+        ),
 
     # Inclusion/exclusion variables ----------------------------------------------------------------------------------------------------
 
