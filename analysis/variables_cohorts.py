@@ -531,23 +531,23 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## Registered for a minimum of 6 months prior to the study start date # line 98: https://github.com/opensafely/comparative-booster-spring2023/blob/main/analysis/dataset_definition.py 
 
-        has_follow_up_previous_6months = (practice_registrations.spanning(
+        inex_follow_up_previous_6months = (practice_registrations.spanning(
             index_date - days(180), index_date
             )).exists_for_patient(),
 
     ## Alive on the study start date
 
-        was_alive = (((patients.date_of_death.is_null()) | (patients.date_of_death.is_after(index_date))) & 
+        inex_alive = (((patients.date_of_death.is_null()) | (patients.date_of_death.is_after(index_date))) & 
         ((ons_deaths.date.is_null()) | (ons_deaths.date.is_after(index_date)))),
 
         has_died = (patients.date_of_death.is_before(index_date) | ons_deaths.date.is_before(index_date)),
 
 
-    # Deregistration variables (define it here rather than variables_dates.py, as this variable depends on the index dates----------------------------------------------------------------------------------------------------------
+    ## Deregistration variables (define it here rather than variables_dates.py, as this variable depends on the index dates
 
     ## First deregistration_date on/after index date (deregistered from all supported practices)
 
-        dereg_date_after_index_date= (
+        inex_dereg_date_after_index_date= (
             practice_registrations.where(practice_registrations.end_date.is_not_null())
             .where(practice_registrations.end_date.is_on_or_after(index_date))
             .sort_by(practice_registrations.end_date)
