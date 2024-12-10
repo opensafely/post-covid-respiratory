@@ -311,7 +311,8 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         ## Consultation rate (these codes can run locally but fail in GitHub action test, details see https://docs.opensafely.org/ehrql/reference/schemas/tpp/#appointments)
         cov_num_consultation_rate=case(
-            when(tmp_cov_num_consultation_rate <= 365).then(tmp_cov_num_consultation_rate).otherwise(365)
+            when(tmp_cov_num_consultation_rate <= 365).then(tmp_cov_num_consultation_rate),
+            otherwise=365,
         ),
 
         ## Smoking status
