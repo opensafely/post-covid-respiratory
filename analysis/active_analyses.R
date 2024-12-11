@@ -488,6 +488,7 @@ for (c in cohorts) {
 }
 
 # Add name for each analysis ----
+
 df$name <- paste0("cohort_",df$cohort, "-", 
                   df$analysis, "-", 
                   gsub("out_date_","",df$outcome))
