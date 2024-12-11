@@ -321,7 +321,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), #-ethnicity
+                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), 
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -342,7 +342,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), #-ethnicity
+                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), 
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -363,7 +363,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), #-ethnicity
+                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), 
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -384,7 +384,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), #-ethnicity
+                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), 
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -405,7 +405,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), #-ethnicity
+                           covariate_other = gsub("cov_cat_ethnicity;","",all_covars), 
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -426,7 +426,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars), #-smoking status
+                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars),
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -447,7 +447,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars), #-smoking status
+                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars),
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
@@ -468,7 +468,7 @@ for (c in cohorts) {
                            strata = strata,
                            covariate_sex = covariate_sex,
                            covariate_age = covariate_age,
-                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars), #-smoking status
+                           covariate_other = gsub("cov_cat_smoking_status;","",all_covars),
                            cox_start = cox_start,
                            cox_stop = cox_stop,
                            study_start = ifelse(c=="prevax", prevax_start, vax_unvax_start),
