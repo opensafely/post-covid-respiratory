@@ -549,7 +549,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## Registered for a minimum of 6 months prior to the study start date # line 98: https://github.com/opensafely/comparative-booster-spring2023/blob/main/analysis/dataset_definition.py 
 
-        inex_bin_follow_up_previous_6months = (practice_registrations.spanning(
+        inex_bin_6m_reg = (practice_registrations.spanning(
             index_date - days(180), index_date
             )).exists_for_patient(),
 
@@ -562,7 +562,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ## First deregistration_date on/after index date (deregistered from all supported practices)
 
-        purpose_date_dereg= (
+        cens_date_dereg= (
             practice_registrations.where(practice_registrations.end_date.is_not_null())
             .where(practice_registrations.end_date.is_on_or_after(index_date))
             .sort_by(practice_registrations.end_date)

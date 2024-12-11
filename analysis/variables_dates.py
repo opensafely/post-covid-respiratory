@@ -546,7 +546,7 @@ vax_num_Moderna = (
 
 # Define a dictionary of preliminary date variables (Death, Vaccination) created above 
 prelim_date_variables = dict(
-    purpose_date_death=death_date,
+    cens_date_death=death_date,
     vax_date_covid_1=vax_date_covid_1,
     vax_date_covid_2=vax_date_covid_2,
     vax_date_covid_3=vax_date_covid_3,
