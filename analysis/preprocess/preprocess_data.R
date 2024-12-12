@@ -26,6 +26,8 @@ all_cols <- fread(paste0("output/input_",cohort_name,".csv.gz"),
 
 message("Column names found")
 
+print(all_cols)
+
 # Identify column classes ------------------------------------------------------
 
 cat_cols <- c("patient_id", grep("_cat", all_cols, value = TRUE))
@@ -63,13 +65,13 @@ message(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"
 # Format columns ---------------------------------------------------------------
 
 df <- df %>%
-  mutate(across(c(contains("_date")),
+  mutate(across(all_of(date_cols),
                 ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")),
          across(contains('_birth_year'),
                 ~ format(as.Date(., origin = "1970-01-01"), "%Y")),
-         across(contains('_num') & !contains('date'), ~ as.numeric(.)),
-         across(contains('_cat'), ~ as.factor(.)),
-         across(contains('_bin'), ~ as.logical(.)))
+         across(all_of(num_cols), ~ as.numeric(.)),
+         across(all_of(cat_cols), ~ as.factor(.)),
+         across(all_of(bin_cols), ~ as.logical(.)))
 
 # Overwrite vaccination information for dummy data and vax cohort only ---------
 
@@ -86,28 +88,11 @@ print(Hmisc::describe(df))
 sink()
 message ("Cohort ",cohort_name, " description written successfully!")
 
-# QC for consultation variable and set max to 365 (i.e., one per day) ----------
-
-df <- df %>%
-  mutate(cov_num_consulation_rate = replace(cov_num_consulation_rate, 
-                                            cov_num_consulation_rate > 365, 365))
-
-# Define COVID-19 severity -----------------------------------------------------
-
-df <- df %>%
-  mutate(sub_cat_covid19_hospital = 
-           ifelse(!is.na(exp_date_covid19_confirmed) &
-                    !is.na(sub_date_covid19_hospital) &
-                    sub_date_covid19_hospital - exp_date_covid19_confirmed >= 0 &
-                    sub_date_covid19_hospital - exp_date_covid19_confirmed < 29, "hospitalised",
-                  ifelse(!is.na(exp_date_covid19_confirmed), "non_hospitalised", 
-                         ifelse(is.na(exp_date_covid19_confirmed), "no_infection", NA)))) %>%
-  mutate(across(sub_cat_covid19_hospital, factor))
+# Remove records with missing patient id ---------------------------------------
 
 df <- df[!is.na(df$patient_id),]
-df[,c("sub_date_covid19_hospital")] <- NULL
 
-message("COVID19 severity determined successfully")
+message("All records with valid patient IDs retained.")
 
 # Restrict columns and save analysis dataset -----------------------------------
 
@@ -122,8 +107,9 @@ df1 <- df %>%
          contains("exp_"), # Exposures
          contains("out_"), # Outcomes
          contains("cov_"), # Covariates
+         contains("inex_"), # Inclusion/exclusion
+         contains("cens_"), # Censor
          contains("qa_"), # Quality assurance
-         contains("step"), # diabetes steps
          contains("vax_date_eligible"), # Vaccination eligibility
          contains("vax_date_"), # Vaccination dates and vax type 
          contains("vax_cat_") # Vaccination products
