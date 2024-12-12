@@ -34,7 +34,7 @@ def generate_dataset(index_date, end_date_exp, end_date_out):
     for var_name, var_value in variables.items():
         setattr(dataset, var_name, var_value)
     
-    # Extract index dates for cohorts from index_dates.csv
+    # Extract index dates for cohorts from index_dates.csv, also extract vax_date_eligible for modifying dummy vax dates
 
     @table_from_file("output/index_dates.csv.gz")
     
@@ -48,6 +48,7 @@ def generate_dataset(index_date, end_date_exp, end_date_out):
         index_unvax = Series(date)
         end_unvax_exposure = Series(date)
         end_unvax_outcome = Series(date)
+        vax_date_eligible = Series(date)
 
     dataset.index_prevax = index_dates.index_prevax
     dataset.end_prevax_exposure = index_dates.end_prevax_exposure
@@ -60,5 +61,8 @@ def generate_dataset(index_date, end_date_exp, end_date_out):
     dataset.index_vax = index_dates.index_vax
     dataset.end_vax_exposure = index_dates.end_vax_exposure
     dataset.end_vax_outcome = index_dates.end_vax_outcome
+
+    dataset.vax_date_eligible = index_dates.vax_date_eligible
+
 
     return dataset
