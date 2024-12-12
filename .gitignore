@@ -13,5 +13,6 @@ venv/
 .Rhistory
 .Rproj.user*
 .Rproj.user
-
+.RData
 release/*
+analysis/specify_paths.R

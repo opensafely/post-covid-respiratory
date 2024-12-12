@@ -1,0 +1,143 @@
+code,term
+1047261000000103,Breathlessness care management
+1049241000000109,Opioid therapy for breathlessness management
+1060991000000107,Medical Research Council Breathlessness Scale grade 5a
+1061001000000106,Medical Research Council Breathlessness Scale grade 5b
+1089981000000102,Extended Medical Research Council dyspnoea scale grade 2
+1089991000000100,Extended Medical Research Council dyspnoea scale grade 3
+1090001000000101,Extended Medical Research Council dyspnoea scale grade 5a
+1090011000000104,Extended Medical Research Council dyspnoea scale grade 4
+1090021000000105,Extended Medical Research Council dyspnoea scale grade 5b
+1099401000000100,Modified Medical Research Council dyspnoea scale grade 3
+1099411000000103,Modified Medical Research Council dyspnoea scale grade 4
+119981000146107,Dyspnea caused by Severe acute respiratory syndrome coronavirus 2
+139192008,(Symptom: [SOB] or [breathlessness] or [dyspnoea]) or (breathlessness)
+139193003,No breathlessness
+139194009,Breathless - moderate exertion
+139195005,Breathless - mild exertion
+139196006,Dyspnoea at rest
+139197002,(Breathless - lying flat) or (orthopnoea symptom)
+139198007,Paroxysmal nocturnal dyspnoea
+139200001,Difficulty breathing
+139201002,Dyspnoea
+139204005,Dyspnoea on exertion
+139205006,Nocturnal dyspnoea
+139207003,Breathlessness NOS
+140107002,O/E - dyspnoea
+140135003,O/E - shallow breathing
+158371003,[D]Dyspnoea
+158379001,[D]Shortness of breath
+161937008,(Symptom: [SOB] or [breathlessness] or [dyspnoea]) or (breathlessness)
+161938003,No breathlessness
+161939006,Breathless - moderate exertion
+161940008,Breathless - mild exertion
+161941007,Dyspnea at rest
+161942000,(Breathless - lying flat) or (orthopnoea symptom)
+161945003,Difficulty breathing
+161946002,Dyspnoea
+161948001,Dyspnoea on exertion
+161949009,Nocturnal dyspnoea
+161951008,Breathlessness NOS
+162890008,On examination - dyspnea
+162891007,On examination - orthopnea
+17216000,"Dyspnea, class I"
+20112008,Dyspnea leaning over
+207057006,[D]Shortness of breath
+207059009,[D]Dyspnea
+207062007,[D]Breathlessness
+23141003,Gasping for breath
+248548009,Nocturnal dyspnea
+24921003,Dyspnea raising arms
+251896001,Breathlessness rating
+25209001,Inspiratory dyspnea
+267036007,Dyspnea
+297216006,Increasing breathlessness
+308149007,[D]Breathlessness
+34560001,Expiratory dyspnea
+389324009,Short of breath dressing/undressing
+389325005,Breathless - strenuous exertion
+389327002,MRC Breathlessness Scale: grade 2
+389328007,MRC Breathlessness Scale: grade 3
+389329004,MRC Breathlessness Scale: grade 4
+389330009,MRC Breathlessness Scale: grade 5
+390057009,Short of breath dressing/undressing
+390058004,Breathless - strenuous exertion
+390060002,MRC Breathlessness Scale: grade 2
+390061003,MRC Breathlessness Scale: grade 3
+390062005,MRC Breathlessness Scale: grade 4
+390063000,MRC Breathlessness Scale: grade 5
+390870001,Short of breath dressing/undressing
+390871002,Breathless - strenuous exertion
+391123006,Medical Research Council Dyspnoea scale grade 2
+391124000,Medical Research Council Dyspnoea scale grade 3
+391125004,Medical Research Council Dyspnoea scale grade 4
+391126003,Medical Research Council Dyspnoea scale grade 5
+39231000000103,Borg Breathlessness Score: 3 moderate
+39241000000107,Borg Breathlessness Score: 4 somewhat severe
+39251000000105,Borg Breathlessness Score: 5 severe
+39261000000108,Borg Breathlessness Score: 6 severe (+)
+39271000000101,Borg Breathlessness Score: 7 very severe
+39281000000104,Borg Breathlessness Score: 8 very severe (+)
+39291000000102,"Borg Breathlessness Score: 9 very, very severe"
+39301000000103,Borg Breathlessness Score: 10 maximal
+39950000,"Dyspnea, class III"
+401281000,Borg Breathlessness Score: 3 moderate
+401282007,Borg Breathlessness Score: 4 somewhat severe
+401284008,Borg Breathlessness Score: 5 severe
+401286005,Borg Breathlessness Score: 6 severe (+)
+401290007,Borg Breathlessness Score: 7 very severe
+401291006,Borg Breathlessness Score: 8 very severe (+)
+401292004,"Borg Breathlessness Score: 9 very, very severe (almost maximal)"
+401293009,Borg Breathlessness Score: 10 maximal
+407588003,Unable to complete a sentence in one breath
+41491000000104,Borg Breathlessness Score: 3 moderate
+41501000000105,Borg Breathlessness Score: 4 somewhat severe
+41511000000107,Borg Breathlessness Score: 5 severe
+41521000000101,Borg Breathlessness Score: 6 severe (+)
+41531000000104,Borg Breathlessness Score: 7 very severe
+41541000000108,Borg Breathlessness Score: 8 very severe (+)
+41551000000106,"Borg Breathlessness Score: 9 very, very severe"
+41561000000109,Borg Breathlessness Score: 10 maximal
+45611000000109,Borg Breathlessness Score: 3 moderate
+45621000000103,Borg Breathlessness Score: 4 somewhat severe
+45651000000108,Borg Breathlessness Score: 5 severe
+45671000000104,Borg Breathlessness Score: 6 severe (+)
+45721000000109,Borg Breathlessness Score: 7 very severe
+45731000000106,Borg Breathlessness Score: 8 very severe (+)
+45741000000102,"Borg Breathlessness Score: 9 very, very severe (almost maximal)"
+45751000000104,Borg Breathlessness Score: 10 maximal
+46661000000100,Borg Breathlessness Score: 5 severe
+47601000000102,Borg Breathlessness Score: 5 severe
+49233005,Dyspnea
+498001000000107,[D]Shortness of breath
+498021000000103,[D]Dyspnoea
+502631000000100,[D]Breathlessness
+55442000,Paroxysmal nocturnal dyspnea
+572661000000100,Breathlessness NOS
+57769004,Dyspnea after eating
+59265000,Paroxysmal dyspnea
+60845006,Dyspnea on exertion
+62744007,Orthopnea
+702581006,Difficulty eating due to breathlessness
+719416003,Opioid therapy for breathlessness management
+72365000,"Dyspnea, class II"
+73322006,"Dyspnea, class IV"
+74721000000107,Borg Breathlessness Score: 3 moderate
+74731000000109,Borg Breathlessness Score: 4 somewhat severe
+74741000000100,Borg Breathlessness Score: 6 severe (+)
+74751000000102,Borg Breathlessness Score: 7 very severe
+74761000000104,Borg Breathlessness Score: 8 very severe (+)
+74771000000106,"Borg Breathlessness Score: 9 very, very severe"
+74781000000108,Borg Breathlessness Score: 10 maximal
+78961000000105,Borg Breathlessness Score: 3 moderate
+78971000000103,Borg Breathlessness Score: 4 somewhat severe
+78981000000101,Borg Breathlessness Score: 6 severe (+)
+78991000000104,Borg Breathlessness Score: 7 very severe
+79001000000104,Borg Breathlessness Score: 8 very severe (+)
+79011000000102,"Borg Breathlessness Score: 9 very, very severe"
+79021000000108,Borg Breathlessness Score: 10 maximal
+870535009,Chronic dyspnea
+888131000000106,Breathlessness causing difficulty eating
+888141000000102,Breathlessness causing difficulty eating 
+95101000000108,Unable to complete a sentence in one breath
+99971000000100,Unable to complete a sentence in one breath
