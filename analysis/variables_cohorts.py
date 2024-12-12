@@ -531,8 +531,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ),
 
     ## Covid_19 severity
-
-        sub_date_covid19_hospital = sub_date_covid19_hospital,
+    
         # case(*when_thens, otherwise=None) the conditions are evaluated in order https://docs.opensafely.org/ehrql/reference/language/#case
         sub_cat_covid19_hospital = case(
             when(
