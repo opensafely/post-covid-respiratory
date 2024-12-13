@@ -33,36 +33,54 @@ def generate_dataset(index_date, end_date_exp, end_date_out):
 
     for var_name, var_value in variables.items():
         setattr(dataset, var_name, var_value)
-    
-    # Extract index dates for cohorts from index_dates.csv, also extract vax_date_eligible for modifying dummy vax dates
+
+# Extract date variables for later pipelines
 
     @table_from_file("output/index_dates.csv.gz")
     
     class index_dates(PatientFrame):
-        index_prevax = Series(date)
-        end_prevax_exposure = Series(date)
-        end_prevax_outcome = Series(date)
-        index_vax = Series(date)
-        end_vax_exposure = Series(date)
-        end_vax_outcome = Series(date)
-        index_unvax = Series(date)
-        end_unvax_exposure = Series(date)
-        end_unvax_outcome = Series(date)
+    # Vaccine category and eligibility variables
+        vax_cat_jcvi_group = Series(str)
         vax_date_eligible = Series(date)
 
-    dataset.index_prevax = index_dates.index_prevax
-    dataset.end_prevax_exposure = index_dates.end_prevax_exposure
-    dataset.end_prevax_outcome = index_dates.end_prevax_outcome
+    # General COVID vaccination dates
+        vax_date_covid_1 = Series(date)
+        vax_date_covid_2 = Series(date)
+        vax_date_covid_3 = Series(date)
 
-    dataset.index_unvax = index_dates.index_unvax
-    dataset.end_unvax_exposure = index_dates.end_unvax_exposure
-    dataset.end_unvax_outcome = index_dates.end_unvax_outcome
+    # Pfizer vaccine-specific dates
+        vax_date_Pfizer_1 = Series(date)
+        vax_date_Pfizer_2 = Series(date)
+        vax_date_Pfizer_3 = Series(date)
 
-    dataset.index_vax = index_dates.index_vax
-    dataset.end_vax_exposure = index_dates.end_vax_exposure
-    dataset.end_vax_outcome = index_dates.end_vax_outcome
+    # AstraZeneca vaccine-specific dates
+        vax_date_AstraZeneca_1 = Series(date)
+        vax_date_AstraZeneca_2 = Series(date)
+        vax_date_AstraZeneca_3 = Series(date)
 
+    # Moderna vaccine-specific dates
+        vax_date_Moderna_1 = Series(date)
+        vax_date_Moderna_2 = Series(date)
+        vax_date_Moderna_3 = Series(date)
+
+    # Censoring date due to death
+        cens_date_death = Series(date)
+
+    # Mapping all variables from index_dates to the dataset
+    dataset.vax_cat_jcvi_group = index_dates.vax_cat_jcvi_group
     dataset.vax_date_eligible = index_dates.vax_date_eligible
-
+    dataset.vax_date_covid_1 = index_dates.vax_date_covid_1
+    dataset.vax_date_covid_2 = index_dates.vax_date_covid_2
+    dataset.vax_date_covid_3 = index_dates.vax_date_covid_3
+    dataset.vax_date_Pfizer_1 = index_dates.vax_date_Pfizer_1
+    dataset.vax_date_Pfizer_2 = index_dates.vax_date_Pfizer_2
+    dataset.vax_date_Pfizer_3 = index_dates.vax_date_Pfizer_3
+    dataset.vax_date_AstraZeneca_1 = index_dates.vax_date_AstraZeneca_1
+    dataset.vax_date_AstraZeneca_2 = index_dates.vax_date_AstraZeneca_2
+    dataset.vax_date_AstraZeneca_3 = index_dates.vax_date_AstraZeneca_3
+    dataset.vax_date_Moderna_1 = index_dates.vax_date_Moderna_1
+    dataset.vax_date_Moderna_2 = index_dates.vax_date_Moderna_2
+    dataset.vax_date_Moderna_3 = index_dates.vax_date_Moderna_3
+    dataset.cens_date_death = index_dates.cens_date_death
 
     return dataset
