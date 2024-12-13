@@ -64,11 +64,11 @@ for var_name, var_value in jcvi_variables.items():
 dataset.index_prevax = minimum_of(pandemic_start, pandemic_start)
 
 dataset.end_prevax_exposure = minimum_of(
-    dataset.death_date, dataset.vax_date_covid_1, dataset.vax_date_eligible, all_eligible
+    dataset.cens_date_death, dataset.vax_date_covid_1, dataset.vax_date_eligible, all_eligible
 )
 
 dataset.end_prevax_outcome = minimum_of(
-    dataset.death_date, omicron_date
+    dataset.cens_date_death, omicron_date
 )
 
 dataset.index_vax = maximum_of(
@@ -76,7 +76,7 @@ dataset.index_vax = maximum_of(
     delta_date
 )
 dataset.end_vax_exposure = minimum_of(
-    dataset.death_date, omicron_date
+    dataset.cens_date_death, omicron_date
 )
 
 dataset.end_vax_outcome = dataset.end_vax_exposure
@@ -86,8 +86,8 @@ dataset.index_unvax = maximum_of(
     delta_date
 )
 dataset.end_unvax_exposure = minimum_of(
-    dataset.death_date, omicron_date, dataset.vax_date_covid_1
+    dataset.cens_date_death, omicron_date, dataset.vax_date_covid_1
 )
 dataset.end_unvax_outcome = minimum_of(
-    dataset.death_date, omicron_date
+    dataset.cens_date_death, omicron_date
 )
