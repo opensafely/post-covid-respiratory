@@ -92,10 +92,7 @@ message("All records with valid patient IDs retained.")
 
 df1 <- df %>% 
   select(patient_id,
-         death_date,
          starts_with("index_date_"),
-         has_follow_up_previous_6months,
-         deregistration_date,
          starts_with("end_date_"),
          contains("sub_"), # Subgroups
          contains("exp_"), # Exposures
