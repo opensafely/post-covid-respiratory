@@ -90,8 +90,8 @@ preprocess_data <- function(cohort){
       arguments = c(cohort),
       needs = list("generate_dataset_index_dates",glue("generate_study_population_{cohort}")),
       moderately_sensitive = list(
-        describe = glue("output/not-for-review/describe_input_{cohort}_stage0.txt"),
-        describe_venn = glue("output/not-for-review/describe_venn_{cohort}.txt")
+        describe = glue("output/describe_input_{cohort}_stage0.txt"),
+        describe_venn = glue("output/describe_venn_{cohort}.txt")
       ),
       highly_sensitive = list(
         cohort = glue("output/input_{cohort}.rds"),
