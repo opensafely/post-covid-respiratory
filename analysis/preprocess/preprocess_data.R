@@ -12,7 +12,7 @@ library(readr)
 args <- commandArgs(trailingOnly=TRUE)
 print(length(args))
 if(length(args)==0){
-  cohort_name <- "vax"
+  cohort_name <- "prevax"
 } else {
   cohort_name <- args[[1]]
 }
