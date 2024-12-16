@@ -65,7 +65,9 @@ message(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"
 
 df <- df %>%
   mutate(across(all_of(date_cols),
-                ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")))
+                ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")),
+         across(contains('_birth_year'), 
+                 ~ format(as.Date(., origin = "1970-01-01"), "%Y")))
 
 # Overwrite vaccination information for dummy data and vax cohort only ---------
 
