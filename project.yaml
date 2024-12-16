@@ -14,7 +14,7 @@ actions:
   ## Generate vaccination eligibility information 
 
   vax_eligibility_inputs:
-    run: r:latest analysis/metadates.R
+    run: r:latest analysis/dataset_definition/metadates.R
     outputs:
       highly_sensitive:
         study_dates_json: output/study_dates.json
@@ -22,7 +22,8 @@ actions:
   ## Generate dates for all cohorts 
 
   generate_dataset_index_dates:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_dates.py --output output/index_dates.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_dates.py
+      --output output/index_dates.csv.gz
     needs:
     - vax_eligibility_inputs
     outputs:
@@ -32,8 +33,8 @@ actions:
   ## Generate study population - prevax 
 
   generate_study_population_prevax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_prevax.py --output
-      output/input_prevax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_prevax.py
+      --output output/input_prevax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
@@ -43,7 +44,8 @@ actions:
   ## Generate study population - vax 
 
   generate_study_population_vax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_vax.py --output output/input_vax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_vax.py
+      --output output/input_vax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
@@ -53,7 +55,8 @@ actions:
   ## Generate study population - unvax 
 
   generate_study_population_unvax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_unvax.py --output output/input_unvax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_unvax.py
+      --output output/input_unvax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
