@@ -70,7 +70,7 @@ generate_study_population <- function(cohort){
     comment(glue("Generate study population - {cohort}")),
     action(
       name = glue("generate_study_population_{cohort}"),
-      run = glue("ehrql:v1 generate-dataset analysis/dataset_definition_{cohort}.py --output output/input_{cohort}.csv.gz"),
+      run = glue("ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_{cohort}.py --output output/input_{cohort}.csv.gz"),
       needs = list("generate_dataset_index_dates"),
       highly_sensitive = list(
         cohort = glue("output/input_{cohort}.csv.gz")
@@ -79,6 +79,27 @@ generate_study_population <- function(cohort){
   )
 }
 
+# Create function to preprocess data -------------------------------------------
+
+preprocess_data <- function(cohort){
+  splice(
+    comment(glue("Preprocess data - {cohort}")),
+    action(
+      name = glue("preprocess_data_{cohort}"),
+      run = glue("r:latest analysis/preprocess/preprocess_data.R"),
+      arguments = c(cohort),
+      needs = list("generate_dataset_index_dates",glue("generate_study_population_{cohort}")),
+      moderately_sensitive = list(
+        describe = glue("output/describe_input_{cohort}_stage0.txt"),
+        describe_venn = glue("output/describe_venn_{cohort}.txt")
+      ),
+      highly_sensitive = list(
+        cohort = glue("output/input_{cohort}.rds"),
+        venn = glue("output/venn_{cohort}.rds")
+      )
+    )
+  )
+}
 
 # Define and combine all actions into a list of actions ------------------------------0
 
@@ -98,7 +119,7 @@ actions_list <- splice(
   
   action(
     name = glue("vax_eligibility_inputs"),
-    run = "r:latest analysis/metadates.R",
+    run = "r:latest analysis/dataset_definition/metadates.R",
     highly_sensitive = list(
       study_dates_json = glue("output/study_dates.json")
     )
@@ -109,7 +130,7 @@ actions_list <- splice(
   
   action(
     name = "generate_dataset_index_dates",
-    run = "ehrql:v1 generate-dataset analysis/dataset_definition_dates.py --output output/index_dates.csv.gz",
+    run = "ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_dates.py --output output/index_dates.csv.gz",
     needs = list("vax_eligibility_inputs"),
     highly_sensitive = list(
       dataset = glue("output/index_dates.csv.gz")
@@ -123,8 +144,18 @@ actions_list <- splice(
                   function(x) generate_study_population(cohort = x)), 
            recursive = FALSE
     )
+  ),
+  
+  ## Preprocess data -----------------------------------------------------------
+  
+  splice(
+    unlist(lapply(cohorts, 
+                  function(x) preprocess_data(cohort = x)), 
+           recursive = FALSE
+    )
   )
 )
+
 
 # Combine actions into project list --------------------------------------------
 

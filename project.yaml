@@ -14,7 +14,7 @@ actions:
   ## Generate vaccination eligibility information 
 
   vax_eligibility_inputs:
-    run: r:latest analysis/metadates.R
+    run: r:latest analysis/dataset_definition/metadates.R
     outputs:
       highly_sensitive:
         study_dates_json: output/study_dates.json
@@ -22,7 +22,8 @@ actions:
   ## Generate dates for all cohorts 
 
   generate_dataset_index_dates:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_dates.py --output output/index_dates.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_dates.py
+      --output output/index_dates.csv.gz
     needs:
     - vax_eligibility_inputs
     outputs:
@@ -32,8 +33,8 @@ actions:
   ## Generate study population - prevax 
 
   generate_study_population_prevax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_prevax.py --output
-      output/input_prevax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_prevax.py
+      --output output/input_prevax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
@@ -43,7 +44,8 @@ actions:
   ## Generate study population - vax 
 
   generate_study_population_vax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_vax.py --output output/input_vax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_vax.py
+      --output output/input_vax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
@@ -53,10 +55,56 @@ actions:
   ## Generate study population - unvax 
 
   generate_study_population_unvax:
-    run: ehrql:v1 generate-dataset analysis/dataset_definition_unvax.py --output output/input_unvax.csv.gz
+    run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_unvax.py
+      --output output/input_unvax.csv.gz
     needs:
     - generate_dataset_index_dates
     outputs:
       highly_sensitive:
         cohort: output/input_unvax.csv.gz
+
+  ## Preprocess data - prevax 
+
+  preprocess_data_prevax:
+    run: r:latest analysis/preprocess/preprocess_data.R prevax
+    needs:
+    - generate_dataset_index_dates
+    - generate_study_population_prevax
+    outputs:
+      moderately_sensitive:
+        describe: output/describe_input_prevax_stage0.txt
+        describe_venn: output/describe_venn_prevax.txt
+      highly_sensitive:
+        cohort: output/input_prevax.rds
+        venn: output/venn_prevax.rds
+
+  ## Preprocess data - vax 
+
+  preprocess_data_vax:
+    run: r:latest analysis/preprocess/preprocess_data.R vax
+    needs:
+    - generate_dataset_index_dates
+    - generate_study_population_vax
+    outputs:
+      moderately_sensitive:
+        describe: output/describe_input_vax_stage0.txt
+        describe_venn: output/describe_venn_vax.txt
+      highly_sensitive:
+        cohort: output/input_vax.rds
+        venn: output/venn_vax.rds
+
+  ## Preprocess data - unvax 
+
+  preprocess_data_unvax:
+    run: r:latest analysis/preprocess/preprocess_data.R unvax
+    needs:
+    - generate_dataset_index_dates
+    - generate_study_population_unvax
+    outputs:
+      moderately_sensitive:
+        describe: output/describe_input_unvax_stage0.txt
+        describe_venn: output/describe_venn_unvax.txt
+      highly_sensitive:
+        cohort: output/input_unvax.rds
+        venn: output/venn_unvax.rds
 
