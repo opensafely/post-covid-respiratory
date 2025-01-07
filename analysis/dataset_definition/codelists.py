@@ -427,9 +427,20 @@ copd_ctv3 = codelist_from_csv(
     "codelists/opensafely-current-copd.csv",
     column="CTV3ID"
 )
+
+copd_icd10 = codelist_from_csv(
+    "codelists/opensafely-copd-secondary-care.csv",
+    column="code"
+)
+
 asthma_snomed = codelist_from_csv(
     "codelists/opensafely-asthma-diagnosis-snomed.csv",
     column="id"
+)
+
+asthma_icd10 = codelist_from_csv(
+    "codelists/opensafely-asthma-exacerbation-secondary-care.csv",
+    column="code"
 )
 
 # Respiratory outcome(s)
@@ -439,8 +450,18 @@ pneumonia_snomed = codelist_from_csv(
     column="code"
 )
 
+pneumonia_icd10 = codelist_from_csv(
+    "codelists/opensafely-pneumonia-secondary-care.csv",
+    column="ICD code"
+)
+
 pulmonary_fibrosis_snomed = codelist_from_csv(
     "codelists/bristol-ild-snomed.csv",
+    column="code"
+)
+
+pulmonary_fibrosis_icd10 = codelist_from_csv(
+    "codelists/bristol-pulmonary-fibrosis-interstitial-lung-disease.csv",
     column="code"
 )
 
