@@ -423,7 +423,7 @@ hrt_dmd = codelist_from_csv(
 
 # Preexisting respiratory condition
 
-copd_ctv3 = codelist_from_csv(
+copd_ctv3_clinical = codelist_from_csv(
     "codelists/opensafely-current-copd.csv",
     column="CTV3ID"
 )
@@ -433,7 +433,7 @@ copd_icd10 = codelist_from_csv(
     column="code"
 )
 
-asthma_snomed = codelist_from_csv(
+asthma_snomed_clinical = codelist_from_csv(
     "codelists/opensafely-asthma-diagnosis-snomed.csv",
     column="id"
 )
@@ -445,7 +445,7 @@ asthma_icd10 = codelist_from_csv(
 
 # Respiratory outcome(s)
 
-pneumonia_snomed = codelist_from_csv(
+pneumonia_snomed_clinical = codelist_from_csv(
     "codelists/bristol-pneumonia-snomed.csv",
     column="code"
 )
@@ -455,7 +455,7 @@ pneumonia_icd10 = codelist_from_csv(
     column="ICD code"
 )
 
-pulmonary_fibrosis_snomed = codelist_from_csv(
+pulmonary_fibrosis_snomed_clinical = codelist_from_csv(
     "codelists/bristol-ild-snomed.csv",
     column="code"
 )

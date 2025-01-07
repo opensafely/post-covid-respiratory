@@ -116,6 +116,140 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_exp_date_covid19_confirmed_death
     )
 
+    ## Define individual temporary variables (for outcomes) first before using them in the dictrionary
+
+        ### Pneumonia
+    
+    tmp_out_date_pneumonia_snomed= (
+        first_matching_event_clinical_snomed_between(
+            pneumonia_snomed_clinical, index_date, end_date_out
+            ).date
+    )
+
+    tmp_out_date_pneumonia_apc= (
+        first_matching_event_apc_between(
+            pneumonia_icd10, index_date, end_date_out
+            ).admission_date
+    )
+
+    tmp_out_date_pneumonia_opa= (
+        first_matching_event_opa_between(
+            pneumonia_icd10, index_date, end_date_out
+            ).appointment_date
+    )
+
+    tmp_out_date_pneumonia_death= case(
+        when(
+            matching_death_between(pneumonia_icd10, index_date, end_date_out)
+            ).then(ons_deaths.date)
+    )
+
+    out_date_pneumonia=minimum_of(
+        tmp_out_date_pneumonia_snomed,
+        tmp_out_date_pneumonia_apc,
+        tmp_out_date_pneumonia_opa,
+        tmp_out_date_pneumonia_death
+    )
+
+        ### Asthma
+    
+    tmp_out_date_asthma_snomed= (
+        first_matching_event_clinical_snomed_between(
+            asthma_snomed_clinical, index_date, end_date_out
+            ).date
+    )
+
+    tmp_out_date_asthma_apc= (
+        first_matching_event_apc_between(
+            asthma_icd10, index_date, end_date_out
+            ).admission_date
+    )
+
+    tmp_out_date_asthma_opa= (
+        first_matching_event_opa_between(
+            asthma_icd10, index_date, end_date_out
+            ).appointment_date
+    )
+
+    tmp_out_date_asthma_death= case(
+        when(
+            matching_death_between(asthma_icd10, index_date, end_date_out)
+            ).then(ons_deaths.date)
+    )
+
+    out_date_asthma=minimum_of(
+        tmp_out_date_asthma_snomed,
+        tmp_out_date_asthma_apc,
+        tmp_out_date_asthma_opa,
+        tmp_out_date_asthma_death
+    )
+
+        ### COPD
+    
+    tmp_out_date_copd_ctv3= (
+        first_matching_event_clinical_ctv3_between(
+            copd_ctv3_clinical, index_date, end_date_out
+            ).date
+    )
+
+    tmp_out_date_copd_apc= (
+        first_matching_event_apc_between(
+            copd_icd10, index_date, end_date_out
+            ).admission_date
+    )
+
+    tmp_out_date_copd_opa= (
+        first_matching_event_opa_between(
+            copd_icd10, index_date, end_date_out
+            ).appointment_date
+    )
+
+    tmp_out_date_copd_death= case(
+        when(
+            matching_death_between(copd_icd10, index_date, end_date_out)
+            ).then(ons_deaths.date)
+    )
+
+    out_date_copd=minimum_of(
+        tmp_out_date_copd_ctv3,
+        tmp_out_date_copd_apc,
+        tmp_out_date_copd_opa,
+        tmp_out_date_copd_death
+    )
+
+        ### Pulmonary Fibrosis
+    
+    tmp_out_date_pulmonary_fibrosis_snomed= (
+        first_matching_event_clinical_snomed_between(
+            pulmonary_fibrosis_snomed_clinical, index_date, end_date_out
+            ).date
+    )
+
+    tmp_out_date_pulmonary_fibrosis_apc= (
+        first_matching_event_apc_between(
+            pulmonary_fibrosis_icd10, index_date, end_date_out
+            ).admission_date
+    )
+
+    tmp_out_date_pulmonary_fibrosis_opa= (
+        first_matching_event_opa_between(
+            pulmonary_fibrosis_icd10, index_date, end_date_out
+            ).appointment_date
+    )
+
+    tmp_out_date_pulmonary_fibrosis_death= case(
+        when(
+            matching_death_between(pulmonary_fibrosis_icd10, index_date, end_date_out)
+            ).then(ons_deaths.date)
+    )
+
+    out_date_pulmonary_fibrosis=minimum_of(
+        tmp_out_date_pulmonary_fibrosis_snomed,
+        tmp_out_date_pulmonary_fibrosis_apc,
+        tmp_out_date_pulmonary_fibrosis_opa,
+        tmp_out_date_pulmonary_fibrosis_death
+    )
+
     ## Define individual temporary variables (subgroup variables) first before using them in the dictrionary
 
     ## 1. Covid-19 prior to study start date (2020-01-01)
@@ -230,50 +364,43 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## ---First recording of the outcome in during the study period
 
       ### Pneumonia
-        out_date_pneumonia= (
-            first_matching_event_clinical_snomed_between(
-            pneumonia_snomed, index_date, end_date_out
-            )
-        .date
-        ),
+        out_date_pneumonia=out_date_pneumonia,
 
       ### Asthma
-        out_date_asthma= (
-            first_matching_event_clinical_snomed_between(
-            asthma_snomed, index_date, end_date_out
-            )
-        .date
-        ),
+        out_date_asthma=out_date_asthma,
 
       ### COPD
-        out_date_copd= (
-            first_matching_event_clinical_ctv3_between(
-            copd_ctv3, index_date, end_date_out
-            )
-        .date
-        ),
+        out_date_copd=out_date_copd,
 
       ### Pulmonary Fibrosis
-        out_date_pulmonary_fibrosis= (
-            first_matching_event_clinical_snomed_between(
-            pulmonary_fibrosis_snomed, index_date, end_date_out
-            )
-        .date
-        ),
+        out_date_pulmonary_fibrosis=out_date_pulmonary_fibrosis,
 
 # DEFINE EXISTING RESPIRATORY CONDITION COHORT --------------------------------------------------------------
-        sub_bin_asthma_recent_snomed= (
-            first_matching_event_clinical_ctv3_between(
-            copd_ctv3, index_date-days(730), index_date-days(1)
-            )
-        .exists_for_patient()        
+
+    ## Asthma diagnosed in the past 2 years
+        sub_bin_asthma_recent=(
+            (first_matching_event_clinical_snomed_between(
+                asthma_snomed_clinical, index_date-days(730), index_date-days(1)
+            ).exists_for_patient()) |
+            (first_matching_event_apc_between(
+                asthma_icd10, index_date-days(730), index_date-days(1)
+            ).exists_for_patient()) |
+            (first_matching_event_opa_between(
+                asthma_icd10, index_date-days(730), index_date-days(1)
+            ).exists_for_patient())
         ),
-# COPD diagnosed ever----------------------------------------------------------------------------------------       
-        sub_bin_copd_ctv3=(
-            last_matching_event_clinical_ctv3_before(
-            copd_ctv3, index_date
-            )    
-        .exists_for_patient()       
+
+    ## COPD diagnosed ever     
+        sub_bin_copd_ever=(
+            (last_matching_event_clinical_ctv3_before(
+                copd_ctv3_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                copd_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                copd_icd10, index_date
+            ).exists_for_patient())
         ),
 
 # Covariates-------------------------------------------------------------------------------------------------  
@@ -480,27 +607,55 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ),
 
       ## Pneumonia
-        cov_bin_history_pneumonia_snomed= (
-            last_matching_event_clinical_snomed_before(
-            pneumonia_snomed, index_date
-            )
-        .exists_for_patient()
+        cov_bin_history_pneumonia= (
+            (last_matching_event_clinical_snomed_before(
+                pneumonia_snomed_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                pneumonia_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                pneumonia_icd10, index_date
+            ).exists_for_patient())
         ),
 
       ## Asthma
-        cov_bin_history_asthma_snomed= (
-            last_matching_event_clinical_snomed_before(
-            asthma_snomed, index_date
-            )
-        .exists_for_patient()
+        cov_bin_history_asthma= (
+            (last_matching_event_clinical_snomed_before(
+                asthma_snomed_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                asthma_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                asthma_icd10, index_date
+            ).exists_for_patient())
         ),
 
       ## Pulmonary Fibrosis
-        cov_bin_history_pulmonary_fibrosis_snomed= (
-            last_matching_event_clinical_snomed_before(
-            pulmonary_fibrosis_snomed, index_date
-            )
-        .exists_for_patient()
+        cov_bin_history_pulmonary_fibrosis= (
+            (last_matching_event_clinical_snomed_before(
+                pulmonary_fibrosis_snomed_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                pulmonary_fibrosis_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                pulmonary_fibrosis_icd10, index_date
+            ).exists_for_patient())
+        ),
+
+      ## COPD
+        cov_bin_history_copd= (
+            (last_matching_event_clinical_ctv3_before(
+                copd_ctv3_clinical, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_apc_before(
+                copd_icd10, index_date
+            ).exists_for_patient()) |
+            (last_matching_event_opa_before(
+                copd_icd10, index_date
+            ).exists_for_patient())
         ),
 
         ## Ischaemic stroke

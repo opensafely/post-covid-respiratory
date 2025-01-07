@@ -65,14 +65,14 @@ core_covars <- c(
 
 ## Define project-specific covariates (specific to respiratory project) ----
 project_covars <- c(
-  "cov_bin_history_pneumonia_snomed", "cov_bin_history_asthma_snomed", 
-  "cov_bin_history_pulmonary_fibrosis_snomed", "cov_bin_all_stroke"
+  "cov_bin_history_pneumonia", "cov_bin_history_asthma", 
+  "cov_bin_history_pulmonary_fibrosis", "cov_bin_stroke_isch"
 )
 # Combine covariates into a single vector ----
 all_covars <- c(core_covars, project_covars)
 
 ## Combine covariates into a single string for analysis ----
-preex_FALSE_covars <- paste0(all_covars[!all_covars %in% c("cov_bin_history_asthma_snomed", "cov_bin_history_copd")], collapse = ";")
+preex_FALSE_covars <- paste0(all_covars[!all_covars %in% c("cov_bin_history_asthma", "cov_bin_history_copd")], collapse = ";")
 all_covars <- paste0(c(core_covars, project_covars), collapse = ";")
 
 # Specify cohorts ----
