@@ -10,8 +10,6 @@ from ehrql.tables.tpp import (
     sgss_covid_all_tests,
     apcs, 
     ec, 
-    opa, 
-    opa_diag, 
     clinical_events, 
     medications, 
     ons_deaths,
@@ -58,15 +56,6 @@ def last_matching_event_apc_before(codelist, start_date, where=True):
         .where(apcs.primary_diagnosis.is_in(codelist) | apcs.secondary_diagnosis.is_in(codelist))
         .where(apcs.admission_date.is_before(start_date))
         .sort_by(apcs.admission_date)
-        .last_for_patient()
-    )
-
-def last_matching_event_opa_before(codelist, start_date, where=True):
-    return(
-        opa_diag.where(where)
-        .where(opa_diag.primary_diagnosis_code.is_in(codelist) | opa_diag.secondary_diagnosis_code_1.is_in(codelist))
-        .where(opa_diag.appointment_date.is_before(start_date))
-        .sort_by(opa_diag.appointment_date)
         .last_for_patient()
     )
 
@@ -145,15 +134,6 @@ def first_matching_event_apc_between(codelist, start_date, end_date, where=True)
         .where(apcs.primary_diagnosis.is_in(codelist) | apcs.secondary_diagnosis.is_in(codelist))
         .where(apcs.admission_date.is_on_or_between(start_date, end_date))
         .sort_by(apcs.admission_date)
-        .first_for_patient()
-    )
-
-def first_matching_event_opa_between(codelist, start_date, end_date, where=True):
-    return(
-        opa_diag.where(where)
-        .where(opa_diag.primary_diagnosis_code.is_in(codelist) | opa_diag.secondary_diagnosis_code_1.is_in(codelist))
-        .where(opa_diag.appointment_date.is_on_or_between(start_date, end_date))
-        .sort_by(opa_diag.appointment_date)
         .first_for_patient()
     )
 
