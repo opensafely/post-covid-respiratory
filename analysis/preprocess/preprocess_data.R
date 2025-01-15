@@ -67,8 +67,10 @@ df <- df %>%
   mutate(across(all_of(date_cols),
                 ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")),
          across(contains('_birth_year'), 
-                ~ format(as.Date(., origin = "1970-01-01"), "%Y")))
-
+                ~ format(as.Date(., origin = "1970-01-01"), "%Y")),
+         across(all_of(num_cols), ~ as.numeric(.)), 
+         across(all_of(cat_cols), ~ as.factor(.))) 
+         
 # Overwrite vaccination information for dummy data and vax cohort only ---------
 
 if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") &&
