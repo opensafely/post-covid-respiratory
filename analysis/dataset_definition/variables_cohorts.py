@@ -17,9 +17,7 @@ from ehrql.tables.tpp import (
     vaccinations,
     sgss_covid_all_tests,
     apcs, 
-    ec, 
-    opa, 
-    opa_diag, 
+    ec,
     clinical_events, 
     medications, 
     ons_deaths,
@@ -36,14 +34,12 @@ from variable_helper_functions import (
     first_matching_event_clinical_snomed_between,
     first_matching_med_dmd_between,
     first_matching_event_apc_between,
-    first_matching_event_opa_between,
     first_matching_event_ec_snomed_between,
     matching_death_between,
     last_matching_event_clinical_ctv3_before,
     last_matching_event_clinical_snomed_before,
     last_matching_med_dmd_before,
     last_matching_event_apc_before,
-    last_matching_event_opa_before,
     last_matching_event_ec_snomed_before,
     matching_death_before,
     filter_codes_by_category,
@@ -89,17 +85,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .admission_date
     )
 
-    tmp_exp_date_covid19_confirmed_opa = (
-        opa_diag.where(
-            ((opa_diag.primary_diagnosis_code.is_in(covid_codes)) | 
-             (opa_diag.secondary_diagnosis_code_1.is_in(covid_codes))) & 
-            (opa_diag.appointment_date.is_on_or_between(index_date, end_date_exp))
-        )
-        .sort_by(opa_diag.appointment_date)
-        .first_for_patient()
-        .appointment_date
-    )
-
     tmp_exp_covid19_confirmed_death = matching_death_between(covid_codes, index_date, end_date_exp)
 
     tmp_exp_date_death = ons_deaths.date
@@ -112,7 +97,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_exp_date_covid19_confirmed_sgss, 
         tmp_exp_date_covid19_confirmed_snomed,
         tmp_exp_date_covid19_confirmed_apc,
-        tmp_exp_date_covid19_confirmed_opa,
         tmp_exp_date_covid19_confirmed_death
     )
 
@@ -132,12 +116,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).admission_date
     )
 
-    tmp_out_date_pneumonia_opa= (
-        first_matching_event_opa_between(
-            pneumonia_icd10, index_date, end_date_out
-            ).appointment_date
-    )
-
     tmp_out_date_pneumonia_death= case(
         when(
             matching_death_between(pneumonia_icd10, index_date, end_date_out)
@@ -147,7 +125,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     out_date_pneumonia=minimum_of(
         tmp_out_date_pneumonia_snomed,
         tmp_out_date_pneumonia_apc,
-        tmp_out_date_pneumonia_opa,
         tmp_out_date_pneumonia_death
     )
 
@@ -165,12 +142,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).admission_date
     )
 
-    tmp_out_date_asthma_opa= (
-        first_matching_event_opa_between(
-            asthma_icd10, index_date, end_date_out
-            ).appointment_date
-    )
-
     tmp_out_date_asthma_death= case(
         when(
             matching_death_between(asthma_icd10, index_date, end_date_out)
@@ -180,7 +151,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     out_date_asthma=minimum_of(
         tmp_out_date_asthma_snomed,
         tmp_out_date_asthma_apc,
-        tmp_out_date_asthma_opa,
         tmp_out_date_asthma_death
     )
 
@@ -198,12 +168,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).admission_date
     )
 
-    tmp_out_date_copd_opa= (
-        first_matching_event_opa_between(
-            copd_icd10, index_date, end_date_out
-            ).appointment_date
-    )
-
     tmp_out_date_copd_death= case(
         when(
             matching_death_between(copd_icd10, index_date, end_date_out)
@@ -213,7 +177,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     out_date_copd=minimum_of(
         tmp_out_date_copd_ctv3,
         tmp_out_date_copd_apc,
-        tmp_out_date_copd_opa,
         tmp_out_date_copd_death
     )
 
@@ -231,12 +194,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).admission_date
     )
 
-    tmp_out_date_pulmonary_fibrosis_opa= (
-        first_matching_event_opa_between(
-            pulmonary_fibrosis_icd10, index_date, end_date_out
-            ).appointment_date
-    )
-
     tmp_out_date_pulmonary_fibrosis_death= case(
         when(
             matching_death_between(pulmonary_fibrosis_icd10, index_date, end_date_out)
@@ -246,7 +203,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     out_date_pulmonary_fibrosis=minimum_of(
         tmp_out_date_pulmonary_fibrosis_snomed,
         tmp_out_date_pulmonary_fibrosis_apc,
-        tmp_out_date_pulmonary_fibrosis_opa,
         tmp_out_date_pulmonary_fibrosis_death
     )
 
@@ -287,39 +243,19 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .exists_for_patient()
     )
 
-    tmp_sub_bin_priorcovid19_confirmed_opa = (
-        opa_diag.where(
-            ((opa_diag.primary_diagnosis_code.is_in(covid_codes)) | (opa_diag.secondary_diagnosis_code_1.is_in(covid_codes))) & 
-            (opa_diag.appointment_date.is_before(index_date))
-        )
-        .exists_for_patient()
-    )
-
     ## 2. Covid-19 severity
 
-    ### SUS
+    ### SUS (primary diagnosis only)
 
-    tmp_sub_date_severecovid19_apc = (
+    sub_date_covid19_hospital = (
         apcs.where(
-            ((apcs.primary_diagnosis.is_in(covid_codes)) | (apcs.secondary_diagnosis.is_in(covid_codes))) & 
+            (apcs.primary_diagnosis.is_in(covid_codes)) & 
             (apcs.admission_date.is_on_or_after(index_date))
         )
         .sort_by(apcs.admission_date)
         .first_for_patient()
         .admission_date
     )
-
-    tmp_sub_date_severecovid19_opa = (
-        opa_diag.where(
-            ((opa_diag.primary_diagnosis_code.is_in(covid_codes)) | (opa_diag.secondary_diagnosis_code_1.is_in(covid_codes))) & 
-            (opa_diag.appointment_date.is_on_or_after(index_date))
-        )
-        .sort_by(opa_diag.appointment_date)
-        .first_for_patient()
-        .appointment_date
-    )
-    
-    sub_date_covid19_hospital = minimum_of(tmp_sub_date_severecovid19_apc, tmp_sub_date_severecovid19_opa)
 
     ## 3. Smoking status
 
@@ -353,7 +289,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_exp_date_covid19_confirmed_sgss=tmp_exp_date_covid19_confirmed_sgss,
         tmp_exp_date_covid19_confirmed_snomed=tmp_exp_date_covid19_confirmed_snomed,
         tmp_exp_date_covid19_confirmed_apc=tmp_exp_date_covid19_confirmed_apc,
-        tmp_exp_date_covid19_confirmed_opa=tmp_exp_date_covid19_confirmed_opa,
         tmp_exp_date_death=tmp_exp_date_death,
         tmp_exp_covid19_confirmed_death=tmp_exp_covid19_confirmed_death,
         tmp_exp_date_covid19_confirmed_death=tmp_exp_date_covid19_confirmed_death,       
@@ -384,9 +319,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (first_matching_event_apc_between(
                 asthma_icd10, index_date-days(730), index_date-days(1)
-            ).exists_for_patient()) |
-            (first_matching_event_opa_between(
-                asthma_icd10, index_date-days(730), index_date-days(1)
             ).exists_for_patient())
         ),
 
@@ -396,9 +328,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 copd_ctv3_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                copd_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 copd_icd10, index_date
             ).exists_for_patient())
         ),
@@ -466,9 +395,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 bmi_obesity_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                bmi_obesity_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -497,9 +423,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 ami_icd10 + ami_prior_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                ami_icd10 + ami_prior_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -513,9 +436,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 dementia_icd10 + dementia_vascular_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                dementia_icd10 + dementia_vascular_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -525,9 +445,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 liver_disease_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                liver_disease_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 liver_disease_icd10, index_date
             ).exists_for_patient())
         ),
@@ -539,9 +456,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 ckd_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                ckd_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -551,9 +465,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 cancer_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                cancer_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 cancer_icd10, index_date
             ).exists_for_patient())
         ),
@@ -571,9 +482,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 hypertension_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                hypertension_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -587,9 +495,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 diabetes_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                diabetes_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -599,9 +504,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 depression_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                depression_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 depression_icd10, index_date
             ).exists_for_patient())
         ),
@@ -613,9 +515,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 pneumonia_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                pneumonia_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -625,9 +524,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 asthma_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                asthma_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 asthma_icd10, index_date
             ).exists_for_patient())
         ),
@@ -639,9 +535,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 pulmonary_fibrosis_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                pulmonary_fibrosis_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -651,9 +544,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 copd_ctv3_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                copd_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 copd_icd10, index_date
             ).exists_for_patient())
         ),
@@ -665,9 +555,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 stroke_isch_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
-                stroke_isch_icd10, index_date
             ).exists_for_patient())
         ),
 
@@ -677,12 +564,10 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_sub_bin_priorcovid19_confirmed_sgss=tmp_sub_bin_priorcovid19_confirmed_sgss,
         tmp_sub_bin_priorcovid19_confirmed_snomed=tmp_sub_bin_priorcovid19_confirmed_snomed,
         tmp_sub_bin_priorcovid19_confirmed_apc=tmp_sub_bin_priorcovid19_confirmed_apc,
-        tmp_sub_bin_priorcovid19_confirmed_opa=tmp_sub_bin_priorcovid19_confirmed_opa,
         sub_bin_covid19_confirmed_history=(
             tmp_sub_bin_priorcovid19_confirmed_sgss |
             tmp_sub_bin_priorcovid19_confirmed_snomed |
-            tmp_sub_bin_priorcovid19_confirmed_apc |
-            tmp_sub_bin_priorcovid19_confirmed_opa 
+            tmp_sub_bin_priorcovid19_confirmed_apc
         ),
 
     ## Covid_19 severity
@@ -733,9 +618,6 @@ def generate_variables(index_date, end_date_exp, end_date_out):
                 prostate_cancer_snomed_clinical, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
-                prostate_cancer_icd10, index_date
-            ).exists_for_patient()) |
-            (last_matching_event_opa_before(
                 prostate_cancer_icd10, index_date
             ).exists_for_patient()) |
             (matching_death_before(
