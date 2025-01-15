@@ -198,14 +198,12 @@ consort[nrow(consort)+1,] <- c("Inclusion criteria: Alive at index",
 print('Inclusion criteria: Known age 18 or over at index')
 
 input <- subset(input, input$cov_num_age >= 18) # Subset input if age between 18 and 110 at index.
-
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known age 18 or over at index",
                                nrow(input))
 
 print('Inclusion criteria: Known age 110 or under at index')
 
 input <- subset(input, input$cov_num_age <= 110) # Subset input if age between 18 and 110 on 01/06/2021.
-
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known age 110 or under at index",
                                nrow(input))
 
