@@ -250,7 +250,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     sub_date_covid19_hospital = (
         apcs.where(
             (apcs.primary_diagnosis.is_in(covid_codes)) & 
-            (apcs.admission_date.is_on_or_after(index_date))
+            (apcs.admission_date.is_on_or_after(exp_date_covid19_confirmed))
         )
         .sort_by(apcs.admission_date)
         .first_for_patient()

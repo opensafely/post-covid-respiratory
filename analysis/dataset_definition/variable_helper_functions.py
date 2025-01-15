@@ -50,14 +50,15 @@ def last_matching_med_dmd_before(codelist, start_date, where=True):
         .last_for_patient()
     )
 
-def last_matching_event_apc_before(codelist, start_date, where=True):
-    return(
-        apcs.where(where)
-        .where(apcs.primary_diagnosis.is_in(codelist) | apcs.secondary_diagnosis.is_in(codelist))
-        .where(apcs.admission_date.is_before(start_date))
-        .sort_by(apcs.admission_date)
-        .last_for_patient()
-    )
+def last_matching_event_apc_before(codelist, start_date, only_prim_diagnoses=False, where=True):
+    query = apcs.where(where).where(apcs.admission_date.is_before(start_date))
+    if only_prim_diagnoses:
+        query = query.where(
+            apcs.primary_diagnosis.is_in(codelist)
+        )
+    else:
+        query = query.where(apcs.all_diagnoses.contains_any_of(codelist))
+    return query.sort_by(apcs.admission_date).last_for_patient()
 
 # helper function
 def any_of(conditions):
@@ -128,14 +129,15 @@ def first_matching_med_dmd_between(codelist, start_date, end_date, where=True):
         .first_for_patient()
     )
 
-def first_matching_event_apc_between(codelist, start_date, end_date, where=True):
-    return(
-        apcs.where(where)
-        .where(apcs.primary_diagnosis.is_in(codelist) | apcs.secondary_diagnosis.is_in(codelist))
-        .where(apcs.admission_date.is_on_or_between(start_date, end_date))
-        .sort_by(apcs.admission_date)
-        .first_for_patient()
-    )
+def first_matching_event_apc_between(codelist, start_date, end_date, only_prim_diagnoses=False, where=True):
+    query = apcs.where(where).where(apcs.admission_date.is_on_or_between(start_date, end_date))
+    if only_prim_diagnoses:
+        query = query.where(
+            apcs.primary_diagnosis.is_in(codelist)
+        )
+    else:
+        query = query.where(apcs.all_diagnoses.contains_any_of(codelist))
+    return query.sort_by(apcs.admission_date).first_for_patient()
 
 def first_matching_event_ec_snomed_between(codelist, start_date, end_date, where=True):
     conditions = [
