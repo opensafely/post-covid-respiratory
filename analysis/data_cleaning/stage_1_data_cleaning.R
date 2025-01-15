@@ -51,11 +51,6 @@ print('Load cohort data')
 input <- read_rds(file.path("output", paste0("input_",cohort,".rds")))
 print(paste0(cohort,  " cohort: ", nrow(input), " rows in the input file"))
 
-# Rename date variables --------------------------------------------------------
-print('Rename date variables')
-
-input <- dplyr::rename(input, "index_date" = "index_date_cohort")
-
 # Handle missing values --------------------------------------------------------
 print('Handle missing values')
 
@@ -94,17 +89,11 @@ input$cov_cat_ethnicity <- ordered(input$cov_cat_ethnicity,
                                               "South Asian","Black",
                                               "Other","Missing"))
 
-# Set reference level for variable: cov_cat_deprivation ------------------------
-print('Set reference level for variable: cov_cat_deprivation')
+# Set reference level for variable: cov_cat_imd -------------------------------
+print('Set reference level for variable: cov_cat_imd')
 
-levels(input$cov_cat_deprivation)[levels(input$cov_cat_deprivation)==1 | levels(input$cov_cat_deprivation)==2] <- "1-2 (most deprived)"
-levels(input$cov_cat_deprivation)[levels(input$cov_cat_deprivation)==3 | levels(input$cov_cat_deprivation)==4] <- "3-4"
-levels(input$cov_cat_deprivation)[levels(input$cov_cat_deprivation)==5 | levels(input$cov_cat_deprivation)==6] <- "5-6"
-levels(input$cov_cat_deprivation)[levels(input$cov_cat_deprivation)==7 | levels(input$cov_cat_deprivation)==8] <- "7-8"
-levels(input$cov_cat_deprivation)[levels(input$cov_cat_deprivation)==9 | levels(input$cov_cat_deprivation)==10] <- "9-10 (least deprived)"
-
-input$cov_cat_deprivation <- ordered(input$cov_cat_deprivation, 
-                                     levels = c("1-2 (most deprived)","3-4","5-6","7-8","9-10 (least deprived)"))
+input$cov_cat_imd <- ordered(input$cov_cat_imd, 
+                                     levels = c("1 (most deprived)","2","3","4","5 (least deprived)","unknown"))
 
 # Set reference level for variable: cov_cat_region -----------------------------
 print('Set reference level for variable: cov_cat_region')
@@ -120,9 +109,7 @@ input$cov_cat_smoking_status <- ordered(input$cov_cat_smoking_status, levels = c
 # Set reference level for variable: cov_cat_sex --------------------------------
 print('Set reference level for variable: cov_cat_sex')
 
-levels(input$cov_cat_sex) <- list("Female" = "F", "Male" = "M")
-
-input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "Female")
+input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "female")
 
 # Set reference level for variable: vax_cat_jcvi_group -------------------------
 print('Set reference level for variable: vax_cat_jcvi_group')
@@ -160,9 +147,9 @@ consort <- data.frame(Description = "Input",
 
 print('Quality assurance: Year of birth is after year of death or patient only has year of death')
 
-input <- input[!((input$qa_num_birth_year > (format(input$death_date, format="%Y")) & 
-                    is.na(input$qa_num_birth_year)== FALSE & is.na(input$death_date) == FALSE) | 
-                   (is.na(input$qa_num_birth_year)== TRUE & is.na(input$death_date) == FALSE)),]
+input <- input[!((input$qa_num_birth_year > (format(input$cens_date_death, format="%Y")) & 
+                    is.na(input$qa_num_birth_year)== FALSE & is.na(input$cens_date_death) == FALSE) | 
+                   (is.na(input$qa_num_birth_year)== TRUE & is.na(input$cens_date_death) == FALSE)),]
 
 consort[nrow(consort)+1,] <- c("Quality assurance: Year of birth is after year of death or patient only has year of death",
                                nrow(input))
@@ -176,24 +163,24 @@ input <- input[!((input$qa_num_birth_year < 1793 |
 consort[nrow(consort)+1,] <- c("Quality assurance: Year of birth is before 1793 or year of birth exceeds current date",
                                nrow(input))
 
-print('Quality assurance: Date of death is NULL or invalid (on or before 1/1/1900 or after current date)')
+print('Quality assurance: Date of death is invalid (on or before 1/1/1900 or after current date)')
 
-input <- input[!((input$death_date <= as.Date(study_dates$earliest_expec) | 
-                    input$death_date > format(Sys.Date(),"%Y-%m-%d")) & is.na(input$death_date) == FALSE),]
+input <- input[!((input$cens_date_death <= as.Date(study_dates$earliest_expec) | 
+                    input$cens_date_death > format(Sys.Date(),"%Y-%m-%d")) & is.na(input$cens_date_death) == FALSE),]
 
-consort[nrow(consort)+1,] <- c("Quality assurance: Date of death is NULL or invalid (on or before 1/1/1900 or after current date)",
+consort[nrow(consort)+1,] <- c("Quality assurance: Date of death is invalid (on or before 1/1/1900 or after current date)",
                                nrow(input))
 
 print('Quality assurance: Pregnancy/birth codes for men')
 
-input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="Male"),]
+input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="male"),]
 
 consort[nrow(consort)+1,] <- c("Quality assurance: Pregnancy/birth codes for men",
                                nrow(input))
 
 print('Quality assurance: HRT or COCP meds for men')
 
-input <- input[!(input$cov_cat_sex=="Male" & input$qa_bin_hrtcocp==TRUE),]
+input <- input[!(input$cov_cat_sex=="male" & input$qa_bin_hrtcocp==TRUE),]
 
 consort[nrow(consort)+1,] <- c("Quality assurance: HRT or COCP meds for men",
                                nrow(input))
@@ -201,7 +188,7 @@ consort[nrow(consort)+1,] <- c("Quality assurance: HRT or COCP meds for men",
 print('Quality assurance: Prostate cancer codes for women')
 
 input <- input[!(input$qa_bin_prostate_cancer == TRUE & 
-                   input$cov_cat_sex=="Female"),]
+                   input$cov_cat_sex=="female"),]
 
 consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                nrow(input))
@@ -210,7 +197,7 @@ consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for wom
 
 print('Inclusion criteria: Alive at index')
 
-input <- input %>% filter(index_date < death_date | is.na(death_date))
+input <- subset(input, input$inex_bin_alive==TRUE) # Subset input if alive at index.
 
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Alive at index",
                                nrow(input))
@@ -218,37 +205,50 @@ consort[nrow(consort)+1,] <- c("Inclusion criteria: Alive at index",
 print('Inclusion criteria: Known age 18 or over at index')
 
 input <- subset(input, input$cov_num_age >= 18) # Subset input if age between 18 and 110 at index.
+
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known age 18 or over at index",
                                nrow(input))
 
 print('Inclusion criteria: Known age 110 or under at index')
 
 input <- subset(input, input$cov_num_age <= 110) # Subset input if age between 18 and 110 on 01/06/2021.
+
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known age 110 or under at index",
                                nrow(input))
 
 print('Inclusion criteria: Known sex at index')
 
-input <- input[!is.na(input$cov_cat_sex),] # removes NAs, if any
+input <- input %>% mutate(cov_cat_sex = as.character(cov_cat_sex)) %>%
+  filter(cov_cat_sex != "unknown")%>%
+  mutate(cov_cat_sex = as.factor(cov_cat_sex)) # removes unknown, if any
+
+input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "female")
+
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known sex at index",
                                nrow(input))
 
-print('Inclusion criteria: Known deprivation at index')
+print('Inclusion criteria: Known IMD at index')
 
-input <- input[!is.na(input$cov_cat_deprivation),] # removes NAs, if any
-consort[nrow(consort)+1,] <- c("Inclusion criteria: Known deprivation at index",
+input <- input %>% mutate(cov_cat_imd = as.character(cov_cat_imd)) %>%
+  filter(cov_cat_imd != "unknown")%>%
+  mutate(cov_cat_imd = as.factor(cov_cat_imd)) # removes unknown, if any
+
+input$cov_cat_imd <- ordered(input$cov_cat_imd, 
+                                     levels = c("1 (most deprived)","2","3","4","5 (least deprived)"))
+
+consort[nrow(consort)+1,] <- c("Inclusion criteria: Known IMD at index",
                                nrow(input))
 
 print('Inclusion criteria: Six months follow up prior to index')
 
-input <- subset(input, input$has_follow_up_previous_6months == TRUE)
+input <- subset(input, input$inex_bin_6m_reg == TRUE)
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Six months follow up prior to index",
                                nrow(input))
 
 print('Inclusion criteria: Active registration at index')
 
 input <- input %>%
-  filter(is.na(deregistration_date) | (!is.na(deregistration_date) & deregistration_date>=index_date))
+  filter(is.na(cens_date_dereg) | (!is.na(cens_date_dereg) & cens_date_dereg>=index_date))
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Active registration at index",
                                nrow(input))
 
