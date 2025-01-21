@@ -312,6 +312,12 @@
       "downloaded_at": "2024-10-15 22:00:28.603248Z",
       "sha": "884477b8c56a7e29ef1684d5a7ea3cfd6f75b566"
     },
+    "opensafely-asthma-exacerbation-secondary-care.csv": {
+      "id": "opensafely/asthma-exacerbation-secondary-care/229001a8",
+      "url": "https://www.opencodelists.org/codelist/opensafely/asthma-exacerbation-secondary-care/229001a8/",
+      "downloaded_at": "2025-01-07 16:42:00.028040Z",
+      "sha": "4539261c8a45b1c365f436400026d5859c9a7896"
+    },
     "opensafely-current-copd.csv": {
       "id": "opensafely/current-copd/2020-05-06",
       "url": "https://www.opencodelists.org/codelist/opensafely/current-copd/2020-05-06/",
@@ -611,6 +617,12 @@
       "url": "https://www.opencodelists.org/codelist/bristol/ild-snomed/2f3e3051/",
       "downloaded_at": "2024-10-15 22:00:47.298839Z",
       "sha": "9e2de5190c0081e01bffef1a56aa4431885da94e"
+    },
+    "bristol-pulmonary-fibrosis-interstitial-lung-disease.csv": {
+      "id": "bristol/pulmonary-fibrosis-interstitial-lung-disease/6c747549",
+      "url": "https://www.opencodelists.org/codelist/bristol/pulmonary-fibrosis-interstitial-lung-disease/6c747549/",
+      "downloaded_at": "2025-01-07 16:42:19.618571Z",
+      "sha": "5a7efa48dc60e30860ec4e09df86e2c83f4fdeb5"
     }
   }
 }
