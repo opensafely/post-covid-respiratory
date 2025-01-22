@@ -93,7 +93,7 @@ input$cov_cat_ethnicity <- ordered(input$cov_cat_ethnicity,
 print('Set reference level for variable: cov_cat_imd')
 
 input$cov_cat_imd <- ordered(input$cov_cat_imd, 
-                                     levels = c("1 (most deprived)","2","3","4","5 (least deprived)","unknown"))
+                                     levels = c("1 (most deprived)","2","3","4","5 (least deprived)"))
 
 # Set reference level for variable: cov_cat_region -----------------------------
 print('Set reference level for variable: cov_cat_region')
@@ -104,12 +104,15 @@ input$cov_cat_region <- relevel(input$cov_cat_region, ref = "East")
 print('Set reference level for variable: cov_cat_smoking_status')
 
 levels(input$cov_cat_smoking_status) <- list("Ever smoker" = "E", "Missing" = "M", "Never smoker" = "N", "Current smoker" = "S")
+
 input$cov_cat_smoking_status <- ordered(input$cov_cat_smoking_status, levels = c("Never smoker","Ever smoker","Current smoker","Missing"))
 
 # Set reference level for variable: cov_cat_sex --------------------------------
 print('Set reference level for variable: cov_cat_sex')
 
-input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "female")
+levels(input$cov_cat_sex) <- list("Female" = "female", "Male" = "male")
+
+input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "Female")
 
 # Set reference level for variable: vax_cat_jcvi_group -------------------------
 print('Set reference level for variable: vax_cat_jcvi_group')
@@ -119,14 +122,6 @@ input$vax_cat_jcvi_group <- ordered(input$vax_cat_jcvi_group,
                                                "09","08","07",
                                                "06","05","04",
                                                "03","02","01","99"))
-
-# Set reference level for variable: vax_cat_product_*  -------------------------
-print('Set reference level for variable: vax_cat_product_*')
-
-vax_cat_product_factors <- colnames(input)[grepl("vax_cat_product_",colnames(input))]
-
-input[,vax_cat_product_factors] <- lapply(input[,vax_cat_product_factors], 
-                                          function(x) ordered(x, levels = c("Pfizer","AstraZeneca","Moderna")))
 
 # Set reference level for binaries ---------------------------------------------
 print('Set reference level for binaries')
@@ -170,20 +165,20 @@ consort[nrow(consort)+1,] <- c("Quality assurance: Date of death is invalid (on 
 
 print('Quality assurance: Pregnancy/birth codes for men')
 
-input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="male"),]
+input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="Male"),]
 consort[nrow(consort)+1,] <- c("Quality assurance: Pregnancy/birth codes for men",
                                nrow(input))
 
 print('Quality assurance: HRT or COCP meds for men')
 
-input <- input[!(input$cov_cat_sex=="male" & input$qa_bin_hrtcocp==TRUE),]
+input <- input[!(input$cov_cat_sex=="Male" & input$qa_bin_hrtcocp==TRUE),]
 consort[nrow(consort)+1,] <- c("Quality assurance: HRT or COCP meds for men",
                                nrow(input))
 
 print('Quality assurance: Prostate cancer codes for women')
 
 input <- input[!(input$qa_bin_prostate_cancer == TRUE & 
-                   input$cov_cat_sex=="female"),]
+                   input$cov_cat_sex=="Female"),]
 consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                nrow(input))
 
@@ -212,7 +207,7 @@ print('Inclusion criteria: Known sex at index')
 input <- input %>% mutate(cov_cat_sex = as.character(cov_cat_sex)) %>%
   filter(cov_cat_sex != "unknown")%>%
   mutate(cov_cat_sex = as.factor(cov_cat_sex)) # removes unknown, if any
-input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "female")
+input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "Female")
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known sex at index",
                                nrow(input))
 
@@ -226,17 +221,10 @@ input$cov_cat_imd <- ordered(input$cov_cat_imd,
 consort[nrow(consort)+1,] <- c("Inclusion criteria: Known IMD at index",
                                nrow(input))
 
-print('Inclusion criteria: Six months follow up prior to index')
+print('Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date')
 
 input <- subset(input, input$inex_bin_6m_reg == TRUE)
-consort[nrow(consort)+1,] <- c("Inclusion criteria: Six months follow up prior to index",
-                               nrow(input))
-
-print('Inclusion criteria: Active registration at index')
-
-input <- input %>%
-  filter(is.na(cens_date_dereg) | (!is.na(cens_date_dereg) & cens_date_dereg>=index_date))
-consort[nrow(consort)+1,] <- c("Inclusion criteria: Active registration at index",
+consort[nrow(consort)+1,] <- c("Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date",
                                nrow(input))
 
 print('Inclusion criteria: Known region at index')
