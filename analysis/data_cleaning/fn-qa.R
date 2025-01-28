@@ -13,9 +13,6 @@ qa <- function(input, study_dates, consort, cohort, threshold) {
   library(here)
   library(arrow)
   
-  print('Source common functions')
-  source("analysis/utility.R")
-  
   print('Quality assurance: Year of birth is after year of death or patient only has year of death')
   
   input <- input[!((input$qa_num_birth_year > (format(input$cens_date_death, format="%Y")) & 
@@ -57,6 +54,6 @@ qa <- function(input, study_dates, consort, cohort, threshold) {
                      input$cov_cat_sex=="Female"),]
   consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                  nrow(input))
-                                 
+
   return(list(input = input, consort = consort))
 }
