@@ -1,18 +1,7 @@
-inex <- function(input, consort, cohort, threshold) {
-  print('Load libraries')
-  
-  library(dplyr)
-  library(tictoc)
-  library(readr)
-  library(tidyr)
-  library(stringr)
-  library(ggplot2)
-  library(jsonlite)
-  library(here)
-  library(arrow)
-  
-  print('Source common functions')
-  source("analysis/utility.R")
+# Function to apply inclusion criteria
+
+inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta) {
+
   
   print('Inclusion criteria: Alive at index')
   

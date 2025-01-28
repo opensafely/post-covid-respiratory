@@ -1,18 +1,14 @@
 # Function to apply quality assurance
-qa <- function(input, study_dates, consort, cohort, threshold) {
-  # Load libraries ---------------------------------------------------------------
-  print('Load libraries')
+qa <- function(input, study_dates) {
+
+  # Specify consort table --------------------------------------------------------
   
-  library(dplyr)
-  library(tictoc)
-  library(readr)
-  library(tidyr)
-  library(stringr)
-  library(ggplot2)
-  library(jsonlite)
-  library(here)
-  library(arrow)
-  
+  print('Specify consort table')
+
+  consort <- data.frame(Description = "Input", #delete consort as a parametere
+                        N = nrow(input),
+                        stringsAsFactors = FALSE)
+
   print('Quality assurance: Year of birth is after year of death or patient only has year of death')
   
   input <- input[!((input$qa_num_birth_year > (format(input$cens_date_death, format="%Y")) & 
