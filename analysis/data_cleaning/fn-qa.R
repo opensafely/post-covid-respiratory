@@ -57,43 +57,6 @@ qa <- function(input, study_dates, consort, cohort, threshold) {
                      input$cov_cat_sex=="Female"),]
   consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                  nrow(input))
-  
-  # Save consort data
-  print('Saving consort data after Quality Assurance')
-  
-  consort$N <- as.numeric(consort$N)
-  consort$removed <- dplyr::lag(consort$N, default = dplyr::first(consort$N)) - consort$N
-  
-  write.csv(consort, file = paste0("output/consort_", cohort, "_qa.csv"), row.names = FALSE)
-  
-  # Perform redaction
-  print('Performing redaction')
-  
-  consort$removed <- NULL
-  consort$N_midpoint6 <- roundmid_any(consort$N, to=threshold)
-  consort$removed_derived <- dplyr::lag(consort$N_midpoint6, default = dplyr::first(consort$N_midpoint6)) - consort$N_midpoint6
-  consort$N <- NULL
-  
-  # Save rounded consort data
-  print('Saving rounded consort data')
-  
-  write.csv(consort, file = paste0("output/consort_", cohort, "_qa_midpoint6.csv"), row.names = FALSE)
-  
-  # Save the dataset after Quality Assurance
-  print('Saving dataset after Quality Assurance')
-  
-  input <- input[, c("patient_id", "cens_date_death", "index_date",
-                     colnames(input)[grepl("end_date_", colnames(input))],
-                     colnames(input)[grepl("sub_", colnames(input))],
-                     colnames(input)[grepl("exp_", colnames(input))],
-                     colnames(input)[grepl("out_", colnames(input))],
-                     colnames(input)[grepl("cov_", colnames(input))],
-                     colnames(input)[grepl("inex_", colnames(input))],
-                     colnames(input)[grepl("cens_", colnames(input))],
-                     colnames(input)[grepl("vax_date_", colnames(input))],
-                     colnames(input)[grepl("vax_cat_", colnames(input))])]
-  
-  saveRDS(input, file = paste0("output/input_", cohort, "_qa.rds"), compress = TRUE)
-  
+                                 
   return(list(input = input, consort = consort))
 }
