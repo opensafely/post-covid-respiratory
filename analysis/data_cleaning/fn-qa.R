@@ -5,7 +5,7 @@ qa <- function(input, study_dates) {
   
   print('Specify consort table')
 
-  consort <- data.frame(Description = "Input", #delete consort as a parametere
+  consort <- data.frame(Description = "Input", 
                         N = nrow(input),
                         stringsAsFactors = FALSE)
 
@@ -34,20 +34,20 @@ qa <- function(input, study_dates) {
   
   print('Quality assurance: Pregnancy/birth codes for men')
   
-  input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="Male"),]
+  input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="Male") | is.na(input$cov_cat_sex),]
   consort[nrow(consort)+1,] <- c("Quality assurance: Pregnancy/birth codes for men",
                                  nrow(input))
   
   print('Quality assurance: HRT or COCP meds for men')
   
-  input <- input[!(input$cov_cat_sex=="Male" & input$qa_bin_hrtcocp==TRUE),]
+  input <- input[!(input$cov_cat_sex=="Male" & input$qa_bin_hrtcocp==TRUE) | is.na(input$cov_cat_sex),]
   consort[nrow(consort)+1,] <- c("Quality assurance: HRT or COCP meds for men",
                                  nrow(input))
   
   print('Quality assurance: Prostate cancer codes for women')
   
   input <- input[!(input$qa_bin_prostate_cancer == TRUE & 
-                     input$cov_cat_sex=="Female"),]
+                     input$cov_cat_sex=="Female") | is.na(input$cov_cat_sex),]
   consort[nrow(consort)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                  nrow(input))
 
