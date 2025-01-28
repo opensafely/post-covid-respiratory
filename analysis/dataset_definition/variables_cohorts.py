@@ -619,10 +619,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 prostate_cancer_icd10, index_date
-            ).exists_for_patient()) |
-            (matching_death_before(
-                prostate_cancer_icd10, index_date
-            ))
+            ).exists_for_patient())
         ),
 
         ## Pregnancy
