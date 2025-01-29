@@ -49,7 +49,7 @@ start_date_delta <- as.Date(study_dates$delta_date, format="%Y-%m-%d")
 # Load cohort data -------------------------------------------------------------
 print('Load cohort data')
 
-input <- read_rds(file.path("output", paste0("input_",cohort,".rds")))
+input <- read_rds(file.path("output", paste0("input_",cohort,"_0.rds")))
 print(paste0(cohort,  " cohort: ", nrow(input), " rows in the input file"))
 
 # Set reference levels for factors----------------------------------------------

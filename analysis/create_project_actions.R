@@ -83,7 +83,48 @@ generate_cohort <- function(cohort) {
 }
 
 
-# Define and combine all actions into a list of actions ------------------------
+preprocess_data <- function(cohort){
+  splice(
+    comment(glue("Preprocess data - {cohort}")),
+    action(
+      name = glue("preprocess_data_{cohort}"),
+      run = glue("r:latest analysis/preprocess/preprocess_data.R"),
+      arguments = c(cohort),
+      needs = list("generate_dataset_index_dates",glue("generate_study_population_{cohort}")),
+      moderately_sensitive = list(
+        describe = glue("output/describe_input_{cohort}_stage0.txt"),
+        describe_venn = glue("output/describe_venn_{cohort}.txt")
+      ),
+      highly_sensitive = list(
+        cohort = glue("output/input_{cohort}_0.rds"),
+        venn = glue("output/venn_{cohort}.rds")
+      )
+    )
+  )
+}
+
+# Create function to data cleaning -------------------------------------------
+
+data_cleaning <- function(cohort){
+  splice(
+    comment(glue("Data cleaning - {cohort}")),
+    action(
+      name = glue("data_cleaning_{cohort}"),
+      run = glue("r:latest analysis/data_cleaning/data_cleaning.R"),
+      arguments = c(cohort),
+      needs = list("vax_eligibility_inputs",glue("preprocess_data_{cohort}")),
+      moderately_sensitive = list(
+        consort = glue("output/consort_{cohort}.csv"),
+        consort_midpoint6 = glue("output/consort_{cohort}_midpoint6.csv")
+      ),
+      highly_sensitive = list(
+        cohort = glue("output/input_{cohort}.rds")
+      )
+    )
+  )
+}
+
+# Define and combine all actions into a list of actions ------------------------------0
 
 actions_list <- splice(
 
@@ -126,9 +167,16 @@ actions_list <- splice(
                   function(x) generate_cohort(cohort = x)),
            recursive = FALSE
     )
-  )
+  ),
 
-)
+  ## Preprocess data -----------------------------------------------------------
+  
+  splice(
+    unlist(lapply(cohorts, 
+                  function(x) data_cleaning(cohort = x)), 
+           recursive = FALSE
+    )
+  ))
 
 
 # Combine actions into project list --------------------------------------------
