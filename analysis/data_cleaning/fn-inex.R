@@ -84,18 +84,21 @@ inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, st
     # Trick to run the mixed vaccine code on dummy data with limited levels -> To ensure that the levels are the same in vax_cat_product variables
 
     input <- input %>%
-        mutate(AZ_date = ifelse(vax_date_AstraZeneca_1 < mixed_vax_threshold, 1,
-                                ifelse(vax_date_AstraZeneca_2 < mixed_vax_threshold, 1,
-                                    ifelse(vax_date_AstraZeneca_3 < mixed_vax_threshold, 1, 0)))) %>%
-        mutate(Moderna_date = ifelse(vax_date_Moderna_1 < mixed_vax_threshold, 1,
-                                    ifelse(vax_date_Moderna_2 < mixed_vax_threshold, 1,
-                                            ifelse(vax_date_Moderna_3 < mixed_vax_threshold, 1, 0)))) %>%
-        mutate(Pfizer_date = ifelse(vax_date_Pfizer_1 < mixed_vax_threshold, 1,
-                                    ifelse(vax_date_Pfizer_2 < mixed_vax_threshold, 1,
-                                        ifelse(vax_date_Pfizer_3 < mixed_vax_threshold, 1, 0)))) %>%
-        rowwise() %>%
-        mutate(vax_mixed = sum(across(c("AZ_date", "Moderna_date", "Pfizer_date")), na.rm = T)) %>%
-        dplyr::filter(vax_mixed < 2)
+      mutate(
+        AZ_date = as.numeric(ifelse(vax_date_AstraZeneca_1 < mixed_vax_threshold, 1,
+                          ifelse(vax_date_AstraZeneca_2 < mixed_vax_threshold, 1,
+                                 ifelse(vax_date_AstraZeneca_3 < mixed_vax_threshold, 1, 0)))),
+        Moderna_date = as.numeric(ifelse(vax_date_Moderna_1 < mixed_vax_threshold, 1,
+                              ifelse(vax_date_Moderna_2 < mixed_vax_threshold, 1,
+                                     ifelse(vax_date_Moderna_3 < mixed_vax_threshold, 1, 0)))),
+        Pfizer_date = as.numeric(ifelse(vax_date_Pfizer_1 < mixed_vax_threshold, 1,
+                              ifelse(vax_date_Pfizer_2 < mixed_vax_threshold, 1,
+                                     ifelse(vax_date_Pfizer_3 < mixed_vax_threshold, 1, 0))))
+      ) %>%
+      rowwise() %>%
+      mutate(vax_mixed = sum(c_across(c(AZ_date, Moderna_date, Pfizer_date)), na.rm = TRUE)) %>%
+      ungroup() %>%
+      dplyr::filter(vax_mixed < 2)
 
     consort[nrow(consort)+1,] <- c("Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021",
                                     nrow(input))
