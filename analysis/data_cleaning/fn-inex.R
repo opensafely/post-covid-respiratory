@@ -80,8 +80,6 @@ inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, st
 
     print('Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021')
 
-    # Trick to run the mixed vaccine code on dummy data with limited levels -> To ensure that the levels are the same in vax_cat_product variables
-
     input <- input %>%
       mutate(
         AZ_date = as.numeric(ifelse(vax_date_AstraZeneca_1 < mixed_vax_threshold, 1,
