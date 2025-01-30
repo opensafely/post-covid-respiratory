@@ -29,7 +29,7 @@ print('Specify command arguments')
 args <- commandArgs(trailingOnly=TRUE)
 
 if(length(args)==0){
-  cohort <- "prevax"
+  cohort <- "vax"
 } else {
   cohort <- args[[1]]
 }
@@ -68,8 +68,9 @@ consort <- qa_results$consort
 # Inclusion criteria -----------------------------------------------------------
 
 print('Call inclusion criteria function')
-input <- inex(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta)$input
-consort <- inex(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta)$consort
+inex_results <- inex(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta)
+input <- inex_results$input
+consort <- inex_results$consort
 
 # Save consort data after Inclusion criteria
 print('Saving consort data after Inclusion criteria')
