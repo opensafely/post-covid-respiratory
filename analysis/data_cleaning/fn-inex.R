@@ -1,7 +1,6 @@
 # Function to apply inclusion criteria
 
 inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta) {
-
   
   print('Inclusion criteria: Alive at index')
   
