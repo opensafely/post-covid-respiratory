@@ -94,8 +94,29 @@ preprocess_data <- function(cohort){
         describe_venn = glue("output/describe_venn_{cohort}.txt")
       ),
       highly_sensitive = list(
-        cohort = glue("output/input_{cohort}.rds"),
+        cohort = glue("output/input_{cohort}_0.rds"),
         venn = glue("output/venn_{cohort}.rds")
+      )
+    )
+  )
+}
+
+# Create function to data cleaning -------------------------------------------
+
+data_cleaning <- function(cohort){
+  splice(
+    comment(glue("Data cleaning - {cohort}")),
+    action(
+      name = glue("data_cleaning_{cohort}"),
+      run = glue("r:latest analysis/data_cleaning/data_cleaning.R"),
+      arguments = c(cohort),
+      needs = list("vax_eligibility_inputs",glue("preprocess_data_{cohort}")),
+      moderately_sensitive = list(
+        consort = glue("output/consort_{cohort}.csv"),
+        consort_midpoint6 = glue("output/consort_{cohort}_midpoint6.csv")
+      ),
+      highly_sensitive = list(
+        cohort = glue("output/input_{cohort}.rds")
       )
     )
   )
@@ -153,8 +174,16 @@ actions_list <- splice(
                   function(x) preprocess_data(cohort = x)), 
            recursive = FALSE
     )
-  )
-)
+  ),
+
+  ## Preprocess data -----------------------------------------------------------
+  
+  splice(
+    unlist(lapply(cohorts, 
+                  function(x) data_cleaning(cohort = x)), 
+           recursive = FALSE
+    )
+  ))
 
 
 # Combine actions into project list --------------------------------------------

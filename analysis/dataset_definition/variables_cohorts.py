@@ -619,10 +619,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 prostate_cancer_icd10, index_date
-            ).exists_for_patient()) |
-            (matching_death_before(
-                prostate_cancer_icd10, index_date
-            ))
+            ).exists_for_patient())
         ),
 
         ## Pregnancy
@@ -634,7 +631,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Year of birth
         qa_num_birth_year=patients.date_of_birth.year,
 
-        ## COCP or heart medication
+        ## COCP or hrt medication
         qa_bin_hrtcocp=last_matching_med_dmd_before(
             cocp_dmd + hrt_dmd, index_date
         ).exists_for_patient(),
