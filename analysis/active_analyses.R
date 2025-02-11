@@ -50,8 +50,8 @@ vax_unvax_start <- study_dates$delta_date
 study_stop <- study_dates$omicron_date
 
 # Define cut points ----
-prevax_cuts <- "1;28;197;365;714"
-vax_unvax_cuts <- "1;28;197"
+prevax_cuts <- "1;7;14;28;56;84;183;365;730;1065;1582"
+vax_unvax_cuts <- "1;7;14;28;56;84;183;365;730;1065;1582"
 
 # Define covariates ----
 
