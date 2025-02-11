@@ -67,7 +67,6 @@ user/elsie_horne/dementia_snomed/7bd3364c
 user/elsie_horne/dementia_icd10/2df21cb7
 user/elsie_horne/dementia_vascular_icd10/27c5e93c
 user/elsie_horne/dementia_vascular_snomed/0eb67607
-opensafely/dementia/2020-04-22
 user/elsie_horne/liver_disease_icd10/75a702d1
 user/elsie_horne/liver_disease_snomed/5c978f9c
 user/elsie_horne/diabetes_snomed/43881c67
@@ -75,7 +74,6 @@ user/elsie_horne/diabetes_icd10/2a78a932
 user/elsie_horne/diabetes_drugs_dmd/3228dace
 user/elsie_horne/hypertension_icd10/1a48296e
 user/elsie_horne/hypertension_drugs_dmd/0009f464
-opensafely/hypertension/2020-04-28
 user/hjforbes/depression-symptoms-and-diagnoses/499814eb
 user/kurttaylor/depression_icd10/4dc56a05
 nhsd-primary-care-domain-refsets/hyp_cod/20210127

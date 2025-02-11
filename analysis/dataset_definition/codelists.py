@@ -278,7 +278,7 @@ stroke_isch_icd10 = codelist_from_csv(
     column="code"
 )
 
-# Dementia (added ctv3)
+# Dementia
 dementia_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_snomed.csv",
     column="code"
@@ -287,11 +287,6 @@ dementia_snomed = codelist_from_csv(
 dementia_icd10 = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_icd10.csv",
     column="code"
-)
-
-dementia_ctv3 = codelist_from_csv(
-    "codelists/opensafely-dementia.csv",
-    column="CTV3ID"
 )
 
 dementia_vascular_snomed = codelist_from_csv(
@@ -337,7 +332,7 @@ cancer_icd10 = codelist_from_csv(
     column="code"
 )
 
-# Hypertension (added ctv3 codes)
+# Hypertension
 hypertension_icd10 = codelist_from_csv(
     "codelists/user-elsie_horne-hypertension_icd10.csv",
     column="code"
@@ -349,10 +344,6 @@ hypertension_drugs_dmd = codelist_from_csv(
 hypertension_snomed = codelist_from_csv(
     "codelists/nhsd-primary-care-domain-refsets-hyp_cod.csv",
     column="code"
-)
-hypertension_ctv3 = codelist_from_csv(
-    "codelists/opensafely-hypertension.csv",
-    column="CTV3ID"
 )
 
 # Diabetes

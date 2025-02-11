@@ -414,12 +414,6 @@
       "downloaded_at": "2024-10-15 22:00:35.151711Z",
       "sha": "47a67ea3a18239dbdff6c0f514ea81fe6d2d1bec"
     },
-    "opensafely-dementia.csv": {
-      "id": "opensafely/dementia/2020-04-22",
-      "url": "https://www.opencodelists.org/codelist/opensafely/dementia/2020-04-22/",
-      "downloaded_at": "2024-10-24 18:12:11.678961Z",
-      "sha": "9d40ff3a5c2428af4651c765f2c418de3a3ad4b4"
-    },
     "user-elsie_horne-liver_disease_icd10.csv": {
       "id": "user/elsie_horne/liver_disease_icd10/75a702d1",
       "url": "https://www.opencodelists.org/codelist/user/elsie_horne/liver_disease_icd10/75a702d1/",
@@ -461,12 +455,6 @@
       "url": "https://www.opencodelists.org/codelist/user/elsie_horne/hypertension_drugs_dmd/0009f464/",
       "downloaded_at": "2024-10-15 22:00:37.972863Z",
       "sha": "9d97d2f8dd93c7942db9463b4e5e300a5ec35a85"
-    },
-    "opensafely-hypertension.csv": {
-      "id": "opensafely/hypertension/2020-04-28",
-      "url": "https://www.opencodelists.org/codelist/opensafely/hypertension/2020-04-28/",
-      "downloaded_at": "2024-10-15 23:48:50.352865Z",
-      "sha": "b0d7bbf6ea767366db458bc6f6d37955ae331cc7"
     },
     "user-hjforbes-depression-symptoms-and-diagnoses.csv": {
       "id": "user/hjforbes/depression-symptoms-and-diagnoses/499814eb",
