@@ -42,7 +42,7 @@ vax2_earliest = study_dates["vax2_earliest"]  # earliest expectation date for 2n
 vax3_earliest = study_dates["vax3_earliest"]  # earliest expectation date for 3rd vaccination
 all_eligible = study_dates["all_eligible"]  # all 18+ are eligible for vax on this date (protocol)
 end_date = study_dates["end_date"]  # last date of available vaccination data. NEED TO ALSO CHECK END DATES FOR OTHER DATA SOURCES
-
+lcd_date = study_dates["lcd_date"] # last import date
 # Import preliminary date variables (death date, vax dates)
 
 from variables_dates import prelim_date_variables
@@ -68,7 +68,7 @@ dataset.end_prevax_exposure = minimum_of(
 )
 
 dataset.end_prevax_outcome = minimum_of(
-    dataset.cens_date_death, omicron_date
+    dataset.cens_date_death, lcd_date
 )
 
 dataset.index_vax = maximum_of(
@@ -76,7 +76,7 @@ dataset.index_vax = maximum_of(
     delta_date
 )
 dataset.end_vax_exposure = minimum_of(
-    dataset.cens_date_death, omicron_date
+    dataset.cens_date_death, lcd_date
 )
 
 dataset.end_vax_outcome = dataset.end_vax_exposure
@@ -86,8 +86,8 @@ dataset.index_unvax = maximum_of(
     delta_date
 )
 dataset.end_unvax_exposure = minimum_of(
-    dataset.cens_date_death, omicron_date, dataset.vax_date_covid_1
+    dataset.cens_date_death, lcd_date, dataset.vax_date_covid_1
 )
 dataset.end_unvax_outcome = minimum_of(
-    dataset.cens_date_death, omicron_date
+    dataset.cens_date_death, lcd_date
 )
