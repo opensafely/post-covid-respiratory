@@ -61,7 +61,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .specimen_taken_date
     )
 
-    tmp_exp_date_covid19_confirmed_snomed = (
+    tmp_exp_date_covid19_confirmed_gp = (
         clinical_events.where(
             (clinical_events.ctv3_code.is_in(
                 covid_primary_care_code + 
@@ -95,7 +95,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     
     exp_date_covid19_confirmed=minimum_of(
         tmp_exp_date_covid19_confirmed_sgss, 
-        tmp_exp_date_covid19_confirmed_snomed,
+        tmp_exp_date_covid19_confirmed_gp,
         tmp_exp_date_covid19_confirmed_apc,
         tmp_exp_date_covid19_confirmed_death
     )
@@ -104,9 +104,9 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         ### Pneumonia
     
-    tmp_out_date_pneumonia_snomed= (
+    tmp_out_date_pneumonia_gp= (
         first_matching_event_clinical_snomed_between(
-            pneumonia_snomed_clinical, index_date, end_date_out
+            pneumonia_snomed, index_date, end_date_out
             ).date
     )
 
@@ -123,16 +123,16 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     )
 
     out_date_pneumonia=minimum_of(
-        tmp_out_date_pneumonia_snomed,
+        tmp_out_date_pneumonia_gp,
         tmp_out_date_pneumonia_apc,
         tmp_out_date_pneumonia_death
     )
 
         ### Asthma
     
-    tmp_out_date_asthma_snomed= (
+    tmp_out_date_asthma_gp= (
         first_matching_event_clinical_snomed_between(
-            asthma_snomed_clinical, index_date, end_date_out
+            asthma_snomed, index_date, end_date_out
             ).date
     )
 
@@ -149,16 +149,16 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     )
 
     out_date_asthma=minimum_of(
-        tmp_out_date_asthma_snomed,
+        tmp_out_date_asthma_gp,
         tmp_out_date_asthma_apc,
         tmp_out_date_asthma_death
     )
 
         ### COPD
     
-    tmp_out_date_copd_ctv3= (
+    tmp_out_date_copd_gp= (
         first_matching_event_clinical_ctv3_between(
-            copd_ctv3_clinical, index_date, end_date_out
+            copd_ctv3, index_date, end_date_out
             ).date
     )
 
@@ -175,16 +175,16 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     )
 
     out_date_copd=minimum_of(
-        tmp_out_date_copd_ctv3,
+        tmp_out_date_copd_gp,
         tmp_out_date_copd_apc,
         tmp_out_date_copd_death
     )
 
         ### Pulmonary Fibrosis
     
-    tmp_out_date_pulmonary_fibrosis_snomed= (
+    tmp_out_date_pulmonary_fibrosis_gp= (
         first_matching_event_clinical_snomed_between(
-            pulmonary_fibrosis_snomed_clinical, index_date, end_date_out
+            pulmonary_fibrosis_snomed, index_date, end_date_out
             ).date
     )
 
@@ -201,14 +201,14 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     )
 
     out_date_pulmonary_fibrosis=minimum_of(
-        tmp_out_date_pulmonary_fibrosis_snomed,
+        tmp_out_date_pulmonary_fibrosis_gp,
         tmp_out_date_pulmonary_fibrosis_apc,
         tmp_out_date_pulmonary_fibrosis_death
     )
 
     ## Define individual temporary variables (subgroup variables) first before using them in the dictrionary
 
-    ## 1. Covid-19 prior to study start date (2020-01-01)
+    ## 1. Covid-19 prior to index date
 
     ### SGSS
 
@@ -222,7 +222,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     ### Primary care
 
-    tmp_sub_bin_priorcovid19_confirmed_snomed = (
+    tmp_sub_bin_priorcovid19_confirmed_gp = (
         clinical_events.where(
             (clinical_events.ctv3_code.is_in(
                 covid_primary_care_code + 
@@ -287,7 +287,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ### Exposures----Covid-19
 
         tmp_exp_date_covid19_confirmed_sgss=tmp_exp_date_covid19_confirmed_sgss,
-        tmp_exp_date_covid19_confirmed_snomed=tmp_exp_date_covid19_confirmed_snomed,
+        tmp_exp_date_covid19_confirmed_gp=tmp_exp_date_covid19_confirmed_gp,
         tmp_exp_date_covid19_confirmed_apc=tmp_exp_date_covid19_confirmed_apc,
         tmp_exp_date_death=tmp_exp_date_death,
         tmp_exp_covid19_confirmed_death=tmp_exp_covid19_confirmed_death,
@@ -315,7 +315,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## Asthma diagnosed in the past 2 years
         sub_bin_asthma_recent=(
             (first_matching_event_clinical_snomed_between(
-                asthma_snomed_clinical, index_date-days(730), index_date-days(1)
+                asthma_snomed, index_date-days(730), index_date-days(1)
             ).exists_for_patient()) |
             (first_matching_event_apc_between(
                 asthma_icd10, index_date-days(730), index_date-days(1)
@@ -325,7 +325,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## COPD diagnosed ever     
         sub_bin_copd_ever=(
             (last_matching_event_clinical_ctv3_before(
-                copd_ctv3_clinical, index_date
+                copd_ctv3, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 copd_icd10, index_date
@@ -391,7 +391,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Obesity 
         cov_bin_obesity=(
             (last_matching_event_clinical_snomed_before(
-                bmi_obesity_snomed_clinical, index_date
+                bmi_obesity_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 bmi_obesity_icd10, index_date
@@ -419,7 +419,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Acute myocardial infarction
         cov_bin_ami=(
             (last_matching_event_clinical_snomed_before(
-                ami_snomed_clinical, index_date
+                ami_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 ami_icd10 + ami_prior_icd10, index_date
@@ -429,7 +429,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Dementia
         cov_bin_dementia_combined=(
             (last_matching_event_clinical_snomed_before(
-                dementia_snomed_clinical + dementia_vascular_snomed_clinical, index_date
+                dementia_snomed + dementia_vascular_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_clinical_ctv3_before(
                 dementia_ctv3, index_date
@@ -442,7 +442,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Liver disease
         cov_bin_liver_disease=(
             (last_matching_event_clinical_snomed_before(
-                liver_disease_snomed_clinical, index_date
+                liver_disease_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 liver_disease_icd10, index_date
@@ -452,7 +452,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Chronic kidney disease
         cov_bin_chronic_kidney_disease=(
             (last_matching_event_clinical_snomed_before(
-                ckd_snomed_clinical, index_date
+                ckd_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 ckd_icd10, index_date
@@ -462,7 +462,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Cancer
         cov_bin_cancer=(
             (last_matching_event_clinical_snomed_before(
-                cancer_snomed_clinical, index_date
+                cancer_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 cancer_icd10, index_date
@@ -472,7 +472,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Hypertension
         cov_bin_hypertension=(
             (last_matching_event_clinical_snomed_before(
-                hypertension_snomed_clinical, index_date
+                hypertension_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_clinical_ctv3_before(
                 hypertension_ctv3, index_date
@@ -488,7 +488,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Diabetes 
         cov_bin_diabetes=(
             (last_matching_event_clinical_snomed_before(
-                diabetes_snomed_clinical, index_date
+                diabetes_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_med_dmd_before(
                 diabetes_drugs_dmd, index_date
@@ -501,7 +501,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Depression
         cov_bin_depression=(
             (last_matching_event_clinical_snomed_before(
-                depression_snomed_clinical, index_date
+                depression_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 depression_icd10, index_date
@@ -511,7 +511,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
       ## Pneumonia
         cov_bin_history_pneumonia= (
             (last_matching_event_clinical_snomed_before(
-                pneumonia_snomed_clinical, index_date
+                pneumonia_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 pneumonia_icd10, index_date
@@ -521,7 +521,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
       ## Asthma
         cov_bin_history_asthma= (
             (last_matching_event_clinical_snomed_before(
-                asthma_snomed_clinical, index_date
+                asthma_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 asthma_icd10, index_date
@@ -531,7 +531,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
       ## Pulmonary Fibrosis
         cov_bin_history_pulmonary_fibrosis= (
             (last_matching_event_clinical_snomed_before(
-                pulmonary_fibrosis_snomed_clinical, index_date
+                pulmonary_fibrosis_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 pulmonary_fibrosis_icd10, index_date
@@ -541,7 +541,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
       ## COPD
         cov_bin_history_copd= (
             (last_matching_event_clinical_ctv3_before(
-                copd_ctv3_clinical, index_date
+                copd_ctv3, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 copd_icd10, index_date
@@ -551,7 +551,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Ischaemic stroke
         cov_bin_stroke_isch=(
             (last_matching_event_clinical_snomed_before(
-                stroke_isch_snomed_clinical, index_date
+                stroke_isch_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 stroke_isch_icd10, index_date
@@ -562,11 +562,11 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## History of Covid-19 Combined
 
         tmp_sub_bin_priorcovid19_confirmed_sgss=tmp_sub_bin_priorcovid19_confirmed_sgss,
-        tmp_sub_bin_priorcovid19_confirmed_snomed=tmp_sub_bin_priorcovid19_confirmed_snomed,
+        tmp_sub_bin_priorcovid19_confirmed_gp=tmp_sub_bin_priorcovid19_confirmed_gp,
         tmp_sub_bin_priorcovid19_confirmed_apc=tmp_sub_bin_priorcovid19_confirmed_apc,
         sub_bin_covid19_confirmed_history=(
             tmp_sub_bin_priorcovid19_confirmed_sgss |
-            tmp_sub_bin_priorcovid19_confirmed_snomed |
+            tmp_sub_bin_priorcovid19_confirmed_gp |
             tmp_sub_bin_priorcovid19_confirmed_apc
         ),
 
@@ -586,13 +586,13 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
     # Inclusion/exclusion variables ----------------------------------------------------------------------------------------------------
 
-    ## Registered for a minimum of 6 months prior to the study start date # line 98: https://github.com/opensafely/comparative-booster-spring2023/blob/main/analysis/dataset_definition.py 
+    ## Registered for a minimum of 6 months prior to the index date # line 98: https://github.com/opensafely/comparative-booster-spring2023/blob/main/analysis/dataset_definition.py 
 
         inex_bin_6m_reg = (practice_registrations.spanning(
             index_date - days(180), index_date
             )).exists_for_patient(),
 
-    ## Alive on the study start date
+    ## Alive on the index date
 
         inex_bin_alive = (((patients.date_of_death.is_null()) | (patients.date_of_death.is_after(index_date))) & 
         ((ons_deaths.date.is_null()) | (ons_deaths.date.is_after(index_date)))),
@@ -615,7 +615,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
 
         qa_bin_prostate_cancer=(
             (last_matching_event_clinical_snomed_before(
-                prostate_cancer_snomed_clinical, index_date
+                prostate_cancer_snomed, index_date
             ).exists_for_patient()) |
             (last_matching_event_apc_before(
                 prostate_cancer_icd10, index_date
@@ -628,7 +628,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ## Pregnancy
 
         qa_bin_pregnancy=last_matching_event_clinical_snomed_before(
-            pregnancy_snomed_clinical, index_date
+            pregnancy_snomed, index_date
         ).exists_for_patient(),
 
         ## Year of birth
