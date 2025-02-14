@@ -27,9 +27,8 @@ study_dates <-
     vax2_earliest = "2021-01-08", # earliest expectation date for 2nd vaccination
     vax3_earliest = "2021-02-08", # earliest expectation date for 3rd vaccination
     all_eligible = "2021-06-18", # all 18+ are eligible for vax on this date(protocol)
-    end_date = "2021-09-15", # last date of available vaccination data. NEED TO ALSO CHECK END DATES FOR OTHER DATA SOURCES
     lcd_date = "2024-04-30", # last collection date for linked data (APCS; ONS_Deaths; SGSS_*)
-    mixed_vax_threshold = "2021-05-07"
+    mixed_vax_threshold = "2021-05-07" # date that courses of mixed vaccine products were permitted
   )
 
 jsonlite::write_json(study_dates, path = "output/study_dates.json", auto_unbox = TRUE, pretty=TRUE)
