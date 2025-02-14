@@ -33,11 +33,11 @@ opensafely_ethnicity_codes_6 = codelist_from_csv(
     category_column="Grouping_6"
 )
 
-primis_covid19_vacc_update_ethnicity = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-eth2001.csv",
-    column="code",
-    category_column="grouping_6_id"
-)
+# primis_covid19_vacc_update_ethnicity = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-eth2001.csv",
+#     column="code",
+#     category_column="grouping_6_id"
+# )
 
 # Smoking
 smoking_clear = codelist_from_csv(
@@ -46,16 +46,16 @@ smoking_clear = codelist_from_csv(
     category_column="Category"
 )
 
-smoking_unclear = codelist_from_csv(
-    "codelists/opensafely-smoking-unclear.csv",
-    column="CTV3Code",
-    category_column="Category"
-)
+# smoking_unclear = codelist_from_csv(
+#     "codelists/opensafely-smoking-unclear.csv",
+#     column="CTV3Code",
+#     category_column="Category"
+# )
 
-ever_current_smoke = codelist_from_csv(
-    "codelists/bristol-smoke-and-eversmoke.csv",
-    column="code"
-)
+# ever_current_smoke = codelist_from_csv(
+#     "codelists/bristol-smoke-and-eversmoke.csv",
+#     column="code"
+# )
 
 # BMI
 bmi_obesity_snomed = codelist_from_csv(
@@ -86,16 +86,16 @@ hdl_cholesterol_snomed = codelist_from_csv(
 )
 
 # Carer codes
-carer_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-carer.csv",
-    column="code"
-)
+# carer_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-carer.csv",
+#     column="code"
+# )
 
 # No longer a carer codes
-notcarer_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-notcarer.csv",
-    column="code"
-)
+# notcarer_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-notcarer.csv",
+#     column="code"
+# )
 
 # Wider Learning Disability
 learndis_primis = codelist_from_csv(
@@ -104,22 +104,22 @@ learndis_primis = codelist_from_csv(
 )
 
 # Employed by Care Home codes
-carehome_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-carehome.csv",
-    column="code"
-)
+# carehome_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-carehome.csv",
+#     column="code"
+# )
 
 # Employed by nursing home codes
-nursehome_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-nursehome.csv",
-    column="code"
-)
+# nursehome_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-nursehome.csv",
+#     column="code"
+# )
 
 # Employed by domiciliary care provider codes
-domcare_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-domcare.csv",
-    column="code"
-)
+# domcare_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-domcare.csv",
+#     column="code"
+# )
 
 # Patients in long-stay nursing and residential care
 longres_primis = codelist_from_csv(
