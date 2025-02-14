@@ -456,14 +456,14 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## Subgroups-------------------------------------------------------------------------------------------
 
     ### History of COVID-19
-    tmp_sub_bin_covid_history_sgss = (
+    tmp_sub_bin_covidhistory_sgss = (
         sgss_covid_all_tests.where(
             sgss_covid_all_tests.specimen_taken_date.is_before(index_date)
         )
         .where(sgss_covid_all_tests.is_positive)
         .exists_for_patient()
     )
-    tmp_sub_bin_covid_history_gp = (
+    tmp_sub_bin_covidhistory_gp = (
         clinical_events.where(
             (clinical_events.ctv3_code.is_in(
                 covid_primary_care_code + 
@@ -473,7 +473,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         )
         .exists_for_patient()
     )
-    tmp_sub_bin_covid_history_apc = (
+    tmp_sub_bin_covidhistory_apc = (
         apcs.where(
             ((apcs.primary_diagnosis.is_in(covid_codes)) | (apcs.secondary_diagnosis.is_in(covid_codes))) & 
             (apcs.admission_date.is_before(index_date))
@@ -481,14 +481,14 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .exists_for_patient()
     )
 
-    sub_bin_covid_history = (
-        tmp_sub_bin_covid_history_sgss |
-        tmp_sub_bin_covid_history_gp |
-        tmp_sub_bin_covid_history_apc
+    sub_bin_covidhistory = (
+        tmp_sub_bin_covidhistory_sgss |
+        tmp_sub_bin_covidhistory_gp |
+        tmp_sub_bin_covidhistory_apc
     )
 
     ### COVID-19 severity
-    tmp_sub_date_covid_hospital = (
+    tmp_sub_date_covidhospital = (
         apcs.where(
             (apcs.primary_diagnosis.is_in(covid_codes)) & 
             (apcs.admission_date.is_on_or_after(exp_date_covid))
@@ -498,12 +498,12 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         .admission_date
     )
 
-    sub_cat_covid_hospital = case(
+    sub_cat_covidhospital = case(
         when(
             (exp_date_covid.is_not_null()) &
-            (tmp_sub_date_covid_hospital.is_not_null()) &
-            ((tmp_sub_date_covid_hospital - exp_date_covid).days >= 0) &
-            ((tmp_sub_date_covid_hospital - exp_date_covid).days < 29)
+            (tmp_sub_date_covidhospital.is_not_null()) &
+            ((tmp_sub_date_covidhospital - exp_date_covid).days >= 0) &
+            ((tmp_sub_date_covidhospital - exp_date_covid).days < 29)
             ).then("hospitalised"),
         when(exp_date_covid.is_not_null()).then("non_hospitalised"),
         when(exp_date_covid.is_null()).then("no_infection")
@@ -580,8 +580,8 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         cov_bin_asthma = cov_bin_asthma,
         cov_bin_pf = cov_bin_pf,
         ### Subgroups
-        sub_bin_covid_history = sub_bin_covid_history,
-        sub_cat_covid_hospital = sub_cat_covid_hospital,
+        sub_bin_covidhistory = sub_bin_covidhistory,
+        sub_cat_covidhospital = sub_cat_covidhospital,
         sub_bin_asthma_recent = sub_bin_asthma_recent,
         sub_bin_copd_ever = sub_bin_copd_ever
     ) 

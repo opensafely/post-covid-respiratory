@@ -179,7 +179,7 @@ for (c in cohorts) {
                            age_spline = TRUE,
                            analysis = paste0("sub_covidhospital_FALSE","_",p))    
       
-      ## analysis: sub_covid_history ----
+      ## analysis: sub_covidhistory ----
       if (c!="prevax") {
         df[nrow(df)+1,] <- c(cohort = c,
                              exposure = exposure, 
