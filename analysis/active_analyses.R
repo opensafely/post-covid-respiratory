@@ -52,7 +52,7 @@ study_stop <- study_dates$lcd_date
 # Define cut points ----
 
 prevax_cuts <- "1;7;14;28;56;84;183;365;730;1065;1582"
-vax_unvax_cuts <- "1;7;14;28;56;84;183;365;730;1065;1582"
+vax_unvax_cuts <- "1;7;14;28;56;84;183;365;730;1065"
 
 # Define covariates ----
 
