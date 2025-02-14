@@ -103,6 +103,7 @@ df1 <- df %>%
          contains("inex_"), # Inclusion/exclusion
          contains("cens_"), # Censor
          contains("qa_"), # Quality assurance
+         contains("strat_"), # Strata
          contains("vax_date_eligible"), # Vaccination eligibility
          contains("vax_date_"), # Vaccination dates and vax type 
          contains("vax_cat_") # Vaccination products
