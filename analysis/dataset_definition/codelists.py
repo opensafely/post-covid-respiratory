@@ -33,11 +33,11 @@ opensafely_ethnicity_codes_6 = codelist_from_csv(
     category_column="Grouping_6"
 )
 
-primis_covid19_vacc_update_ethnicity = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-eth2001.csv",
-    column="code",
-    category_column="grouping_6_id"
-)
+# primis_covid19_vacc_update_ethnicity = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-eth2001.csv",
+#     column="code",
+#     category_column="grouping_6_id"
+# )
 
 # Smoking
 smoking_clear = codelist_from_csv(
@@ -46,19 +46,19 @@ smoking_clear = codelist_from_csv(
     category_column="Category"
 )
 
-smoking_unclear = codelist_from_csv(
-    "codelists/opensafely-smoking-unclear.csv",
-    column="CTV3Code",
-    category_column="Category"
-)
+# smoking_unclear = codelist_from_csv(
+#     "codelists/opensafely-smoking-unclear.csv",
+#     column="CTV3Code",
+#     category_column="Category"
+# )
 
-ever_current_smoke = codelist_from_csv(
-    "codelists/bristol-smoke-and-eversmoke.csv",
-    column="code"
-)
+# ever_current_smoke = codelist_from_csv(
+#     "codelists/bristol-smoke-and-eversmoke.csv",
+#     column="code"
+# )
 
 # BMI
-bmi_obesity_snomed_clinical = codelist_from_csv(
+bmi_obesity_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-bmi_obesity_snomed.csv",
     column="code"
 )
@@ -86,16 +86,16 @@ hdl_cholesterol_snomed = codelist_from_csv(
 )
 
 # Carer codes
-carer_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-carer.csv",
-    column="code"
-)
+# carer_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-carer.csv",
+#     column="code"
+# )
 
 # No longer a carer codes
-notcarer_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-notcarer.csv",
-    column="code"
-)
+# notcarer_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-notcarer.csv",
+#     column="code"
+# )
 
 # Wider Learning Disability
 learndis_primis = codelist_from_csv(
@@ -104,22 +104,22 @@ learndis_primis = codelist_from_csv(
 )
 
 # Employed by Care Home codes
-carehome_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-carehome.csv",
-    column="code"
-)
+# carehome_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-carehome.csv",
+#     column="code"
+# )
 
 # Employed by nursing home codes
-nursehome_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-nursehome.csv",
-    column="code"
-)
+# nursehome_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-nursehome.csv",
+#     column="code"
+# )
 
 # Employed by domiciliary care provider codes
-domcare_primis = codelist_from_csv(
-    "codelists/primis-covid19-vacc-uptake-domcare.csv",
-    column="code"
-)
+# domcare_primis = codelist_from_csv(
+#     "codelists/primis-covid19-vacc-uptake-domcare.csv",
+#     column="code"
+# )
 
 # Patients in long-stay nursing and residential care
 longres_primis = codelist_from_csv(
@@ -268,7 +268,7 @@ immrx_primis = codelist_from_csv(
 )
 
 # Stroke Ischaemic (Ischaemic Stroke)
-stroke_isch_snomed_clinical = codelist_from_csv(
+stroke_isch_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-stroke_isch_snomed.csv",
     column="code"
 )
@@ -278,8 +278,8 @@ stroke_isch_icd10 = codelist_from_csv(
     column="code"
 )
 
-# Dementia (added ctv3)
-dementia_snomed_clinical = codelist_from_csv(
+# Dementia
+dementia_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_snomed.csv",
     column="code"
 )
@@ -289,12 +289,7 @@ dementia_icd10 = codelist_from_csv(
     column="code"
 )
 
-dementia_ctv3 = codelist_from_csv(
-    "codelists/opensafely-dementia.csv",
-    column="CTV3ID"
-)
-
-dementia_vascular_snomed_clinical = codelist_from_csv(
+dementia_vascular_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-dementia_vascular_snomed.csv",
     column="code"
 )
@@ -305,7 +300,7 @@ dementia_vascular_icd10 = codelist_from_csv(
 )
 
 # Liver disease
-liver_disease_snomed_clinical = codelist_from_csv(
+liver_disease_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-liver_disease_snomed.csv",
     column="code"
 )
@@ -316,7 +311,7 @@ liver_disease_icd10 = codelist_from_csv(
 )
 
 # Chronic Kidney disease
-ckd_snomed_clinical = codelist_from_csv(
+ckd_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-ckd_snomed.csv",
     column="code"
 )
@@ -327,7 +322,7 @@ ckd_icd10 = codelist_from_csv(
 )
 
 # Cancer
-cancer_snomed_clinical = codelist_from_csv(
+cancer_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-cancer_snomed.csv",
     column="code"
 )
@@ -337,7 +332,7 @@ cancer_icd10 = codelist_from_csv(
     column="code"
 )
 
-# Hypertension (added ctv3 codes)
+# Hypertension
 hypertension_icd10 = codelist_from_csv(
     "codelists/user-elsie_horne-hypertension_icd10.csv",
     column="code"
@@ -346,13 +341,9 @@ hypertension_drugs_dmd = codelist_from_csv(
     "codelists/user-elsie_horne-hypertension_drugs_dmd.csv",
     column="dmd_id"
 )
-hypertension_snomed_clinical = codelist_from_csv(
+hypertension_snomed = codelist_from_csv(
     "codelists/nhsd-primary-care-domain-refsets-hyp_cod.csv",
     column="code"
-)
-hypertension_ctv3 = codelist_from_csv(
-    "codelists/opensafely-hypertension.csv",
-    column="CTV3ID"
 )
 
 # Diabetes
@@ -366,13 +357,13 @@ diabetes_drugs_dmd = codelist_from_csv(
     column="dmd_id"
 )
 
-diabetes_snomed_clinical = codelist_from_csv(
+diabetes_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-diabetes_snomed.csv",
     column="code"
 )   
 
 # Depression
-depression_snomed_clinical = codelist_from_csv(
+depression_snomed = codelist_from_csv(
     "codelists/user-hjforbes-depression-symptoms-and-diagnoses.csv",
     column="code"
 )
@@ -383,7 +374,7 @@ depression_icd10 = codelist_from_csv(
 )
 
 # AMI (Acute Myocardial Infarction)
-ami_snomed_clinical = codelist_from_csv(
+ami_snomed = codelist_from_csv(
     "codelists/user-elsie_horne-ami_snomed.csv",
     column="code"
 )
@@ -400,7 +391,7 @@ ami_prior_icd10 = codelist_from_csv(
 
 #Quality assurance codes 
 
-prostate_cancer_snomed_clinical = codelist_from_csv(
+prostate_cancer_snomed = codelist_from_csv(
     "codelists/user-RochelleKnight-prostate_cancer_snomed.csv",
     column="code"
 )
@@ -408,7 +399,7 @@ prostate_cancer_icd10 = codelist_from_csv(
     "codelists/user-RochelleKnight-prostate_cancer_icd10.csv",
     column="code"
 )
-pregnancy_snomed_clinical = codelist_from_csv(
+pregnancy_snomed = codelist_from_csv(
     "codelists/user-RochelleKnight-pregnancy_and_birth_snomed.csv",
     column="code"
 )
@@ -423,7 +414,7 @@ hrt_dmd = codelist_from_csv(
 
 # Preexisting respiratory condition
 
-copd_ctv3_clinical = codelist_from_csv(
+copd_ctv3 = codelist_from_csv(
     "codelists/opensafely-current-copd.csv",
     column="CTV3ID"
 )
@@ -433,7 +424,7 @@ copd_icd10 = codelist_from_csv(
     column="code"
 )
 
-asthma_snomed_clinical = codelist_from_csv(
+asthma_snomed = codelist_from_csv(
     "codelists/opensafely-asthma-diagnosis-snomed.csv",
     column="id"
 )
@@ -445,7 +436,7 @@ asthma_icd10 = codelist_from_csv(
 
 # Respiratory outcome(s)
 
-pneumonia_snomed_clinical = codelist_from_csv(
+pneumonia_snomed = codelist_from_csv(
     "codelists/bristol-pneumonia-snomed.csv",
     column="code"
 )
@@ -455,7 +446,7 @@ pneumonia_icd10 = codelist_from_csv(
     column="ICD code"
 )
 
-pulmonary_fibrosis_snomed_clinical = codelist_from_csv(
+pulmonary_fibrosis_snomed = codelist_from_csv(
     "codelists/bristol-ild-snomed.csv",
     column="code"
 )
