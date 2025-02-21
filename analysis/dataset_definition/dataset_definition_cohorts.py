@@ -36,7 +36,7 @@ def generate_dataset(index_date, end_date_exp, end_date_out):
 
 # Extract date variables for later pipelines
 
-    @table_from_file("output/index_dates.csv.gz")
+    @table_from_file("output/dataset_definition/index_dates.csv.gz")
     
     class index_dates(PatientFrame):
     # Vaccine category and eligibility variables

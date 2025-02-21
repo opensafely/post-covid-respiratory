@@ -6,7 +6,7 @@ from datetime import date
 
 # extract index dates for vax cohort from index_dates.csv
 
-@table_from_file("output/index_dates.csv.gz")
+@table_from_file("output/dataset_definition/index_dates.csv.gz")
 
 class index_dates(PatientFrame):
     index_vax = Series(date)
