@@ -61,92 +61,59 @@ actions:
     - generate_dates
     outputs:
       highly_sensitive:
-        cohort: output/input_unvax.csv.gz
+        cohort: output/dataset_definition/input_unvax.csv.gz
 
-  ## Preprocess data - prevax 
+  ## Clean data - prevax, with describe_print 
 
-  preprocess_data_prevax:
-    run: r:latest analysis/preprocess/preprocess_data.R prevax
+  clean_data_prevax:
+    run: r:latest analysis/dataset_clean/dataset_clean.R prevax describe_print
     needs:
-    - generate_dataset_index_dates
-    - generate_study_population_prevax
+    - study_dates
+    - generate_cohort_prevax
     outputs:
       moderately_sensitive:
-        describe: output/describe_input_prevax_stage0.txt
-        describe_venn: output/describe_venn_prevax.txt
+        describe_dataset_preprocess: output/describe/desc_preproc_prevax.txt
+        describe_venn: output/describe/desc_venn_prevax.txt
+        describe_input_preclean: output/describe/desc_input_preclean_prevax.txt
+        consort: output/dataset_clean/consort_prevax.csv
+        consort_midpoint6: output/dataset_clean/consort_prevax_midpoint6.csv
       highly_sensitive:
-        cohort: output/input_prevax_0.rds
-        venn: output/venn_prevax.rds
+        venn: output/dataset_clean/venn_prevax.rds
+        cohort: output/dataset_clean/input_prevax.rds
 
-  ## Preprocess data - vax 
+  ## Clean data - vax, with describe_print 
 
-  preprocess_data_vax:
-    run: r:latest analysis/preprocess/preprocess_data.R vax
+  clean_data_vax:
+    run: r:latest analysis/dataset_clean/dataset_clean.R vax describe_print
     needs:
-    - generate_dataset_index_dates
-    - generate_study_population_vax
+    - study_dates
+    - generate_cohort_vax
     outputs:
       moderately_sensitive:
-        describe: output/describe_input_vax_stage0.txt
-        describe_venn: output/describe_venn_vax.txt
+        describe_dataset_preprocess: output/describe/desc_preproc_vax.txt
+        describe_venn: output/describe/desc_venn_vax.txt
+        describe_input_preclean: output/describe/desc_input_preclean_vax.txt
+        consort: output/dataset_clean/consort_vax.csv
+        consort_midpoint6: output/dataset_clean/consort_vax_midpoint6.csv
       highly_sensitive:
-        cohort: output/input_vax_0.rds
-        venn: output/venn_vax.rds
+        venn: output/dataset_clean/venn_vax.rds
+        cohort: output/dataset_clean/input_vax.rds
 
-  ## Preprocess data - unvax 
+  ## Clean data - unvax, with describe_print 
 
-  preprocess_data_unvax:
-    run: r:latest analysis/preprocess/preprocess_data.R unvax
+  clean_data_unvax:
+    run: r:latest analysis/dataset_clean/dataset_clean.R unvax describe_print
     needs:
-    - generate_dataset_index_dates
-    - generate_study_population_unvax
+    - study_dates
+    - generate_cohort_unvax
     outputs:
       moderately_sensitive:
-        describe: output/describe_input_unvax_stage0.txt
-        describe_venn: output/describe_venn_unvax.txt
+        describe_dataset_preprocess: output/describe/desc_preproc_unvax.txt
+        describe_venn: output/describe/desc_venn_unvax.txt
+        describe_input_preclean: output/describe/desc_input_preclean_unvax.txt
+        consort: output/dataset_clean/consort_unvax.csv
+        consort_midpoint6: output/dataset_clean/consort_unvax_midpoint6.csv
       highly_sensitive:
-        cohort: output/input_unvax_0.rds
-        venn: output/venn_unvax.rds
-
-  ## Data cleaning - prevax 
-
-  data_cleaning_prevax:
-    run: r:latest analysis/data_cleaning/data_cleaning.R prevax
-    needs:
-    - vax_eligibility_inputs
-    - preprocess_data_prevax
-    outputs:
-      moderately_sensitive:
-        consort: output/consort_prevax.csv
-        consort_midpoint6: output/consort_prevax_midpoint6.csv
-      highly_sensitive:
-        cohort: output/input_prevax.rds
-
-  ## Data cleaning - vax 
-
-  data_cleaning_vax:
-    run: r:latest analysis/data_cleaning/data_cleaning.R vax
-    needs:
-    - vax_eligibility_inputs
-    - preprocess_data_vax
-    outputs:
-      moderately_sensitive:
-        consort: output/consort_vax.csv
-        consort_midpoint6: output/consort_vax_midpoint6.csv
-      highly_sensitive:
-        cohort: output/input_vax.rds
-
-  ## Data cleaning - unvax 
-
-  data_cleaning_unvax:
-    run: r:latest analysis/data_cleaning/data_cleaning.R unvax
-    needs:
-    - vax_eligibility_inputs
-    - preprocess_data_unvax
-    outputs:
-      moderately_sensitive:
-        consort: output/consort_unvax.csv
-        consort_midpoint6: output/consort_unvax_midpoint6.csv
-      highly_sensitive:
-        cohort: output/input_unvax.rds
+        venn: output/dataset_clean/venn_unvax.rds
+        cohort: output/dataset_clean/input_unvax.rds
 

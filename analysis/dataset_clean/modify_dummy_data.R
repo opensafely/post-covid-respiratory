@@ -83,7 +83,7 @@ df <- df %>%
                   NA_Date_))) %>%
   mutate(across(vax_date_Moderna_2,
                 ~if_else(
-                  vaccine_1_type %in% "Moderna",
+                  vaccine_2_type %in% "Moderna",
                   .x,
                   NA_Date_))) %>%
   
@@ -143,7 +143,7 @@ df <- df %>%
                   NA_Date_))) %>%
   mutate(across(vax_date_Moderna_3,
                 ~if_else(
-                  vaccine_1_type %in% "Moderna",
+                  vaccine_3_type %in% "Moderna",
                   .x,
                   NA_Date_))) %>%
   

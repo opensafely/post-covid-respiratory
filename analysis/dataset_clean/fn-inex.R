@@ -1,7 +1,14 @@
 # Function to apply inclusion criteria
 
-inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, start_date_delta) {
-  
+inex <- function(input, cohort, vax_start_date, mixed_vax_threshold, start_date_delta) {
+
+  ## Specify consort table --------------------------------------------------------
+  print('Specify consort table')
+
+  consort <- data.frame(Description = "Input", 
+                        N = nrow(input),
+                        stringsAsFactors = FALSE)
+  ## Apply inclusion criteria to all cohorts --------------------------------------
   print('Inclusion criteria: Alive at index')
   
   input <- subset(input, input$inex_bin_alive == TRUE) # Subset input if alive at index.
@@ -35,21 +42,22 @@ inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, st
   consort[nrow(consort)+1,] <- c("Inclusion criteria: Known IMD at index",
                                  nrow(input))
   
+  print('Inclusion criteria: Known region at index')
+  
+  input <- input %>% mutate(strat_cat_region = as.character(strat_cat_region)) %>%
+    filter(strat_cat_region != "Missing")%>%
+    mutate(strat_cat_region = as.factor(strat_cat_region))
+  input$strat_cat_region <- relevel(input$strat_cat_region, ref = "East")
+  consort[nrow(consort)+1,] <- c("Inclusion criteria: Known region at index",
+                                 nrow(input))
+    
   print('Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date')
   
   input <- subset(input, input$inex_bin_6m_reg == TRUE)
   consort[nrow(consort)+1,] <- c("Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date",
                                  nrow(input))
-  
-  print('Inclusion criteria: Known region at index')
-  
-  input <- input %>% mutate(cov_cat_region = as.character(cov_cat_region)) %>%
-    filter(cov_cat_region != "Missing")%>%
-    mutate(cov_cat_region = as.factor(cov_cat_region))
-  input$cov_cat_region <- relevel(input$cov_cat_region, ref = "East")
-  consort[nrow(consort)+1,] <- c("Inclusion criteria: Known region at index",
-                                 nrow(input))
-# Apply cohort specific inclusion criteria -------------------------------------
+
+  ## Apply cohort specific inclusion criteria -------------------------------------
   print('Apply cohort specific inclusion criteria')
   
   if (cohort == "vax") {
@@ -79,18 +87,26 @@ inex <- function(input, consort, cohort, vax_start_date, mixed_vax_threshold, st
                                     nrow(input))
 
     print('Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021')
-
     input <- input %>%
       mutate(
-        AZ_date = as.numeric(ifelse(vax_date_AstraZeneca_1 < mixed_vax_threshold, 1,
-                          ifelse(vax_date_AstraZeneca_2 < mixed_vax_threshold, 1,
-                                 ifelse(vax_date_AstraZeneca_3 < mixed_vax_threshold, 1, 0)))),
-        Moderna_date = as.numeric(ifelse(vax_date_Moderna_1 < mixed_vax_threshold, 1,
-                              ifelse(vax_date_Moderna_2 < mixed_vax_threshold, 1,
-                                     ifelse(vax_date_Moderna_3 < mixed_vax_threshold, 1, 0)))),
-        Pfizer_date = as.numeric(ifelse(vax_date_Pfizer_1 < mixed_vax_threshold, 1,
-                              ifelse(vax_date_Pfizer_2 < mixed_vax_threshold, 1,
-                                     ifelse(vax_date_Pfizer_3 < mixed_vax_threshold, 1, 0))))
+        AZ_date = case_when(
+          vax_date_AstraZeneca_1 < mixed_vax_threshold ~ 1,
+          vax_date_AstraZeneca_2 < mixed_vax_threshold ~ 1,
+          vax_date_AstraZeneca_3 < mixed_vax_threshold ~ 1,
+          TRUE ~ 0
+        ),
+        Moderna_date = case_when(
+          vax_date_Moderna_1 < mixed_vax_threshold ~ 1,
+          vax_date_Moderna_2 < mixed_vax_threshold ~ 1,
+          vax_date_Moderna_3 < mixed_vax_threshold ~ 1,
+          TRUE ~ 0
+        ),
+        Pfizer_date = case_when(
+          vax_date_Pfizer_1 < mixed_vax_threshold ~ 1,
+          vax_date_Pfizer_2 < mixed_vax_threshold ~ 1,
+          vax_date_Pfizer_3 < mixed_vax_threshold ~ 1,
+          TRUE ~ 0
+        )
       ) %>%
       rowwise() %>%
       mutate(vax_mixed = sum(c_across(c(AZ_date, Moderna_date, Pfizer_date)), na.rm = TRUE)) %>%

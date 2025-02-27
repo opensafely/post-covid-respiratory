@@ -14,6 +14,8 @@ defaults_list <- list(
   expectations = list(population_size = 1000L)
 )
 cohorts <- c("prevax", "vax", "unvax")
+# describe_flag <- c("no_describe_print") #choose this to not print out describe*.txt files during dataset_clean.R
+describe_flag <- c("describe_print")   # choose this to print out describe*.txt files during dataset_clean.R
 
 # Create generic action function -----------------------------------------------
 
@@ -82,45 +84,51 @@ generate_cohort <- function(cohort) {
   )
 }
 
+# Create function to clean data -------------------------------------------------
 
-preprocess_data <- function(cohort){
+clean_data <- function(cohort, describe = "no_describe_print") {
   splice(
-    comment(glue("Preprocess data - {cohort}")),
-    action(
-      name = glue("preprocess_data_{cohort}"),
-      run = glue("r:latest analysis/preprocess/preprocess_data.R"),
-      arguments = c(cohort),
-      needs = list("generate_dataset_index_dates",glue("generate_study_population_{cohort}")),
-      moderately_sensitive = list(
-        describe = glue("output/describe_input_{cohort}_stage0.txt"),
-        describe_venn = glue("output/describe_venn_{cohort}.txt")
-      ),
-      highly_sensitive = list(
-        cohort = glue("output/input_{cohort}_0.rds"),
-        venn = glue("output/venn_{cohort}.rds")
+    comment(glue("Clean data - {cohort}, with {describe}")),
+    if (describe == "describe_print") { # Action to include describe*.txt files
+      action(
+        name      = glue("clean_data_{cohort}"),
+        run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        arguments = c(c(cohort), c(describe)),
+        needs     = list(
+               "study_dates",
+          glue("generate_cohort_{cohort}")
+        ),
+        moderately_sensitive = list(
+          describe_dataset_preprocess  = glue("output/describe/desc_preproc_{cohort}.txt"),
+          describe_venn                = glue("output/describe/desc_venn_{cohort}.txt"),
+          describe_input_preclean      = glue("output/describe/desc_input_preclean_{cohort}.txt"),
+          consort                      = glue("output/dataset_clean/consort_{cohort}.csv"),
+          consort_midpoint6            = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
+        ),
+        highly_sensitive = list(
+          venn   = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort = glue("output/dataset_clean/input_{cohort}.rds")
+        )
       )
-    )
-  )
-}
-
-# Create function to data cleaning -------------------------------------------
-
-data_cleaning <- function(cohort){
-  splice(
-    comment(glue("Data cleaning - {cohort}")),
-    action(
-      name = glue("data_cleaning_{cohort}"),
-      run = glue("r:latest analysis/data_cleaning/data_cleaning.R"),
-      arguments = c(cohort),
-      needs = list("vax_eligibility_inputs",glue("preprocess_data_{cohort}")),
-      moderately_sensitive = list(
-        consort = glue("output/consort_{cohort}.csv"),
-        consort_midpoint6 = glue("output/consort_{cohort}_midpoint6.csv")
-      ),
-      highly_sensitive = list(
-        cohort = glue("output/input_{cohort}.rds")
+    } else { # Action to exclude describe*.txt files
+      action(
+        name      = glue("clean_data_{cohort}"),
+        run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        arguments = c(c(cohort), c(describe)),
+        needs     = list(
+               "study_dates",
+          glue("generate_cohort_{cohort}")
+        ),
+        moderately_sensitive = list(
+          consort            = glue("output/dataset_clean/consort_{cohort}.csv"),
+          consort_midpoint6  = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
+        ),
+        highly_sensitive = list(
+          venn   = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort = glue("output/dataset_clean/input_{cohort}.rds")
+        )
       )
-    )
+    }
   )
 }
 
@@ -169,11 +177,11 @@ actions_list <- splice(
     )
   ),
 
-  ## Preprocess data -----------------------------------------------------------
+  ## Clean data -----------------------------------------------------------
   
   splice(
     unlist(lapply(cohorts, 
-                  function(x) data_cleaning(cohort = x)), 
+                  function(x) clean_data(cohort = x, describe = describe_flag)), 
            recursive = FALSE
     )
   ))

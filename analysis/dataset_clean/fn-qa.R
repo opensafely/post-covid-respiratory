@@ -1,35 +1,27 @@
 # Function to apply quality assurance
-qa <- function(input, study_dates) {
-
-  # Specify consort table --------------------------------------------------------
-  
-  print('Specify consort table')
-
-  consort <- data.frame(Description = "Input", 
-                        N = nrow(input),
-                        stringsAsFactors = FALSE)
+qa <- function(input, consort, study_dates) {
 
   print('Quality assurance: Year of birth is after year of death or patient only has year of death')
-  
-  input <- input[!((input$qa_num_birth_year > (format(input$cens_date_death, format="%Y")) & 
-                      is.na(input$qa_num_birth_year)== FALSE & is.na(input$cens_date_death) == FALSE) | 
-                     (is.na(input$qa_num_birth_year)== TRUE & is.na(input$cens_date_death) == FALSE)),]
+
+  input <- input[((!is.na(input$qa_num_birth_year) & !is.na(input$cens_date_death)) & 
+                  (format(input$cens_date_death, "%Y") >= input$qa_num_birth_year)) | 
+                 (is.na(input$cens_date_death)), ]
+
   consort[nrow(consort)+1,] <- c("Quality assurance: Year of birth is after year of death or patient only has year of death",
                                  nrow(input))
   
-  print('Quality assurance: Year of birth is before 1793 or year of birth exceeds current date')
+  print('Quality assurance: Year of birth exceeds current date')
   
-  input <- input[!((input$qa_num_birth_year < 1793 | 
-                      (input$qa_num_birth_year >format(Sys.Date(),"%Y"))) & 
+  input <- input[!((input$qa_num_birth_year >format(Sys.Date(),"%Y")) & 
                      is.na(input$qa_num_birth_year) == FALSE),]
-  consort[nrow(consort)+1,] <- c("Quality assurance: Year of birth is before 1793 or year of birth exceeds current date",
+  consort[nrow(consort)+1,] <- c("Quality assurance: Year of birth exceeds current date",
                                  nrow(input))
   
-  print('Quality assurance: Date of death is invalid (on or before 1/1/1900 or after current date)')
+  print('Quality assurance: Date of death is invalid (on or before earliest expected date or after current date)')
   
   input <- input[!((input$cens_date_death <= as.Date(study_dates$earliest_expec) | 
                       input$cens_date_death > format(Sys.Date(),"%Y-%m-%d")) & is.na(input$cens_date_death) == FALSE),]
-  consort[nrow(consort)+1,] <- c("Quality assurance: Date of death is invalid (on or before 1/1/1900 or after current date)",
+  consort[nrow(consort)+1,] <- c("Quality assurance: Date of death is invalid (on or before earliest expected date or after current date)",
                                  nrow(input))
   
   print('Quality assurance: Pregnancy/birth codes for men')
