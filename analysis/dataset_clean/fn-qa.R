@@ -2,7 +2,6 @@
 qa <- function(input, consort, study_dates) {
 
   print('Quality assurance: Year of birth is after year of death or patient only has year of death')
-
   input <- input[((!is.na(input$qa_num_birth_year) & !is.na(input$cens_date_death)) & 
                   (format(input$cens_date_death, "%Y") >= input$qa_num_birth_year)) | 
                  (is.na(input$cens_date_death)), ]
