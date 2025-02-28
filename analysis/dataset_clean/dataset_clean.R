@@ -41,9 +41,10 @@ start_date_delta <- as.Date(study_dates$delta_date, format="%Y-%m-%d")
 print('Source common functions')
 
 source("analysis/utility.R")
+source("analysis/dataset_clean/fn-preproc.R")
 source("analysis/dataset_clean/fn-ref.R")
-source("analysis/dataset_clean/fn-qa.R")
 source("analysis/dataset_clean/fn-inex.R")
+source("analysis/dataset_clean/fn-qa.R")
 
 # Specify command arguments ----------------------------------------------------
 print('Specify command arguments')
@@ -57,7 +58,7 @@ if(length(args)==0){
 }
 
 if (length(args) < 2) { # Whether to create describe*.txt files
-  describe_flag <- "no_describe_print" #describe_print or no_describe_print
+  describe_flag <- "describe_print" #describe_print or no_describe_print
 } else {
   describe_flag <- args[[2]]
 }
@@ -70,126 +71,49 @@ if (describe_flag == "describe_print") {
   fs::dir_create(here::here(describe_dir))
 }
 
-# Get column names -------------------------------------------------------------
-print('Get column names')
+# Describe preprocessing data -------------------------------------------------
 
-all_cols <- fread(paste0("output/dataset_definition/input_",cohort,".csv.gz"), 
-                  header = TRUE, sep = ",", nrows = 0, 
-                  stringsAsFactors = FALSE) %>%
-  names()
-message("Column names found")
-print(all_cols)
+  ## Describe raw data
+input_raw <- preproc1(cohort)$input_raw
 
-# Define column classes ------------------------------------------------------
-print('Define colum classes')
-
-cat_cols <- c("patient_id", grep("_cat", all_cols, value = TRUE))
-bin_cols <- c(grep("_bin", all_cols, value = TRUE))
-num_cols <- c(grep("_num", all_cols, value = TRUE),
-              grep("vax_jcvi_age_", all_cols, value = TRUE))
-date_cols <- grep("_date", all_cols, value = TRUE)
-message("Column classes identified")
-
-col_classes <- setNames(
-  c(rep("c", length(cat_cols)),
-    rep("l", length(bin_cols)),
-    rep("d", length(num_cols)),
-    rep("D", length(date_cols))
-  ), 
-  all_cols[match(c(cat_cols, bin_cols, num_cols, date_cols), all_cols)]
-)
-message("Column classes defined")
-
-# Load cohort dataset ---------------------------------------------------------- 
-print('Load cohort dataset')
-
-df <- read_csv(paste0("output/dataset_definition/input_",cohort,".csv.gz"), 
-               col_types = col_classes)
-message(paste0("Dataset has been read successfully with N = ", nrow(df), " rows"))
-
-# Format dataset columns ---------------------------------------------------------------
-print('Format dataset columns')
-
-df <- df %>%
-  mutate(across(all_of(date_cols),
-                ~ floor_date(as.Date(., format="%Y-%m-%d"), unit = "days")),
-         across(contains('_birth_year'), 
-                ~ format(as.Date(., origin = "1970-01-01"), "%Y")),
-         across(all_of(num_cols), ~ as.numeric(.)), 
-         across(all_of(cat_cols), ~ as.factor(.))) 
-message("Dataset columns formatted")
-
-# Overwrite vaccination information for dummy data and vax cohort only ---------
-
+  ### Overwrite vaccination information for dummy data and vax cohort only ---------
+  
 if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") &&
-   cohort %in% c("vax")) {
-  source("analysis/dataset_clean/modify_dummy_data.R")
-  message("Vaccine information overwritten successfully")
+cohort %in% c("vax")) {
+source("analysis/dataset_clean/modify_dummy_data.R")
+message("Vaccine information overwritten successfully")
 }
 
-# Describe pre-processing data -------------------------------------------------
-
 if (describe_flag == "describe_print") {
-    sink(paste0(describe_dir, "desc_preproc_", cohort, ".txt"))
-    print(Hmisc::describe(df))
+    sink(paste0(describe_dir, "desc_raw_", cohort, ".txt"))
+    print(Hmisc::describe(input_raw))
     sink()
     message ("Cohort ", cohort, " description written successfully!")
 } else {
     message("No description written, change input flag if description is desired.")
 }
 
-# Remove records with missing patient id ---------------------------------------
-
-df <- df[!is.na(df$patient_id),]
-
-message("All records with valid patient IDs retained.")
-
-# Restrict columns and save Venn diagram input dataset -------------------------
-
-df1 <- df %>% select(starts_with(c("patient_id","tmp_out_date","out_date")))
-
-# Describe Venn diagram data ---------------------------------------------------
+  ## Describe Venn diagram data
+input_venn <- preproc2(cohort, input_raw)$input_venn
 
 if (describe_flag == "describe_print") {
     sink(paste0(describe_dir, "desc_venn_", cohort, ".txt"))
-    print(Hmisc::describe(df1))
+    print(Hmisc::describe(input_venn))
     sink()
     message("Venn diagram data saved successfully")
 } else {
     message("No description written, change input flag if description is desired.")
 }
-
-saveRDS(df1, file = paste0(dataclean_dir, "venn_", cohort, ".rds"), compress = TRUE)
-
+  ## Save Venn diagram data
+saveRDS(input_venn, file = paste0(dataclean_dir, "venn_", cohort, ".rds"), compress = TRUE)
 message("Venn diagram data saved successfully")
 
-# Restrict columns and save analysis dataset -----------------------------------
-
-input <- df %>% 
-  select(patient_id,
-         starts_with("index_date"),
-         starts_with("end_date_"),
-         contains("sub_"),                   # Subgroups
-         contains("exp_"),                   # Exposures
-         contains("out_"),                   # Outcomes
-         contains("cov_"),                   # Covariates
-         contains("inex_"),                  # Inclusion/exclusion
-         contains("cens_"),                  # Censor
-         contains("qa_"),                    # Quality assurance
-         contains("strat_"),                 # Strata
-         contains("vax_date_eligible"),      # Vaccination eligibility
-         contains("vax_date_"),              # Vaccination dates and vax type 
-         contains("vax_cat_")                # Vaccination products
-  )
-
-input[,colnames(df)[grepl("tmp_",colnames(df))]] <- NULL
-
-message(paste0("Analysis dataset has been read successfully with N = ", nrow(df), " rows"))
-
-# Describe pre-cleaning data ------------------------------------------------------
+  ## Describe preprocess data
+input <- preproc2(cohort, input_raw)$input_preproc
+message(paste0("Preprocess dataset has been read successfully with N = ", nrow(input), " rows"))
 
 if (describe_flag == "describe_print") {
-    sink(paste0(describe_dir, "desc_input_preclean_", cohort, ".txt"))
+    sink(paste0(describe_dir, "desc_preproc_", cohort, ".txt"))
     print(Hmisc::describe(input))
     sink()
     message (paste0("Cohort ", cohort, " with valid patient IDs description written successfully!"))
@@ -251,4 +175,4 @@ input <- input[, c("patient_id", "index_date",
                   colnames(input)[grepl("vax_date_", colnames(input))],
                   colnames(input)[grepl("vax_cat_", colnames(input))])]
 
-saveRDS(input, file = paste0(dataclean_dir, "input_", cohort, ".rds"), compress = TRUE)
+saveRDS(input, file = paste0(dataclean_dir, "input_", cohort, "_clean.rds"), compress = TRUE)

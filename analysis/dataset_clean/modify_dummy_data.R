@@ -5,7 +5,7 @@
 set.seed(1)
 
 # Change first jab date so that they have roughly correct distribution  
-df <- df %>%
+input_raw <- input_raw %>%
   mutate(
     vax_date_Pfizer_1 = as.Date(vax_date_eligible) + days(round(rnorm(nrow(.), mean = 10, sd = 3))),
     vax_date_AstraZeneca_1 = as.Date(vax_date_eligible) + days(round(rnorm(nrow(.), mean = 10, sd = 3))),
@@ -59,7 +59,7 @@ df <- df %>%
   ) %>%
   
   # Set 2nd vaccine type
-  mutate(vaccine_2_type =  ifelse(runif(nrow(df),0,1)>0.95 & vaccine_1_type!="None",
+  mutate(vaccine_2_type =  ifelse(runif(nrow(input_raw),0,1)>0.95 & vaccine_1_type!="None",
                                   sample(
                                     x = c("Pfizer", "AstraZeneca", "Moderna",  "None"),
                                     size = nrow(.),

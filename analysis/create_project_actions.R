@@ -99,15 +99,15 @@ clean_data <- function(cohort, describe = "no_describe_print") {
           glue("generate_cohort_{cohort}")
         ),
         moderately_sensitive = list(
-          describe_dataset_preprocess  = glue("output/describe/desc_preproc_{cohort}.txt"),
+          describe_raw_dataset         = glue("output/describe/desc_raw_{cohort}.txt"),
           describe_venn                = glue("output/describe/desc_venn_{cohort}.txt"),
-          describe_input_preclean      = glue("output/describe/desc_input_preclean_{cohort}.txt"),
+          describe_preprocess_dataset  = glue("output/describe/desc_preproc_{cohort}.txt"),
           consort                      = glue("output/dataset_clean/consort_{cohort}.csv"),
           consort_midpoint6            = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
         ),
         highly_sensitive = list(
-          venn   = glue("output/dataset_clean/venn_{cohort}.rds"),
-          cohort = glue("output/dataset_clean/input_{cohort}.rds")
+          venn           = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort_clean   = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
     } else { # Action to exclude describe*.txt files
@@ -124,8 +124,8 @@ clean_data <- function(cohort, describe = "no_describe_print") {
           consort_midpoint6  = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
         ),
         highly_sensitive = list(
-          venn   = glue("output/dataset_clean/venn_{cohort}.rds"),
-          cohort = glue("output/dataset_clean/input_{cohort}.rds")
+          venn           = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort_clean   = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
     }

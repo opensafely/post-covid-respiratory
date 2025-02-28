@@ -72,14 +72,14 @@ actions:
     - generate_cohort_prevax
     outputs:
       moderately_sensitive:
-        describe_dataset_preprocess: output/describe/desc_preproc_prevax.txt
+        describe_raw_dataset: output/describe/desc_raw_prevax.txt
         describe_venn: output/describe/desc_venn_prevax.txt
-        describe_input_preclean: output/describe/desc_input_preclean_prevax.txt
+        describe_preprocess_dataset: output/describe/desc_preproc_prevax.txt
         consort: output/dataset_clean/consort_prevax.csv
         consort_midpoint6: output/dataset_clean/consort_prevax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_prevax.rds
-        cohort: output/dataset_clean/input_prevax.rds
+        cohort_clean: output/dataset_clean/input_prevax_clean.rds
 
   ## Clean data - vax, with describe_print 
 
@@ -90,14 +90,14 @@ actions:
     - generate_cohort_vax
     outputs:
       moderately_sensitive:
-        describe_dataset_preprocess: output/describe/desc_preproc_vax.txt
+        describe_raw_dataset: output/describe/desc_raw_vax.txt
         describe_venn: output/describe/desc_venn_vax.txt
-        describe_input_preclean: output/describe/desc_input_preclean_vax.txt
+        describe_preprocess_dataset: output/describe/desc_preproc_vax.txt
         consort: output/dataset_clean/consort_vax.csv
         consort_midpoint6: output/dataset_clean/consort_vax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_vax.rds
-        cohort: output/dataset_clean/input_vax.rds
+        cohort_clean: output/dataset_clean/input_vax_clean.rds
 
   ## Clean data - unvax, with describe_print 
 
@@ -108,12 +108,12 @@ actions:
     - generate_cohort_unvax
     outputs:
       moderately_sensitive:
-        describe_dataset_preprocess: output/describe/desc_preproc_unvax.txt
+        describe_raw_dataset: output/describe/desc_raw_unvax.txt
         describe_venn: output/describe/desc_venn_unvax.txt
-        describe_input_preclean: output/describe/desc_input_preclean_unvax.txt
+        describe_preprocess_dataset: output/describe/desc_preproc_unvax.txt
         consort: output/dataset_clean/consort_unvax.csv
         consort_midpoint6: output/dataset_clean/consort_unvax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_unvax.rds
-        cohort: output/dataset_clean/input_unvax.rds
+        cohort_clean: output/dataset_clean/input_unvax_clean.rds
 
