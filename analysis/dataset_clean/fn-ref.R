@@ -8,11 +8,6 @@ ref <- function(input) {
                                           is.na(input$cov_cat_smoking),
                                           "M")
   
-  input <- input %>% 
-    mutate(strat_cat_region = as.character(strat_cat_region)) %>%
-    mutate(strat_cat_region = replace_na(strat_cat_region, "Missing")) %>%
-    mutate(strat_cat_region = as.factor(strat_cat_region))
-  
   # Set reference levels for factors ---------------------------------------------
   print('Set reference levels for factors')
   
@@ -47,7 +42,13 @@ ref <- function(input) {
   
   # Set reference level for variable: strat_cat_region -----------------------------
   print('Set reference level for variable: strat_cat_region')
-  
+
+  input$strat_cat_region <- factor(input$strat_cat_region,  
+                                   levels = c("East", 
+                                              "East Midlands", "London", 
+                                              "North East", "North West", 
+                                              "South East", "South West", 
+                                              "West Midlands", "Yorkshire and The Humber"))
   input$strat_cat_region <- relevel(input$strat_cat_region, ref = "East")
   
   # Set reference level for variable: cov_cat_smoking ---------------------
@@ -61,18 +62,9 @@ ref <- function(input) {
   print('Set reference level for variable: cov_cat_sex')
   
   levels(input$cov_cat_sex) <- list("Female" = "female", "Male" = "male")
-  
-  
   input$cov_cat_sex <- factor(input$cov_cat_sex, 
                               levels = c("Female", "Male", "Unknown"))
   input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "Female")
-  
-  # Define cov_cat_age_group
-
-  input$cov_cat_age_group <- numerical_to_categorical(input$cov_num_age,c(18,30,40,50,60,70,80,90)) 
-
-  input$cov_cat_age_group <- ifelse(input$cov_cat_age_group == "<=17", "", input$cov_cat_age_group) 
-
 
   # Set reference level for variable: vax_cat_jcvi_group -------------------------
   print('Set reference level for variable: vax_cat_jcvi_group')
@@ -93,5 +85,3 @@ ref <- function(input) {
   
   return(list(input = input))
 }
-
-

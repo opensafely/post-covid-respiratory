@@ -2,7 +2,7 @@ version: '3.0'
 
 expectations:
 
-  population_size: 1000
+  population_size: 200000
 
 actions:
 
@@ -63,10 +63,10 @@ actions:
       highly_sensitive:
         cohort: output/dataset_definition/input_unvax.csv.gz
 
-  ## Clean data - prevax, with describe_print 
+  ## Clean data - prevax, with describe_TRUE 
 
   clean_data_prevax:
-    run: r:latest analysis/dataset_clean/dataset_clean.R prevax describe_print
+    run: r:latest analysis/dataset_clean/dataset_clean.R prevax describe_TRUE
     needs:
     - study_dates
     - generate_cohort_prevax
@@ -75,16 +75,16 @@ actions:
         describe_raw_dataset: output/describe/desc_raw_prevax.txt
         describe_venn: output/describe/desc_venn_prevax.txt
         describe_preprocess_dataset: output/describe/desc_preproc_prevax.txt
-        consort: output/dataset_clean/consort_prevax.csv
-        consort_midpoint6: output/dataset_clean/consort_prevax_midpoint6.csv
+        flow: output/dataset_clean/flow_prevax.csv
+        flow_midpoint6: output/dataset_clean/flow_prevax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_prevax.rds
         cohort_clean: output/dataset_clean/input_prevax_clean.rds
 
-  ## Clean data - vax, with describe_print 
+  ## Clean data - vax, with describe_TRUE 
 
   clean_data_vax:
-    run: r:latest analysis/dataset_clean/dataset_clean.R vax describe_print
+    run: r:latest analysis/dataset_clean/dataset_clean.R vax describe_TRUE
     needs:
     - study_dates
     - generate_cohort_vax
@@ -93,16 +93,16 @@ actions:
         describe_raw_dataset: output/describe/desc_raw_vax.txt
         describe_venn: output/describe/desc_venn_vax.txt
         describe_preprocess_dataset: output/describe/desc_preproc_vax.txt
-        consort: output/dataset_clean/consort_vax.csv
-        consort_midpoint6: output/dataset_clean/consort_vax_midpoint6.csv
+        flow: output/dataset_clean/flow_vax.csv
+        flow_midpoint6: output/dataset_clean/flow_vax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_vax.rds
         cohort_clean: output/dataset_clean/input_vax_clean.rds
 
-  ## Clean data - unvax, with describe_print 
+  ## Clean data - unvax, with describe_TRUE 
 
   clean_data_unvax:
-    run: r:latest analysis/dataset_clean/dataset_clean.R unvax describe_print
+    run: r:latest analysis/dataset_clean/dataset_clean.R unvax describe_TRUE
     needs:
     - study_dates
     - generate_cohort_unvax
@@ -111,8 +111,8 @@ actions:
         describe_raw_dataset: output/describe/desc_raw_unvax.txt
         describe_venn: output/describe/desc_venn_unvax.txt
         describe_preprocess_dataset: output/describe/desc_preproc_unvax.txt
-        consort: output/dataset_clean/consort_unvax.csv
-        consort_midpoint6: output/dataset_clean/consort_unvax_midpoint6.csv
+        flow: output/dataset_clean/flow_unvax.csv
+        flow_midpoint6: output/dataset_clean/flow_unvax_midpoint6.csv
       highly_sensitive:
         venn: output/dataset_clean/venn_unvax.rds
         cohort_clean: output/dataset_clean/input_unvax_clean.rds

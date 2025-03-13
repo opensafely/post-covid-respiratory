@@ -11,11 +11,12 @@ library(dplyr)
 
 defaults_list <- list(
   version = "3.0",
-  expectations = list(population_size = 1000L)
+  expectations = list(population_size = 200000L)
 )
+
 cohorts <- c("prevax", "vax", "unvax")
-# describe_flag <- c("no_describe_print") #choose this to not print out describe*.txt files during dataset_clean.R
-describe_flag <- c("describe_print")   # choose this to print out describe*.txt files during dataset_clean.R
+# describe_flag <- c("describe_FALSE") #choose this to not print out describe*.txt files during dataset_clean.R
+describe_flag <- c("describe_TRUE")   # choose this to print out describe*.txt files during dataset_clean.R
 
 # Create generic action function -----------------------------------------------
 
@@ -86,10 +87,10 @@ generate_cohort <- function(cohort) {
 
 # Create function to clean data -------------------------------------------------
 
-clean_data <- function(cohort, describe = "no_describe_print") {
+clean_data <- function(cohort, describe = "describe_FALSE") {
   splice(
     comment(glue("Clean data - {cohort}, with {describe}")),
-    if (describe == "describe_print") { # Action to include describe*.txt files
+    if (describe == "describe_TRUE") { # Action to include describe*.txt files
       action(
         name      = glue("clean_data_{cohort}"),
         run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
@@ -102,8 +103,8 @@ clean_data <- function(cohort, describe = "no_describe_print") {
           describe_raw_dataset         = glue("output/describe/desc_raw_{cohort}.txt"),
           describe_venn                = glue("output/describe/desc_venn_{cohort}.txt"),
           describe_preprocess_dataset  = glue("output/describe/desc_preproc_{cohort}.txt"),
-          consort                      = glue("output/dataset_clean/consort_{cohort}.csv"),
-          consort_midpoint6            = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
+          flow                      = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow_midpoint6            = glue("output/dataset_clean/flow_{cohort}_midpoint6.csv")
         ),
         highly_sensitive = list(
           venn           = glue("output/dataset_clean/venn_{cohort}.rds"),
@@ -120,8 +121,8 @@ clean_data <- function(cohort, describe = "no_describe_print") {
           glue("generate_cohort_{cohort}")
         ),
         moderately_sensitive = list(
-          consort            = glue("output/dataset_clean/consort_{cohort}.csv"),
-          consort_midpoint6  = glue("output/dataset_clean/consort_{cohort}_midpoint6.csv")
+          flow            = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow_midpoint6  = glue("output/dataset_clean/flow_{cohort}_midpoint6.csv")
         ),
         highly_sensitive = list(
           venn           = glue("output/dataset_clean/venn_{cohort}.rds"),

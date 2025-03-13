@@ -33,18 +33,15 @@ study_dates <- fromJSON("output/study_dates.json")
 # Specify relevant dates -------------------------------------------------------
 print('Specify relevant dates')
 
-vax_start_date <- as.Date(study_dates$vax1_earliest, format="%Y-%m-%d")
+vax1_earliest <- as.Date(study_dates$vax1_earliest, format="%Y-%m-%d")
 mixed_vax_threshold <- as.Date(study_dates$mixed_vax_threshold, format="%Y-%m-%d")
-start_date_delta <- as.Date(study_dates$delta_date, format="%Y-%m-%d")
+delta_date <- as.Date(study_dates$delta_date, format="%Y-%m-%d")
 
 # Source common functions ------------------------------------------------------
 print('Source common functions')
 
 source("analysis/utility.R")
-source("analysis/dataset_clean/fn-preproc.R")
-source("analysis/dataset_clean/fn-ref.R")
-source("analysis/dataset_clean/fn-inex.R")
-source("analysis/dataset_clean/fn-qa.R")
+lapply(list.files("analysis/dataset_clean", full.names = TRUE, pattern = "fn-"), source)
 
 # Specify command arguments ----------------------------------------------------
 print('Specify command arguments')
@@ -58,14 +55,14 @@ if(length(args)==0){
 }
 
 if (length(args) < 2) { # Whether to create describe*.txt files
-  describe_flag <- "describe_print" #describe_print or no_describe_print
+  describe_flag <- "describe_TRUE" #describe_TRUE or describe_FALSE
 } else {
   describe_flag <- args[[2]]
 }
 
 # Define describe (desc_*.txt) output folder ----------------------------------
 
-if (describe_flag == "describe_print") {
+if (describe_flag == "describe_TRUE") {
   print("Creating output/describe directory")
   describe_dir <- "output/describe/"
   fs::dir_create(here::here(describe_dir))
@@ -74,6 +71,7 @@ if (describe_flag == "describe_print") {
 # Describe preprocessing data -------------------------------------------------
 
   ## Describe raw data
+
 input_raw <- preproc1(cohort)$input_raw
 
   ### Overwrite vaccination information for dummy data and vax cohort only ---------
@@ -84,7 +82,7 @@ source("analysis/dataset_clean/modify_dummy_data.R")
 message("Vaccine information overwritten successfully")
 }
 
-if (describe_flag == "describe_print") {
+if (describe_flag == "describe_TRUE") {
     sink(paste0(describe_dir, "desc_raw_", cohort, ".txt"))
     print(Hmisc::describe(input_raw))
     sink()
@@ -93,73 +91,62 @@ if (describe_flag == "describe_print") {
     message("No description written, change input flag if description is desired.")
 }
 
-  ## Describe Venn diagram data
-input_venn <- preproc2(cohort, input_raw)$input_venn
-
-if (describe_flag == "describe_print") {
-    sink(paste0(describe_dir, "desc_venn_", cohort, ".txt"))
-    print(Hmisc::describe(input_venn))
-    sink()
-    message("Venn diagram data saved successfully")
-} else {
-    message("No description written, change input flag if description is desired.")
-}
-  ## Save Venn diagram data
+  ## Read and save Venn diagram data
+  
+input_venn <- preproc2(cohort, input_raw, describe_flag, describe_dir)$input_venn
 saveRDS(input_venn, file = paste0(dataclean_dir, "venn_", cohort, ".rds"), compress = TRUE)
 message("Venn diagram data saved successfully")
 
-  ## Describe preprocess data
-input <- preproc2(cohort, input_raw)$input_preproc
+# Read preprocess data --------------------------------------------------------
+
+input <- preproc2(cohort, input_raw, describe_flag, describe_dir)$input_preproc
 message(paste0("Preprocess dataset has been read successfully with N = ", nrow(input), " rows"))
 
-if (describe_flag == "describe_print") {
-    sink(paste0(describe_dir, "desc_preproc_", cohort, ".txt"))
-    print(Hmisc::describe(input))
-    sink()
-    message (paste0("Cohort ", cohort, " with valid patient IDs description written successfully!"))
-} else {
-    message ("No description written, change input flag if description is desired.")
-}
+# Specify flow table ----------------------------------------------------------
+print('Specify flow table')
+
+flow <- data.frame(Description = "Input", 
+                      N = nrow(input),
+                      stringsAsFactors = FALSE)
+# Inclusion criteria -----------------------------------------------------------
+print('Call inclusion criteria function')
+
+inex_results <- inex(input, flow, cohort, vax1_earliest, mixed_vax_threshold, delta_date)
+input <- inex_results$input
+flow <- inex_results$flow
+
+# Quality assurance ------------------------------------------------------------
+print('Call quality assurance function')
+
+qa_results <- qa(input, flow, study_dates)
+input <- qa_results$input
+flow <- qa_results$flow
 
 # Set reference levels for factors----------------------------------------------
 print('Call reference function')
 
 input <- ref(input)$input
 
-# Inclusion criteria -----------------------------------------------------------
-print('Call inclusion criteria function')
+# Save flow data after Inclusion criteria
+print('Saving flow data after Inclusion criteria')
 
-inex_results <- inex(input, cohort, vax_start_date, mixed_vax_threshold, start_date_delta)
-input <- inex_results$input
-consort <- inex_results$consort
+flow$N <- as.numeric(flow$N)
+flow$removed <- dplyr::lag(flow$N, default = dplyr::first(flow$N)) - flow$N
 
-# Quality assurance ------------------------------------------------------------
-print('Call quality assurance function')
-
-qa_results <- qa(input, consort, study_dates)
-input <- qa_results$input
-consort <- qa_results$consort
-
-# Save consort data after Inclusion criteria
-print('Saving consort data after Inclusion criteria')
-
-consort$N <- as.numeric(consort$N)
-consort$removed <- dplyr::lag(consort$N, default = dplyr::first(consort$N)) - consort$N
-
-write.csv(consort, file = paste0(dataclean_dir, "consort_", cohort, ".csv"), row.names = FALSE)
+write.csv(flow, file = paste0(dataclean_dir, "flow_", cohort, ".csv"), row.names = FALSE)
 
 # Perform redaction
 print('Performing redaction')
 
-consort$removed <- NULL
-consort$N_midpoint6 <- roundmid_any(consort$N, to=threshold)
-consort$removed_derived <- dplyr::lag(consort$N_midpoint6, default = dplyr::first(consort$N_midpoint6)) - consort$N_midpoint6
-consort$N <- NULL
+flow$removed <- NULL
+flow$N_midpoint6 <- roundmid_any(flow$N, to=threshold)
+flow$removed_derived <- dplyr::lag(flow$N_midpoint6, default = dplyr::first(flow$N_midpoint6)) - flow$N_midpoint6
+flow$N <- NULL
 
-# Save rounded consort data
-print('Saving rounded consort data after Inclusion criteria')
+# Save rounded flow data
+print('Saving rounded flow data after Inclusion criteria')
 
-write.csv(consort, file = paste0(dataclean_dir, "consort_", cohort, "_midpoint6.csv"), row.names = FALSE)
+write.csv(flow, file = paste0(dataclean_dir, "flow_", cohort, "_midpoint6.csv"), row.names = FALSE)
 
 # Save the dataset 
 print('Saving dataset after Inclusion criteria')
