@@ -42,14 +42,14 @@ preproc1 <- function(cohort) {
     "Dataset has been read successfully with N = ",
     nrow(input_raw),
     " rows"))
-  
+
   # Format dataset columns -------------------------------------------------------
   print('Format dataset columns')
   
   input_raw <- input_raw %>%
     mutate(
       across(all_of(date_cols), ~ floor_date(as.Date(., format = "%Y-%m-%d"), unit = "days")),
-      across(contains('_birth_year'), ~ format(as.Date(., origin = "1970-01-01"), "%Y")),
+      # across(contains('_birth_year'), ~ format(as.Date(., origin = "1970-01-01"), "%Y")), #This turned all dates to 1975
       across(all_of(num_cols), ~ as.numeric(.)),
       across(all_of(cat_cols), ~ as.factor(.))
     )
