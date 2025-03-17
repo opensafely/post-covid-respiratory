@@ -58,8 +58,8 @@ preprocess <- function(cohort, describe) {
   # Modify dummy data ----
   print('Modify dummy data')
   
-  if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") && cohort %in% c("vax")) {
-    source("analysis/dataset_clean/modify_dummy_data.R")
+  if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations")) {
+   input <- modify_dummy(input, cohort)
   }
   
   # Describe data ----
