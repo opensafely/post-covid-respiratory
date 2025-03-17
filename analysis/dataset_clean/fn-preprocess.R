@@ -1,0 +1,117 @@
+# First function to preprocess data
+
+preprocess <- function(cohort, describe) {
+  
+  # Get column names ----
+  print('Get column names')
+  
+  file_path <- paste0("output/dataset_definition/input_", cohort, ".csv.gz")
+  all_cols <- fread(
+    file_path,
+    header = TRUE,
+    sep = ",",
+    nrows = 0,
+    stringsAsFactors = FALSE
+  ) %>%
+    names()
+  message("Column names found")
+  print(all_cols)
+  
+  # Define column classes ----
+  print('Define column classes')
+  
+  cat_cols <- c("patient_id", grep("_cat", all_cols, value = TRUE))
+  bin_cols <- c(grep("_bin", all_cols, value = TRUE))
+  num_cols <- c(grep("_num", all_cols, value = TRUE),
+                grep("vax_jcvi_age_", all_cols, value = TRUE))
+  date_cols <- grep("_date", all_cols, value = TRUE)
+  message("Column classes identified")
+  
+  col_classes <- setNames(c(
+    rep("c", length(cat_cols)),
+    rep("l", length(bin_cols)),
+    rep("d", length(num_cols)),
+    rep("D", length(date_cols))
+  ), all_cols[match(c(cat_cols, bin_cols, num_cols, date_cols), all_cols)])
+  message("Column classes defined")
+  
+  # Load cohort dataset ----
+  print('Load cohort dataset')
+  
+  input <- read_csv(file_path, col_types = col_classes)
+  message(paste0(
+    "Dataset has been read successfully with N = ",
+    nrow(input),
+    " rows"))
+
+  # Format dataset columns ----
+  print('Format dataset columns')
+  
+  input <- input %>%
+    mutate(
+      across(all_of(date_cols), ~ floor_date(as.Date(., format = "%Y-%m-%d"), unit = "days")),
+      across(contains('_birth_year'), ~ year(as.Date(., origin = "1970-01-01"))),
+      across(all_of(num_cols), ~ as.numeric(.)),
+      across(all_of(cat_cols), ~ as.factor(.))
+    )
+
+  # Modify dummy data ----
+  print('Modify dummy data')
+  
+  if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations") && cohort %in% c("vax")) {
+    source("analysis/dataset_clean/modify_dummy_data.R")
+  }
+  
+  # Describe data ----
+  print('Describe data')
+  
+  if (isTRUE(describe)) {
+    describe_data(df = input, name = "input_raw")
+  }
+  
+  # Remove records with missing patient id ----
+  print('Remove records with missing patient id')
+  
+  input <- input[!is.na(input$patient_id),]
+  message("All records with valid patient IDs retained.")
+  
+  # Make Venn diagram input dataset ----
+  print('Make Venn diagram input dataset')
+  
+  venn <- input %>% select(starts_with(c("patient_id","tmp_out_date","out_date")))
+  
+  # Restrict columns ----
+  print('Restrict columns')
+  
+  input <- input %>% 
+    select(patient_id,
+           starts_with("index_date"),
+           starts_with("end_date_"),
+           contains("sub_"), # Subgroups
+           contains("exp_"), # Exposures
+           contains("out_"), # Outcomes
+           contains("cov_"), # Covariates
+           contains("inex_"), # Inclusion/exclusion
+           contains("cens_"), # Censor
+           contains("qa_"), # Quality assurance
+           contains("strat_"), # Strata
+           contains("vax_date_"), # Vaccination dates and vax type 
+           contains("vax_cat_") # Vaccination products
+    )
+  
+  input[,colnames(input)[grepl("tmp_",colnames(input))]] <- NULL
+  
+  # Describe files ----
+  print('Describe files')
+  
+  if (isTRUE(describe)) {
+    describe_data(df = venn, name = "venn")
+    describe_data(df = input, name = "input_preprocessed")
+  }
+
+  # Return data ----
+  print('Return data')
+  
+  return(list(venn = venn, input = input))
+  
+}
