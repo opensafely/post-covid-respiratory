@@ -15,8 +15,7 @@ defaults_list <- list(
 )
 
 cohorts <- c("prevax", "vax", "unvax")
-# describe_flag <- c("describe_FALSE") #choose this to not print out describe*.txt files during dataset_clean.R
-describe_flag <- c("describe_TRUE")   # choose this to print out describe*.txt files during dataset_clean.R
+describe <- TRUE # This prints descriptive files for each dataset in the p
 
 # Create generic action function -----------------------------------------------
 
@@ -87,10 +86,10 @@ generate_cohort <- function(cohort) {
 
 # Create function to clean data -------------------------------------------------
 
-clean_data <- function(cohort, describe = "describe_FALSE") {
+clean_data <- function(cohort, describe = describe) {
   splice(
-    comment(glue("Clean data - {cohort}, with {describe}")),
-    if (describe == "describe_TRUE") { # Action to include describe*.txt files
+    comment(glue("Clean data - {cohort}, with describe = {describe}")),
+    if (isTRUE(describe)) { # Action to include describe*.txt files
       action(
         name      = glue("clean_data_{cohort}"),
         run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
@@ -100,9 +99,9 @@ clean_data <- function(cohort, describe = "describe_FALSE") {
           glue("generate_cohort_{cohort}")
         ),
         moderately_sensitive = list(
-          describe_raw_dataset         = glue("output/describe/desc_raw_{cohort}.txt"),
-          describe_venn                = glue("output/describe/desc_venn_{cohort}.txt"),
-          describe_preprocess_dataset  = glue("output/describe/desc_preproc_{cohort}.txt"),
+          describe_raw         = glue("output/describe/{cohort}_raw.txt"),
+          describe_venn                = glue("output/describe/{cohort}_venn.txt"),
+          describe_preprocessed  = glue("output/describe/{cohort}_preprocessed.txt"),
           flow                      = glue("output/dataset_clean/flow_{cohort}.csv"),
           flow_midpoint6            = glue("output/dataset_clean/flow_{cohort}_midpoint6.csv")
         ),
@@ -133,7 +132,7 @@ clean_data <- function(cohort, describe = "describe_FALSE") {
   )
 }
 
-# Define and combine all actions into a list of actions ------------------------------0
+# Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
 
@@ -182,7 +181,7 @@ actions_list <- splice(
   
   splice(
     unlist(lapply(cohorts, 
-                  function(x) clean_data(cohort = x, describe = describe_flag)), 
+                  function(x) clean_data(cohort = x, describe = describe)), 
            recursive = FALSE
     )
   ))

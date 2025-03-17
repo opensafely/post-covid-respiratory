@@ -49,12 +49,14 @@ print('Specify command arguments')
 args <- commandArgs(trailingOnly = TRUE)
 print(length(args))
 if (length(args) == 0) {
-  cohort <- "prevax"
+  cohort <- "vax"
   describe <- TRUE
 } else {
   cohort <- args[[1]]
   describe <- args[[2]]
 }
+
+describe <- as.logical(describe)
 
 # Preprocess data --------------------------------------------------------------
 

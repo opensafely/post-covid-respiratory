@@ -66,7 +66,7 @@ preprocess <- function(cohort, describe) {
   print('Describe data')
   
   if (isTRUE(describe)) {
-    describe_data(df = input, name = "input_raw")
+    describe_data(df = input, name = paste0(cohort,"_raw"))
   }
   
   # Remove records with missing patient id ----
@@ -105,8 +105,8 @@ preprocess <- function(cohort, describe) {
   print('Describe files')
   
   if (isTRUE(describe)) {
-    describe_data(df = venn, name = "venn")
-    describe_data(df = input, name = "input_preprocessed")
+    describe_data(df = venn, name = paste0(cohort,"_venn"))
+    describe_data(df = input, name = paste0(cohort,"_preprocessed"))
   }
 
   # Return data ----
