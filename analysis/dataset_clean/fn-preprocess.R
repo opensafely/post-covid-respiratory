@@ -43,6 +43,13 @@ preprocess <- function(cohort, describe) {
     "Dataset has been read successfully with N = ",
     nrow(input),
     " rows"))
+  
+  # Modify dummy data ----
+  print('Modify dummy data')
+  
+  if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations")) {
+    input <- modify_dummy(input, cohort)
+  }
 
   # Format dataset columns ----
   print('Format dataset columns')
@@ -50,18 +57,12 @@ preprocess <- function(cohort, describe) {
   input <- input %>%
     mutate(
       across(all_of(date_cols), ~ floor_date(as.Date(., format = "%Y-%m-%d"), unit = "days")),
-      across(contains('_birth_year'), ~ year(as.Date(., origin = "1970-01-01"))),
+      # across(contains('_birth_year'), ~ year(as.Date(., origin = "1970-01-01"))),
       across(all_of(num_cols), ~ as.numeric(.)),
       across(all_of(cat_cols), ~ as.factor(.))
     )
 
-  # Modify dummy data ----
-  print('Modify dummy data')
-  
-  if(Sys.getenv("OPENSAFELY_BACKEND") %in% c("", "expectations")) {
-   input <- modify_dummy(input, cohort)
-  }
-  
+
   # Describe data ----
   print('Describe data')
   
