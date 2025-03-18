@@ -33,9 +33,9 @@ study_dates <- fromJSON("output/study_dates.json")
 # Specify relevant dates -------------------------------------------------------
 print('Specify relevant dates')
 
-vax1_earliest <- as.Date(study_dates$vax1_earliest, format = "%Y-%m-%d")
+vax1_earliest       <- as.Date(study_dates$vax1_earliest,       format = "%Y-%m-%d")
 mixed_vax_threshold <- as.Date(study_dates$mixed_vax_threshold, format = "%Y-%m-%d")
-delta_date <- as.Date(study_dates$delta_date, format = "%Y-%m-%d")
+delta_date          <- as.Date(study_dates$delta_date,          format = "%Y-%m-%d")
 
 # Source common functions ------------------------------------------------------
 print('Source common functions')
@@ -49,10 +49,10 @@ print('Specify command arguments')
 args <- commandArgs(trailingOnly = TRUE)
 print(length(args))
 if (length(args) == 0) {
-  cohort <- "vax"
+  cohort   <- "vax"
   describe <- TRUE
 } else {
-  cohort <- args[[1]]
+  cohort   <- args[[1]]
   describe <- args[[2]]
 }
 
@@ -77,8 +77,8 @@ message(paste0("Preprocess dataset has been read successfully with N = ",nrow(in
 print('Specify flow table')
 
 flow <- data.frame(
-  Description = "Input",
-  N = nrow(input),
+  Description      = "Input",
+  N                = nrow(input),
   stringsAsFactors = FALSE
 )
 
@@ -93,14 +93,14 @@ inex_results <- inex(input,
                      delta_date)
 
 input <- inex_results$input
-flow <- inex_results$flow
+flow  <- inex_results$flow
 
 # Quality assurance ------------------------------------------------------------
 print('Call quality assurance function')
 
 qa_results <- qa(input, flow, study_dates)
-input <- qa_results$input
-flow <- qa_results$flow
+input      <- qa_results$input
+flow       <- qa_results$flow
 
 # Set reference levels for factors----------------------------------------------
 print('Call reference function')
@@ -110,7 +110,7 @@ input <- ref(input)$input
 # Save flow data after Inclusion criteria
 print('Saving flow data after Inclusion criteria')
 
-flow$N <- as.numeric(flow$N)
+flow$N       <- as.numeric(flow$N)
 flow$removed <- dplyr::lag(flow$N, default = dplyr::first(flow$N)) - flow$N
 
 write.csv(flow,

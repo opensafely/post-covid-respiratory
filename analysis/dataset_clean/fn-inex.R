@@ -55,8 +55,8 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
   
   if (cohort == "vax") {
     print('Inclusion criteria: Record of two vaccination doses prior to the study end date')
-
-    input <- subset(input, !is.na(vax_date_covid_1) & !is.na(vax_date_covid_2))
+    
+    input <- subset(input, !is.na(vax_date_covid_1) & !is.na(vax_date_covid_2)) # TODO add study end date criteria
     flow[nrow(flow)+1,] <- c("Inclusion criteria: Record of two vaccination doses prior to the study end date",
                                     nrow(input))
 
