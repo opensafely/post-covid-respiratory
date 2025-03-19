@@ -75,7 +75,7 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
     print('Inclusion criteria: Did not recieve a second dose vaccination less than three weeks after their first dose')
 
     input <- subset(input, (input$vax_date_covid_2 - input$vax_date_covid_1) >= 21) 
-    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not recieve a second dose vaccination before their first dose vaccination",
+    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not recieve a second dose vaccination less than three weeks after their first dose",
                                     nrow(input))
 
     print('Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021')

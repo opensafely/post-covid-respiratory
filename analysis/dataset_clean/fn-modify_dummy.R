@@ -61,6 +61,11 @@ modify_dummy <- function(df, cohort) {
                       .x
                     ))) %>%
 
+      mutate(vax_date_covid_1=pmin(vax_date_Pfizer_1,
+                                   vax_date_AstraZeneca_1,
+                                   vax_date_Moderna_1,
+                                   na.rm=T)) %>%
+
       #Change date for the second jab
       mutate(
         vax_date_Pfizer_2      = vax_date_Pfizer_1      + days(round(rnorm(nrow(.), mean = 10*7, sd = 3))),
@@ -118,6 +123,11 @@ modify_dummy <- function(df, cohort) {
                       NA_Date_,
                       .x))) %>%
 
+      mutate(vax_date_covid_2=pmin(vax_date_Pfizer_2,
+                                   vax_date_AstraZeneca_2,
+                                   vax_date_Moderna_2,
+                                   na.rm=T)) %>%
+
       #Set 3rd jab type
       mutate(vaccine_3_type =  ifelse(vaccine_2_type != "None",
                                        sample(
@@ -157,6 +167,13 @@ modify_dummy <- function(df, cohort) {
                       NA_Date_,
                       .x
                     ))) %>%
+      
+      mutate(across(vax_date_covid_3,
+                    ~ if_else(
+                      vaccine_3_type %in% "None",
+                      NA_Date_,
+                      pmin(vax_date_Pfizer_3,vax_date_AstraZeneca_3,vax_date_Moderna_3,na.rm=T)
+                    ))) %>%
 
       # Set to NA if jab is missing
       mutate(across(vax_date_Pfizer_3,
@@ -175,6 +192,11 @@ modify_dummy <- function(df, cohort) {
                       NA_Date_,
                       .x))) %>%
 
+      mutate(vax_date_covid_3=pmin(vax_date_Pfizer_3,
+                                   vax_date_AstraZeneca_3,
+                                   vax_date_Moderna_3,
+                                   na.rm=T)) %>%
+      
       select(-starts_with("missing"),-matches("vaccine_\\d_type"))
 
   } else if (cohort == "unvax") { # Modifying unvax-specific variables

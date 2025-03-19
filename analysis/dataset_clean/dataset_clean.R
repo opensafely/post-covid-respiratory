@@ -49,7 +49,7 @@ print('Specify command arguments')
 args <- commandArgs(trailingOnly = TRUE)
 print(length(args))
 if (length(args) == 0) {
-  cohort   <- "unvax"
+  cohort   <- "vax"
   describe <- TRUE
 } else {
   cohort   <- args[[1]]
