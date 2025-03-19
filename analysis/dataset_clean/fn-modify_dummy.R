@@ -5,8 +5,6 @@ modify_dummy <- function(df, cohort) {
 
   # Set seed -------------------------------------------------------------------
   set.seed(1)
-  
-  print(df$vax_date_eligible)
 
   # Modifying vax-specific variables
 
@@ -179,6 +177,21 @@ modify_dummy <- function(df, cohort) {
 
       select(-starts_with("missing"),-matches("vaccine_\\d_type"))
 
+  } else if (cohort == "unvax") { # Modifying unvax-specific variables
+
+    df <- df %>%
+
+    ## JCVI distribution
+
+      mutate(vax_cat_jcvi_group = sample(
+      x       = c("12","11","10",
+                  "09","08","07",
+                  "06","05","04",
+                  "03","02","01","99"), # 8.25 for each group, 1.6% for missing
+      size    = nrow(.),
+      replace = TRUE,
+      prob    = c(0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082,0.082, 0.016)))
+
   }
 
   ## Modifying variables across cohorts
@@ -189,13 +202,13 @@ modify_dummy <- function(df, cohort) {
 
     ## Alive on the index date
     mutate(inex_bin_alive = rbernoulli(nrow(.), p = 0.99)) %>% 
-    
+
     # could also modify cens_date_death to match
 
     ## Registered for a minimum of 6 months prior to index date
     mutate(inex_bin_6m_reg = rbernoulli(nrow(.), p = 0.99)) %>% 
 
-    ## Age distribution 
+    ## Age distribution
     mutate(cov_num_age = sample(
                         c(sample(  1:17,          round(nrow(.)*0.02),  replace=TRUE), # Number <18
                           sample(110:120,         round(nrow(.)*0.02),  replace=TRUE), # Number >110
