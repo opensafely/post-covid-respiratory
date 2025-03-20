@@ -197,7 +197,37 @@ modify_dummy <- function(df, cohort) {
                                    vax_date_Moderna_3,
                                    na.rm=T)) %>%
       
-      select(-starts_with("missing"),-matches("vaccine_\\d_type"))
+      select(-starts_with("missing"),-matches("vaccine_\\d_type")) %>%
+    
+      ## Inclusion/Exclusion modifications
+      
+      # Inclusion criteria: Did not receive a vaccination prior to 08-12-2020 (i.e., the start of the vaccination 
+      mutate(modify_vax_start = rbernoulli(nrow(.), p = 0.002)) %>%
+      mutate(across(vax_date_covid_1,
+                    ~if_else(
+                      modify_vax_start,
+                      as.Date("01-12-2020"),
+                      .x))) %>%
+      
+    #   Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination
+      mutate(modify_vax2_then_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
+      mutate(across(vax_date_covid_1,
+                    ~if_else(
+                      modify_vax2_then_vax1,
+                      vax_date_covid_2+10,
+                      .x))) %>%
+    
+    # Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose
+     mutate(modify_vax2_near_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
+      mutate(across(vax_date_covid_2,
+                    ~if_else(
+                      modify_vax2_near_vax1,
+                      vax_date_covid_1+15,
+                      .x))) 
+    
+    
+    # Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021
+    # Inclusion criteria: Index date is before cohort end date
 
   } else if (cohort == "unvax") { # Modifying unvax-specific variables
 
@@ -276,6 +306,65 @@ modify_dummy <- function(df, cohort) {
                   size    = nrow(.),
                   replace = TRUE,
                   prob    = c(0.195, 0.195, 0.195, 0.195, 0.195, 0.025)
-    ))
+    )) %>%
 
+  
+  # Quality assurance: Year of birth is missing
+  mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
+  mutate(across(qa_num_birth_year,
+                ~if_else(
+                  modify_birth_miss,
+                  as.numeric(""), #probably a cleaner way to do this
+                  .x))) %>%  
+    
+  # Quality assurance: Year of birth is after year of death or patient only has year of death
+    mutate(modify_birth_then = rbernoulli(nrow(.), p = 0.002)) %>%
+    mutate(across(qa_num_birth_year,
+                  ~if_else(
+                    modify_birth_then,
+                    2022,
+                    .x))) %>%
+
+    mutate(across(cens_date_death,
+                  ~if_else(
+                    modify_birth_then,
+                    as.Date("02-03-2023"), 
+                    .x))) %>%
+    
+    # mutate(modify_only_death = rbernoulli(nrow(.), p = 0.005)) %>%
+    # mutate(across(cens_date_death,
+    #               ~if_else(
+    #                 modify_only_death,
+    #                 NA_Date_, 
+    #                 .x))) %>%  
+    
+  # Quality assurance: Year of birth exceeds current date
+  mutate(modify_birth_invalid = rbernoulli(nrow(.), p = 0.002)) %>%
+  mutate(across(qa_num_birth_year,
+                ~if_else(
+                  modify_birth_invalid,
+                  as.numeric(format(Sys.Date()+1000, "%Y")),
+                  .x))) %>%    
+    
+  # Quality assurance: Date of death is invalid (after current date)
+  mutate(modify_death_invalid = rbernoulli(nrow(.), p = 0.002)) %>%
+  mutate(across(cens_date_death,
+                ~if_else(
+                  modify_death_invalid,
+                  Sys.Date()+42,
+                  .x))) %>%
+    
+  # Quality assurance: Pregnancy/birth codes for men
+  mutate(qa_bin_pregnancy = rbernoulli(nrow(.), p = 0.005)) %>%
+
+  # Quality assurance: HRT or COCP meds for men
+
+  mutate(qa_bin_hrtcocp = rbernoulli(nrow(.), p = 0.005)) %>%
+
+  # Quality assurance: Prostate cancer codes for women
+  mutate(qa_bin_prostate_cancer = rbernoulli(nrow(.), p = 0.005)) %>%
+    
+  # remove stray variables
+  select(-starts_with("modify_"))
+  
 }

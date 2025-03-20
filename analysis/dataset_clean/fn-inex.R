@@ -66,19 +66,19 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
     flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not receive a vaccination prior to 08-12-2020 (i.e., the start of the vaccination program)",
                                     nrow(input))
 
-    print('Inclusion criteria: Did not recieve a second dose vaccination before their first dose vaccination')
+    print('Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination')
 
     input <- subset(input, input$vax_date_covid_2 >= input$vax_date_covid_1) 
-    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not recieve a second dose vaccination before their first dose vaccination",
+    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination",
                                     nrow(input))
 
-    print('Inclusion criteria: Did not recieve a second dose vaccination less than three weeks after their first dose')
+    print('Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose')
 
     input <- subset(input, (input$vax_date_covid_2 - input$vax_date_covid_1) >= 21) 
-    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not recieve a second dose vaccination less than three weeks after their first dose",
+    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose",
                                     nrow(input))
 
-    print('Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021')
+    print('Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021')
     input <- input %>%
       mutate(
         AZ_date = case_when(
@@ -106,7 +106,7 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
       dplyr::filter(vax_mixed < 2) %>%
       select(-AZ_date, -Moderna_date, -Pfizer_date, -vax_mixed)
 
-    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not recieve a mixed vaccine products before 07-05-2021",
+    flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021",
                                     nrow(input))
 
     print('Inclusion criteria: Index date is before cohort end date')
