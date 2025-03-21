@@ -14,8 +14,16 @@ defaults_list <- list(
   expectations = list(population_size = 200000L)
 )
 
+active_analyses <- read_rds("lib/active_analyses.rds")
+active_analyses <- active_analyses[order(active_analyses$analysis,active_analyses$cohort,active_analyses$outcome),]
+cohorts <- unique(active_analyses$cohort) # does the same as cohorts <- c("prevax", "vax", "unvax")
 cohorts <- c("prevax", "vax", "unvax")
-describe <- TRUE # This prints descriptive files for each dataset in the p
+
+active_subgroups <- unique(stringr::str_split_i(as.vector(active_analyses$name), "-",2)) #extract all unique sub groups
+active_sub_ages  <- active_subgroups[grepl("sub_age_", active_subgroups)] # extract "age" subgroups
+age_str          <- paste(stringr::str_split_i(as.vector(active_sub_ages), "_",3),collapse=";") #create age vector in form "XX;XX;XX"
+
+describe <- TRUE # This prints descriptive files for each dataset in the pipeline
 
 # Create generic action function -----------------------------------------------
 
@@ -132,6 +140,24 @@ clean_data <- function(cohort, describe = describe) {
   )
 }
 
+# Create function for table1 --------------------------------------------
+
+table1 <- function(cohort, ages = "18;80"){
+  splice(
+    comment(glue("Table 1 - {cohort}")),
+    action(
+      name = glue("table1_{cohort}"),
+      run = "r:latest analysis/table1.R",
+      arguments = c(c(cohort), c(ages)),
+      needs = list(glue("clean_data_{cohort}")),
+      moderately_sensitive = list(
+        table1 = glue("output/table1/table1_{cohort}.csv"),
+        table1_midpoint6 = glue("output/table1/table1_{cohort}_midpoint6.csv")
+      )
+    )
+  )
+}
+
 # Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
@@ -184,7 +210,18 @@ actions_list <- splice(
                   function(x) clean_data(cohort = x, describe = describe)), 
            recursive = FALSE
     )
-  ))
+  ),
+
+  ## Table 1 -------------------------------------------------------------------
+
+  splice(
+    unlist(lapply(unique(active_analyses$cohort),
+                  function(x) table1(cohort = x, ages = age_str)),
+           recursive = FALSE
+    )
+  )
+
+)
 
 
 # Combine actions into project list --------------------------------------------
