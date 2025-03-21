@@ -78,7 +78,7 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
     flow[nrow(flow)+1,] <- c("Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose",
                                     nrow(input))
 
-    print('Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021')
+    print('Inclusion criteria: Did not receive mixed vaccine products before 07-05-2021')
     input <- input %>%
       mutate(
         AZ_date = case_when(
@@ -135,10 +135,10 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
     flow[nrow(flow)+1,] <- c("Inclusion criteria: Not missing JCVI group",
                                     nrow(input))
 
-    print('Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date (only those with unknown JCVI group)')
+    print('Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date')
     
     input <- subset(input, index_date <= end_date_exposure & index_date >= delta_date)
-    flow[nrow(flow)+1,] <- c("Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date (only those with unknown JCVI group)",
+    flow[nrow(flow)+1,] <- c("Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date",
                                     nrow(input))
 
   }
