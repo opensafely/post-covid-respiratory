@@ -209,7 +209,7 @@ modify_dummy <- function(df, cohort) {
                       as.Date("01-12-2020"),
                       .x))) %>%
       
-    #   Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination
+      # Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination
       mutate(modify_vax2_then_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
       mutate(across(vax_date_covid_1,
                     ~if_else(
@@ -217,17 +217,30 @@ modify_dummy <- function(df, cohort) {
                       vax_date_covid_2+10,
                       .x))) %>%
     
-    # Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose
-     mutate(modify_vax2_near_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
+      # Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose
+      mutate(modify_vax2_near_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
       mutate(across(vax_date_covid_2,
                     ~if_else(
                       modify_vax2_near_vax1,
                       vax_date_covid_1+15,
+                      .x))) %>%
+    
+    
+      # Inclusion criteria: Did not receive mixed vaccine products before 07-05-2021
+      mutate(modify_mixed_vax = rbernoulli(nrow(.), p = 0.002)) %>%
+      mutate(across(vax_date_Moderna_2,
+                    ~if_else(
+                      modify_mixed_vax,
+                      mixed_vax_threshold-2,
+                      .x)))%>%
+      mutate(across(vax_date_covid_2,
+                    ~if_else(
+                      modify_mixed_vax,
+                      mixed_vax_threshold-2,
                       .x))) 
     
     
-    # Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021
-    # Inclusion criteria: Index date is before cohort end date
+      # Inclusion criteria: Index date is before cohort end date
 
   } else if (cohort == "unvax") { # Modifying unvax-specific variables
 
@@ -309,15 +322,15 @@ modify_dummy <- function(df, cohort) {
     )) %>%
 
   
-  # Quality assurance: Year of birth is missing
-  mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
-  mutate(across(qa_num_birth_year,
+    # Quality assurance: Year of birth is missing
+    mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
+    mutate(across(qa_num_birth_year,
                 ~if_else(
                   modify_birth_miss,
                   as.numeric(""), #probably a cleaner way to do this
                   .x))) %>%  
     
-  # Quality assurance: Year of birth is after year of death or patient only has year of death
+    # Quality assurance: Year of birth is after year of death or patient only has year of death
     mutate(modify_birth_then = rbernoulli(nrow(.), p = 0.002)) %>%
     mutate(across(qa_num_birth_year,
                   ~if_else(
@@ -339,7 +352,7 @@ modify_dummy <- function(df, cohort) {
     #                 .x))) %>%  
     
   # Quality assurance: Year of birth exceeds current date
-  mutate(modify_birth_invalid = rbernoulli(nrow(.), p = 0.002)) %>%
+  mutate(modify_birth_invalid = rbernoulli(nrow(.), p = 0.005)) %>%
   mutate(across(qa_num_birth_year,
                 ~if_else(
                   modify_birth_invalid,
