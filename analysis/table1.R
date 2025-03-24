@@ -81,8 +81,6 @@ for (colname in colnames(df)[grepl("cov_bin_", colnames(df))]) {
  df[[colname]] <- sapply(df[[colname]], as.character)
 }
 
-print(df)
-
 df <- df %>%
   mutate(across(where(is.factor), as.character))
 
