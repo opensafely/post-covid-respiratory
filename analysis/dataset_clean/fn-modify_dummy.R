@@ -320,7 +320,9 @@ modify_dummy <- function(df, cohort) {
                   replace = TRUE,
                   prob    = c(0.195, 0.195, 0.195, 0.195, 0.195, 0.025)
     )) %>%
-
+    
+    ## Prior Covid History
+    mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.95)) %>%
   
     # Quality assurance: Year of birth is missing
     mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
