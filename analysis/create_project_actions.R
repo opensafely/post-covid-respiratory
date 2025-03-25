@@ -15,43 +15,55 @@ defaults_list <- list(
 )
 
 active_analyses <- read_rds("lib/active_analyses.rds")
-active_analyses <- active_analyses[order(active_analyses$analysis,active_analyses$cohort,active_analyses$outcome),]
+active_analyses <- active_analyses[
+  order(
+    active_analyses$analysis,
+    active_analyses$cohort,
+    active_analyses$outcome
+  ),
+]
 cohorts <- unique(active_analyses$cohort) # does the same as cohorts <- c("prevax", "vax", "unvax")
 cohorts <- c("prevax", "vax", "unvax")
 
-active_subgroups <- unique(stringr::str_split_i(as.vector(active_analyses$name), "-",2)) #extract all unique sub groups
-active_sub_ages  <- active_subgroups[grepl("sub_age_", active_subgroups)] # extract "age" subgroups
-age_str          <- paste(stringr::str_split_i(as.vector(active_sub_ages), "_",3),collapse=";") #create age vector in form "XX;XX;XX"
+active_subgroups <- unique(stringr::str_split_i(
+  as.vector(active_analyses$name),
+  "-",
+  2
+)) #extract all unique sub groups
+active_sub_ages <- active_subgroups[grepl("sub_age_", active_subgroups)] # extract "age" subgroups
+age_str <- paste(
+  stringr::str_split_i(as.vector(active_sub_ages), "_", 3),
+  collapse = ";"
+) #create age vector in form "XX;XX;XX"
 
 describe <- TRUE # This prints descriptive files for each dataset in the pipeline
 
 # Create generic action function -----------------------------------------------
 
 action <- function(
-    name,
-    run,
-    dummy_data_file      = NULL,
-    arguments            = NULL,
-    needs                = NULL,
-    highly_sensitive     = NULL,
-    moderately_sensitive = NULL
-){
-
+  name,
+  run,
+  dummy_data_file = NULL,
+  arguments = NULL,
+  needs = NULL,
+  highly_sensitive = NULL,
+  moderately_sensitive = NULL
+) {
   outputs <- list(
     moderately_sensitive = moderately_sensitive,
-    highly_sensitive     = highly_sensitive
+    highly_sensitive = highly_sensitive
   )
   outputs[sapply(outputs, is.null)] <- NULL
 
   actions <- list(
-    run             = paste(c(run, arguments), collapse = " "),
+    run = paste(c(run, arguments), collapse = " "),
     dummy_data_file = dummy_data_file,
-    needs           = needs,
-    outputs         = outputs
+    needs = needs,
+    outputs = outputs
   )
   actions[sapply(actions, is.null)] <- NULL
 
-  action_list        <- list(name = actions)
+  action_list <- list(name = actions)
   names(action_list) <- name
 
   action_list
@@ -61,7 +73,7 @@ action <- function(
 
 comment <- function(...) {
   list_comments <- list(...)
-  comments      <- map(list_comments, ~paste0("## ", ., " ##"))
+  comments <- map(list_comments, ~ paste0("## ", ., " ##"))
   comments
 }
 
@@ -70,7 +82,7 @@ comment <- function(...) {
 
 convert_comment_actions <- function(yaml.txt) {
   yaml.txt %>%
-    str_replace_all("\\\n(\\s*)\\'\\'\\:(\\s*)\\'", "\n\\1")  %>%
+    str_replace_all("\\\n(\\s*)\\'\\'\\:(\\s*)\\'", "\n\\1") %>%
     #str_replace_all("\\\n(\\s*)\\'", "\n\\1") %>%
     str_replace_all("([^\\'])\\\n(\\s*)\\#\\#", "\\1\n\n\\2\\#\\#") %>%
     str_replace_all("\\#\\#\\'\\\n", "\n")
@@ -82,8 +94,10 @@ generate_cohort <- function(cohort) {
   splice(
     comment(glue("Generate cohort - {cohort}")),
     action(
-      name  = glue("generate_cohort_{cohort}"),
-      run   = glue("ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_{cohort}.py --output output/dataset_definition/input_{cohort}.csv.gz"),
+      name = glue("generate_cohort_{cohort}"),
+      run = glue(
+        "ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_{cohort}.py --output output/dataset_definition/input_{cohort}.csv.gz"
+      ),
       needs = list("generate_dates"),
       highly_sensitive = list(
         cohort = glue("output/dataset_definition/input_{cohort}.csv.gz")
@@ -97,43 +111,51 @@ generate_cohort <- function(cohort) {
 clean_data <- function(cohort, describe = describe) {
   splice(
     comment(glue("Clean data - {cohort}, with describe = {describe}")),
-    if (isTRUE(describe)) { # Action to include describe*.txt files
+    if (isTRUE(describe)) {
+      # Action to include describe*.txt files
       action(
-        name      = glue("clean_data_{cohort}"),
-        run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        name = glue("clean_data_{cohort}"),
+        run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
-        needs     = list(
-               "study_dates",
+        needs = list(
+          "study_dates",
           glue("generate_cohort_{cohort}")
         ),
         moderately_sensitive = list(
-          describe_raw         = glue("output/describe/{cohort}_raw.txt"),
-          describe_venn                = glue("output/describe/{cohort}_venn.txt"),
-          describe_preprocessed  = glue("output/describe/{cohort}_preprocessed.txt"),
-          flow                      = glue("output/dataset_clean/flow_{cohort}.csv"),
-          flow_midpoint6            = glue("output/dataset_clean/flow_{cohort}_midpoint6.csv")
+          describe_raw = glue("output/describe/{cohort}_raw.txt"),
+          describe_venn = glue("output/describe/{cohort}_venn.txt"),
+          describe_preprocessed = glue(
+            "output/describe/{cohort}_preprocessed.txt"
+          ),
+          flow = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow_midpoint6 = glue(
+            "output/dataset_clean/flow_{cohort}_midpoint6.csv"
+          )
         ),
         highly_sensitive = list(
-          venn           = glue("output/dataset_clean/venn_{cohort}.rds"),
-          cohort_clean   = glue("output/dataset_clean/input_{cohort}_clean.rds")
+          venn = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort_clean = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
-    } else { # Action to exclude describe*.txt files
+    } else {
+      # Action to exclude describe*.txt files
       action(
-        name      = glue("clean_data_{cohort}"),
-        run       = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        name = glue("clean_data_{cohort}"),
+        run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
-        needs     = list(
-               "study_dates",
+        needs = list(
+          "study_dates",
           glue("generate_cohort_{cohort}")
         ),
         moderately_sensitive = list(
-          flow            = glue("output/dataset_clean/flow_{cohort}.csv"),
-          flow_midpoint6  = glue("output/dataset_clean/flow_{cohort}_midpoint6.csv")
+          flow = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow_midpoint6 = glue(
+            "output/dataset_clean/flow_{cohort}_midpoint6.csv"
+          )
         ),
         highly_sensitive = list(
-          venn           = glue("output/dataset_clean/venn_{cohort}.rds"),
-          cohort_clean   = glue("output/dataset_clean/input_{cohort}_clean.rds")
+          venn = glue("output/dataset_clean/venn_{cohort}.rds"),
+          cohort_clean = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
     }
@@ -142,7 +164,7 @@ clean_data <- function(cohort, describe = describe) {
 
 # Create function for table1 --------------------------------------------
 
-table1 <- function(cohort, ages = "18;80"){
+table1 <- function(cohort, ages = "18;80") {
   splice(
     comment(glue("Table 1 - {cohort}")),
     action(
@@ -161,14 +183,14 @@ table1 <- function(cohort, ages = "18;80"){
 # Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
-
   ## Post YAML disclaimer ------------------------------------------------------
 
-  comment("# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #",
-          "DO NOT EDIT project.yaml DIRECTLY",
-          "This file is created by create_project_actions.R",
-          "Edit and run create_project_actions.R to update the project.yaml",
-          "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
+  comment(
+    "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #",
+    "DO NOT EDIT project.yaml DIRECTLY",
+    "This file is created by create_project_actions.R",
+    "Edit and run create_project_actions.R to update the project.yaml",
+    "# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #"
   ),
 
   ## Define study dates --------------------------------------------------------
@@ -176,7 +198,7 @@ actions_list <- splice(
 
   action(
     name = glue("study_dates"),
-    run  = "r:latest analysis/study_dates.R",
+    run = "r:latest analysis/study_dates.R",
     highly_sensitive = list(
       study_dates_json = glue("output/study_dates.json")
     )
@@ -186,8 +208,8 @@ actions_list <- splice(
   comment("Generate dates for all cohorts"),
 
   action(
-    name  = "generate_dates",
-    run   = "ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_dates.py --output output/dataset_definition/index_dates.csv.gz",
+    name = "generate_dates",
+    run = "ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_dates.py --output output/dataset_definition/index_dates.csv.gz",
     needs = list("study_dates"),
     highly_sensitive = list(
       dataset = glue("output/dataset_definition/index_dates.csv.gz")
@@ -197,30 +219,32 @@ actions_list <- splice(
   ## Generate study population -------------------------------------------------
 
   splice(
-    unlist(lapply(cohorts,
-                  function(x) generate_cohort(cohort = x)),
-           recursive = FALSE
+    unlist(
+      lapply(cohorts, function(x) generate_cohort(cohort = x)),
+      recursive = FALSE
     )
   ),
 
   ## Clean data -----------------------------------------------------------
-  
+
   splice(
-    unlist(lapply(cohorts, 
-                  function(x) clean_data(cohort = x, describe = describe)), 
-           recursive = FALSE
+    unlist(
+      lapply(cohorts, function(x) clean_data(cohort = x, describe = describe)),
+      recursive = FALSE
     )
   ),
 
   ## Table 1 -------------------------------------------------------------------
 
   splice(
-    unlist(lapply(unique(active_analyses$cohort),
-                  function(x) table1(cohort = x, ages = age_str)),
-           recursive = FALSE
+    unlist(
+      lapply(
+        unique(active_analyses$cohort),
+        function(x) table1(cohort = x, ages = age_str)
+      ),
+      recursive = FALSE
     )
   )
-
 )
 
 
@@ -244,7 +268,6 @@ as.yaml(project_list, indent = 2) %>%
 # Return number of actions -----------------------------------------------------
 
 count_run_elements <- function(x) {
-
   if (!is.list(x)) {
     return(0)
   }
@@ -254,7 +277,10 @@ count_run_elements <- function(x) {
 
   # Recursively check all elements in the list
   return(current_count + sum(sapply(x, count_run_elements)))
-
 }
 
-print(paste0("YAML created with ", count_run_elements(actions_list), " actions."))
+print(paste0(
+  "YAML created with ",
+  count_run_elements(actions_list),
+  " actions."
+))
