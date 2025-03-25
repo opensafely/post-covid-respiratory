@@ -8,7 +8,7 @@ inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta
   input <- subset(input, input$inex_bin_alive == TRUE) # Subset input if alive at index.
   flow[nrow(flow)+1,] <- c("Inclusion criteria: Alive at index",
                                  nrow(input))
-  
+  print(flow[nrow(flow),])
   print('Inclusion criteria: Known age 18 or over at index')
   
   input <- subset(input, input$cov_num_age >= 18) # Subset input if age between 18 and 110 at index.
