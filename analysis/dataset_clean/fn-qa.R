@@ -9,7 +9,7 @@ qa <- function(input, flow, study_dates) {
   print('Quality assurance: Year of birth is after year of death')
 
   input <- input[((!is.na(input$cens_date_death)) & 
-                  (format(input$cens_date_death, "%Y") >= input$qa_num_birth_year)) |
+                  (year(input$cens_date_death) >= input$qa_num_birth_year)) |
                  (is.na(input$cens_date_death)), ]
   flow[nrow(flow)+1,] <- c("Quality assurance: Year of birth is after year of death",
                                  nrow(input))
