@@ -368,18 +368,7 @@ modify_dummy <- function(df, cohort) {
           size = nrow(.),
           replace = TRUE,
           prob = c(
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
-            0.082,
+            rep(0.082, 12),
             0.016
           )
         )
@@ -444,7 +433,7 @@ modify_dummy <- function(df, cohort) {
         ), # 11% for each area, %1 Missing
         size = nrow(.),
         replace = TRUE,
-        prob = c(0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.01)
+        prob = c(rep(0.11, 9), 0.01)
       )
     ) %>%
 
@@ -454,7 +443,7 @@ modify_dummy <- function(df, cohort) {
         x = c("1 (most deprived)", "2", "3", "4", "5 (least deprived)", NA), # 19.5% for each area, 2.5% missing
         size = nrow(.),
         replace = TRUE,
-        prob = c(0.195, 0.195, 0.195, 0.195, 0.195, 0.025)
+        prob = c(rep(0.195, 5), 0.025)
       )
     ) %>%
 
@@ -491,13 +480,6 @@ modify_dummy <- function(df, cohort) {
         .x
       )
     )) %>%
-
-    # mutate(modify_only_death = rbernoulli(nrow(.), p = 0.005)) %>%
-    # mutate(across(cens_date_death,
-    #               ~if_else(
-    #                 modify_only_death,
-    #                 NA_Date_,
-    #                 .x))) %>%
 
     # Quality assurance: Year of birth exceeds current date
     mutate(modify_birth_invalid = rbernoulli(nrow(.), p = 0.005)) %>%
