@@ -30,7 +30,7 @@ qa <- function(input, flow, study_dates) {
 
   print('Quality assurance: Pregnancy/birth codes for men')
   
-  input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="male") | is.na(input$cov_cat_sex),]
+  input <- input[!(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex=="male"),]
   flow[nrow(flow)+1,] <- c("Quality assurance: Pregnancy/birth codes for men",
                                  nrow(input))
   
