@@ -46,8 +46,7 @@ qa <- function(input, flow, study_dates) {
   )
 
   input <- input[
-    !(input$qa_bin_pregnancy == TRUE & input$cov_cat_sex == "male") |
-      is.na(input$cov_cat_sex),
+    !(input$cov_cat_sex == "male" & input$qa_bin_pregnancy == TRUE),
   ]
   flow[nrow(flow) + 1, ] <- c(
     "Quality assurance: Men do not have records that contain pregnancy and/or birth codes",
@@ -59,8 +58,7 @@ qa <- function(input, flow, study_dates) {
   )
 
   input <- input[
-    !(input$cov_cat_sex == "male" & input$qa_bin_hrtcocp == TRUE) |
-      is.na(input$cov_cat_sex),
+    !(input$cov_cat_sex == "male" & input$qa_bin_hrtcocp == TRUE),
   ]
   flow[nrow(flow) + 1, ] <- c(
     "Quality assurance: Men do not have records that contain HRT or COCP medication codes",
@@ -72,9 +70,7 @@ qa <- function(input, flow, study_dates) {
   )
 
   input <- input[
-    !(input$qa_bin_prostate_cancer == TRUE &
-      input$cov_cat_sex == "female") |
-      is.na(input$cov_cat_sex),
+    !(input$cov_cat_sex == "female" & input$qa_bin_prostate_cancer == TRUE),
   ]
   flow[nrow(flow) + 1, ] <- c(
     "Quality assurance: Women do not have records that contain prostate cancer codes",
