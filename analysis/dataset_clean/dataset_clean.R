@@ -65,7 +65,6 @@ describe <- as.logical(describe)
 
 input_preprocess <- preprocess(cohort, describe)
 
-input_venn <- input_preprocess$venn
 saveRDS(
   input_venn,
   file = paste0(dataclean_dir, "venn_", cohort, ".rds"),
