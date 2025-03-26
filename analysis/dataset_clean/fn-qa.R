@@ -43,7 +43,7 @@ qa <- function(input, flow, study_dates) {
   print('Quality assurance: Prostate cancer codes for women')
   
   input <- input[!(input$qa_bin_prostate_cancer == TRUE & 
-                     input$cov_cat_sex=="female") | is.na(input$cov_cat_sex),]
+                     input$cov_cat_sex=="female"),]
   flow[nrow(flow)+1,] <- c("Quality assurance: Prostate cancer codes for women",
                                  nrow(input))
 
