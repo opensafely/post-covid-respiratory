@@ -37,11 +37,7 @@ ref <- function(input) {
     "Black" = "4",
     "Other" = "5"
   )
-
-  input$cov_cat_ethnicity <- ordered(
-    input$cov_cat_ethnicity,
-    levels = c("White", "Mixed", "South Asian", "Black", "Other", "Missing")
-  )
+  input$cov_cat_ethnicity <- relevel(input$cov_cat_ethnicity, ref = "White")
 
   # Set reference level for variable: cov_cat_imd -------------------------------
   print('Set reference level for variable: cov_cat_imd')
