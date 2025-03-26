@@ -3,6 +3,8 @@
 inex <- function(input, flow, cohort, vax_start_date, mixed_vax_threshold, delta_date) {
 
   ## Apply inclusion criteria to all cohorts --------------------------------------
+  print('Apply inclusion criteria to all cohorts')
+  
   print('Inclusion criteria: Alive at index')
   
   input <- subset(input, input$inex_bin_alive == TRUE) # Subset input if alive at index.
