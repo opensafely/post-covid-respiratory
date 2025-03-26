@@ -85,31 +85,26 @@ flow <- data.frame(
 # Inclusion criteria -----------------------------------------------------------
 print('Call inclusion criteria function')
 
-inex_results <- inex(input,
+inex_results <- inex(input_preprocess$input,
                      flow,
                      cohort,
                      vax1_earliest,
                      mixed_vax_threshold,
                      delta_date)
 
-input <- inex_results$input
-flow  <- inex_results$flow
-
 # Quality assurance ------------------------------------------------------------
 print('Call quality assurance function')
 
-qa_results <- qa(input, flow, study_dates)
-input      <- qa_results$input
-flow       <- qa_results$flow
+qa_results <- qa(inex_results$input, inex_results$flow, study_dates)
 
 # Set reference levels for factors----------------------------------------------
 print('Call reference function')
 
-input <- ref(input)$input
+input <- ref(qa_results$input)$input
 
 # Save flow data after Inclusion criteria
 print('Saving flow data after Inclusion criteria')
-
+flow       <- qa_results$flow
 flow$N       <- as.numeric(flow$N)
 flow$removed <- dplyr::lag(flow$N, default = dplyr::first(flow$N)) - flow$N
 
