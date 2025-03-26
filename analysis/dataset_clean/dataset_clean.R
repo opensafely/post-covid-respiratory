@@ -73,10 +73,9 @@ saveRDS(
 )
 message("Venn diagram data saved successfully")
 
-input <- input_preprocess$input
 message(paste0(
-  "Preprocess dataset has been read successfully with N = ",
-  nrow(input),
+  "Preprocess dataset has N = ",
+  nrow(input_preprocess$input),
   " rows"
 ))
 
@@ -85,7 +84,7 @@ print('Specify flow table')
 
 flow <- data.frame(
   Description = "Input",
-  N = nrow(input),
+  N = nrow(input_preprocess$input),
   stringsAsFactors = FALSE
 )
 
@@ -105,7 +104,7 @@ inex_results <- inex(
 # Quality assurance ------------------------------------------------------------
 print('Call quality assurance function')
 
-qa_results <- qa(inex_results$input, inex_results$flow, study_dates)
+qa_results <- qa(inex_results$input, inex_results$flow)
 
 # Set reference levels for factors----------------------------------------------
 print('Call reference function')
