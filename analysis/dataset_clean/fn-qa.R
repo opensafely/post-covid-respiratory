@@ -36,7 +36,7 @@ qa <- function(input, flow, study_dates) {
   
   print('Quality assurance: HRT or COCP meds for men')
   
-  input <- input[!(input$cov_cat_sex=="male" & input$qa_bin_hrtcocp==TRUE) | is.na(input$cov_cat_sex),]
+  input <- input[!(input$cov_cat_sex=="male" & input$qa_bin_hrtcocp==TRUE),]
   flow[nrow(flow)+1,] <- c("Quality assurance: HRT or COCP meds for men",
                                  nrow(input))
   
