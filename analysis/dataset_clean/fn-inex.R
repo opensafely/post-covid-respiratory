@@ -77,7 +77,7 @@ inex <- function(
 
   input <- subset(
     input,
-    index_date <= end_date_exposure & index_date >= delta_date
+    index_date <= end_date_exposure
   )
   flow[nrow(flow) + 1, ] <- c(
     "Inclusion criteria: Index date is before cohort end date",

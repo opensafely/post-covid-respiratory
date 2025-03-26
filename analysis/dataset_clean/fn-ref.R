@@ -3,9 +3,9 @@ ref <- function(input) {
   # Handle missing values --------------------------------------------------------
   print('Handle missing values')
 
-  input$cov_cat_smoking <- replace(
+  input$cov_cat_smoking <- ifelse(
+    input$cov_cat_smoking %in% c("E", "N", "S"),
     input$cov_cat_smoking,
-    is.na(input$cov_cat_smoking),
     "M"
   )
 
@@ -23,7 +23,7 @@ ref <- function(input) {
 
   input$sub_cat_covidhospital <- ordered(
     input$sub_cat_covidhospital,
-    levels = c("non_hospitalised", "hospitalised", "no_infection")
+    levels = c("no_infection", "non_hospitalised", "hospitalised")
   )
 
   # Set reference level for variable: cov_cat_ethnicity --------------------------
@@ -75,7 +75,6 @@ ref <- function(input) {
     "Never smoker" = "N",
     "Current smoker" = "S"
   )
-
   input$cov_cat_smoking <- ordered(
     input$cov_cat_smoking,
     levels = c("Never smoker", "Ever smoker", "Current smoker", "Missing")
@@ -85,10 +84,6 @@ ref <- function(input) {
   print('Set reference level for variable: cov_cat_sex')
 
   levels(input$cov_cat_sex) <- list("Female" = "female", "Male" = "male")
-  input$cov_cat_sex <- factor(
-    input$cov_cat_sex,
-    levels = c("Female", "Male", "Unknown")
-  )
   input$cov_cat_sex <- relevel(input$cov_cat_sex, ref = "Female")
 
   # Set reference level for variable: vax_cat_jcvi_group -------------------------
@@ -117,7 +112,6 @@ ref <- function(input) {
   print('Set reference level for binaries')
 
   bin_factors <- colnames(input)[grepl("cov_bin_", colnames(input))]
-
   input[, bin_factors] <- lapply(
     input[, bin_factors],
     function(x) factor(x, levels = c("FALSE", "TRUE"))

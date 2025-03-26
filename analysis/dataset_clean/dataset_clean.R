@@ -2,6 +2,7 @@
 print('Load libraries')
 
 library(dplyr)
+library(tidyverse)
 library(lubridate)
 library(data.table)
 library(readr)
