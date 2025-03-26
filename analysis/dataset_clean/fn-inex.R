@@ -4,43 +4,38 @@ inex <- function(
   input,
   flow,
   cohort,
-  vax_start_date,
+  vax1_earliest,
   mixed_vax_threshold,
-  delta_date
+  delta_date,
+  lcd_date
 ) {
   ## Apply inclusion criteria to all cohorts --------------------------------------
   print('Apply inclusion criteria to all cohorts')
-  
-  print('Inclusion criteria: Alive at index')
 
   input <- subset(input, input$inex_bin_alive == TRUE) # Subset input if alive at index.
   flow[nrow(flow) + 1, ] <- c("Inclusion criteria: Alive at index", nrow(input))
   print(flow[nrow(flow), ])
-  print('Inclusion criteria: Known age 18 or over at index')
 
   input <- subset(input, input$cov_num_age >= 18) # Subset input if age between 18 and 110 at index.
   flow[nrow(flow) + 1, ] <- c(
     "Inclusion criteria: Known age 18 or over at index",
     nrow(input)
   )
-
-  print('Inclusion criteria: Known age 110 or under at index')
+  print(flow[nrow(flow), ])
 
   input <- subset(input, input$cov_num_age <= 110) # Subset input if age between 18 and 110 on 01/06/2021.
   flow[nrow(flow) + 1, ] <- c(
     "Inclusion criteria: Known age 110 or under at index",
     nrow(input)
   )
-
-  print('Inclusion criteria: Known sex at index')
+  print(flow[nrow(flow), ])
 
   input <- subset(input, cov_cat_sex %in% c("female", "male"))
   flow[nrow(flow) + 1, ] <- c(
-    "Inclusion criteria: Known sex at index",
+    "Inclusion criteria: Known sex, recorded as male or female, at index",
     nrow(input)
   )
-
-  print('Inclusion criteria: Known IMD at index')
+  print(flow[nrow(flow), ])
 
   input <- subset(
     input,
@@ -50,8 +45,7 @@ inex <- function(
     "Inclusion criteria: Known IMD at index",
     nrow(input)
   )
-
-  print('Inclusion criteria: Known region at index')
+  print(flow[nrow(flow), ])
 
   input <- subset(
     input,
@@ -72,54 +66,53 @@ inex <- function(
     "Inclusion criteria: Known region at index",
     nrow(input)
   )
-
-  print(
-    'Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date'
-  )
+  print(flow[nrow(flow), ])
 
   input <- subset(input, input$inex_bin_6m_reg == TRUE)
   flow[nrow(flow) + 1, ] <- c(
     "Inclusion criteria: Continuous registration with the same practice for at least six months up to and including the index date",
     nrow(input)
   )
+  print(flow[nrow(flow), ])
 
+  input <- subset(
+    input,
+    index_date <= end_date_exposure & index_date >= delta_date
+  )
+  flow[nrow(flow) + 1, ] <- c(
+    "Inclusion criteria: Index date is before cohort end date",
+    nrow(input)
+  )
+  print(flow[nrow(flow), ])
   ## Apply cohort specific inclusion criteria -------------------------------------
   print('Apply cohort specific inclusion criteria')
 
   if (cohort == "vax") {
-    print(
-      'Inclusion criteria: Record of two vaccination doses prior to the study end date'
+    input <- subset(
+      input,
+      !is.na(vax_date_covid_1) &
+        !is.na(vax_date_covid_2) &
+        vax_date_covid_2 < lcd_date
     )
-
-    input <- subset(input, !is.na(vax_date_covid_1) & !is.na(vax_date_covid_2)) # TODO add study end date criteria
     flow[nrow(flow) + 1, ] <- c(
       "Inclusion criteria: Record of two vaccination doses prior to the study end date",
       nrow(input)
     )
+    print(flow[nrow(flow), ])
 
-    print(
-      'Inclusion criteria: Did not receive a vaccination prior to 08-12-2020 (i.e., the start of the vaccination program)'
-    )
-
-    input <- subset(input, input$vax_date_covid_1 >= vax_start_date)
+    input <- subset(input, input$vax_date_covid_1 >= vax1_earliest)
     flow[nrow(flow) + 1, ] <- c(
       "Inclusion criteria: Did not receive a vaccination prior to 08-12-2020 (i.e., the start of the vaccination program)",
       nrow(input)
     )
-
-    print(
-      'Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination'
-    )
+    print(flow[nrow(flow), ])
 
     input <- subset(input, input$vax_date_covid_2 >= input$vax_date_covid_1)
     flow[nrow(flow) + 1, ] <- c(
       "Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination",
       nrow(input)
     )
-
-    print(
-      'Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose'
-    )
+    print(flow[nrow(flow), ])
 
     input <- subset(
       input,
@@ -129,10 +122,8 @@ inex <- function(
       "Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose",
       nrow(input)
     )
+    print(flow[nrow(flow), ])
 
-    print(
-      'Inclusion criteria: Did not receive mixed vaccine products before 07-05-2021'
-    )
     input <- input %>%
       mutate(
         AZ_date = case_when(
@@ -169,40 +160,19 @@ inex <- function(
       "Inclusion criteria: Did not receive a mixed vaccine products before 07-05-2021",
       nrow(input)
     )
-
-    print('Inclusion criteria: Index date is before cohort end date')
-
-    # Will remove anyone who is not fully vaccinated by the cohort end date
-
-    input <- subset(
-      input,
-      index_date <= end_date_exposure & index_date >= delta_date
-    )
-    flow[nrow(flow) + 1, ] <- c(
-      "Inclusion criteria: Index date is before cohort end date",
-      nrow(input)
-    )
+    print(flow[nrow(flow), ])
   } else if (cohort == "unvax") {
-    print(
-      'Inclusion criteria: Does not have a record of one or more vaccination prior index date'
-    )
-
-    # i.e. Have a record of a first vaccination prior to index date
-    # (no more vax 2 and 3 variables available in this dataset)
-    # a.Determine the vaccination status on index start date
-
     input <- subset(
       input,
-      (input$vax_date_covid_1 <= input$index_date &
-        !is.na(input$vax_date_covid_1)) |
-        is.na(input$vax_date_covid_1)
+      (is.na(vax_date_covid_1) | vax_date_covid_1 > index_date) &
+        (is.na(vax_date_covid_2) | vax_date_covid_2 > index_date) &
+        (is.na(vax_date_covid_3) | vax_date_covid_3 > index_date)
     )
     flow[nrow(flow) + 1, ] <- c(
-      "Inclusion criteria: Does not have a record of one or more vaccination prior index date",
+      "Inclusion criteria: Does not have a record of one or more vaccination prior to index date",
       nrow(input)
     )
-
-    print('Inclusion criteria: Not missing JCVI group')
+    print(flow[nrow(flow), ])
 
     input <- subset(
       input,
@@ -226,19 +196,7 @@ inex <- function(
       "Inclusion criteria: Not missing JCVI group",
       nrow(input)
     )
-
-    print(
-      'Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date'
-    )
-
-    input <- subset(
-      input,
-      index_date <= end_date_exposure & index_date >= delta_date
-    )
-    flow[nrow(flow) + 1, ] <- c(
-      "Inclusion criteria: Index date is not before cohort end date - will remove anyone whose eligibility date + 84 days is after study end date",
-      nrow(input)
-    )
+    print(flow[nrow(flow), ])
   }
 
   return(list(input = input, flow = flow))
