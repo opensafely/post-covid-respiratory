@@ -36,6 +36,7 @@ mixed_vax_threshold <- as.Date(
   format = "%Y-%m-%d"
 )
 delta_date <- as.Date(study_dates$delta_date, format = "%Y-%m-%d")
+lcd_date <- as.Date(study_dates$lcd_date, format = "%Y-%m-%d")
 
 # Source common functions ------------------------------------------------------
 print('Source common functions')
@@ -97,7 +98,8 @@ inex_results <- inex(
   cohort,
   vax1_earliest,
   mixed_vax_threshold,
-  delta_date
+  delta_date,
+  lcd_date
 )
 
 # Quality assurance ------------------------------------------------------------
