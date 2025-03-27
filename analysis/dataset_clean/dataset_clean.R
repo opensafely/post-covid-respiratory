@@ -162,7 +162,7 @@ input <- input %>%
     starts_with("cov_"), # Covariates
     starts_with("cens_"), # Censor
     starts_with("strat_"), # Strata
-    starts_with("vax_date_"), # Vaccination dates and vax type
+    starts_with("vax_date_"), # Vaccination dates
     starts_with("vax_cat_") # Vaccination products
   )
 
