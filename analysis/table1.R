@@ -5,7 +5,6 @@ library(magrittr)
 library(here)
 library(dplyr)
 
-
 # Specify redaction threshold --------------------------------------------------
 print("Specify redaction threshold")
 
