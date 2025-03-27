@@ -164,9 +164,7 @@ inex <- function(
   } else if (cohort == "unvax") {
     input <- subset(
       input,
-      (is.na(vax_date_covid_1) | vax_date_covid_1 > index_date) &
-        (is.na(vax_date_covid_2) | vax_date_covid_2 > index_date) &
-        (is.na(vax_date_covid_3) | vax_date_covid_3 > index_date)
+      (is.na(vax_date_covid_1) | vax_date_covid_1 > index_date)
     )
     flow[nrow(flow) + 1, ] <- c(
       "Inclusion criteria: Does not have a record of one or more vaccination prior to index date",
