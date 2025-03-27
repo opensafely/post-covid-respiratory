@@ -22,7 +22,8 @@ if (length(args) == 0) {
   name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma;cohort_vax-sub_sex_male_preex_FALSE-asthma" # Testing sex groups
   # name <- "cohort_vax-subhistory_migraine; cohort_vax-subhistory_depression" # This one should fail (it's a neuro group)
   name <- "cohort_vax-sub_age_18_39_preex_FALSE-pf;cohort_vax-sub_age_40_59_preex_FALSE-pf;cohort_vax-sub_age_60_79_preex_FALSE-pf;cohort_vax-sub_age_80_110_preex_FALSE-pf" # This is a test for 4 at once
-  name <- "cohort_prevax-sub_ethnicity_white_preex_FALSE-copd;cohort_prevax-sub_ethnicity_black_preex_FALSE-copd;cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd;cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd;cohort_prevax-sub_ethnicity_other_preex_FALSE-copd"
+  # name <- "cohort_prevax-sub_ethnicity_white_preex_FALSE-copd;cohort_prevax-sub_ethnicity_black_preex_FALSE-copd;cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd;cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd;cohort_prevax-sub_ethnicity_other_preex_FALSE-copd"
+  # name <- "cohort_vax-sub_covidhistory_preex_FALSE-pf"
 } else {
   name <- args[[1]]
 }
@@ -230,9 +231,9 @@ for (i in 1:nrow(active_analyses)) {
       gsub(".*sub_age_", "", active_analyses$analysis[i]),
       split = "_"
     )[[1]][2])
-    df <- input[
+    df <- df[
       df$cov_num_age >= min_age &
-        df$cov_num_age < ifelse(max_age == 110, max_age + 1, max_age),
+        df$cov_num_age < (max_age + 1),
     ]
   }
 
@@ -243,7 +244,7 @@ for (i in 1:nrow(active_analyses)) {
       "",
       active_analyses$analysis[i]
     ))
-    df <- df[df$cov_cat_ethnicity == tolower(ethnicity), ]
+    df <- df[tolower(df$cov_cat_ethnicity) == ethnicity, ]
   }
 
   # Save model output
