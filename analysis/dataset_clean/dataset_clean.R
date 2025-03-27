@@ -114,6 +114,7 @@ input <- ref(qa_results$input)$input
 
 # Save flow data after Inclusion criteria
 print('Saving flow data after Inclusion criteria')
+
 flow <- qa_results$flow
 flow$N <- as.numeric(flow$N)
 flow$removed <- dplyr::lag(flow$N, default = dplyr::first(flow$N)) - flow$N
