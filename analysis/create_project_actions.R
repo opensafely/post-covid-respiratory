@@ -11,7 +11,7 @@ library(dplyr)
 
 defaults_list <- list(
   version = "3.0",
-  expectations = list(population_size = 200000L)
+  expectations = list(population_size = 5000L)
 )
 
 cohorts <- c("prevax", "vax", "unvax")
