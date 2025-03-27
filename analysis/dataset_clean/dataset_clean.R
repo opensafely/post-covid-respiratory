@@ -105,7 +105,7 @@ inex_results <- inex(
 # Quality assurance ------------------------------------------------------------
 print('Call quality assurance function')
 
-qa_results <- qa(inex_results$input, inex_results$flow)
+qa_results <- qa(inex_results$input, inex_results$flow, lcd_date)
 
 # Set reference levels for factors----------------------------------------------
 print('Call reference function')
