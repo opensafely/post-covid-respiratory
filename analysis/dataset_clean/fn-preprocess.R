@@ -109,8 +109,6 @@ preprocess <- function(cohort, describe) {
       starts_with("vax_cat_") # Vaccination products
     )
 
-  input[, colnames(input)[grepl("tmp_", colnames(input))]] <- NULL
-
   # Describe files ----
   print('Describe files')
 

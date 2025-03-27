@@ -146,21 +146,24 @@ write.csv(
 )
 
 # Save the dataset
-print('Saving dataset after Inclusion criteria')
+print(
+  'Saving dataset after preprocessing, applying inclusion criteria, quality assurance checks, and setting reference levels'
+)
 
-input <- input[, c(
-  "patient_id",
-  "index_date",
-  colnames(input)[grepl("end_date_", colnames(input))],
-  colnames(input)[grepl("sub_", colnames(input))],
-  colnames(input)[grepl("exp_", colnames(input))],
-  colnames(input)[grepl("out_", colnames(input))],
-  colnames(input)[grepl("cov_", colnames(input))],
-  colnames(input)[grepl("cens_", colnames(input))],
-  colnames(input)[grepl("strat_", colnames(input))],
-  colnames(input)[grepl("vax_date_", colnames(input))],
-  colnames(input)[grepl("vax_cat_", colnames(input))]
-)]
+input <- input %>%
+  select(
+    patient_id,
+    index_date,
+    starts_with("end_date_"),
+    starts_with("sub_"), # Subgroups
+    starts_with("exp_"), # Exposures
+    starts_with("out_"), # Outcomes
+    starts_with("cov_"), # Covariates
+    starts_with("cens_"), # Censor
+    starts_with("strat_"), # Strata
+    starts_with("vax_date_"), # Vaccination dates and vax type
+    starts_with("vax_cat_") # Vaccination products
+  )
 
 saveRDS(
   input,
