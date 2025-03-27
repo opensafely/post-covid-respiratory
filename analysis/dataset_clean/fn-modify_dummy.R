@@ -344,10 +344,21 @@ modify_dummy <- function(df, cohort) {
   } else if (cohort == "unvax") {
     # Modifying unvax-specific variables
 
+    # Redistribute vax_date_covid_1 to increase earlier values
+    print("Redistributing vax_date_covid_1 for unvax cohort")
+
     df <- df %>%
+      mutate(
+        vax_date_covid_1 = case_when(
+          # Shift all dates after 2021-12-10 one day earlier
+          vax_date_covid_1 > as.Date("2021-12-10") ~ vax_date_covid_1 - 360,
+
+          # Boost early vaccine dates by randomly pulling some later values earlier
+          TRUE ~ vax_date_covid_1
+        )
+      ) %>%
 
       ## JCVI distribution
-
       mutate(
         vax_cat_jcvi_group = sample(
           x = c(
