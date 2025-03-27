@@ -350,7 +350,7 @@ modify_dummy <- function(df, cohort) {
     df <- df %>%
       mutate(
         vax_date_covid_1 = case_when(
-          # Shift all dates after 2021-12-10 one day earlier
+          # Shift all dates after 2021-12-10 one year earlier
           vax_date_covid_1 > as.Date("2021-12-10") ~ vax_date_covid_1 - 360,
 
           # Boost early vaccine dates by randomly pulling some later values earlier
