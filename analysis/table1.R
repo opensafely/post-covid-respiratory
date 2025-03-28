@@ -43,7 +43,7 @@ df <- readr::read_rds(paste0(
   "output/dataset_clean/input_",
   cohort,
   "_clean.rds"
-)) # "_stage1.rds"))
+))
 
 # Table 1 Processing Start -----------------------------------------------------
 print("Table 1 processing")
