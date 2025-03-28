@@ -11,7 +11,7 @@ library(dplyr)
 
 defaults_list <- list(
   version = "3.0",
-  expectations = list(population_size = 200000L)
+  expectations = list(population_size = 5000L)
 )
 
 active_analyses <- read_rds("lib/active_analyses.rds")
@@ -22,19 +22,20 @@ active_analyses <- active_analyses[
     active_analyses$outcome
   ),
 ]
-cohorts <- unique(active_analyses$cohort) # does the same as cohorts <- c("prevax", "vax", "unvax")
-cohorts <- c("prevax", "vax", "unvax")
+cohorts <- unique(active_analyses$cohort)
 
-active_subgroups <- unique(stringr::str_split_i(
-  as.vector(active_analyses$name),
-  "-",
-  2
-)) #extract all unique sub groups
-active_sub_ages <- active_subgroups[grepl("sub_age_", active_subgroups)] # extract "age" subgroups
-age_str <- paste(
-  stringr::str_split_i(as.vector(active_sub_ages), "_", 3),
-  collapse = ";"
-) #create age vector in form "XX;XX;XX"
+active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
+age_str <- paste0(
+  paste0(
+    unique(sub(".*_age_([0-9]+)_([0-9]+)_.*", "\\1", active_age)),
+    collapse = ";"
+  ),
+  ";",
+  max(
+    as.numeric(unique(sub(".*_age_([0-9]+)_([0-9]+)_.*", "\\2", active_age))) +
+      1
+  )
+) #create age vector in form "X;XX;XX;XX;XXX"
 
 describe <- TRUE # This prints descriptive files for each dataset in the pipeline
 
@@ -164,12 +165,12 @@ clean_data <- function(cohort, describe = describe) {
 
 # Create function for table1 --------------------------------------------
 
-table1 <- function(cohort, ages = "18;80") {
+table1 <- function(cohort, ages = "18;40;60;80") {
   splice(
     comment(glue("Table 1 - {cohort}")),
     action(
       name = glue("table1_{cohort}"),
-      run = "r:latest analysis/table1.R",
+      run = "r:latest analysis/table1/table1.R",
       arguments = c(c(cohort), c(ages)),
       needs = list(glue("clean_data_{cohort}")),
       moderately_sensitive = list(
