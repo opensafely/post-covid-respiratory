@@ -5,6 +5,12 @@ library(magrittr)
 library(here)
 library(dplyr)
 
+# Define table1 output folder ---------------------------------------------------------
+print("Creating output/table1 output folder")
+
+table1_dir <- "output/table1/"
+fs::dir_create(here::here(table1_dir))
+
 # Specify redaction threshold --------------------------------------------------
 print("Specify redaction threshold")
 
@@ -20,17 +26,13 @@ print("Specify arguments")
 
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) < 1) {
-  # Which cohort to analyse
+print(length(args))
+
+if (length(args) == 0) {
   cohort <- "vax"
+  age_str <- "18;40;65;85;111"
 } else {
   cohort <- args[[1]]
-}
-
-if (length(args) < 2) {
-  # The bounds to use for age cohorts
-  age_str <- "18;40;65;85" # vector of age bounds in form "X;XX;XX;XX"
-} else {
   age_str <- args[[2]]
 }
 
@@ -43,7 +45,7 @@ df <- readr::read_rds(paste0(
   "output/dataset_clean/input_",
   cohort,
   "_clean.rds"
-)) # "_stage1.rds"))
+))
 
 # Table 1 Processing Start -----------------------------------------------------
 print("Table 1 processing")
@@ -63,10 +65,15 @@ print("Define age groups")
 
 df$cov_cat_age_group <- numerical_to_categorical(df$cov_num_age, age_bounds) # See utility.R
 df$cov_cat_age_group <- ifelse(
-  df$cov_cat_age_group == "<=17",
+  df$cov_cat_age_group == paste0("<=", age_bounds[1] - 1),
   "",
   df$cov_cat_age_group
 ) # for consistency in blanking out underage
+df$cov_cat_age_group <- ifelse(
+  df$cov_cat_age_group == paste0(age_bounds[length(age_bounds)], "+"),
+  "",
+  df$cov_cat_age_group
+) # for consistency in blanking out overage
 
 df$cov_cat_consrate2019 <- numerical_to_categorical(
   df$cov_num_consrate2019,
@@ -74,14 +81,7 @@ df$cov_cat_consrate2019 <- numerical_to_categorical(
   zero_flag = TRUE
 )
 
-median_iqr_string <- paste0(
-  quantile(df$cov_num_age)[3],
-  " (",
-  quantile(df$cov_num_age)[2],
-  "-",
-  quantile(df$cov_num_age)[4],
-  ")"
-)
+median_iqr_string <- create_median_iqr_string(df$cov_num_age)
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
@@ -114,7 +114,6 @@ df <- tidyr::pivot_longer(
   names_to = "characteristic",
   values_to = "subcharacteristic"
 )
-#as.factor or factor to convert binary functions
 
 df$total <- 1
 
@@ -124,10 +123,9 @@ df <- aggregate(
   sum
 )
 
-# Tidy care home characteristic ------------------------------------------------
-print("Remove extraneous information")
+# Tidy missing data labels -----------------------------------------------------
+print("Tidy missing data labels")
 
-df <- df[df$subcharacteristic != FALSE, ]
 df$subcharacteristic <- ifelse(
   df$subcharacteristic == "" | df$subcharacteristic == "unknown",
   "Missing",
@@ -137,23 +135,13 @@ df$subcharacteristic <- ifelse(
 # Sort characteristics ---------------------------------------------------------
 print("Sort characteristics")
 
-df <- df[order(df$subcharacteristic, decreasing = TRUE), ] # Basic sort from extendedtable, might need to clean up
-df <- df[order(df$characteristic), ]
+df <- df[order(df$characteristic, df$subcharacteristic), ]
 
 # Add in Median IQR
 print('Add median (IQR) age')
 
 # Pastes: "Mean Age (LQ Age - UQ Age)" as a string for each cohort
 df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_string, 0)
-
-# Define table1 output folder ---------------------------------------------------------
-print("Creating output/table1 output folder")
-
-# setting up the sub directory
-table1_dir <- "output/table1/"
-
-# check if sub directory exists, create if not
-fs::dir_create(here::here(table1_dir))
 
 # Save Table 1 -----------------------------------------------------------------
 print("Save Table 1")
@@ -170,7 +158,7 @@ df$exposed_midpoint6 <- roundmid_any(as.numeric(df$exposed), to = threshold)
 
 # Calculate column percentages -------------------------------------------------
 
-df$N_midpoint6_derived <- df$total
+df$N_midpoint6_derived <- df$total_midpoint6
 
 df$percent_midpoint6_derived <- paste0(
   ifelse(
@@ -197,12 +185,15 @@ df <- df[, c(
   "exposed_midpoint6"
 )]
 
-colnames(df) <- c(
-  "Characteristic",
-  "Subcharacteristic",
-  "N [midpoint6_derived]",
-  "(%) [midpoint6_derived]",
-  "COVID-19 diagnoses [midpoint6]"
+df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_string, "", 0)
+
+df <- dplyr::rename(
+  df,
+  "Characteristic" = "characteristic",
+  "Subcharacteristic" = "subcharacteristic",
+  "N [midpoint6_derived]" = "N_midpoint6_derived",
+  "(%) [midpoint6_derived]" = "percent_midpoint6_derived",
+  "COVID-19 diagnoses [midpoint6]" = "exposed_midpoint6"
 )
 
 # Save Table 1 -----------------------------------------------------------------
