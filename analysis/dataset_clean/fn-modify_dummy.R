@@ -309,18 +309,25 @@ modify_dummy <- function(df, cohort) {
                   prob    = c(0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.11, 0.01))) %>%
 
     ## IMD
-    mutate(cov_cat_imd   = sample(
-                  x       = c("1 (most deprived)",
-                            "2",
-                            "3",
-                            "4",
-                            "5 (least deprived)",
-                            NA), # 19.5% for each area, 2.5% missing
-                  size    = nrow(.),
-                  replace = TRUE,
-                  prob    = c(0.195, 0.195, 0.195, 0.195, 0.195, 0.025)
-    )) %>%
-    
+    mutate(
+      cov_cat_imd = sample(
+        x = c("1 (most deprived)", "2", "3", "4", "5 (least deprived)", NA), # 19.5% for each area, 2.5% missing
+        size = nrow(.),
+        replace = TRUE,
+        prob = c(rep(0.195, 5), 0.025)
+      )
+    ) %>%
+
+    # ## Update Covid Hospital proportions
+    # mutate(
+    #   sub_cat_covidhospital = sample(
+    #     x = c("no_infection", "non_hospitalised", "hospitalised", NA), # 19.5% for each area, 2.5% missing
+    #     size = nrow(.),
+    #     replace = TRUE,
+    #     prob = rep(0.333, 3)
+    #   )
+    # ) %>%
+
     ## Prior Covid History
     mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.95)) %>% 
   
