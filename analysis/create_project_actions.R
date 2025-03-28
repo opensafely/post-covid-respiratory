@@ -245,9 +245,9 @@ actions_list <- splice(
       ),
       recursive = FALSE
     )
+
   )
 )
-
 
 # Combine actions into project list --------------------------------------------
 
