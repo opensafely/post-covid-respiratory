@@ -27,13 +27,13 @@ describe_data <- function(df, name) {
 
 # Function for creating a median (iqr_low-iqr_high) string ----
 
-create_median_iqr_string <- function(age_vec)
+create_median_iqr_string <- function(x)
   return(paste0(
-    quantile(age_vec)[3],
+    quantile(x)[3],
     " (",
-    quantile(age_vec)[2],
+    quantile(x)[2],
     "-",
-    quantile(age_vec)[4],
+    quantile(x)[4],
     ")"
   ))
 
