@@ -68,12 +68,12 @@ df$cov_cat_age_group <- ifelse(
   df$cov_cat_age_group == paste0("<=", age_bounds[1] - 1),
   "",
   df$cov_cat_age_group
-) # for consistency in blanking out underage
+) # for consistency in blanking out underage, e.g. "<=17"
 df$cov_cat_age_group <- ifelse(
   df$cov_cat_age_group == paste0(age_bounds[length(age_bounds)], "+"),
   "",
   df$cov_cat_age_group
-) # for consistency in blanking out overage
+) # for consistency in blanking out overage, e.g. "111+"
 
 df$cov_cat_consrate2019 <- numerical_to_categorical(
   df$cov_num_consrate2019,
@@ -81,7 +81,7 @@ df$cov_cat_consrate2019 <- numerical_to_categorical(
   zero_flag = TRUE
 )
 
-median_iqr_string <- create_median_iqr_string(df$cov_num_age)
+median_iqr_age <- create_median_iqr_string(df$cov_num_age) # See utility.R
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
@@ -141,7 +141,7 @@ df <- df[order(df$characteristic, df$subcharacteristic), ]
 print('Add median (IQR) age')
 
 # Pastes: "Mean Age (LQ Age - UQ Age)" as a string for each cohort
-df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_string, 0)
+df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_age, 0)
 
 # Save Table 1 -----------------------------------------------------------------
 print("Save Table 1")
@@ -152,6 +152,7 @@ write.csv(df, paste0(table1_dir, "table1_", cohort, ".csv"), row.names = FALSE)
 print("Perform redaction")
 
 df <- df[df$subcharacteristic != "Median (IQR)", ] # Remove Median IQR row
+df <- df[df$subcharacteristic != FALSE, ] # Remove False binary data
 
 df$total_midpoint6 <- roundmid_any(as.numeric(df$total), to = threshold)
 df$exposed_midpoint6 <- roundmid_any(as.numeric(df$exposed), to = threshold)
@@ -185,7 +186,7 @@ df <- df[, c(
   "exposed_midpoint6"
 )]
 
-df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_string, "", 0)
+df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_age, "", 0)
 
 df <- dplyr::rename(
   df,
