@@ -467,6 +467,34 @@ modify_dummy <- function(df, cohort) {
     ## Prior Covid History
     mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.95)) %>%
 
+    ## Exposure date
+    mutate(across(
+      exp_date_covid,
+      ~ as.Date(ifelse(
+        runif(n()) < 0.50, #50% With COVID
+        sample(
+          seq(pandemic_start, lcd_date, by = "day"),
+          n(),
+          replace = TRUE
+        ),
+        NA_Date_
+      ))
+    )) %>%
+
+    ## Outcome dates
+    mutate(across(
+      starts_with("out_date_"), # Select columns dynamically
+      ~ as.Date(ifelse(
+        runif(n()) < 0.15, #15% for each outcome
+        sample(
+          seq(pandemic_start, lcd_date, by = "day"),
+          n(),
+          replace = TRUE
+        ),
+        NA_Date_
+      ))
+    )) %>%
+
     # Quality assurance: Year of birth is missing
     mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
     mutate(across(
