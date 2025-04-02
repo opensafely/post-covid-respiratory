@@ -5,6 +5,12 @@ modify_dummy <- function(df, cohort) {
   # Set seed -------------------------------------------------------------------
   set.seed(1)
 
+  pandemic_start <- as.Date(
+    study_dates$pandemic_start,
+    format = "%Y-%m-%d",
+    origin = "1970-01-01"
+  )
+
   # Modifying vax-specific variables
 
   if (cohort == "vax") {
@@ -467,28 +473,36 @@ modify_dummy <- function(df, cohort) {
     ## Exposure date
     mutate(across(
       exp_date_covid,
-      ~ as.Date(ifelse(
-        runif(n()) < 0.50, # 50% With COVID
-        sample(
-          seq(pandemic_start, lcd_date, by = "day"),
-          n(),
-          replace = TRUE
+      ~ as.Date(
+        ifelse(
+          runif(n()) < 0.50, # 50% With COVID
+          sample(
+            seq(pandemic_start, lcd_date, by = "day"),
+            n(),
+            replace = TRUE
+          ),
+          NA_Date_
         ),
-        NA_Date_
-      ))
+        format = "%Y-%m-%d",
+        origin = "1970-01-01"
+      )
     )) %>%
 
     ## Outcome dates
     mutate(across(
       starts_with("out_date_"),
-      ~ as.Date(ifelse(
-        runif(n()) < 0.15, # 15% for each outcome
-        index_date +
-          round(
-            (lcd_date - index_date) * runif(n(), min = 0, max = 1)
-          ),
-        NA_Date_
-      ))
+      ~ as.Date(
+        ifelse(
+          runif(n()) < 0.15, # 15% for each outcome
+          index_date +
+            round(
+              (lcd_date - index_date) * runif(n(), min = 0, max = 1)
+            ),
+          NA_Date_
+        ),
+        format = "%Y-%m-%d",
+        origin = "1970-01-01"
+      )
     )) %>%
 
     # Quality assurance: Year of birth is missing
