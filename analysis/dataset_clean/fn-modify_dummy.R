@@ -468,7 +468,7 @@ modify_dummy <- function(df, cohort) {
     mutate(across(
       exp_date_covid,
       ~ as.Date(ifelse(
-        runif(n()) < 0.50, #50% With COVID
+        runif(n()) < 0.50, # 50% With COVID
         sample(
           seq(pandemic_start, lcd_date, by = "day"),
           n(),
@@ -480,14 +480,13 @@ modify_dummy <- function(df, cohort) {
 
     ## Outcome dates
     mutate(across(
-      starts_with("out_date_"), # Select columns dynamically
+      starts_with("out_date_"),
       ~ as.Date(ifelse(
-        runif(n()) < 0.15, #15% for each outcome
-        sample(
-          seq(pandemic_start, lcd_date, by = "day"),
-          n(),
-          replace = TRUE
-        ),
+        runif(n()) < 0.15, # 15% for each outcome
+        index_date +
+          round(
+            (lcd_date - index_date) * runif(n(), min = 0, max = 1)
+          ),
         NA_Date_
       ))
     )) %>%
