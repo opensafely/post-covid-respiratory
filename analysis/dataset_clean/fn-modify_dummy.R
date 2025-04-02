@@ -289,33 +289,30 @@ modify_dummy <- function(df, cohort) {
       ## Inclusion/Exclusion modifications
 
       # Inclusion criteria: Did not receive a vaccination prior to 08-12-2020 (i.e., the start of the vaccination
-      mutate(modify_vax_start = rbernoulli(nrow(.), p = 0.002)) %>%
       mutate(across(
         vax_date_covid_1,
         ~ if_else(
-          modify_vax_start,
+          runif(n()) < 0.002,
           as.Date("01-12-2020"),
           .x
         )
       )) %>%
 
       # Inclusion criteria: Did not receive a second dose vaccination before their first dose vaccination
-      mutate(modify_vax2_then_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
       mutate(across(
         vax_date_covid_1,
         ~ if_else(
-          modify_vax2_then_vax1,
+          runif(n()) < 0.002,
           vax_date_covid_2 + 10,
           .x
         )
       )) %>%
 
       # Inclusion criteria: Did not receive a second dose vaccination less than three weeks after their first dose
-      mutate(modify_vax2_near_vax1 = rbernoulli(nrow(.), p = 0.002)) %>%
       mutate(across(
         vax_date_covid_2,
         ~ if_else(
-          modify_vax2_near_vax1,
+          runif(n()) < 0.002,
           vax_date_covid_1 + 15,
           .x
         )
@@ -496,23 +493,22 @@ modify_dummy <- function(df, cohort) {
     )) %>%
 
     # Quality assurance: Year of birth is missing
-    mutate(modify_birth_miss = rbernoulli(nrow(.), p = 0.002)) %>%
     mutate(across(
       qa_num_birth_year,
       ~ if_else(
-        modify_birth_miss,
+        runif(n()) < 0.002,
         as.numeric(""),
         .x
       )
     )) %>%
 
-    # Quality assurance: Year of birth is after year of death or patient only has year of death
+    # Quality assurance: Year of birth is before year of death
     mutate(modify_birth_then = rbernoulli(nrow(.), p = 0.002)) %>%
     mutate(across(
       qa_num_birth_year,
       ~ if_else(
         modify_birth_then,
-        2022,
+        2024,
         .x
       )
     )) %>%
@@ -521,28 +517,26 @@ modify_dummy <- function(df, cohort) {
       cens_date_death,
       ~ if_else(
         modify_birth_then,
-        as.Date("02-03-2023"),
+        as.Date("2023-03-02"),
         .x
       )
     )) %>%
 
-    # Quality assurance: Year of birth exceeds current date
-    mutate(modify_birth_invalid = rbernoulli(nrow(.), p = 0.005)) %>%
+    # Quality assurance: Year of birth is before today
     mutate(across(
       qa_num_birth_year,
       ~ if_else(
-        modify_birth_invalid,
+        runif(n()) < 0.005,
         as.numeric(format(Sys.Date() + 1000, "%Y")),
         .x
       )
     )) %>%
 
-    # Quality assurance: Date of death is invalid (after current date)
-    mutate(modify_death_invalid = rbernoulli(nrow(.), p = 0.002)) %>%
+    # Quality assurance: Date of death before today
     mutate(across(
       cens_date_death,
       ~ if_else(
-        modify_death_invalid,
+        runif(n()) < 0.002,
         Sys.Date() + 42,
         .x
       )
