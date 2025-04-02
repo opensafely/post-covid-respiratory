@@ -457,16 +457,6 @@ modify_dummy <- function(df, cohort) {
       )
     ) %>%
 
-    ## Update Covid Hospital proportions
-    mutate(
-      sub_cat_covidhospital = sample(
-        x = c("no_infection", "non_hospitalised", "hospitalised"),
-        size = nrow(.),
-        replace = TRUE,
-        prob = rep(0.333, 3)
-      )
-    ) %>%
-
     ## Prior Covid History
     mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.05)) %>%
 
@@ -487,6 +477,25 @@ modify_dummy <- function(df, cohort) {
         origin = "1970-01-01"
       )
     )) %>%
+
+    ## Update Covid Hospital proportions
+
+    mutate(
+      sub_cat_covidhospital = sample(
+        x = c("non_hospitalised", "hospitalised"),
+        size = nrow(.),
+        replace = TRUE,
+        prob = rep(0.5, 2)
+      )
+    ) %>%
+
+    mutate(
+      sub_cat_covidhospital = replace(
+        sub_cat_covidhospital,
+        which(is.na(exp_date_covid)),
+        "no_infection"
+      )
+    ) %>%
 
     ## Outcome dates
     mutate(across(
