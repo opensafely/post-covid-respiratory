@@ -15,10 +15,10 @@ print("Specify arguments")
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  name <- "vax-sub_sex_female-copd" # prepare datasets for all active analyses # cohort-covariate-outcome
-  name <- "cohort_vax-sub_age_65_84_preex_FALSE-pneumonia" # testing  # cohort-covariate-outcome
+  # name <- "vax-sub_age_80_110_preex_FALSE-pneumonia" # currently behaves unexpectedly (processes all cohorts) # cohort-covariate-outcome
+  # name <- "cohort_vax-sub_age_80_110_preex_FALSE-pneumonia" # testing a single input  # cohort-covariate-outcome
   # name <- "cohort_prevax-main_preex_TRUE-pf;cohort_prevax-main_preex_FALSE-pf" #Testing pre-existing as true and false at once (and main test)
-  # name <- "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma;cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma" # covidhospital test
+  name <- "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma;cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma" # covidhospital test
   # name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma;cohort_vax-sub_sex_male_preex_FALSE-asthma" # Testing sex groups
   # name <- "cohort_vax-subhistory_migraine; cohort_vax-subhistory_depression" # This one should fail (it's a neuro group)
   # name <- "cohort_vax-sub_age_18_39_preex_FALSE-pf;cohort_vax-sub_age_40_59_preex_FALSE-pf;cohort_vax-sub_age_60_79_preex_FALSE-pf;cohort_vax-sub_age_80_110_preex_FALSE-pf" # This is a test for 4 at once
@@ -187,17 +187,17 @@ for (i in 1:nrow(active_analyses)) {
       "",
       active_analyses$analysis[i]
     ))
-    str_covidhosp <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
+    str_covidhosp_cens <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
     df <- df %>%
       dplyr::mutate(
         end_date_outcome = replace(
           end_date_outcome,
-          which(sub_cat_covidhospital == str_covidhosp),
+          which(sub_cat_covidhospital == str_covidhosp_cens),
           exp_date - 1
         ),
         exp_date = replace(
           exp_date,
-          which(sub_cat_covidhospital == str_covidhosp),
+          which(sub_cat_covidhospital == str_covidhosp_cens),
           NA
         ),
         out_date = replace(
