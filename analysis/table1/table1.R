@@ -64,16 +64,6 @@ df$exposed <- !is.na(df$exp_date_covid)
 print("Define age groups")
 
 df$cov_cat_age_group <- numerical_to_categorical(df$cov_num_age, age_bounds) # See utility.R
-df$cov_cat_age_group <- ifelse(
-  df$cov_cat_age_group == paste0("<=", age_bounds[1] - 1),
-  "",
-  df$cov_cat_age_group
-) # for consistency in blanking out underage, e.g. "<=17"
-df$cov_cat_age_group <- ifelse(
-  df$cov_cat_age_group == paste0(age_bounds[length(age_bounds)], "+"),
-  "",
-  df$cov_cat_age_group
-) # for consistency in blanking out overage, e.g. "111+"
 
 df$cov_cat_consrate2019 <- numerical_to_categorical(
   df$cov_num_consrate2019,
@@ -105,8 +95,9 @@ for (colname in colnames(df)[grepl("cov_bin_", colnames(df))]) {
 df <- df %>%
   mutate(across(where(is.factor), as.character))
 
-# Aggregate data ---------------------------------------------------------------
-print("Aggregate data")
+
+# Convert to characteristics and subcharacteristics ----------------------------
+print("Convert to characteristics and subcharacteristics")
 
 df <- tidyr::pivot_longer(
   df,
@@ -117,20 +108,27 @@ df <- tidyr::pivot_longer(
 
 df$total <- 1
 
+# Tidy missing data labels -----------------------------------------------------
+print("Tidy missing data labels")
+
+df$subcharacteristic <- ifelse(
+  df$subcharacteristic == "" |
+    df$subcharacteristic == "unknown" |
+    is.na(df$subcharacteristic),
+  "Missing",
+  df$subcharacteristic
+)
+
+# Aggregate data ---------------------------------------------------------------
+
+print("Aggregate data")
+
 df <- aggregate(
   cbind(total, exposed) ~ characteristic + subcharacteristic,
   data = df,
   sum
 )
 
-# Tidy missing data labels -----------------------------------------------------
-print("Tidy missing data labels")
-
-df$subcharacteristic <- ifelse(
-  df$subcharacteristic == "" | df$subcharacteristic == "unknown",
-  "Missing",
-  df$subcharacteristic
-)
 
 # Sort characteristics ---------------------------------------------------------
 print("Sort characteristics")
