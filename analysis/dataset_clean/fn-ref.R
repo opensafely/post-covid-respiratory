@@ -6,7 +6,7 @@ ref <- function(input) {
   input$cov_cat_smoking <- if_else(
     input$cov_cat_smoking %in% c("E", "N", "S"),
     input$cov_cat_smoking,
-    "M"
+    factor("M")
   )
 
   # Set reference levels for factors ---------------------------------------------
