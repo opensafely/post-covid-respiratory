@@ -457,8 +457,22 @@ modify_dummy <- function(df, cohort) {
       )
     ) %>%
 
-    ## Prior Covid History
-    mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.05)) %>%
+    ## Outcome dates
+    mutate(across(
+      starts_with("out_date_"),
+      ~ as.Date(
+        ifelse(
+          runif(n()) < 0.15, # 15% for each outcome
+          index_date +
+            round(
+              (lcd_date - index_date) * runif(n(), min = 0, max = 1)
+            ),
+          NA_Date_
+        ),
+        format = "%Y-%m-%d",
+        origin = "1970-01-01"
+      )
+    )) %>%
 
     ## Exposure date
     mutate(across(
@@ -479,7 +493,6 @@ modify_dummy <- function(df, cohort) {
     )) %>%
 
     ## Update Covid Hospital proportions
-
     mutate(
       sub_cat_covidhospital = sample(
         x = c("non_hospitalised", "hospitalised"),
@@ -489,30 +502,13 @@ modify_dummy <- function(df, cohort) {
       )
     ) %>%
 
-    mutate(
-      sub_cat_covidhospital = replace(
-        sub_cat_covidhospital,
-        which(is.na(exp_date_covid)),
-        "no_infection"
-      )
-    ) %>%
-
-    ## Outcome dates
     mutate(across(
-      starts_with("out_date_"),
-      ~ as.Date(
-        ifelse(
-          runif(n()) < 0.15, # 15% for each outcome
-          index_date +
-            round(
-              (lcd_date - index_date) * runif(n(), min = 0, max = 1)
-            ),
-          NA_Date_
-        ),
-        format = "%Y-%m-%d",
-        origin = "1970-01-01"
-      )
+      sub_cat_covidhospital,
+      ~ if_else(is.na(exp_date_covid), "no_infection", .x)
     )) %>%
+
+    ## Prior Covid History
+    mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.95)) %>%
 
     # Quality assurance: Year of birth is missing
     mutate(across(
