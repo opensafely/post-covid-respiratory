@@ -3,7 +3,7 @@ ref <- function(input) {
   # Handle missing values --------------------------------------------------------
   print('Handle missing values')
 
-  input$cov_cat_smoking <- ifelse(
+  input$cov_cat_smoking <- if_else(
     input$cov_cat_smoking %in% c("E", "N", "S"),
     input$cov_cat_smoking,
     "M"
