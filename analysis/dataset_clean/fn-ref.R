@@ -52,6 +52,7 @@ ref <- function(input) {
   }
 
   # Recode missing values in binary variables as FALSE -------------------------
+
   print('Recode missing values in binary variables as FALSE')
 
   input <- input %>%

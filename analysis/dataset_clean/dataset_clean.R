@@ -113,6 +113,7 @@ print('Call reference function')
 input <- ref(qa_results$input)
 
 # Save flow data after Inclusion criteria --------------------------------------
+
 print('Saving flow data after Inclusion criteria')
 
 flow <- qa_results$flow
@@ -125,7 +126,8 @@ write.csv(
   row.names = FALSE
 )
 
-# Perform redaction ------------------------------------------------------------
+# Perform redaction-------------------------------------------------------------
+
 print('Performing redaction')
 
 flow$removed <- NULL
@@ -137,7 +139,8 @@ flow$removed_derived <- dplyr::lag(
   flow$N_midpoint6
 flow$N <- NULL
 
-# Save rounded flow data -------------------------------------------------------
+# Save rounded flow data--------------------------------------------------------
+
 print('Saving rounded flow data after Inclusion criteria')
 
 write.csv(
@@ -146,7 +149,8 @@ write.csv(
   row.names = FALSE
 )
 
-# Save the dataset -------------------------------------------------------------
+# Save the dataset--------------------------------------------------------------
+
 print(
   'Saving dataset after preprocessing, applying inclusion criteria, quality assurance checks, and setting reference levels'
 )
