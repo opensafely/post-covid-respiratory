@@ -468,7 +468,7 @@ modify_dummy <- function(df, cohort) {
     ) %>%
 
     ## Prior Covid History
-    mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.95)) %>%
+    mutate(sub_bin_covidhistory = rbernoulli(nrow(.), p = 0.05)) %>%
 
     ## Exposure date
     mutate(across(
