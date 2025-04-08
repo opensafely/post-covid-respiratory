@@ -35,10 +35,7 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
         -   [`fn-ref`](analysis/dataset_clean/fn-ref.R) is the function that sets the reference levels for factors 
     
     -   Table 1 scripts are in the [`table1`](./analysis/table1/) directory:
-        -   This directory contains a single script:  [`table1`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the dataset prior to any statistical analyses.
-        -   The script outputs 2 files in `output/table1`(output/table1/table1.R)
-                - table1_<cohort>.csv, a summary of key characteristics and the proportions of each characteristic in the dataset (e.g. age bands, sex, ethnicity)
-                - table1_<cohort>_midpoint6.csv, a version of table1_<cohort>.csv with rounding and percentage outputs for data privacy purposes
+        -   This directory contains a single script:  [`table1.R`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the dataset prior to any statistical analyses.
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
