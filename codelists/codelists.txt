@@ -1,7 +1,7 @@
 opensafely/covid-identification-in-primary-care-probable-covid-positive-test/2020-07-16
 opensafely/covid-identification-in-primary-care-probable-covid-clinical-code/2020-07-16
 opensafely/covid-identification-in-primary-care-probable-covid-sequelae/2020-07-16
-opensafely/ethnicity/2020-04-27
+opensafely/ethnicity-snomed-0removed/22911876
 #opensafely/smoking-unclear/2020-04-29
 #bristol/smoke-and-eversmoke/16ff650f
 opensafely/smoking-clear/2020-04-29
