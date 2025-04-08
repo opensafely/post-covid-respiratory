@@ -11,7 +11,7 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
 
 ## Repository navigation
 
--   Detailed protocols are in the [`protocol](./protocol/) folder.
+-   Detailed protocols are in the [`protocol`](./protocol/) folder.
 
     - [post-covid-events-respiratory](protocol/post-covid-events-respiratory.pdf) contains the outcome specific elements necessary to implement [post-covid-events-ehrql](protocol/post-covid-events-ehrql.pdf).
 
