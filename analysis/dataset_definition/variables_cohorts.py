@@ -241,13 +241,16 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     cov_cat_sex = patients.sex
 
     ### Ethnicity
-    cov_cat_ethnicity = (
-        clinical_events.where(
-            clinical_events.ctv3_code.is_in(opensafely_ethnicity_codes_6)
-        )
+    tmp_cov_cat_ethnicity = (
+        clinical_events.where(clinical_events.snomedct_code.is_in(ethnicity_snomed))
+        .where(clinical_events.date.is_on_or_before(index_date))
         .sort_by(clinical_events.date)
         .last_for_patient()
-        .ctv3_code.to_category(opensafely_ethnicity_codes_6)
+        .snomedct_code
+    )
+
+    cov_cat_ethnicity = tmp_cov_cat_ethnicity.to_category(
+        ethnicity_snomed
     )
 
     ### Deprivation
