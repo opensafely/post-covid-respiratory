@@ -35,7 +35,7 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
         -   [`fn-ref`](analysis/dataset_clean/fn-ref.R) is the function that sets the reference levels for factors 
     
     -   Table 1 scripts are in the [`table1`](./analysis/table1/) directory:
-        -   This directory contains a single script:  [`table1.R`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the dataset prior to any statistical analyses.
+        -   This directory contains a single script:  [`table1.R`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the patient characteristics.
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
