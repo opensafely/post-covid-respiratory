@@ -33,10 +33,10 @@ if (length(args) == 0) {
 print("Creating output/table1 output folder")
 
 # setting up the sub directory
-mmi_dir <- "output/make_model_input/"
+model_dir <- "output/model/"
 
 # check if sub directory exists, create if not
-fs::dir_create(here::here(mmi_dir))
+fs::dir_create(here::here(model_dir))
 
 # Load active analyses ---------------------------------------------------------
 print("Load active analyses")
@@ -260,14 +260,14 @@ for (i in 1:nrow(active_analyses)) {
   readr::write_rds(
     df,
     file.path(
-      mmi_dir,
+      model_dir,
       paste0("model_input-", active_analyses$name[i], ".rds")
     ),
     compress = "gz"
   )
   print(paste0(
     "Saved: ",
-    mmi_dir,
+    model_dir,
     "model_input-",
     active_analyses$name[i],
     ".rds"
