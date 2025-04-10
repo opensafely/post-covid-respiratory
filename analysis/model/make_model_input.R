@@ -8,7 +8,10 @@ library(stringr)
 # Source functions -------------------------------------------------------------
 print("Source functions")
 
-source("analysis/fn-check_vitals.R") # check if needed
+lapply(
+  list.files("analysis/model", full.names = TRUE, pattern = "fn-"),
+  source
+)
 
 # Specify arguments ------------------------------------------------------------
 print("Specify arguments")
