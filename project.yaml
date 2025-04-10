@@ -7148,3 +7148,83 @@ actions:
       moderately_sensitive:
         model_output: output/model/model_output-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.csv
 
+  ## Table 2 - severity - prevax 
+
+  table2_severity_prevax:
+    run: r:latest analysis/table2/table2.R prevax severity
+    needs:
+    - make_model_input-cohort_prevax-main_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-main_preex_FALSE-copd
+    - make_model_input-cohort_prevax-main_preex_FALSE-pf
+    - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-main_preex_TRUE-pf
+    - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2_severity_prevax.csv
+        table2_midpoint6: output/table2/table2_severity_prevax_midpoint6.csv
+
+  ## Table 2 - severity - unvax 
+
+  table2_severity_unvax:
+    run: r:latest analysis/table2/table2.R unvax severity
+    needs:
+    - make_model_input-cohort_unvax-main_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-main_preex_FALSE-copd
+    - make_model_input-cohort_unvax-main_preex_FALSE-pf
+    - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-main_preex_TRUE-pf
+    - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2_severity_unvax.csv
+        table2_midpoint6: output/table2/table2_severity_unvax_midpoint6.csv
+
+  ## Table 2 - severity - vax 
+
+  table2_severity_vax:
+    run: r:latest analysis/table2/table2.R vax severity
+    needs:
+    - make_model_input-cohort_vax-main_preex_FALSE-asthma
+    - make_model_input-cohort_vax-main_preex_FALSE-copd
+    - make_model_input-cohort_vax-main_preex_FALSE-pf
+    - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-main_preex_TRUE-pf
+    - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2_severity_vax.csv
+        table2_midpoint6: output/table2/table2_severity_vax_midpoint6.csv
+
+  ## Table 2 - history - unvax 
+
+  table2_history_unvax:
+    run: r:latest analysis/table2/table2.R unvax history
+    needs:
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-copd
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pf
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pf
+    - make_model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2_history_unvax.csv
+        table2_midpoint6: output/table2/table2_history_unvax_midpoint6.csv
+
+  ## Table 2 - history - vax 
+
+  table2_history_vax:
+    run: r:latest analysis/table2/table2.R vax history
+    needs:
+    - make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-asthma
+    - make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-copd
+    - make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-pf
+    - make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-sub_covidhistory_preex_TRUE-pf
+    - make_model_input-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2_history_vax.csv
+        table2_midpoint6: output/table2/table2_history_vax_midpoint6.csv
+
