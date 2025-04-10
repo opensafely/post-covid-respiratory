@@ -462,7 +462,7 @@ modify_dummy <- function(df, cohort) {
       starts_with("out_date_"),
       ~ as.Date(
         ifelse(
-          runif(n()) < 0.15, # 15% for each outcome
+          runif(n()) < 0.5, # 15% for each outcome
           index_date +
             round(
               (lcd_date - index_date) * runif(n(), min = 0, max = 1)
