@@ -30,6 +30,12 @@ if (length(args) == 0) {
   name <- args[[1]]
 }
 
+analysis <- gsub(
+  "cohort_.*vax-",
+  "",
+  name
+)
+
 # Define make_model_input output folder ---------------------------------------
 print("Creating output/table1 output folder")
 
@@ -39,45 +45,47 @@ model_dir <- "output/model/"
 # check if sub directory exists, create if not
 fs::dir_create(here::here(model_dir))
 
-# Load active analyses ---------------------------------------------------------
-print("Load active analyses")
-
-active_analyses <- readr::read_rds("lib/active_analyses.rds")
-
-
-# Filter active_analyses to model inputs to be prepared ------------------------
-print("Filter active_analyses to model inputs to be prepared")
-
-active_analyses <- active_analyses[active_analyses$name == name, ]
-
-if (nrow(active_analyses) == 0) {
-  stop(paste0("Input: ", name, " does not match any analyses"))
-}
-
 # Load and prepare data for analysis
 print("Load and prepare data for analysis")
 
-df_model <- prepare_model(active_analyses)
-input <- df_model$input
-active_analyses <- df_model$active_analyses
+input <- prepare_model(name)
 
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")
 
-# Make model input: main/sub_covidhistory ------------------------------------
+print(paste0("Make model input: ", analysis))
 
-if (grepl("sub_covidhistory", active_analyses$analysis[i])) {
+# Creating a pre-existing condition variable where appropriate
+if (grepl("preex", analysis)) {
+  # True false indicator of preex
+  preex <- gsub(
+    ".*preex_",
+    "",
+    analysis
+  )
+  # Remove preex string from analysis string
+  analysis <- gsub(
+    "_preex_.*",
+    "",
+    analysis
+  )
+  # Preserve the string we removed from active_analysis$analysis
+  preex_str <- paste0("_preex_", preex)
+}
+
+# Make model input: main/sub_covidhistory ------------------------------------
+if (grepl("sub_covidhistory", analysis)) {
   df <- input[input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
   df <- input[input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
 }
 
 # Make model input: sub_covidhospital ----------------------------------------
-if (grepl("sub_covidhospital", active_analyses$analysis[i])) {
+if (grepl("sub_covidhospital", analysis)) {
   covidhosp <- as.logical(gsub(
     ".*sub_covidhospital_",
     "",
-    active_analyses$analysis[i]
+    analysis
   ))
   str_covidhosp_cens <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
   df <- df %>%
@@ -102,23 +110,23 @@ if (grepl("sub_covidhospital", active_analyses$analysis[i])) {
 }
 
 # Make model input: sub_sex_* ------------------------------------------------
-if (grepl("sub_sex_", active_analyses$analysis[i])) {
+if (grepl("sub_sex_", analysis)) {
   sex <- str_to_title(gsub(
     ".*sub_sex_",
     "",
-    active_analyses$analysis[i]
+    analysis
   ))
   df <- df[df$cov_cat_sex == sex, ]
 }
 
 # Make model input: sub_age_* ------------------------------------------------
-if (grepl("sub_age_", active_analyses$analysis[i]) == TRUE) {
+if (grepl("sub_age_", analysis) == TRUE) {
   min_age <- as.numeric(strsplit(
-    gsub(".*sub_age_", "", active_analyses$analysis[i]),
+    gsub(".*sub_age_", "", analysis),
     split = "_"
   )[[1]][1])
   max_age <- as.numeric(strsplit(
-    gsub(".*sub_age_", "", active_analyses$analysis[i]),
+    gsub(".*sub_age_", "", analysis),
     split = "_"
   )[[1]][2])
   df <- df[
@@ -128,14 +136,14 @@ if (grepl("sub_age_", active_analyses$analysis[i]) == TRUE) {
 }
 
 # Make model input: sub_ethnicity_* ------------------------------------------
-if (grepl("sub_ethnicity_", active_analyses$analysis[i]) == TRUE) {
+if (grepl("sub_ethnicity_", analysis) == TRUE) {
   ethnicity <- str_to_title(gsub(
     "_",
     " ",
     gsub(
       ".*sub_ethnicity_",
       "",
-      active_analyses$analysis[i]
+      analysis
     )
   ))
   df <- df[df$cov_cat_ethnicity == ethnicity, ]
@@ -150,7 +158,7 @@ readr::write_rds(
   df,
   file.path(
     model_dir,
-    paste0("model_input-", active_analyses$name[i], ".rds")
+    paste0("model_input-", name, ".rds")
   ),
   compress = "gz"
 )
@@ -158,7 +166,7 @@ print(paste0(
   "Saved: ",
   model_dir,
   "model_input-",
-  active_analyses$name[i],
+  name,
   ".rds"
 ))
-# rm(df)
+rm(df)
