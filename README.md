@@ -37,6 +37,10 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
     -   Table 1 scripts are in the [`table1`](./analysis/table1/) directory:
         -   This directory contains a single script:  [`table1.R`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the patient characteristics.
 
+    -   Modelling scripts are in the [`model`](./analysis/model/) directory:
+        -   [`make_model_input.R`](analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis.
+        -   ['cox-ipw'](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
+
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
 -   The [`project.yaml`](./project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project_actions.R`](analysis/create_project_actions.R) script which generates all the actions.
