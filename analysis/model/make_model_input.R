@@ -48,7 +48,9 @@ fs::dir_create(here::here(model_dir))
 # Load and prepare data for analysis
 print("Load and prepare data for analysis")
 
-input <- prepare_model(name)
+pmi <- prepare_model_input(name)
+input <- pmi$input
+keep <- pmi$keep
 
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")

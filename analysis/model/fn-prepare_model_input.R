@@ -1,4 +1,4 @@
-prepare_model <- function(name) {
+prepare_model_input <- function(name) {
   # Load active analyses ---------------------------------------------------------
   print("Load active analyses")
 
@@ -97,5 +97,5 @@ prepare_model <- function(name) {
       end_date_outcome = min(end_date_outcome, out_date, na.rm = TRUE)
     )
 
-  return(input)
+  return(list(input = input, keep = keep))
 }
