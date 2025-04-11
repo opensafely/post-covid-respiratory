@@ -49,8 +49,6 @@ fs::dir_create(here::here(model_dir))
 print("Load and prepare data for analysis")
 
 pmi <- prepare_model_input(name)
-input <- pmi$input
-keep <- pmi$keep
 
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")
@@ -77,9 +75,9 @@ if (grepl("preex", analysis)) {
 
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
-  df <- input[input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
+  df <- pmi$input[pmi$input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
-  df <- input[input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
+  df <- pmi$input[pmi$input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
 }
 
 # Make model input: sub_covidhospital ----------------------------------------
@@ -153,7 +151,7 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
 
 # Save model output
 df <- df %>%
-  dplyr::select(tidyselect::all_of(keep))
+  dplyr::select(tidyselect::all_of(pmi$keep))
 
 check_vitals(df)
 readr::write_rds(
