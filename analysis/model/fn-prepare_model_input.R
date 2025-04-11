@@ -1,10 +1,24 @@
-prepare_model <- function(active_analyses) {
+prepare_model <- function(name) {
+  # Load active analyses ---------------------------------------------------------
+  print("Load active analyses")
+
+  active_analyses <- readr::read_rds("lib/active_analyses.rds")
+
+  # Filter active_analyses to model inputs to be prepared ------------------------
+  print("Filter active_analyses to model inputs to be prepared")
+
+  active_analyses <- active_analyses[active_analyses$name == name, ]
+
+  if (nrow(active_analyses) == 0) {
+    stop(paste0("Input: ", name, " does not match any analyses"))
+  }
+
   # Load data ------------------------------------------------------------------
-  print(paste0("Load data for ", active_analyses$name[i]))
+  print(paste0("Load data for ", active_analyses$name))
 
   input <- dplyr::as_tibble(readr::read_rds(paste0(
     "output/dataset_clean/input_",
-    active_analyses$cohort[i],
+    active_analyses$cohort,
     "_clean.rds"
   )))
 
@@ -16,15 +30,13 @@ prepare_model <- function(active_analyses) {
     "index_date",
     "end_date_exposure",
     "end_date_outcome",
-    active_analyses$exposure[i],
-    active_analyses$outcome[i],
-    unlist(strsplit(active_analyses$strata[i], split = ";")),
-    unlist(strsplit(active_analyses$covariate_other[i], split = ";")),
-    "sub_cat_covidhospital", # variables needed for subgroup analysis
-    "sub_bin_covidhistory", # variables needed for subgroup analysis
-    "cov_cat_sex", # variables needed for subgroup analysis
-    "cov_num_age", # variables needed for subgroup analysis
-    "cov_cat_ethnicity" # variables needed for subgroup analysis
+    active_analyses$exposure,
+    active_analyses$outcome,
+    active_analyses$strata,
+    unlist(strsplit(active_analyses$covariate_other, split = ";")),
+    active_analyses$covariate_sex,
+    active_analyses$covariate_age,
+    c(grep("sub_", colnames(input), value = TRUE)) #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
   ))]
 
   # Identify final list of variables to keep -----------------------------------
@@ -40,10 +52,10 @@ prepare_model <- function(active_analyses) {
   )
   varlists <- c("strata", "covariate_age", "covariate_sex", "covariate_other")
   for (j in varlists) {
-    if (active_analyses[i, j] != "NULL") {
+    if (active_analyses[, j] != "NULL") {
       keep <- c(
         keep,
-        stringr::str_split(as.vector(active_analyses[i, j]), ";")[[1]]
+        stringr::str_split(as.vector(active_analyses[, j]), ";")[[1]]
       )
     }
   }
@@ -53,8 +65,8 @@ prepare_model <- function(active_analyses) {
 
   input <- dplyr::rename(
     input,
-    "out_date" = active_analyses$outcome[i],
-    "exp_date" = active_analyses$exposure[i]
+    "out_date" = active_analyses$outcome,
+    "exp_date" = active_analyses$exposure
   )
 
   input <- input %>%
@@ -85,25 +97,5 @@ prepare_model <- function(active_analyses) {
       end_date_outcome = min(end_date_outcome, out_date, na.rm = TRUE)
     )
 
-  print(paste0("Make model input: ", active_analyses$analysis[i]))
-
-  # Creating a pre-existing condition variable where appropriate
-
-  if (grepl("preex", active_analyses$analysis[i])) {
-    # True false indicator of preex (not sure if needed)
-    preex <- gsub(
-      ".*preex_",
-      "",
-      active_analyses$analysis[i]
-    )
-    # Remove preex string from active analysis
-    active_analyses$analysis[i] <- gsub(
-      "_preex_.*",
-      "",
-      active_analyses$analysis[i]
-    )
-    # Preserve the string we removed from active_analysis$analysis
-    preex_str <- paste0("_preex_", preex)
-  }
-  return(list(active_analyses = active_analyses, input = input))
+  return(input)
 }
