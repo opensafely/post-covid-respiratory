@@ -39,7 +39,8 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
 
     -   Modelling scripts are in the [`model`](./analysis/model/) directory:
         -   [`make_model_input.R`](analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis.
-        -   ['cox-ipw'](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
+        -   [`fn-prepare_model_input.R`](analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R` which handles the interaction with `active_anlayses.rds`.
+        -   [`cox-ipw`](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
