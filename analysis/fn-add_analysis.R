@@ -3,7 +3,7 @@ add_analysis <- function(
   cohort,
   outcome,
   preex,
-  analysis_suffix,
+  analysis_name,
   covariate_other,
   age_spline
 ) {
@@ -32,30 +32,31 @@ add_analysis <- function(
     cut_points$vax_unvax
   )
 
-  new_analysis <- c(cohort = cohort,
-      exposure = "exp_date_covid",
-      outcome = outcome,
-      ipw = TRUE,
-      strata = "strat_cat_region",
-      covariate_sex = ifelse(
-        grepl("sex", analysis_suffix),
-        "NULL",
-        "cov_cat_sex"
-      ),
-      covariate_age = "cov_num_age",
-      covariate_other = covariate_other,
-      cox_start = "index_date",
-      cox_stop = "end_date_outcome",
-      study_start = study_start,
-      study_stop = dates$study_stop,
-      cut_points = cut_points_used,
-      controls_per_case = 20L,
-      total_event_threshold = 50L,
-      episode_event_threshold = 5L,
-      covariate_threshold = 5L,
-      age_spline = TRUE,
-      analysis = paste0(analysis_suffix, "_", preex)
-    )
+  new_analysis <- c(
+    cohort = cohort,
+    exposure = "exp_date_covid",
+    outcome = outcome,
+    ipw = TRUE,
+    strata = "strat_cat_region",
+    covariate_sex = ifelse(
+      grepl("sex", analysis_name),
+      "NULL",
+      "cov_cat_sex"
+    ),
+    covariate_age = "cov_num_age",
+    covariate_other = covariate_other,
+    cox_start = "index_date",
+    cox_stop = "end_date_outcome",
+    study_start = study_start,
+    study_stop = dates$study_stop,
+    cut_points = cut_points_used,
+    controls_per_case = 20L,
+    total_event_threshold = 50L,
+    episode_event_threshold = 5L,
+    covariate_threshold = 5L,
+    age_spline = TRUE,
+    analysis = paste0(analysis_name, "_", preex)
+  )
 
-    return(new_analysis)
+  return(new_analysis)
 }

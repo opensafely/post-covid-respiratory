@@ -106,7 +106,7 @@ for (c in cohorts) {
         cohort = c,
         outcome = i,
         preex = p,
-        analysis_suffix = "main",
+        analysis_name = "main",
         covariate_other = covariate_other,
         age_spline = TRUE
       )
@@ -137,7 +137,7 @@ for (c in cohorts) {
           cohort = c,
           outcome = i,
           preex = p,
-          analysis_suffix = sub,
+          analysis_name = sub,
           covariate_other = adjusted_covariate_other,
           age_spline = ifelse(grepl("age", sub), FALSE, TRUE)
         )
