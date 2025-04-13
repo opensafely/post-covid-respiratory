@@ -19,13 +19,13 @@ print("Specify arguments")
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  # name <- "cohort_prevax-main_preex_TRUE-pf" #Testing pre-existing as true
-  name <- "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma" # covidhospital test
-  name <- "cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma" # covidhospital test
+  name <- "cohort_prevax-main_preex_TRUE-pf" #Testing main loop + pre-existing as true
+  # name <- "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma" # covidhospital TRUE test
+  # name <- "cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma" # covidhospital FALSE test
   # name <- "cohort_vax-sub_covidhistory_preex_FALSE-pf" # covidhistory test
   # name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma" # Testing sex group
   # name <- "cohort_vax-sub_age_40_59_preex_FALSE-pf" # Testing age group
-  # name <- "cohort_prevax-sub_ethnicity_south_asian_preex_FALSE-copd" # Check that the "south_asian" ethnicity is processing correctly
+  name <- "cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd" # Check that the "asian" ethnicity is processing correctly
 } else {
   name <- args[[1]]
 }
