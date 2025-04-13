@@ -25,6 +25,17 @@ prepare_model_input <- function(name) {
   # Restrict to required variables for dataset preparation ---------------------
   print("Restrict to required variables for dataset preparation")
 
+  active_analyses$covariate_sex <- dplyr::if_else(
+    active_analyses$covariate_sex == "cov_cat_sex",
+    active_analyses$covariate_sex,
+    "cov_cat_sex"
+  )
+  active_analyses$covariate_other <- dplyr::if_else(
+    "cov_cat_ethnicity" %in% active_analyses$covariate_other,
+    active_analyses$covariate_other,
+    paste0("cov_cat_ethnicity;", active_analyses$covariate_other)
+  )
+
   input <- input[, unique(c(
     "patient_id",
     "index_date",
@@ -33,9 +44,9 @@ prepare_model_input <- function(name) {
     active_analyses$exposure,
     active_analyses$outcome,
     active_analyses$strata,
-    unlist(strsplit(active_analyses$covariate_other, split = ";")),
-    active_analyses$covariate_sex,
     active_analyses$covariate_age,
+    active_analyses$covariate_sex,
+    unlist(strsplit(active_analyses$covariate_other, split = ";")),
     c(grep("sub_", colnames(input), value = TRUE)) #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
   ))]
 
@@ -45,10 +56,10 @@ prepare_model_input <- function(name) {
   keep <- c(
     "patient_id",
     "index_date",
-    "exp_date",
-    "out_date",
     "end_date_exposure",
-    "end_date_outcome"
+    "end_date_outcome",
+    "exp_date",
+    "out_date"
   )
   varlists <- c("strata", "covariate_age", "covariate_sex", "covariate_other")
   for (j in varlists) {
