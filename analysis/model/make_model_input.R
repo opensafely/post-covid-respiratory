@@ -4,7 +4,7 @@ print("Load packages")
 library(magrittr)
 library(data.table)
 library(stringr)
-
+library(lubridate)
 # Source functions -------------------------------------------------------------
 print("Source functions")
 
