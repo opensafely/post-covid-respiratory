@@ -6,7 +6,7 @@ fs::dir_create(here::here("lib"))
 
 # Source common functions ----
 lapply(
-  list.files("analysis/", full.names = TRUE, pattern = "fn-"),
+  list.files("analysis/active_analyses/", full.names = TRUE, pattern = "fn-"),
   source
 )
 
