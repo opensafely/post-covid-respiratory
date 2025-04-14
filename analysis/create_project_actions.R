@@ -245,8 +245,7 @@ table2 <- function(cohort, focus) {
   if (focus == "severity") {
     table2_names <- table2_names[
       grepl("-main", table2_names) |
-        grepl("-sub_covid_hospitalised", table2_names) |
-        grepl("-sub_covid_nonhospitalised", table2_names)
+        grepl("-sub_covidhospital", table2_names)
     ]
   }
 
