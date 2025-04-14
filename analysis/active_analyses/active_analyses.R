@@ -120,12 +120,12 @@ for (c in cohorts) {
 
         # Adjust covariate_other for ethnicity and smoking subgroups
         adjusted_covariate_other <- covariate_other
-        if (grepl("ethnicity", sub)) {
+        if (grepl("sub_ethnicity", sub)) {
           adjusted_covariate_other <- paste0(
             setdiff(strsplit(covariate_other, ";")[[1]], "cov_cat_ethnicity"),
             collapse = ";"
           )
-        } else if (grepl("smoking", sub)) {
+        } else if (grepl("sub_smoking", sub)) {
           adjusted_covariate_other <- paste0(
             setdiff(strsplit(covariate_other, ";")[[1]], "cov_cat_smoking"),
             collapse = ";"
@@ -139,7 +139,7 @@ for (c in cohorts) {
           preex = p,
           analysis_name = sub,
           covariate_other = adjusted_covariate_other,
-          age_spline = ifelse(grepl("age", sub), FALSE, TRUE)
+          age_spline = ifelse(grepl("sub_age", sub), FALSE, TRUE)
         )
       }
     }

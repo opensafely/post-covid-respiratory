@@ -54,7 +54,7 @@ add_analysis <- function(
     total_event_threshold = 50L,
     episode_event_threshold = 5L,
     covariate_threshold = 5L,
-    age_spline = TRUE,
+    age_spline = age_spline,
     analysis = paste0(analysis_name, "_", preex)
   )
 
