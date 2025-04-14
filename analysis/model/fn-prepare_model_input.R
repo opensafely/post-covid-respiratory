@@ -25,17 +25,6 @@ prepare_model_input <- function(name) {
   # Restrict to required variables for dataset preparation ---------------------
   print("Restrict to required variables for dataset preparation")
 
-  covariate_sex <- dplyr::if_else(
-    active_analyses$covariate_sex == "cov_cat_sex",
-    active_analyses$covariate_sex,
-    "cov_cat_sex"
-  )
-  covariate_other <- dplyr::if_else(
-    "cov_cat_ethnicity" %in% active_analyses$covariate_other,
-    active_analyses$covariate_other,
-    paste0("cov_cat_ethnicity;", active_analyses$covariate_other)
-  )
-
   input <- input[, unique(c(
     "patient_id",
     "index_date",
@@ -45,7 +34,8 @@ prepare_model_input <- function(name) {
     active_analyses$outcome,
     active_analyses$strata,
     active_analyses$covariate_age,
-    covariate_sex,
+    "cov_cat_sex",
+    "cov_cat_ethnicity",
     unlist(strsplit(covariate_other, split = ";")),
     c(grep("sub_", colnames(input), value = TRUE)) #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
   ))]
