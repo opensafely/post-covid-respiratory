@@ -159,7 +159,7 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
 
 # Stop code if no subgroup/main analysis was correctly selected
 if (!check_for_subgroup) {
-  stop(paste0("Input: ", name, " did not undergo any subgroup analyses"))
+  stop(paste0("Input: ", name, " did not undergo any subgroup filtering!"))
 }
 
 # Save model output
