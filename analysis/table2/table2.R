@@ -28,7 +28,7 @@ args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
   cohort <- "prevax"
-  focus <- "history"
+  focus <- "covidhospital"
 } else {
   cohort <- args[[1]]
   focus <- args[[2]]
@@ -52,17 +52,10 @@ table2_names <- gsub(
   )
 )
 
-if (focus == "severity") {
-  table2_names <- table2_names[
-    grepl("-main", table2_names) |
-      grepl("-sub_covidhospital_TRUE", table2_names) |
-      grepl("-sub_covidhospital_FALSE", table2_names)
-  ]
-}
-
-if (focus == "history") {
-  table2_names <- table2_names[grepl("-sub_covidhistory", table2_names)]
-}
+table2_names <- table2_names[
+  grepl("-main", table2_names) |
+    grepl(paste0("-sub_", focus), table2_names)
+]
 
 active_analyses <- active_analyses[active_analyses$name %in% table2_names, ]
 
@@ -204,26 +197,20 @@ write.csv(
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
 
-table2$sample_size_midpoint6 <- roundmid_any(
-  as.numeric(table2$sample_size),
-  threshold
+cols <- c(
+  "sample_size",
+  "day0_events",
+  "total_exposed",
+  "unexposed_events",
+  "exposed_events"
 )
-table2$day0_events_midpoint6 <- roundmid_any(
-  as.numeric(table2$day0_events),
-  threshold
+new_names <- paste0(cols, "_midpoint6")
+
+table2[new_names] <- lapply(
+  table2[cols],
+  function(x) roundmid_any(as.numeric(x), threshold)
 )
-table2$total_exposed_midpoint6 <- roundmid_any(
-  as.numeric(table2$total_exposed),
-  threshold
-)
-table2$unexposed_events_midpoint6 <- roundmid_any(
-  as.numeric(table2$unexposed_events),
-  threshold
-)
-table2$exposed_events_midpoint6 <- roundmid_any(
-  as.numeric(table2$exposed_events),
-  threshold
-)
+
 table2$total_events_midpoint6_derived <- table2$unexposed_events_midpoint6 +
   table2$exposed_events_midpoint6
 

@@ -242,16 +242,10 @@ table2 <- function(cohort, focus) {
     )
   )
 
-  if (focus == "severity") {
-    table2_names <- table2_names[
-      grepl("-main", table2_names) |
-        grepl("-sub_covidhospital", table2_names)
-    ]
-  }
-
-  if (focus == "history") {
-    table2_names <- table2_names[grepl("-sub_covidhistory", table2_names)]
-  }
+  table2_names <- table2_names[
+    grepl("-main", table2_names) |
+      grepl(paste0("-sub_", focus), table2_names)
+  ]
 
   splice(
     comment(glue("Table 2 - {focus} - {cohort}")),
@@ -377,17 +371,7 @@ actions_list <- splice(
     unlist(
       lapply(
         cohorts,
-        function(x) table2(cohort = x, focus = "severity")
-      ),
-      recursive = FALSE
-    )
-  ),
-
-  splice(
-    unlist(
-      lapply(
-        cohorts[cohorts %in% c("vax", "unvax")],
-        function(x) table2(cohort = x, focus = "history")
+        function(x) table2(cohort = x, focus = "covidhospital")
       ),
       recursive = FALSE
     )
