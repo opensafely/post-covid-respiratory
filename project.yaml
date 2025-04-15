@@ -7148,9 +7148,9 @@ actions:
       moderately_sensitive:
         model_output: output/model/model_output-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.csv
 
-  ## Table 2 - covidhospital - prevax 
+  ## Table 2 - prevax - covidhospital 
 
-  table2_covidhospital_prevax:
+  table2_prevax_covidhospital:
     run: r:latest analysis/table2/table2.R prevax covidhospital
     needs:
     - make_model_input-cohort_prevax-main_preex_FALSE-asthma
@@ -7173,12 +7173,12 @@ actions:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_covidhospital_prevax.csv
-        table2_midpoint6: output/table2/table2_covidhospital_prevax_midpoint6.csv
+        table2: output/table2/table2_prevax_covidhospital.csv
+        table2_midpoint6: output/table2/table2_prevax_covidhospital_midpoint6.csv
 
-  ## Table 2 - covidhospital - unvax 
+  ## Table 2 - unvax - covidhospital 
 
-  table2_covidhospital_unvax:
+  table2_unvax_covidhospital:
     run: r:latest analysis/table2/table2.R unvax covidhospital
     needs:
     - make_model_input-cohort_unvax-main_preex_FALSE-asthma
@@ -7201,12 +7201,12 @@ actions:
     - make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_covidhospital_unvax.csv
-        table2_midpoint6: output/table2/table2_covidhospital_unvax_midpoint6.csv
+        table2: output/table2/table2_unvax_covidhospital.csv
+        table2_midpoint6: output/table2/table2_unvax_covidhospital_midpoint6.csv
 
-  ## Table 2 - covidhospital - vax 
+  ## Table 2 - vax - covidhospital 
 
-  table2_covidhospital_vax:
+  table2_vax_covidhospital:
     run: r:latest analysis/table2/table2.R vax covidhospital
     needs:
     - make_model_input-cohort_vax-main_preex_FALSE-asthma
@@ -7229,144 +7229,6 @@ actions:
     - make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_covidhospital_vax.csv
-        table2_midpoint6: output/table2/table2_covidhospital_vax_midpoint6.csv
-
-  ## Table 2 - ethnicity - prevax 
-
-  table2_ethnicity_prevax:
-    run: r:latest analysis/table2/table2.R prevax ethnicity
-    needs:
-    - make_model_input-cohort_prevax-main_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-main_preex_FALSE-copd
-    - make_model_input-cohort_prevax-main_preex_FALSE-pf
-    - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-main_preex_TRUE-pf
-    - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-copd
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-asthma
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-copd
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pf
-    - make_model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia
-    outputs:
-      moderately_sensitive:
-        table2: output/table2/table2_ethnicity_prevax.csv
-        table2_midpoint6: output/table2/table2_ethnicity_prevax_midpoint6.csv
-
-  ## Table 2 - ethnicity - unvax 
-
-  table2_ethnicity_unvax:
-    run: r:latest analysis/table2/table2.R unvax ethnicity
-    needs:
-    - make_model_input-cohort_unvax-main_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-main_preex_FALSE-copd
-    - make_model_input-cohort_unvax-main_preex_FALSE-pf
-    - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-main_preex_TRUE-pf
-    - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-copd
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-copd
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-copd
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-copd
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-asthma
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pf
-    - make_model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia
-    outputs:
-      moderately_sensitive:
-        table2: output/table2/table2_ethnicity_unvax.csv
-        table2_midpoint6: output/table2/table2_ethnicity_unvax_midpoint6.csv
-
-  ## Table 2 - ethnicity - vax 
-
-  table2_ethnicity_vax:
-    run: r:latest analysis/table2/table2.R vax ethnicity
-    needs:
-    - make_model_input-cohort_vax-main_preex_FALSE-asthma
-    - make_model_input-cohort_vax-main_preex_FALSE-copd
-    - make_model_input-cohort_vax-main_preex_FALSE-pf
-    - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-main_preex_TRUE-pf
-    - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-asthma
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-copd
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-asthma
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-copd
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-asthma
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-copd
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-asthma
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-copd
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-asthma
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-copd
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pf
-    - make_model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia
-    outputs:
-      moderately_sensitive:
-        table2: output/table2/table2_ethnicity_vax.csv
-        table2_midpoint6: output/table2/table2_ethnicity_vax_midpoint6.csv
+        table2: output/table2/table2_vax_covidhospital.csv
+        table2_midpoint6: output/table2/table2_vax_covidhospital_midpoint6.csv
 

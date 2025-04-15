@@ -190,7 +190,7 @@ print('Save Table 2')
 
 write.csv(
   table2,
-  paste0(table2_dir, "table2_", focus, "_", cohort, ".csv"),
+  paste0(table2_dir, "table2_", cohort, "_", focus, ".csv"),
   row.names = FALSE
 )
 
@@ -236,6 +236,6 @@ print('Save rounded Table 2')
 
 write.csv(
   table2,
-  paste0(table2_dir, "table2_", focus, "_", cohort, "_midpoint6.csv"),
+  paste0(table2_dir, "table2_", cohort, "_", focus, "_midpoint6.csv"),
   row.names = FALSE
 )

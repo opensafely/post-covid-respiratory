@@ -248,16 +248,16 @@ table2 <- function(cohort, focus) {
   ]
 
   splice(
-    comment(glue("Table 2 - {focus} - {cohort}")),
+    comment(glue("Table 2 - {cohort} - {focus}")),
     action(
-      name = glue("table2_{focus}_{cohort}"),
+      name = glue("table2_{cohort}_{focus}"),
       run = "r:latest analysis/table2/table2.R",
       arguments = c(cohort, focus),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
-        table2 = glue("output/table2/table2_{focus}_{cohort}.csv"),
+        table2 = glue("output/table2/table2_{cohort}_{focus}.csv"),
         table2_midpoint6 = glue(
-          "output/table2/table2_{focus}_{cohort}_midpoint6.csv"
+          "output/table2/table2_{cohort}_{focus}_midpoint6.csv"
         )
       )
     )
