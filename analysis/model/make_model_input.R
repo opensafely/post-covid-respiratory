@@ -26,6 +26,7 @@ if (length(args) == 0) {
   # name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma" # Testing sex group
   # name <- "cohort_vax-sub_age_40_59_preex_FALSE-pf" # Testing age group
   name <- "cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd" # Check that the "asian" ethnicity is processing correctly
+  name <- "cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia" # Check that the smoking subgroup is processing correctly
 } else {
   name <- args[[1]]
 }
@@ -55,6 +56,8 @@ print("Perform subgroup-specific manipulation")
 
 print(paste0("Make model input: ", analysis))
 
+check_for_subgroup <- (grepl("main", analysis)) # =1 if subgroup is main, =0 otherwise
+
 # Creating a pre-existing condition variable where appropriate
 if (grepl("preex", analysis)) {
   # True false indicator of preex
@@ -75,6 +78,7 @@ if (grepl("preex", analysis)) {
 
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
+  check_for_subgroup <- 1
   df <- pmi$input[pmi$input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
   df <- pmi$input[pmi$input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
@@ -82,6 +86,7 @@ if (grepl("sub_covidhistory", analysis)) {
 
 # Make model input: sub_covidhospital ----------------------------------------
 if (grepl("sub_covidhospital", analysis)) {
+  check_for_subgroup <- 1
   covidhosp <- as.logical(gsub(
     ".*sub_covidhospital_",
     "",
@@ -111,6 +116,7 @@ if (grepl("sub_covidhospital", analysis)) {
 
 # Make model input: sub_sex_* ------------------------------------------------
 if (grepl("sub_sex_", analysis)) {
+  check_for_subgroup <- 1
   sex <- str_to_title(gsub(
     ".*sub_sex_",
     "",
@@ -121,6 +127,7 @@ if (grepl("sub_sex_", analysis)) {
 
 # Make model input: sub_age_* ------------------------------------------------
 if (grepl("sub_age_", analysis) == TRUE) {
+  check_for_subgroup <- 1
   min_age <- as.numeric(strsplit(
     gsub(".*sub_age_", "", analysis),
     split = "_"
@@ -137,6 +144,7 @@ if (grepl("sub_age_", analysis) == TRUE) {
 
 # Make model input: sub_ethnicity_* ------------------------------------------
 if (grepl("sub_ethnicity_", analysis) == TRUE) {
+  check_for_subgroup <- 1
   ethnicity <- str_to_title(gsub(
     "_",
     " ",
@@ -147,6 +155,11 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
     )
   ))
   df <- df[df$cov_cat_ethnicity == ethnicity, ]
+}
+
+# Stop code if no subgroup/main analysis was correctly selected
+if (!check_for_subgroup) {
+  stop(paste0("Input: ", name, " did not undergo any subgroup analyses"))
 }
 
 # Save model output
