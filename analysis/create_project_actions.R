@@ -228,7 +228,7 @@ apply_model_function <- function(
 
 # Create function to make Table 2 ----------------------------------------------
 
-table2 <- function(cohort, focus) {
+table2 <- function(cohort, subgroup) {
   table2_names <- gsub(
     "out_date_",
     "",
@@ -244,20 +244,20 @@ table2 <- function(cohort, focus) {
 
   table2_names <- table2_names[
     grepl("-main", table2_names) |
-      grepl(paste0("-sub_", focus), table2_names)
+      grepl(paste0("-sub_", subgroup), table2_names)
   ]
 
   splice(
-    comment(glue("Table 2 - {cohort} - {focus}")),
+    comment(glue("Table 2 - {cohort} - {subgroup}")),
     action(
-      name = glue("table2_{cohort}_{focus}"),
+      name = glue("table2_{cohort}_{subgroup}"),
       run = "r:latest analysis/table2/table2.R",
-      arguments = c(cohort, focus),
+      arguments = c(cohort, subgroup),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
-        table2 = glue("output/table2/table2_{cohort}_{focus}.csv"),
+        table2 = glue("output/table2/table2_{cohort}_{subgroup}.csv"),
         table2_midpoint6 = glue(
-          "output/table2/table2_{cohort}_{focus}_midpoint6.csv"
+          "output/table2/table2_{cohort}_{subgroup}_midpoint6.csv"
         )
       )
     )
@@ -371,7 +371,7 @@ actions_list <- splice(
     unlist(
       lapply(
         cohorts,
-        function(x) table2(cohort = x, focus = "covidhospital")
+        function(x) table2(cohort = x, subgroup = "covidhospital")
       ),
       recursive = FALSE
     )

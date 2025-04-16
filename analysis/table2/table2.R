@@ -28,10 +28,10 @@ args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
   cohort <- "prevax"
-  focus <- "covidhospital"
+  subgroup <- "covidhospital"
 } else {
   cohort <- args[[1]]
-  focus <- args[[2]]
+  subgroup <- args[[2]]
 }
 
 # Load active analyses ---------------------------------------------------------
@@ -54,7 +54,7 @@ table2_names <- gsub(
 
 table2_names <- table2_names[
   grepl("-main", table2_names) |
-    grepl(paste0("-sub_", focus), table2_names)
+    grepl(paste0("-sub_", subgroup), table2_names)
 ]
 
 active_analyses <- active_analyses[active_analyses$name %in% table2_names, ]
@@ -190,7 +190,7 @@ print('Save Table 2')
 
 write.csv(
   table2,
-  paste0(table2_dir, "table2_", cohort, "_", focus, ".csv"),
+  paste0(table2_dir, "table2_", cohort, "_", subgroup, ".csv"),
   row.names = FALSE
 )
 
@@ -236,6 +236,6 @@ print('Save rounded Table 2')
 
 write.csv(
   table2,
-  paste0(table2_dir, "table2_", cohort, "_", focus, "_midpoint6.csv"),
+  paste0(table2_dir, "table2_", cohort, "_", subgroup, "_midpoint6.csv"),
   row.names = FALSE
 )
