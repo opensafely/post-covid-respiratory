@@ -142,21 +142,16 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
 
 # Make model input: sub_smoking_* ------------------------------------------
 if (grepl("sub_smoking_", analysis)) {
-  smoking_label <- gsub(".*sub_smoking_", "", analysis)
-
-  # Create a mapping from label to code
-  smoking_map <- c(
-    "never" = "N",
-    "ever" = "E",
-    "current" = "S"
+  check_for_subgroup <- 1
+  smoking <- paste(
+    str_to_title(gsub(
+      ".*sub_smoking_",
+      "",
+      analysis
+    )),
+    "smoker"
   )
-  smoking_code <- smoking_map[[smoking_label]]
-
-  if (is.null(smoking_code)) {
-    stop(paste0("Unrecognized smoking subgroup: ", smoking_label))
-  }
-
-  df <- df[df$cov_cat_smoking == smoking_code, ]
+  df <- df[df$cov_cat_smoking == smoking, ]
 }
 
 # Stop code if no subgroup/main analysis was correctly selected
