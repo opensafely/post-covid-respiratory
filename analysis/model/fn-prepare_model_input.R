@@ -1,4 +1,4 @@
-prepare_model_input <- function(name, analysis) {
+prepare_model_input <- function(name) {
   # Load active analyses ---------------------------------------------------------
   print("Load active analyses")
 
@@ -30,42 +30,17 @@ prepare_model_input <- function(name, analysis) {
     "index_date",
     "end_date_exposure",
     "end_date_outcome",
-    "cens_date_dereg",
     active_analyses$exposure,
     active_analyses$outcome,
     active_analyses$strata,
     active_analyses$covariate_age,
     "cov_cat_sex",
     "cov_cat_ethnicity",
+    "cov_cat_smoking",
     unlist(strsplit(active_analyses$covariate_other, split = ";")),
     c(grep("sub_", colnames(input), value = TRUE)), #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
-    "pop_bin_preex"
+    "sup_bin_preex"
   ))]
-
-  # Restrict to required population -------------------------------------------
-  print('Restrict to required population')
-
-  # Creating a pre-existing condition variable where appropriate
-  if (grepl("preex", name)) {
-    # True false indicator of preex
-    preex <- as.logical(
-      gsub(
-        ".*preex_([^\\-]+)-.*",
-        "\\1",
-        name
-      )
-    )
-
-    # Remove preex string from analysis string
-    analysis <- gsub(
-      "_preex_.*",
-      "",
-      analysis
-    )
-    #   # Preserve the string we removed from active_analysis$analysis
-    #   preex_str <- paste0("_preex_", preex)
-    input <- input[input$pop_bin_preex == preex, ]
-  }
 
   # Identify final list of variables to keep -----------------------------------
   print("Identify final list of variables to keep")
@@ -94,18 +69,6 @@ prepare_model_input <- function(name, analysis) {
     "out_date" = active_analyses$outcome,
     "exp_date" = active_analyses$exposure
   )
-
-  input <- input %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      end_date_outcome = min(end_date_outcome, cens_date_dereg, na.rm = TRUE),
-      end_date_exposure = min(
-        end_date_exposure,
-        cens_date_dereg,
-        out_date,
-        na.rm = TRUE
-      )
-    )
 
   # Remove outcomes outside of follow-up time ----------------------------------
   print("Remove outcomes outside of follow-up time")
@@ -139,5 +102,5 @@ prepare_model_input <- function(name, analysis) {
     ) %>%
     dplyr::ungroup()
 
-  return(list(input = input, keep = keep, analysis = analysis))
+  return(list(input = input, keep = keep))
 }

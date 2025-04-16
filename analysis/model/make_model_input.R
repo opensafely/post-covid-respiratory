@@ -26,7 +26,7 @@ if (length(args) == 0) {
   # name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma" # Testing sex group
   # name <- "cohort_vax-sub_age_40_59_preex_FALSE-pf" # Testing age group
   name <- "cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd" # Check that the "asian" ethnicity is processing correctly
-  name <- "cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia" # Check that the smoking subgroup is processing correctly
+  name <- "cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia" # Check that the smoking subgroup is processing correctly
 } else {
   name <- args[[1]]
 }
@@ -46,11 +46,34 @@ model_dir <- "output/model/"
 # check if sub directory exists, create if not
 fs::dir_create(here::here(model_dir))
 
-# Load and prepare data by selecting project-required columns and filtering the study population
+# Load and prepare data by selecting project-required columns
 print("Load and prepare data for analysis")
 
-pmi <- prepare_model_input(name, analysis)
-analysis <- pmi$analysis
+pmi <- prepare_model_input(name)
+
+# Restrict to required population -------------------------------------------
+print('Restrict to required population')
+
+# Creating a pre-existing condition variable where appropriate
+if (grepl("preex", name)) {
+  # True false indicator of preex
+  preex <- as.logical(
+    gsub(
+      ".*preex_([^\\-]+)-.*",
+      "\\1",
+      name
+    )
+  )
+
+  # Remove preex string from analysis string
+  analysis <- gsub(
+    "_preex_.*",
+    "",
+    analysis
+  )
+  df <- pmi$input[pmi$input$sup_bin_preex == preex, ]
+}
+
 
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")
