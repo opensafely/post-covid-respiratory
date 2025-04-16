@@ -46,10 +46,11 @@ model_dir <- "output/model/"
 # check if sub directory exists, create if not
 fs::dir_create(here::here(model_dir))
 
-# Load and prepare data for analysis
+# Load and prepare data by selecting project-required columns and filtering the study population
 print("Load and prepare data for analysis")
 
-pmi <- prepare_model_input(name)
+pmi <- prepare_model_input(name, analysis)
+analysis <- pmi$analysis
 
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")
@@ -160,6 +161,23 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
 # Stop code if no subgroup/main analysis was correctly selected
 if (!check_for_subgroup) {
   stop(paste0("Input: ", name, " did not undergo any subgroup filtering!"))
+# Make model input: sub_smoking_* ------------------------------------------
+if (grepl("sub_smoking_", analysis)) {
+  smoking_label <- gsub(".*sub_smoking_", "", analysis)
+
+  # Create a mapping from label to code
+  smoking_map <- c(
+    "never" = "N",
+    "ever" = "E",
+    "current" = "S"
+  )
+  smoking_code <- smoking_map[[smoking_label]]
+
+  if (is.null(smoking_code)) {
+    stop(paste0("Unrecognized smoking subgroup: ", smoking_label))
+  }
+
+  df <- df[df$cov_cat_smoking == smoking_code, ]
 }
 
 # Save model output
