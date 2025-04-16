@@ -59,24 +59,6 @@ print(paste0("Make model input: ", analysis))
 
 check_for_subgroup <- (grepl("main", analysis)) # =1 if subgroup is main, =0 otherwise
 
-# Creating a pre-existing condition variable where appropriate
-if (grepl("preex", analysis)) {
-  # True false indicator of preex
-  preex <- gsub(
-    ".*preex_",
-    "",
-    analysis
-  )
-  # Remove preex string from analysis string
-  analysis <- gsub(
-    "_preex_.*",
-    "",
-    analysis
-  )
-  # Preserve the string we removed from active_analysis$analysis
-  preex_str <- paste0("_preex_", preex)
-}
-
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
   check_for_subgroup <- 1
@@ -158,9 +140,6 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
   df <- df[df$cov_cat_ethnicity == ethnicity, ]
 }
 
-# Stop code if no subgroup/main analysis was correctly selected
-if (!check_for_subgroup) {
-  stop(paste0("Input: ", name, " did not undergo any subgroup filtering!"))
 # Make model input: sub_smoking_* ------------------------------------------
 if (grepl("sub_smoking_", analysis)) {
   smoking_label <- gsub(".*sub_smoking_", "", analysis)
@@ -178,6 +157,11 @@ if (grepl("sub_smoking_", analysis)) {
   }
 
   df <- df[df$cov_cat_smoking == smoking_code, ]
+}
+
+# Stop code if no subgroup/main analysis was correctly selected
+if (!check_for_subgroup) {
+  stop(paste0("Input: ", name, " did not undergo any subgroup filtering!"))
 }
 
 # Save model output
