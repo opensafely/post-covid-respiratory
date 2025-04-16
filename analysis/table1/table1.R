@@ -31,10 +31,16 @@ print(length(args))
 if (length(args) == 0) {
   cohort <- "vax"
   age_str <- "18;40;65;85;111"
+  preex <- "All" # "None", TRUE, or FALSE
 } else {
   cohort <- args[[1]]
   age_str <- args[[2]]
+  preex <- args[[3]]
 }
+
+if (length(args) == 2) {
+  preex == "All"
+} # allow an empty input for the preex variable
 
 age_bounds <- as.numeric(stringr::str_split(as.vector(age_str), ";")[[1]])
 
@@ -59,6 +65,12 @@ df <- df[df$sub_bin_covidhistory == FALSE, ]
 print("Create exposure indicator")
 
 df$exposed <- !is.na(df$exp_date_covid)
+
+# Select for pre-existing conditions
+print("Select for pre-existing conditions")
+if (preex != "All") {
+  df <- df[df$sup_bin_preex == preex, ]
+}
 
 # Define age groups ------------------------------------------------------------
 print("Define age groups")
