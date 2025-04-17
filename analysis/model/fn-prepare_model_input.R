@@ -94,7 +94,7 @@ prepare_model_input <- function(name) {
       sub_cat_covidhospital = ifelse(
         is.na(exp_date),
         "no_infection",
-        sub_cat_covidhospital
+        as.character(sub_cat_covidhospital)
       )
     )
 
