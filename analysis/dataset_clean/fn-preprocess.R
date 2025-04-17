@@ -122,16 +122,3 @@ preprocess <- function(cohort, describe) {
 
   return(list(venn = venn, input = input))
 }
-
-
-# input <- input %>%
-#   dplyr::rowwise() %>%
-#   dplyr::mutate(
-#     end_date_outcome = min(end_date_outcome, cens_date_dereg, na.rm = TRUE),
-#     end_date_exposure = min(
-#       end_date_exposure,
-#       cens_date_dereg,
-#       out_date,
-#       na.rm = TRUE
-#     )
-#   )
