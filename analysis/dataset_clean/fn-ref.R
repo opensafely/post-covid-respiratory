@@ -98,7 +98,7 @@ ref <- function(input) {
       "Missing" = "0",
       "White" = "1",
       "Mixed" = "2",
-      "South Asian" = "3",
+      "Asian" = "3",
       "Black" = "4",
       "Other" = "5"
     )
