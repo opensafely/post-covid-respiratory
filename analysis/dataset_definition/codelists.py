@@ -30,7 +30,7 @@ covid_primary_care_sequalae = codelist_from_csv(
 ethnicity_snomed = codelist_from_csv(
     "codelists/opensafely-ethnicity-snomed-0removed.csv",
     column="code",
-    category_column="Label_6"
+    category_column="Grouping_6"
 )
 
 # primis_covid19_vacc_update_ethnicity = codelist_from_csv(
