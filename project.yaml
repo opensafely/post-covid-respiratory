@@ -119,7 +119,7 @@ actions:
 
   ## Table 1 - prevax - preex_TRUE 
 
-  table1_prevax_TRUE:
+  table1_prevax_preex_TRUE:
     run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 TRUE
     needs:
     - clean_data_prevax
@@ -130,7 +130,7 @@ actions:
 
   ## Table 1 - unvax - preex_TRUE 
 
-  table1_unvax_TRUE:
+  table1_unvax_preex_TRUE:
     run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 TRUE
     needs:
     - clean_data_unvax
@@ -141,7 +141,7 @@ actions:
 
   ## Table 1 - vax - preex_TRUE 
 
-  table1_vax_TRUE:
+  table1_vax_preex_TRUE:
     run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 TRUE
     needs:
     - clean_data_vax
@@ -152,7 +152,7 @@ actions:
 
   ## Table 1 - prevax - preex_FALSE 
 
-  table1_prevax_FALSE:
+  table1_prevax_preex_FALSE:
     run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 FALSE
     needs:
     - clean_data_prevax
@@ -163,7 +163,7 @@ actions:
 
   ## Table 1 - unvax - preex_FALSE 
 
-  table1_unvax_FALSE:
+  table1_unvax_preex_FALSE:
     run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 FALSE
     needs:
     - clean_data_unvax
@@ -174,7 +174,7 @@ actions:
 
   ## Table 1 - vax - preex_FALSE 
 
-  table1_vax_FALSE:
+  table1_vax_preex_FALSE:
     run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 FALSE
     needs:
     - clean_data_vax

@@ -187,7 +187,7 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
       )
     } else {
       action(
-        name = glue("table1_{cohort}_{preex}"),
+        name = glue("table1_{cohort}_preex_{preex}"),
         run = "r:latest analysis/table1/table1.R",
         arguments = c(c(cohort), c(ages), c(preex)),
         needs = list(glue("clean_data_{cohort}")),
