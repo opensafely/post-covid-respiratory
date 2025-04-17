@@ -170,7 +170,7 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
     if (preex == "All") {
       comment(glue("Table 1 - {cohort}"))
     } else {
-      comment(glue("Table 1 - {cohort} - {preex}"))
+      comment(glue("Table 1 - {cohort} - preex_{preex}"))
     },
     if (preex == "All") {
       action(

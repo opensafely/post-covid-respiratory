@@ -31,7 +31,7 @@ print(length(args))
 if (length(args) == 0) {
   cohort <- "vax"
   age_str <- "18;40;65;85;111"
-  preex <- FALSE # "None", TRUE, or FALSE
+  preex <- FALSE # "All", TRUE, or FALSE
 } else {
   cohort <- args[[1]]
   age_str <- args[[2]]
@@ -73,7 +73,7 @@ print("Select for pre-existing conditions")
 preex_string <- ""
 if (preex != "All") {
   df <- df[df$sup_bin_preex == preex, ]
-  preex_string <- paste0("_", preex)
+  preex_string <- paste0("_preex_", preex)
 }
 
 # Define age groups ------------------------------------------------------------
