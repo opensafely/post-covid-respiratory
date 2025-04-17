@@ -1,5 +1,17 @@
 # Function to set reference levels for factors
 ref <- function(input) {
+  # Create supporting variable: pre-existing respiratory condition
+  print('Create supporting variable ')
+
+  if (all(c("sub_bin_asthma_recent", "sub_bin_copd_ever") %in% names(input))) {
+    input$sup_bin_preex <- (input$sub_bin_asthma_recent |
+      input$sub_bin_copd_ever)
+  } else {
+    warning(
+      "One or both variables ('sub_bin_asthma_recent', 'sub_bin_copd_ever') are missing. sup_bin_preex will not be created."
+    )
+  }
+
   # Handle missing values in cov_cat_sex ---------------------------------------
   print('Handle missing values in cov_cat_sex')
 
