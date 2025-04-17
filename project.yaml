@@ -30,9 +30,9 @@ actions:
       highly_sensitive:
         dataset: output/dataset_definition/index_dates.csv.gz
 
-  ## Generate cohort - prevax 
+  ## Generate input_prevax 
 
-  generate_cohort_prevax:
+  generate_input_prevax:
     run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_prevax.py
       --output output/dataset_definition/input_prevax.csv.gz
     needs:
@@ -41,9 +41,9 @@ actions:
       highly_sensitive:
         cohort: output/dataset_definition/input_prevax.csv.gz
 
-  ## Generate cohort - unvax 
+  ## Generate input_unvax 
 
-  generate_cohort_unvax:
+  generate_input_unvax:
     run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_unvax.py
       --output output/dataset_definition/input_unvax.csv.gz
     needs:
@@ -52,9 +52,9 @@ actions:
       highly_sensitive:
         cohort: output/dataset_definition/input_unvax.csv.gz
 
-  ## Generate cohort - vax 
+  ## Generate input_vax 
 
-  generate_cohort_vax:
+  generate_input_vax:
     run: ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_vax.py
       --output output/dataset_definition/input_vax.csv.gz
     needs:
@@ -63,132 +63,132 @@ actions:
       highly_sensitive:
         cohort: output/dataset_definition/input_vax.csv.gz
 
-  ## Clean data - prevax, with describe = TRUE 
+  ## Generate input_prevax_clean, with describe = TRUE 
 
-  clean_data_prevax:
+  generate_input_prevax_clean:
     run: r:latest analysis/dataset_clean/dataset_clean.R prevax TRUE
     needs:
     - study_dates
-    - generate_cohort_prevax
+    - generate_input_prevax
     outputs:
       moderately_sensitive:
         describe_raw: output/describe/prevax_raw.txt
         describe_venn: output/describe/prevax_venn.txt
         describe_preprocessed: output/describe/prevax_preprocessed.txt
-        flow: output/dataset_clean/flow_prevax.csv
-        flow_midpoint6: output/dataset_clean/flow_prevax_midpoint6.csv
+        flow: output/dataset_clean/flow-cohort_prevax.csv
+        flow_midpoint6: output/dataset_clean/flow-cohort_prevax-midpoint6.csv
       highly_sensitive:
-        venn: output/dataset_clean/venn_prevax.rds
+        venn: output/dataset_clean/venn-cohort_prevax.rds
         cohort_clean: output/dataset_clean/input_prevax_clean.rds
 
-  ## Clean data - unvax, with describe = TRUE 
+  ## Generate input_unvax_clean, with describe = TRUE 
 
-  clean_data_unvax:
+  generate_input_unvax_clean:
     run: r:latest analysis/dataset_clean/dataset_clean.R unvax TRUE
     needs:
     - study_dates
-    - generate_cohort_unvax
+    - generate_input_unvax
     outputs:
       moderately_sensitive:
         describe_raw: output/describe/unvax_raw.txt
         describe_venn: output/describe/unvax_venn.txt
         describe_preprocessed: output/describe/unvax_preprocessed.txt
-        flow: output/dataset_clean/flow_unvax.csv
-        flow_midpoint6: output/dataset_clean/flow_unvax_midpoint6.csv
+        flow: output/dataset_clean/flow-cohort_unvax.csv
+        flow_midpoint6: output/dataset_clean/flow-cohort_unvax-midpoint6.csv
       highly_sensitive:
-        venn: output/dataset_clean/venn_unvax.rds
+        venn: output/dataset_clean/venn-cohort_unvax.rds
         cohort_clean: output/dataset_clean/input_unvax_clean.rds
 
-  ## Clean data - vax, with describe = TRUE 
+  ## Generate input_vax_clean, with describe = TRUE 
 
-  clean_data_vax:
+  generate_input_vax_clean:
     run: r:latest analysis/dataset_clean/dataset_clean.R vax TRUE
     needs:
     - study_dates
-    - generate_cohort_vax
+    - generate_input_vax
     outputs:
       moderately_sensitive:
         describe_raw: output/describe/vax_raw.txt
         describe_venn: output/describe/vax_venn.txt
         describe_preprocessed: output/describe/vax_preprocessed.txt
-        flow: output/dataset_clean/flow_vax.csv
-        flow_midpoint6: output/dataset_clean/flow_vax_midpoint6.csv
+        flow: output/dataset_clean/flow-cohort_vax.csv
+        flow_midpoint6: output/dataset_clean/flow-cohort_vax-midpoint6.csv
       highly_sensitive:
-        venn: output/dataset_clean/venn_vax.rds
+        venn: output/dataset_clean/venn-cohort_vax.rds
         cohort_clean: output/dataset_clean/input_vax_clean.rds
 
-  ## Table 1 - prevax - preex_TRUE 
+  ## Generate table1_cohort_prevax-preex_TRUE 
 
-  table1_prevax_preex_TRUE:
+  table1-cohort_prevax-preex_TRUE:
     run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 TRUE
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_prevax_preex_TRUE.csv
-        table1_midpoint6: output/table1/table1_prevax_preex_TRUE_midpoint6.csv
+        table1: output/table1/table1-cohort_prevax-preex_TRUE.csv
+        table1_midpoint6: output/table1/table1-cohort_prevax-preex_TRUE-midpoint6.csv
 
-  ## Table 1 - unvax - preex_TRUE 
+  ## Generate table1_cohort_unvax-preex_TRUE 
 
-  table1_unvax_preex_TRUE:
+  table1-cohort_unvax-preex_TRUE:
     run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 TRUE
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_unvax_preex_TRUE.csv
-        table1_midpoint6: output/table1/table1_unvax_preex_TRUE_midpoint6.csv
+        table1: output/table1/table1-cohort_unvax-preex_TRUE.csv
+        table1_midpoint6: output/table1/table1-cohort_unvax-preex_TRUE-midpoint6.csv
 
-  ## Table 1 - vax - preex_TRUE 
+  ## Generate table1_cohort_vax-preex_TRUE 
 
-  table1_vax_preex_TRUE:
+  table1-cohort_vax-preex_TRUE:
     run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 TRUE
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_vax_preex_TRUE.csv
-        table1_midpoint6: output/table1/table1_vax_preex_TRUE_midpoint6.csv
+        table1: output/table1/table1-cohort_vax-preex_TRUE.csv
+        table1_midpoint6: output/table1/table1-cohort_vax-preex_TRUE-midpoint6.csv
 
-  ## Table 1 - prevax - preex_FALSE 
+  ## Generate table1_cohort_prevax-preex_FALSE 
 
-  table1_prevax_preex_FALSE:
+  table1-cohort_prevax-preex_FALSE:
     run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 FALSE
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_prevax_preex_FALSE.csv
-        table1_midpoint6: output/table1/table1_prevax_preex_FALSE_midpoint6.csv
+        table1: output/table1/table1-cohort_prevax-preex_FALSE.csv
+        table1_midpoint6: output/table1/table1-cohort_prevax-preex_FALSE-midpoint6.csv
 
-  ## Table 1 - unvax - preex_FALSE 
+  ## Generate table1_cohort_unvax-preex_FALSE 
 
-  table1_unvax_preex_FALSE:
+  table1-cohort_unvax-preex_FALSE:
     run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 FALSE
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_unvax_preex_FALSE.csv
-        table1_midpoint6: output/table1/table1_unvax_preex_FALSE_midpoint6.csv
+        table1: output/table1/table1-cohort_unvax-preex_FALSE.csv
+        table1_midpoint6: output/table1/table1-cohort_unvax-preex_FALSE-midpoint6.csv
 
-  ## Table 1 - vax - preex_FALSE 
+  ## Generate table1_cohort_vax-preex_FALSE 
 
-  table1_vax_preex_FALSE:
+  table1-cohort_vax-preex_FALSE:
     run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 FALSE
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_vax_preex_FALSE.csv
-        table1_midpoint6: output/table1/table1_vax_preex_FALSE_midpoint6.csv
+        table1: output/table1/table1-cohort_vax-preex_FALSE.csv
+        table1_midpoint6: output/table1/table1-cohort_vax-preex_FALSE-midpoint6.csv
 
   ## Run models 
 
   make_model_input-cohort_prevax-main_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_FALSE-asthma.rds
@@ -210,7 +210,7 @@ actions:
   make_model_input-cohort_prevax-main_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_FALSE-copd.rds
@@ -232,7 +232,7 @@ actions:
   make_model_input-cohort_prevax-main_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_FALSE-pf.rds
@@ -254,7 +254,7 @@ actions:
   make_model_input-cohort_prevax-main_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_FALSE-pneumonia.rds
@@ -276,7 +276,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_FALSE-asthma.rds
@@ -298,7 +298,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_FALSE-copd.rds
@@ -320,7 +320,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_FALSE-pf.rds
@@ -342,7 +342,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_FALSE-pneumonia.rds
@@ -364,7 +364,7 @@ actions:
   make_model_input-cohort_vax-main_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_FALSE-asthma.rds
@@ -386,7 +386,7 @@ actions:
   make_model_input-cohort_vax-main_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_FALSE-copd.rds
@@ -408,7 +408,7 @@ actions:
   make_model_input-cohort_vax-main_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_FALSE-pf.rds
@@ -430,7 +430,7 @@ actions:
   make_model_input-cohort_vax-main_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_FALSE-pneumonia.rds
@@ -452,7 +452,7 @@ actions:
   make_model_input-cohort_prevax-main_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_TRUE-pf.rds
@@ -474,7 +474,7 @@ actions:
   make_model_input-cohort_prevax-main_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-main_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-main_preex_TRUE-pneumonia.rds
@@ -496,7 +496,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_TRUE-pf.rds
@@ -518,7 +518,7 @@ actions:
   make_model_input-cohort_unvax-main_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-main_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-main_preex_TRUE-pneumonia.rds
@@ -540,7 +540,7 @@ actions:
   make_model_input-cohort_vax-main_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_TRUE-pf.rds
@@ -562,7 +562,7 @@ actions:
   make_model_input-cohort_vax-main_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-main_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-main_preex_TRUE-pneumonia.rds
@@ -584,7 +584,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_FALSE-asthma.rds
@@ -606,7 +606,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_FALSE-copd.rds
@@ -628,7 +628,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_FALSE-pf.rds
@@ -650,7 +650,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.rds
@@ -672,7 +672,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_FALSE-asthma.rds
@@ -694,7 +694,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_FALSE-copd.rds
@@ -716,7 +716,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_FALSE-pf.rds
@@ -738,7 +738,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia.rds
@@ -760,7 +760,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_FALSE-asthma.rds
@@ -782,7 +782,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_FALSE-copd.rds
@@ -804,7 +804,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_FALSE-pf.rds
@@ -826,7 +826,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia.rds
@@ -848,7 +848,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pf.rds
@@ -870,7 +870,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.rds
@@ -892,7 +892,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_TRUE-pf.rds
@@ -914,7 +914,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia.rds
@@ -936,7 +936,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_TRUE-pf.rds
@@ -958,7 +958,7 @@ actions:
   make_model_input-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_18_39_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia.rds
@@ -980,7 +980,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_FALSE-asthma.rds
@@ -1002,7 +1002,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_FALSE-copd.rds
@@ -1024,7 +1024,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_FALSE-pf.rds
@@ -1046,7 +1046,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.rds
@@ -1068,7 +1068,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_FALSE-asthma.rds
@@ -1090,7 +1090,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_FALSE-copd.rds
@@ -1112,7 +1112,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_FALSE-pf.rds
@@ -1134,7 +1134,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia.rds
@@ -1156,7 +1156,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_FALSE-asthma.rds
@@ -1178,7 +1178,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_FALSE-copd.rds
@@ -1200,7 +1200,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_FALSE-pf.rds
@@ -1222,7 +1222,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia.rds
@@ -1244,7 +1244,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_TRUE-pf.rds
@@ -1266,7 +1266,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.rds
@@ -1288,7 +1288,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_TRUE-pf.rds
@@ -1310,7 +1310,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia.rds
@@ -1332,7 +1332,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_TRUE-pf.rds
@@ -1354,7 +1354,7 @@ actions:
   make_model_input-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_40_59_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia.rds
@@ -1376,7 +1376,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_FALSE-asthma.rds
@@ -1398,7 +1398,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_FALSE-copd.rds
@@ -1420,7 +1420,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pf.rds
@@ -1442,7 +1442,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.rds
@@ -1464,7 +1464,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_FALSE-asthma.rds
@@ -1486,7 +1486,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_FALSE-copd.rds
@@ -1508,7 +1508,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_FALSE-pf.rds
@@ -1530,7 +1530,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia.rds
@@ -1552,7 +1552,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_FALSE-asthma.rds
@@ -1574,7 +1574,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_FALSE-copd.rds
@@ -1596,7 +1596,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_FALSE-pf.rds
@@ -1618,7 +1618,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia.rds
@@ -1640,7 +1640,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_TRUE-pf.rds
@@ -1662,7 +1662,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.rds
@@ -1684,7 +1684,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_TRUE-pf.rds
@@ -1706,7 +1706,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia.rds
@@ -1728,7 +1728,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_TRUE-pf.rds
@@ -1750,7 +1750,7 @@ actions:
   make_model_input-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_60_79_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia.rds
@@ -1772,7 +1772,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_FALSE-asthma.rds
@@ -1794,7 +1794,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_FALSE-copd.rds
@@ -1816,7 +1816,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_FALSE-pf.rds
@@ -1838,7 +1838,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.rds
@@ -1860,7 +1860,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_FALSE-asthma.rds
@@ -1882,7 +1882,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_FALSE-copd.rds
@@ -1904,7 +1904,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_FALSE-pf.rds
@@ -1926,7 +1926,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia.rds
@@ -1948,7 +1948,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_FALSE-asthma.rds
@@ -1970,7 +1970,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_FALSE-copd.rds
@@ -1992,7 +1992,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_FALSE-pf.rds
@@ -2014,7 +2014,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia.rds
@@ -2036,7 +2036,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_TRUE-pf.rds
@@ -2058,7 +2058,7 @@ actions:
   make_model_input-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.rds
@@ -2080,7 +2080,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_TRUE-pf.rds
@@ -2102,7 +2102,7 @@ actions:
   make_model_input-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia.rds
@@ -2124,7 +2124,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_TRUE-pf.rds
@@ -2146,7 +2146,7 @@ actions:
   make_model_input-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_age_80_110_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia.rds
@@ -2168,7 +2168,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_FALSE-asthma.rds
@@ -2190,7 +2190,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_FALSE-copd.rds
@@ -2212,7 +2212,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pf.rds
@@ -2234,7 +2234,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia.rds
@@ -2256,7 +2256,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_FALSE-asthma.rds
@@ -2278,7 +2278,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_FALSE-copd.rds
@@ -2300,7 +2300,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_FALSE-pf.rds
@@ -2322,7 +2322,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia.rds
@@ -2344,7 +2344,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pf.rds
@@ -2366,7 +2366,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia.rds
@@ -2388,7 +2388,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_TRUE-pf.rds
@@ -2410,7 +2410,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhistory_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia.rds
@@ -2432,7 +2432,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma.rds
@@ -2454,7 +2454,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-copd.rds
@@ -2476,7 +2476,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pf.rds
@@ -2498,7 +2498,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.rds
@@ -2520,7 +2520,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma.rds
@@ -2542,7 +2542,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-copd.rds
@@ -2564,7 +2564,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pf.rds
@@ -2586,7 +2586,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.rds
@@ -2608,7 +2608,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-asthma.rds
@@ -2630,7 +2630,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-copd.rds
@@ -2652,7 +2652,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pf.rds
@@ -2674,7 +2674,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.rds
@@ -2696,7 +2696,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pf.rds
@@ -2718,7 +2718,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.rds
@@ -2740,7 +2740,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pf.rds
@@ -2762,7 +2762,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.rds
@@ -2784,7 +2784,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pf.rds
@@ -2806,7 +2806,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.rds
@@ -2828,7 +2828,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-asthma.rds
@@ -2850,7 +2850,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-copd.rds
@@ -2872,7 +2872,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf.rds
@@ -2894,7 +2894,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.rds
@@ -2916,7 +2916,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma.rds
@@ -2938,7 +2938,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-copd.rds
@@ -2960,7 +2960,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf.rds
@@ -2982,7 +2982,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.rds
@@ -3004,7 +3004,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-asthma.rds
@@ -3026,7 +3026,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-copd.rds
@@ -3048,7 +3048,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf.rds
@@ -3070,7 +3070,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.rds
@@ -3092,7 +3092,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf.rds
@@ -3114,7 +3114,7 @@ actions:
   make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.rds
@@ -3136,7 +3136,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pf.rds
@@ -3158,7 +3158,7 @@ actions:
   make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.rds
@@ -3180,7 +3180,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pf.rds
@@ -3202,7 +3202,7 @@ actions:
   make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.rds
@@ -3224,7 +3224,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma.rds
@@ -3246,7 +3246,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd.rds
@@ -3268,7 +3268,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf.rds
@@ -3290,7 +3290,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.rds
@@ -3312,7 +3312,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-asthma.rds
@@ -3334,7 +3334,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-copd.rds
@@ -3356,7 +3356,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pf.rds
@@ -3378,7 +3378,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia.rds
@@ -3400,7 +3400,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-asthma.rds
@@ -3422,7 +3422,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-copd.rds
@@ -3444,7 +3444,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pf.rds
@@ -3466,7 +3466,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia.rds
@@ -3488,7 +3488,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf.rds
@@ -3510,7 +3510,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.rds
@@ -3532,7 +3532,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pf.rds
@@ -3554,7 +3554,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia.rds
@@ -3576,7 +3576,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pf.rds
@@ -3598,7 +3598,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia.rds
@@ -3620,7 +3620,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma.rds
@@ -3642,7 +3642,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.rds
@@ -3664,7 +3664,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf.rds
@@ -3686,7 +3686,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.rds
@@ -3708,7 +3708,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-asthma.rds
@@ -3730,7 +3730,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-copd.rds
@@ -3752,7 +3752,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pf.rds
@@ -3774,7 +3774,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia.rds
@@ -3796,7 +3796,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-asthma.rds
@@ -3818,7 +3818,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-copd.rds
@@ -3840,7 +3840,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pf.rds
@@ -3862,7 +3862,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia.rds
@@ -3884,7 +3884,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pf.rds
@@ -3906,7 +3906,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.rds
@@ -3928,7 +3928,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pf.rds
@@ -3950,7 +3950,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia.rds
@@ -3972,7 +3972,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pf.rds
@@ -3994,7 +3994,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia.rds
@@ -4016,7 +4016,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-asthma.rds
@@ -4038,7 +4038,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd.rds
@@ -4060,7 +4060,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pf.rds
@@ -4082,7 +4082,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.rds
@@ -4104,7 +4104,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-asthma.rds
@@ -4126,7 +4126,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-copd.rds
@@ -4148,7 +4148,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pf.rds
@@ -4170,7 +4170,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia.rds
@@ -4192,7 +4192,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-asthma.rds
@@ -4214,7 +4214,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-copd.rds
@@ -4236,7 +4236,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pf.rds
@@ -4258,7 +4258,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia.rds
@@ -4280,7 +4280,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pf.rds
@@ -4302,7 +4302,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.rds
@@ -4324,7 +4324,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pf.rds
@@ -4346,7 +4346,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia.rds
@@ -4368,7 +4368,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pf.rds
@@ -4390,7 +4390,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia.rds
@@ -4412,7 +4412,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-asthma.rds
@@ -4434,7 +4434,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-copd.rds
@@ -4456,7 +4456,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pf.rds
@@ -4478,7 +4478,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.rds
@@ -4500,7 +4500,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-asthma.rds
@@ -4522,7 +4522,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-copd.rds
@@ -4544,7 +4544,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pf.rds
@@ -4566,7 +4566,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia.rds
@@ -4588,7 +4588,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-asthma.rds
@@ -4610,7 +4610,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-copd.rds
@@ -4632,7 +4632,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pf.rds
@@ -4654,7 +4654,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia.rds
@@ -4676,7 +4676,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pf.rds
@@ -4698,7 +4698,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.rds
@@ -4720,7 +4720,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pf.rds
@@ -4742,7 +4742,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia.rds
@@ -4764,7 +4764,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pf.rds
@@ -4786,7 +4786,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia.rds
@@ -4808,7 +4808,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-asthma.rds
@@ -4830,7 +4830,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-copd.rds
@@ -4852,7 +4852,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pf.rds
@@ -4874,7 +4874,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.rds
@@ -4896,7 +4896,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-asthma.rds
@@ -4918,7 +4918,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd.rds
@@ -4940,7 +4940,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pf.rds
@@ -4962,7 +4962,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia.rds
@@ -4984,7 +4984,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-asthma.rds
@@ -5006,7 +5006,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-copd.rds
@@ -5028,7 +5028,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pf.rds
@@ -5050,7 +5050,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia.rds
@@ -5072,7 +5072,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pf.rds
@@ -5094,7 +5094,7 @@ actions:
   make_model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.rds
@@ -5116,7 +5116,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pf.rds
@@ -5138,7 +5138,7 @@ actions:
   make_model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia.rds
@@ -5160,7 +5160,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pf.rds
@@ -5182,7 +5182,7 @@ actions:
   make_model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia.rds
@@ -5204,7 +5204,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_FALSE-asthma.rds
@@ -5226,7 +5226,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_FALSE-copd.rds
@@ -5248,7 +5248,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_FALSE-pf.rds
@@ -5270,7 +5270,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.rds
@@ -5292,7 +5292,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_FALSE-asthma.rds
@@ -5314,7 +5314,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_FALSE-copd.rds
@@ -5336,7 +5336,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_FALSE-pf.rds
@@ -5358,7 +5358,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia.rds
@@ -5380,7 +5380,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_FALSE-asthma.rds
@@ -5402,7 +5402,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_FALSE-copd.rds
@@ -5424,7 +5424,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_FALSE-pf.rds
@@ -5446,7 +5446,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.rds
@@ -5468,7 +5468,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_TRUE-pf.rds
@@ -5490,7 +5490,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.rds
@@ -5512,7 +5512,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_TRUE-pf.rds
@@ -5534,7 +5534,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_female_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia.rds
@@ -5556,7 +5556,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_TRUE-pf.rds
@@ -5578,7 +5578,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_female_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_female_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_TRUE-pneumonia.rds
@@ -5600,7 +5600,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_FALSE-asthma.rds
@@ -5622,7 +5622,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_FALSE-copd.rds
@@ -5644,7 +5644,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_FALSE-pf.rds
@@ -5666,7 +5666,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.rds
@@ -5688,7 +5688,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_FALSE-asthma.rds
@@ -5710,7 +5710,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_FALSE-copd.rds
@@ -5732,7 +5732,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_FALSE-pf.rds
@@ -5754,7 +5754,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia.rds
@@ -5776,7 +5776,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_FALSE-asthma.rds
@@ -5798,7 +5798,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_FALSE-copd.rds
@@ -5820,7 +5820,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_FALSE-pf.rds
@@ -5842,7 +5842,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_FALSE-pneumonia.rds
@@ -5864,7 +5864,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_TRUE-pf.rds
@@ -5886,7 +5886,7 @@ actions:
   make_model_input-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_sex_male_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.rds
@@ -5908,7 +5908,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_TRUE-pf.rds
@@ -5930,7 +5930,7 @@ actions:
   make_model_input-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_sex_male_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia.rds
@@ -5952,7 +5952,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_TRUE-pf.rds
@@ -5974,7 +5974,7 @@ actions:
   make_model_input-cohort_vax-sub_sex_male_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_sex_male_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_male_preex_TRUE-pneumonia.rds
@@ -5996,7 +5996,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_FALSE-asthma.rds
@@ -6018,7 +6018,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_FALSE-copd.rds
@@ -6040,7 +6040,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pf.rds
@@ -6062,7 +6062,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.rds
@@ -6084,7 +6084,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_FALSE-asthma.rds
@@ -6106,7 +6106,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_FALSE-copd.rds
@@ -6128,7 +6128,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pf.rds
@@ -6150,7 +6150,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia.rds
@@ -6172,7 +6172,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_FALSE-asthma.rds
@@ -6194,7 +6194,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_FALSE-copd.rds
@@ -6216,7 +6216,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_FALSE-pf.rds
@@ -6238,7 +6238,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia.rds
@@ -6260,7 +6260,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pf.rds
@@ -6282,7 +6282,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.rds
@@ -6304,7 +6304,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pf.rds
@@ -6326,7 +6326,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia.rds
@@ -6348,7 +6348,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_TRUE-pf.rds
@@ -6370,7 +6370,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_current_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia.rds
@@ -6392,7 +6392,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-asthma.rds
@@ -6414,7 +6414,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-copd.rds
@@ -6436,7 +6436,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pf.rds
@@ -6458,7 +6458,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.rds
@@ -6480,7 +6480,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-asthma.rds
@@ -6502,7 +6502,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-copd.rds
@@ -6524,7 +6524,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pf.rds
@@ -6546,7 +6546,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia.rds
@@ -6568,7 +6568,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_FALSE-asthma.rds
@@ -6590,7 +6590,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_FALSE-copd.rds
@@ -6612,7 +6612,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pf.rds
@@ -6634,7 +6634,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia.rds
@@ -6656,7 +6656,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pf.rds
@@ -6678,7 +6678,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.rds
@@ -6700,7 +6700,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pf.rds
@@ -6722,7 +6722,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia.rds
@@ -6744,7 +6744,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pf.rds
@@ -6766,7 +6766,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia.rds
@@ -6788,7 +6788,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_FALSE-asthma
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_FALSE-asthma.rds
@@ -6810,7 +6810,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_FALSE-copd
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_FALSE-copd.rds
@@ -6832,7 +6832,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_FALSE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pf.rds
@@ -6854,7 +6854,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.rds
@@ -6876,7 +6876,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_FALSE-asthma
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_FALSE-asthma.rds
@@ -6898,7 +6898,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_FALSE-copd
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_FALSE-copd.rds
@@ -6920,7 +6920,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_FALSE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pf.rds
@@ -6942,7 +6942,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia.rds
@@ -6964,7 +6964,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-asthma:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_FALSE-asthma
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_FALSE-asthma.rds
@@ -6986,7 +6986,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-copd:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_FALSE-copd
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_FALSE-copd.rds
@@ -7008,7 +7008,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_FALSE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_FALSE-pf.rds
@@ -7030,7 +7030,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_FALSE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia.rds
@@ -7052,7 +7052,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_TRUE-pf
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pf.rds
@@ -7074,7 +7074,7 @@ actions:
   make_model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia
     needs:
-    - clean_data_prevax
+    - generate_input_prevax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.rds
@@ -7096,7 +7096,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_TRUE-pf
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pf.rds
@@ -7118,7 +7118,7 @@ actions:
   make_model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia
     needs:
-    - clean_data_unvax
+    - generate_input_unvax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia.rds
@@ -7140,7 +7140,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_TRUE-pf:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_TRUE-pf
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_TRUE-pf.rds
@@ -7162,7 +7162,7 @@ actions:
   make_model_input-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia:
     run: r:latest analysis/model/make_model_input.R cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
     needs:
-    - clean_data_vax
+    - generate_input_vax_clean
     outputs:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.rds
@@ -7181,9 +7181,9 @@ actions:
       moderately_sensitive:
         model_output: output/model/model_output-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.csv
 
-  ## Table 2 - prevax - covidhospital 
+  ## Generate table2-cohort_prevax-sub_covidhospital 
 
-  table2_prevax_covidhospital:
+  table2-cohort_prevax-sub_covidhospital:
     run: r:latest analysis/table2/table2.R prevax covidhospital
     needs:
     - make_model_input-cohort_prevax-main_preex_FALSE-asthma
@@ -7206,12 +7206,12 @@ actions:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_prevax_covidhospital.csv
-        table2_midpoint6: output/table2/table2_prevax_covidhospital_midpoint6.csv
+        table2: output/table2/table2-cohort_prevax-sub_covidhospital.csv
+        table2_midpoint6: output/table2/table2-cohort_prevax-sub_covidhospital-midpoint6.csv
 
-  ## Table 2 - unvax - covidhospital 
+  ## Generate table2-cohort_unvax-sub_covidhospital 
 
-  table2_unvax_covidhospital:
+  table2-cohort_unvax-sub_covidhospital:
     run: r:latest analysis/table2/table2.R unvax covidhospital
     needs:
     - make_model_input-cohort_unvax-main_preex_FALSE-asthma
@@ -7234,12 +7234,12 @@ actions:
     - make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_unvax_covidhospital.csv
-        table2_midpoint6: output/table2/table2_unvax_covidhospital_midpoint6.csv
+        table2: output/table2/table2-cohort_unvax-sub_covidhospital.csv
+        table2_midpoint6: output/table2/table2-cohort_unvax-sub_covidhospital-midpoint6.csv
 
-  ## Table 2 - vax - covidhospital 
+  ## Generate table2-cohort_vax-sub_covidhospital 
 
-  table2_vax_covidhospital:
+  table2-cohort_vax-sub_covidhospital:
     run: r:latest analysis/table2/table2.R vax covidhospital
     needs:
     - make_model_input-cohort_vax-main_preex_FALSE-asthma
@@ -7262,6 +7262,6 @@ actions:
     - make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        table2: output/table2/table2_vax_covidhospital.csv
-        table2_midpoint6: output/table2/table2_vax_covidhospital_midpoint6.csv
+        table2: output/table2/table2-cohort_vax-sub_covidhospital.csv
+        table2_midpoint6: output/table2/table2-cohort_vax-sub_covidhospital-midpoint6.csv
 

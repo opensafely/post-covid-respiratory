@@ -93,9 +93,9 @@ convert_comment_actions <- function(yaml.txt) {
 
 generate_cohort <- function(cohort) {
   splice(
-    comment(glue("Generate cohort - {cohort}")),
+    comment(glue("Generate input_{cohort}")),
     action(
-      name = glue("generate_cohort_{cohort}"),
+      name = glue("generate_input_{cohort}"),
       run = glue(
         "ehrql:v1 generate-dataset analysis/dataset_definition/dataset_definition_{cohort}.py --output output/dataset_definition/input_{cohort}.csv.gz"
       ),
@@ -111,16 +111,16 @@ generate_cohort <- function(cohort) {
 
 clean_data <- function(cohort, describe = describe) {
   splice(
-    comment(glue("Clean data - {cohort}, with describe = {describe}")),
+    comment(glue("Generate input_{cohort}_clean, with describe = {describe}")),
     if (isTRUE(describe)) {
       # Action to include describe*.txt files
       action(
-        name = glue("clean_data_{cohort}"),
+        name = glue("generate_input_{cohort}_clean"),
         run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
         needs = list(
           "study_dates",
-          glue("generate_cohort_{cohort}")
+          glue("generate_input_{cohort}")
         ),
         moderately_sensitive = list(
           describe_raw = glue("output/describe/{cohort}_raw.txt"),
@@ -128,34 +128,34 @@ clean_data <- function(cohort, describe = describe) {
           describe_preprocessed = glue(
             "output/describe/{cohort}_preprocessed.txt"
           ),
-          flow = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow = glue("output/dataset_clean/flow-cohort_{cohort}.csv"),
           flow_midpoint6 = glue(
-            "output/dataset_clean/flow_{cohort}_midpoint6.csv"
+            "output/dataset_clean/flow-cohort_{cohort}-midpoint6.csv"
           )
         ),
         highly_sensitive = list(
-          venn = glue("output/dataset_clean/venn_{cohort}.rds"),
+          venn = glue("output/dataset_clean/venn-cohort_{cohort}.rds"),
           cohort_clean = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
     } else {
       # Action to exclude describe*.txt files
       action(
-        name = glue("clean_data_{cohort}"),
+        name = glue("generate_input_{cohort}_clean"),
         run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
         needs = list(
           "study_dates",
-          glue("generate_cohort_{cohort}")
+          glue("generate_input_{cohort}")
         ),
         moderately_sensitive = list(
-          flow = glue("output/dataset_clean/flow_{cohort}.csv"),
+          flow = glue("output/dataset_clean/flow-cohort_{cohort}.csv"),
           flow_midpoint6 = glue(
-            "output/dataset_clean/flow_{cohort}_midpoint6.csv"
+            "output/dataset_clean/flow-cohort_{cohort}-midpoint6.csv"
           )
         ),
         highly_sensitive = list(
-          venn = glue("output/dataset_clean/venn_{cohort}.rds"),
+          venn = glue("output/dataset_clean/venn-cohort_{cohort}.rds"),
           cohort_clean = glue("output/dataset_clean/input_{cohort}_clean.rds")
         )
       )
@@ -168,16 +168,16 @@ clean_data <- function(cohort, describe = describe) {
 table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
   splice(
     if (preex == "All") {
-      comment(glue("Table 1 - {cohort}"))
+      comment(glue("Generate table1_cohort_{cohort}"))
     } else {
-      comment(glue("Table 1 - {cohort} - preex_{preex}"))
+      comment(glue("Generate table1_cohort_{cohort}-preex_{preex}"))
     },
     if (preex == "All") {
       action(
-        name = glue("table1_{cohort}"),
+        name = glue("table1-cohort_{cohort}"),
         run = "r:latest analysis/table1/table1.R",
         arguments = c(c(cohort), c(ages)),
-        needs = list(glue("clean_data_{cohort}")),
+        needs = list(glue("generate_input_{cohort}_clean")),
         moderately_sensitive = list(
           table1 = glue("output/table1/table1_{cohort}.csv"),
           table1_midpoint6 = glue(
@@ -187,14 +187,14 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
       )
     } else {
       action(
-        name = glue("table1_{cohort}_preex_{preex}"),
+        name = glue("table1-cohort_{cohort}-preex_{preex}"),
         run = "r:latest analysis/table1/table1.R",
         arguments = c(c(cohort), c(ages), c(preex)),
-        needs = list(glue("clean_data_{cohort}")),
+        needs = list(glue("generate_input_{cohort}_clean")),
         moderately_sensitive = list(
-          table1 = glue("output/table1/table1_{cohort}_preex_{preex}.csv"),
+          table1 = glue("output/table1/table1-cohort_{cohort}-preex_{preex}.csv"),
           table1_midpoint6 = glue(
-            "output/table1/table1_{cohort}_preex_{preex}_midpoint6.csv"
+            "output/table1/table1-cohort_{cohort}-preex_{preex}-midpoint6.csv"
           )
         )
       )
@@ -227,7 +227,7 @@ apply_model_function <- function(
     action(
       name = glue("make_model_input-{name}"),
       run = glue("r:latest analysis/model/make_model_input.R {name}"),
-      needs = as.list(glue("clean_data_{cohort}")),
+      needs = as.list(glue("generate_input_{cohort}_clean")),
       highly_sensitive = list(
         model_input = glue("output/model/model_input-{name}.rds")
       )
@@ -269,16 +269,16 @@ table2 <- function(cohort, subgroup) {
   ]
 
   splice(
-    comment(glue("Table 2 - {cohort} - {subgroup}")),
+    comment(glue("Generate table2-cohort_{cohort}-sub_{subgroup}")),
     action(
-      name = glue("table2_{cohort}_{subgroup}"),
+      name = glue("table2-cohort_{cohort}-sub_{subgroup}"),
       run = "r:latest analysis/table2/table2.R",
       arguments = c(cohort, subgroup),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
-        table2 = glue("output/table2/table2_{cohort}_{subgroup}.csv"),
+        table2 = glue("output/table2/table2-cohort_{cohort}-sub_{subgroup}.csv"),
         table2_midpoint6 = glue(
-          "output/table2/table2_{cohort}_{subgroup}_midpoint6.csv"
+          "output/table2/table2-cohort_{cohort}-sub_{subgroup}-midpoint6.csv"
         )
       )
     )

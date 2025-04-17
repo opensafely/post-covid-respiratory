@@ -73,7 +73,7 @@ print("Select for pre-existing conditions")
 preex_string <- ""
 if (preex != "All") {
   df <- df[df$sup_bin_preex == preex, ]
-  preex_string <- paste0("_preex_", preex)
+  preex_string <- paste0("-preex_", preex)
 }
 
 # Define age groups ------------------------------------------------------------
@@ -162,7 +162,7 @@ print("Save Table 1")
 
 write.csv(
   df,
-  paste0(table1_dir, "table1_", cohort, preex_string, ".csv"),
+  paste0(table1_dir, "table1-cohort_", cohort, preex_string, ".csv"),
   row.names = FALSE
 )
 
@@ -220,6 +220,6 @@ print("Save rounded Table 1")
 
 write.csv(
   df,
-  paste0(table1_dir, "table1_", cohort, preex_string, "_midpoint6.csv"),
+  paste0(table1_dir, "table1-cohort_", cohort, preex_string, "-midpoint6.csv"),
   row.names = FALSE
 )
