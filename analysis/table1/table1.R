@@ -35,13 +35,13 @@ if (length(args) == 0) {
 } else {
   cohort <- args[[1]]
   age_str <- args[[2]]
+  if (length(args) < 3) {
+    preex <- "All"
+  } else {
+    preex <- args[[3]]
+  } # allow an empty input for the preex variable
 }
 
-if (length(args) < 3) {
-  preex <- "All"
-} else {
-  preex <- args[[3]]
-} # allow an empty input for the preex variable
 
 age_bounds <- as.numeric(stringr::str_split(as.vector(age_str), ";")[[1]])
 
