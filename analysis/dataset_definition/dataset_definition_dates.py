@@ -68,16 +68,17 @@ cens_date_dereg_prevax = (
 
 dataset.end_prevax_exposure = minimum_of(
     dataset.cens_date_death, 
+    cens_date_dereg_prevax,
+    lcd_date,
     dataset.vax_date_covid_1, 
     dataset.vax_date_eligible, 
-    all_eligible,
-    cens_date_dereg_prevax
+    all_eligible
 )
 
 dataset.end_prevax_outcome = minimum_of(
     dataset.cens_date_death, 
-    lcd_date,
-    cens_date_dereg_prevax
+    cens_date_dereg_prevax,
+    lcd_date
 )
 
 ## Vax
@@ -99,14 +100,15 @@ cens_date_dereg_vax = (
 
 dataset.end_vax_exposure = minimum_of(
     dataset.cens_date_death, 
-    omicron_date,
-    cens_date_dereg_vax
+    cens_date_dereg_vax,
+    lcd_date,
+    omicron_date
 )
 
 dataset.end_vax_outcome = minimum_of(
     dataset.cens_date_death, 
-    lcd_date,
-    cens_date_dereg_vax
+    cens_date_dereg_vax,
+    lcd_date
 )
 
 ## Unvax
@@ -126,13 +128,14 @@ cens_date_dereg_unvax = (
 
 dataset.end_unvax_exposure = minimum_of(
     dataset.cens_date_death, 
+    cens_date_dereg_unvax,
+    lcd_date, 
     omicron_date, 
-    dataset.vax_date_covid_1,
-    cens_date_dereg_unvax
+    dataset.vax_date_covid_1
 )
 
 dataset.end_unvax_outcome = minimum_of(
     dataset.cens_date_death, 
-    lcd_date,
-    cens_date_dereg_unvax
+    cens_date_dereg_unvax,
+    lcd_date
 )
