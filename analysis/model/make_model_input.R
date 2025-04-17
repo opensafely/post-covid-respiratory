@@ -74,7 +74,6 @@ if (grepl("preex", name)) {
   df <- pmi$input[pmi$input$sup_bin_preex == preex, ]
 }
 
-
 ## Perform subgroup-specific manipulation
 print("Perform subgroup-specific manipulation")
 
