@@ -165,19 +165,40 @@ clean_data <- function(cohort, describe = describe) {
 
 # Create function for table1 --------------------------------------------
 
-table1 <- function(cohort, ages = "18;40;60;80") {
+table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
   splice(
-    comment(glue("Table 1 - {cohort}")),
-    action(
-      name = glue("table1_{cohort}"),
-      run = "r:latest analysis/table1/table1.R",
-      arguments = c(c(cohort), c(ages)),
-      needs = list(glue("clean_data_{cohort}")),
-      moderately_sensitive = list(
-        table1 = glue("output/table1/table1_{cohort}.csv"),
-        table1_midpoint6 = glue("output/table1/table1_{cohort}_midpoint6.csv")
+    if (preex == "All") {
+      comment(glue("Table 1 - {cohort}"))
+    } else {
+      comment(glue("Table 1 - {cohort} - preex_{preex}"))
+    },
+    if (preex == "All") {
+      action(
+        name = glue("table1_{cohort}"),
+        run = "r:latest analysis/table1/table1.R",
+        arguments = c(c(cohort), c(ages)),
+        needs = list(glue("clean_data_{cohort}")),
+        moderately_sensitive = list(
+          table1 = glue("output/table1/table1_{cohort}.csv"),
+          table1_midpoint6 = glue(
+            "output/table1/table1_{cohort}_midpoint6.csv"
+          )
+        )
       )
-    )
+    } else {
+      action(
+        name = glue("table1_{cohort}_{preex}"),
+        run = "r:latest analysis/table1/table1.R",
+        arguments = c(c(cohort), c(ages), c(preex)),
+        needs = list(glue("clean_data_{cohort}")),
+        moderately_sensitive = list(
+          table1 = glue("output/table1/table1_{cohort}_preex_{preex}.csv"),
+          table1_midpoint6 = glue(
+            "output/table1/table1_{cohort}_preex_{preex}_midpoint6.csv"
+          )
+        )
+      )
+    }
   )
 }
 # Create function to make model input and run a model --------------------------
@@ -324,7 +345,17 @@ actions_list <- splice(
     unlist(
       lapply(
         unique(active_analyses$cohort),
-        function(x) table1(cohort = x, ages = age_str)
+        function(x) table1(cohort = x, ages = age_str, preex = TRUE)
+      ),
+      recursive = FALSE
+    )
+  ),
+
+  splice(
+    unlist(
+      lapply(
+        unique(active_analyses$cohort),
+        function(x) table1(cohort = x, ages = age_str, preex = FALSE)
       ),
       recursive = FALSE
     )
