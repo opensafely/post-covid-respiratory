@@ -36,8 +36,10 @@ prepare_model_input <- function(name) {
     active_analyses$covariate_age,
     "cov_cat_sex",
     "cov_cat_ethnicity",
+    "cov_cat_smoking",
     unlist(strsplit(active_analyses$covariate_other, split = ";")),
-    c(grep("sub_", colnames(input), value = TRUE)) #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
+    c(grep("sub_", colnames(input), value = TRUE)), #sub_cat_covidhospital, sub_cat_covidhistory, and other subgroups
+    "sup_bin_preex"
   ))]
 
   # Identify final list of variables to keep -----------------------------------
@@ -61,14 +63,15 @@ prepare_model_input <- function(name) {
     }
   }
 
-  # Remove outcomes outside of follow-up time ----------------------------------
-  print("Remove outcomes outside of follow-up time")
-
+  # Update end date for outcome and exposure by definition ---------------------
   input <- dplyr::rename(
     input,
     "out_date" = active_analyses$outcome,
     "exp_date" = active_analyses$exposure
   )
+
+  # Remove outcomes outside of follow-up time ----------------------------------
+  print("Remove outcomes outside of follow-up time")
 
   input <- input %>%
     dplyr::mutate(
@@ -96,7 +99,8 @@ prepare_model_input <- function(name) {
     dplyr::rowwise() %>%
     dplyr::mutate(
       end_date_outcome = min(end_date_outcome, out_date, na.rm = TRUE)
-    )
+    ) %>%
+    dplyr::ungroup()
 
   return(list(input = input, keep = keep))
 }

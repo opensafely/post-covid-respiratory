@@ -225,6 +225,45 @@ apply_model_function <- function(
   )
 }
 
+
+# Create function to make Table 2 ----------------------------------------------
+
+table2 <- function(cohort, subgroup) {
+  table2_names <- gsub(
+    "out_date_",
+    "",
+    unique(
+      active_analyses[
+        active_analyses$cohort ==
+          {
+            cohort
+          },
+      ]$name
+    )
+  )
+
+  table2_names <- table2_names[
+    grepl("-main", table2_names) |
+      grepl(paste0("-sub_", subgroup), table2_names)
+  ]
+
+  splice(
+    comment(glue("Table 2 - {cohort} - {subgroup}")),
+    action(
+      name = glue("table2_{cohort}_{subgroup}"),
+      run = "r:latest analysis/table2/table2.R",
+      arguments = c(cohort, subgroup),
+      needs = c(as.list(paste0("make_model_input-", table2_names))),
+      moderately_sensitive = list(
+        table2 = glue("output/table2/table2_{cohort}_{subgroup}.csv"),
+        table2_midpoint6 = glue(
+          "output/table2/table2_{cohort}_{subgroup}_midpoint6.csv"
+        )
+      )
+    )
+  )
+}
+
 # Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
@@ -321,6 +360,18 @@ actions_list <- splice(
             covariate_threshold = active_analyses$covariate_threshold[x],
             age_spline = active_analyses$age_spline[x]
           )
+      ),
+      recursive = FALSE
+    )
+  ),
+
+  ## Table 2 -------------------------------------------------------------------
+
+  splice(
+    unlist(
+      lapply(
+        cohorts,
+        function(x) table2(cohort = x, subgroup = "covidhospital")
       ),
       recursive = FALSE
     )
