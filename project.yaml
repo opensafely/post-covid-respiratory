@@ -117,38 +117,71 @@ actions:
         venn: output/dataset_clean/venn_vax.rds
         cohort_clean: output/dataset_clean/input_vax_clean.rds
 
-  ## Table 1 - prevax 
+  ## Table 1 - prevax - preex_TRUE 
 
-  table1_prevax:
-    run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111
+  table1_prevax_TRUE:
+    run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 TRUE
     needs:
     - clean_data_prevax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_prevax.csv
-        table1_midpoint6: output/table1/table1_prevax_midpoint6.csv
+        table1: output/table1/table1_prevax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_prevax_preex_TRUE_midpoint6.csv
 
-  ## Table 1 - unvax 
+  ## Table 1 - unvax - preex_TRUE 
 
-  table1_unvax:
-    run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111
+  table1_unvax_TRUE:
+    run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 TRUE
     needs:
     - clean_data_unvax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_unvax.csv
-        table1_midpoint6: output/table1/table1_unvax_midpoint6.csv
+        table1: output/table1/table1_unvax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_unvax_preex_TRUE_midpoint6.csv
 
-  ## Table 1 - vax 
+  ## Table 1 - vax - preex_TRUE 
 
-  table1_vax:
-    run: r:latest analysis/table1/table1.R vax 18;40;60;80;111
+  table1_vax_TRUE:
+    run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 TRUE
     needs:
     - clean_data_vax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_vax.csv
-        table1_midpoint6: output/table1/table1_vax_midpoint6.csv
+        table1: output/table1/table1_vax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_vax_preex_TRUE_midpoint6.csv
+
+  ## Table 1 - prevax - preex_FALSE 
+
+  table1_prevax_FALSE:
+    run: r:latest analysis/table1/table1.R prevax 18;40;60;80;111 FALSE
+    needs:
+    - clean_data_prevax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1/table1_prevax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_prevax_preex_FALSE_midpoint6.csv
+
+  ## Table 1 - unvax - preex_FALSE 
+
+  table1_unvax_FALSE:
+    run: r:latest analysis/table1/table1.R unvax 18;40;60;80;111 FALSE
+    needs:
+    - clean_data_unvax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1/table1_unvax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_unvax_preex_FALSE_midpoint6.csv
+
+  ## Table 1 - vax - preex_FALSE 
+
+  table1_vax_FALSE:
+    run: r:latest analysis/table1/table1.R vax 18;40;60;80;111 FALSE
+    needs:
+    - clean_data_vax
+    outputs:
+      moderately_sensitive:
+        table1: output/table1/table1_vax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_vax_preex_FALSE_midpoint6.csv
 
   ## Run models 
 

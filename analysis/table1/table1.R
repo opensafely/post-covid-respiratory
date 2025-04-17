@@ -31,10 +31,17 @@ print(length(args))
 if (length(args) == 0) {
   cohort <- "vax"
   age_str <- "18;40;65;85;111"
+  preex <- FALSE # "All", TRUE, or FALSE
 } else {
   cohort <- args[[1]]
   age_str <- args[[2]]
+  if (length(args) < 3) {
+    preex <- "All"
+  } else {
+    preex <- args[[3]]
+  } # allow an empty input for the preex variable
 }
+
 
 age_bounds <- as.numeric(stringr::str_split(as.vector(age_str), ";")[[1]])
 
@@ -59,6 +66,15 @@ df <- df[df$sub_bin_covidhistory == FALSE, ]
 print("Create exposure indicator")
 
 df$exposed <- !is.na(df$exp_date_covid)
+
+# Select for pre-existing conditions
+print("Select for pre-existing conditions")
+
+preex_string <- ""
+if (preex != "All") {
+  df <- df[df$sup_bin_preex == preex, ]
+  preex_string <- paste0("_preex_", preex)
+}
 
 # Define age groups ------------------------------------------------------------
 print("Define age groups")
@@ -144,7 +160,11 @@ df[nrow(df) + 1, ] <- c("Age, years", "Median (IQR)", median_iqr_age, 0)
 # Save Table 1 -----------------------------------------------------------------
 print("Save Table 1")
 
-write.csv(df, paste0(table1_dir, "table1_", cohort, ".csv"), row.names = FALSE)
+write.csv(
+  df,
+  paste0(table1_dir, "table1_", cohort, preex_string, ".csv"),
+  row.names = FALSE
+)
 
 # Perform redaction ------------------------------------------------------------
 print("Perform redaction")
@@ -200,6 +220,6 @@ print("Save rounded Table 1")
 
 write.csv(
   df,
-  paste0(table1_dir, "table1_", cohort, "_midpoint6.csv"),
+  paste0(table1_dir, "table1_", cohort, preex_string, "_midpoint6.csv"),
   row.names = FALSE
 )
