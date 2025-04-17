@@ -73,7 +73,7 @@ print("Perform subgroup-specific manipulation")
 
 print(paste0("Make model input: ", analysis))
 
-check_for_subgroup <- (grepl("main", analysis)) # =1 if subgroup is main, =0 otherwise
+check_for_subgroup <- (grepl("main", analysis)) # TRUE if subgroup is main, FALSE otherwise
 
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
