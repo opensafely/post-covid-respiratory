@@ -192,9 +192,9 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
         arguments = c(c(cohort), c(ages), c(preex)),
         needs = list(glue("clean_data_{cohort}")),
         moderately_sensitive = list(
-          table1 = glue("output/table1/table1_{cohort}_{preex}.csv"),
+          table1 = glue("output/table1/table1_{cohort}_preex_{preex}.csv"),
           table1_midpoint6 = glue(
-            "output/table1/table1_{cohort}_{preex}_midpoint6.csv"
+            "output/table1/table1_{cohort}_preex_{preex}_midpoint6.csv"
           )
         )
       )

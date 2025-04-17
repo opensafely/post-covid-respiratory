@@ -125,8 +125,8 @@ actions:
     - clean_data_prevax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_prevax_TRUE.csv
-        table1_midpoint6: output/table1/table1_prevax_TRUE_midpoint6.csv
+        table1: output/table1/table1_prevax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_prevax_preex_TRUE_midpoint6.csv
 
   ## Table 1 - unvax - preex_TRUE 
 
@@ -136,8 +136,8 @@ actions:
     - clean_data_unvax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_unvax_TRUE.csv
-        table1_midpoint6: output/table1/table1_unvax_TRUE_midpoint6.csv
+        table1: output/table1/table1_unvax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_unvax_preex_TRUE_midpoint6.csv
 
   ## Table 1 - vax - preex_TRUE 
 
@@ -147,8 +147,8 @@ actions:
     - clean_data_vax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_vax_TRUE.csv
-        table1_midpoint6: output/table1/table1_vax_TRUE_midpoint6.csv
+        table1: output/table1/table1_vax_preex_TRUE.csv
+        table1_midpoint6: output/table1/table1_vax_preex_TRUE_midpoint6.csv
 
   ## Table 1 - prevax - preex_FALSE 
 
@@ -158,8 +158,8 @@ actions:
     - clean_data_prevax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_prevax_FALSE.csv
-        table1_midpoint6: output/table1/table1_prevax_FALSE_midpoint6.csv
+        table1: output/table1/table1_prevax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_prevax_preex_FALSE_midpoint6.csv
 
   ## Table 1 - unvax - preex_FALSE 
 
@@ -169,8 +169,8 @@ actions:
     - clean_data_unvax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_unvax_FALSE.csv
-        table1_midpoint6: output/table1/table1_unvax_FALSE_midpoint6.csv
+        table1: output/table1/table1_unvax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_unvax_preex_FALSE_midpoint6.csv
 
   ## Table 1 - vax - preex_FALSE 
 
@@ -180,8 +180,8 @@ actions:
     - clean_data_vax
     outputs:
       moderately_sensitive:
-        table1: output/table1/table1_vax_FALSE.csv
-        table1_midpoint6: output/table1/table1_vax_FALSE_midpoint6.csv
+        table1: output/table1/table1_vax_preex_FALSE.csv
+        table1_midpoint6: output/table1/table1_vax_preex_FALSE_midpoint6.csv
 
   ## Run models 
 
