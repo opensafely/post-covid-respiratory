@@ -37,7 +37,7 @@ if (length(args) == 0) {
   age_str <- args[[2]]
 }
 
-if (length(args) == 2) {
+if (length(args) < 3) {
   preex <- "All"
 } else {
   preex <- args[[3]]
