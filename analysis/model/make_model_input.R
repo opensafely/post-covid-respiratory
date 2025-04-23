@@ -94,21 +94,30 @@ if (grepl("sub_covidhospital", analysis)) {
     analysis
   ))
   str_covidhosp_cens <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
-  df$end_date_outcome <- as.Date(ifelse(
-    df$sub_cat_covidhospital == str_covidhosp_cens,
-    df$exp_date - 1,
-    df$end_date_outcome
-  ))
-  df$exp_date <- as.Date(ifelse(
-    df$sub_cat_covidhospital == str_covidhosp_cens,
-    NA_Date_,
-    df$exp_date
-  ))
-  df$out_date <- as.Date(ifelse(
-    df$out_date > df$end_date_outcome,
-    NA_Date_,
-    df$out_date
-  ))
+  df$end_date_outcome <- as.Date(
+    ifelse(
+      df$sub_cat_covidhospital == str_covidhosp_cens,
+      df$exp_date - 1,
+      df$end_date_outcome
+    ),
+    origin = .Date(0)
+  )
+  df$exp_date <- as.Date(
+    ifelse(
+      df$sub_cat_covidhospital == str_covidhosp_cens,
+      NA_Date_,
+      df$exp_date
+    ),
+    origin = .Date(0)
+  )
+  df$out_date <- as.Date(
+    ifelse(
+      df$out_date > df$end_date_outcome,
+      NA_Date_,
+      df$out_date
+    ),
+    origin = .Date(0)
+  )
   df <- df[df$end_date_outcome >= df$index_date, ]
 }
 
