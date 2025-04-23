@@ -66,6 +66,8 @@ if (grepl("preex", name)) {
     analysis
   )
   df <- pmi$input[pmi$input$sup_bin_preex == preex, ]
+} else {
+  df <- pmi$input
 }
 
 ## Perform subgroup-specific manipulation
@@ -78,9 +80,9 @@ check_for_subgroup <- (grepl("main", analysis)) # TRUE if subgroup is main, FALS
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
   check_for_subgroup <- TRUE
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
+  df <- df[df$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
+  df <- df[df$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
 }
 
 # Make model input: sub_covidhospital ----------------------------------------
