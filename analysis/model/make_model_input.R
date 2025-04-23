@@ -192,4 +192,3 @@ print(paste0(
   name,
   ".rds"
 ))
-rm(df)
