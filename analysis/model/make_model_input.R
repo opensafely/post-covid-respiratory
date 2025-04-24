@@ -31,8 +31,8 @@ analysis <- gsub(
   name
 )
 
-# Define make_model_input output folder ---------------------------------------
-print("Creating output/table1 output folder")
+# Define model output folder ---------------------------------------
+print("Creating output/model output folder")
 
 # setting up the sub directory
 model_dir <- "output/model/"
