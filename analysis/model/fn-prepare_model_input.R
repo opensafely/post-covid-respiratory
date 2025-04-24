@@ -75,26 +75,20 @@ prepare_model_input <- function(name) {
 
   input <- input %>%
     dplyr::mutate(
-      out_date = as.Date(
-        ifelse(
-          out_date > end_date_outcome | out_date < index_date,
-          NA,
-          out_date
-        ),
-        origin = "1970-01-01"
+      out_date = replace(
+        out_date,
+        which(out_date > end_date_outcome | out_date < index_date),
+        NA
       ),
-      exp_date = as.Date(
-        ifelse(
-          exp_date > end_date_exposure | exp_date < index_date,
-          NA,
-          exp_date
-        ),
-        origin = "1970-01-01"
+      exp_date = replace(
+        exp_date,
+        which(exp_date > end_date_exposure | exp_date < index_date),
+        NA
       ),
-      sub_cat_covidhospital = ifelse(
-        is.na(exp_date),
-        "no_infection",
-        as.character(sub_cat_covidhospital)
+      sub_cat_covidhospital = replace(
+        sub_cat_covidhospital,
+        which(is.na(exp_date)),
+        "no_infection"
       )
     )
 

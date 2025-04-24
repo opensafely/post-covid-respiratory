@@ -20,7 +20,7 @@ print("Specify arguments")
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  name <- "cohort_vax-sub_covidhospital_FALSE_preex_FALSE-copd"
+  name <- "cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma"
 } else {
   name <- args[[1]]
 }
@@ -66,6 +66,8 @@ if (grepl("preex", name)) {
     analysis
   )
   df <- pmi$input[pmi$input$sup_bin_preex == preex, ]
+} else {
+  df <- pmi$input
 }
 
 ## Perform subgroup-specific manipulation
@@ -78,9 +80,9 @@ check_for_subgroup <- (grepl("main", analysis)) # TRUE if subgroup is main, FALS
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
   check_for_subgroup <- TRUE
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
+  df <- df[df$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
+  df <- df[df$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
 }
 
 # Make model input: sub_covidhospital ----------------------------------------
@@ -93,24 +95,33 @@ if (grepl("sub_covidhospital", analysis)) {
   ))
   str_covidhosp_cens <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
   df <- df %>%
-    dplyr::mutate(
-      end_date_outcome = replace(
-        end_date_outcome,
-        which(sub_cat_covidhospital == str_covidhosp_cens),
-        exp_date - 1
+  dplyr::mutate(
+    end_date_outcome = as.Date(
+      ifelse(
+        sub_cat_covidhospital == str_covidhosp_cens,
+        exp_date - 1,
+        end_date_outcome
       ),
-      exp_date = replace(
-        exp_date,
-        which(sub_cat_covidhospital == str_covidhosp_cens),
-        NA
+      origin = .Date(0)
+    ),
+    exp_date = as.Date(
+      ifelse(
+        sub_cat_covidhospital == str_covidhosp_cens,
+        NA_Date_,
+        exp_date
       ),
-      out_date = replace(
-        out_date,
-        which(out_date > end_date_outcome),
-        NA
-      )
+      origin = .Date(0)
+    ),
+    out_date = as.Date(
+      ifelse(
+        out_date > end_date_outcome,
+        NA_Date_,
+        out_date
+      ),
+      origin = .Date(0)
     )
-  df <- df[df$end_date_outcome >= df$index_date, ]
+  ) %>%
+  dplyr::filter(end_date_outcome >= index_date)
 }
 
 # Make model input: sub_sex_* ------------------------------------------------
@@ -195,4 +206,3 @@ print(paste0(
   name,
   ".rds"
 ))
-rm(df)
