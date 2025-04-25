@@ -41,9 +41,9 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
         -   [`make_model_input.R`](analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis.
         -   [`fn-prepare_model_input.R`](analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R` which handles the interaction with `active_anlayses.rds`.
         -   [`cox-ipw`](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
-        
-    -   Making absolute excess risk (AER) input scripts are in the [`aer](./analysis/aer/) directory:
-        - This directory contains a single script: [make_aer_input.R](analysis/aer/make_aer_input.R). This script works with the output of [`make_model_input`](analysis/model/make_model_input.R) to generate summary statistics required for AER estimation for each analysis across all combinations of age and sex. 
+
+    -   Making absolute excess risk (AER) input scripts are in the [`aer`](./analysis/aer/) directory:
+        - This directory contains a single script: [`make_aer_input.R`](analysis/aer/make_aer_input.R). This script works with the output of [`make_model_input`](analysis/model/make_model_input.R) to generate summary statistics required for AER estimation for each analysis across all combinations of age and sex. 
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
