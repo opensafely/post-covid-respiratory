@@ -192,7 +192,9 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
         arguments = c(c(cohort), c(ages), c(preex)),
         needs = list(glue("generate_input_{cohort}_clean")),
         moderately_sensitive = list(
-          table1 = glue("output/table1/table1-cohort_{cohort}-preex_{preex}.csv"),
+          table1 = glue(
+            "output/table1/table1-cohort_{cohort}-preex_{preex}.csv"
+          ),
           table1_midpoint6 = glue(
             "output/table1/table1-cohort_{cohort}-preex_{preex}-midpoint6.csv"
           )
@@ -276,7 +278,9 @@ table2 <- function(cohort, subgroup) {
       arguments = c(cohort, subgroup),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
-        table2 = glue("output/table2/table2-cohort_{cohort}-sub_{subgroup}.csv"),
+        table2 = glue(
+          "output/table2/table2-cohort_{cohort}-sub_{subgroup}.csv"
+        ),
         table2_midpoint6 = glue(
           "output/table2/table2-cohort_{cohort}-sub_{subgroup}-midpoint6.csv"
         )
@@ -415,11 +419,12 @@ actions_list <- splice(
     run = "r:latest analysis/model/make_model_output.R",
     needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
     moderately_sensitive = list(
-      model_output = glue("output/model/model_output.csv"),
-      model_output_midpoint6 = glue("output/model/model_output_midpoint6.csv")
+      model_output = glue("output/make_output/model_output.csv"),
+      model_output_midpoint6 = glue(
+        "output/make_output/model_output_midpoint6.csv"
+      )
     )
   )
-
 )
 
 # Combine actions into project list --------------------------------------------
