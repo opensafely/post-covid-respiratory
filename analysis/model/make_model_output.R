@@ -84,6 +84,8 @@ df <- merge(
 
 df$outcome <- gsub("out_date_", "", df$outcome)
 
+df$source <- "R"
+
 # Save model output ------------------------------------------------------------
 print('Save model output')
 
@@ -106,7 +108,8 @@ df <- df[, c(
   "person_time_total",
   "outcome_time_median",
   "strata_warning",
-  "surv_formula"
+  "surv_formula",
+  "source"
 )]
 
 readr::write_csv(df, paste0(makeout_dir, "model_output.csv"))
