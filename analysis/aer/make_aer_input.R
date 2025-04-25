@@ -5,7 +5,7 @@ library(readr)
 library(dplyr)
 library(magrittr)
 
-# Define make_aer_input output folder ---------------------------------------------------------
+# Define make_aer_input output folder ------------------------------------------
 print("Creating output/aer output folder")
 
 aer_dir <- "output/aer/"
@@ -36,6 +36,16 @@ if (length(args) == 0) {
 print('Load active analyses')
 
 active_analyses <- readr::read_rds("lib/active_analyses.rds")
+
+# Extracting age boundaries from active analyses -------------------------------
+print('Extracting age boundaries')
+
+active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
+age_grp <- unique(sub(
+    ".*_age_([0-9]+)_([0-9]+).*",
+    "\\1_\\2",
+    active_age
+))
 
 # Format active analyses -------------------------------------------------------
 print('Format active analyses')
@@ -85,7 +95,7 @@ for (i in 1:nrow(active_analyses)) {
     )]
 
     for (sex in c("Female", "Male")) {
-        for (age in c("18_39", "40_59", "60_79", "80_110")) {
+        for (age in age_grp) {
             ## Identify AER groupings ------------------------------------------------
             print(paste0(
                 "Identify AER groupings for sex: ",
@@ -105,27 +115,6 @@ for (i in 1:nrow(active_analyses)) {
                     model_input$cov_num_age >= as.numeric(min_age) &
                     model_input$cov_num_age < as.numeric(max_age),
             ]
-
-            # ## Remove exposures and outcomes outside follow-up ----------------------- ! we have done this in make_model_input
-            # print("Remove exposures and outcomes outside follow-up")
-
-            # df <- df %>%
-            #     dplyr::mutate(
-            #         exposure = replace(
-            #             exp_date,
-            #             which(
-            #                 exp_date > end_date_exposure | exp_date < index_date
-            #             ),
-            #             NA
-            #         ),
-            #         outcome = replace(
-            #             out_date,
-            #             which(
-            #                 out_date > end_date_outcome | out_date < index_date
-            #             ),
-            #             NA
-            #         )
-            #     )
 
             ## Make exposed subset ---------------------------------------------------
             print('Make exposed subset')
