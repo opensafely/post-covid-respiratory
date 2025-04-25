@@ -50,6 +50,22 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
 -   The [`project.yaml`](./project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project_actions.R`](analysis/create_project_actions.R) script which generates all the actions.
 
 -   Descriptive and Model outputs, including figures and tables are in the [`released_outputs`](./release_outputs) directory.
+  
+## Output
+
+### aer_input-\*.csv
+
+| Variable                     | Description                                                                    |
+|------------------------------|--------------------------------------------------------------------------------|
+|     aer_sex                  |      sex subgroup under consideration                                          |
+|     aer_age                  |      age subgroup under consideration                                          |
+|     analysis                 |      string to identify whether this is the   ‘main’ analysis or a subgroup    |
+|     cohort                   |      cohort used for the analysis                                              |
+|     outcome                  |      outcome used for the analysis                                             |
+|     unexposed_person_days    |      unexposed person days in the age/sex   grouping                           |
+|     unexposed_events         |      number of events in   unexposed people in the age/sex grouping            |
+|     total_exposed            |      total number of   people with the exposure in the age/sex grouping        |
+|     sample_size              |      total number of   people in the age/sex grouping                          |
 
 # About the OpenSAFELY framework
 
