@@ -201,6 +201,7 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
     }
   )
 }
+
 # Create function to make model input and run a model --------------------------
 
 apply_model_function <- function(
@@ -245,7 +246,6 @@ apply_model_function <- function(
     )
   )
 }
-
 
 # Create function to make Table 2 ----------------------------------------------
 
@@ -406,7 +406,20 @@ actions_list <- splice(
       ),
       recursive = FALSE
     )
+  ),
+
+  ## Model output --------------------------------------------------------------
+
+  action(
+    name = "make_model_output",
+    run = "r:latest analysis/model/make_model_output.R",
+    needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
+    moderately_sensitive = list(
+      model_output = glue("output/model/model_output.csv"),
+      model_output_midpoint6 = glue("output/model/model_output_midpoint6.csv")
+    )
   )
+
 )
 
 # Combine actions into project list --------------------------------------------
