@@ -13,6 +13,7 @@ print("Creating output/model output folder")
 
 # setting up the sub directory
 makeout_dir <- "output/make_output/"
+model_dir <- "output/model/"
 
 # check if sub directory exists, create if not
 fs::dir_create(here::here(makeout_dir))
@@ -25,7 +26,7 @@ active_analyses <- readr::read_rds("lib/active_analyses.rds")
 # List available model outputs -------------------------------------------------
 print('List available model outputs')
 
-files_R <- list.files(makeout_dir, pattern = "model_output-")
+files_R <- list.files(model_dir, pattern = "model_output-")
 
 # Combine R model output -------------------------------------------------------
 print('Combine R model output')
@@ -34,7 +35,7 @@ df <- NULL
 
 for (i in files_R) {
   ## Load model output
-  tmp <- readr::read_csv(paste0(makeout_dir, i))
+  tmp <- readr::read_csv(paste0(model_dir, i))
 
   ## Handle errors
   if (colnames(tmp)[1] == "error") {
