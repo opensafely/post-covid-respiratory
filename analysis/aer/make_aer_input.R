@@ -1,6 +1,3 @@
-#Harry said: 1. update folders 2.  
-
-
 # Load libraries ---------------------------------------------------------------
 print('Load libraries')
 
@@ -8,16 +5,11 @@ library(readr)
 library(dplyr)
 library(magrittr)
 
-# Specify command arguments ----------------------------------------------------
-print('Specify command arguments')
+# Define make_aer_input output folder ---------------------------------------------------------
+print("Creating output/aer output folder")
 
-args <- commandArgs(trailingOnly = TRUE)
-
-if (length(args) == 0) {
-    analysis <- "day0_main"
-} else {
-    analysis <- args[[1]]
-}
+aer_dir <- "output/aer/"
+fs::dir_create(here::here(aer_dir))
 
 # Specify redaction threshold --------------------------------------------------
 print('Specify redaction threshold')
@@ -29,20 +21,27 @@ print('Source common functions')
 
 source("analysis/utility.R")
 
-# Load active analyses --------------------------------------------------------- *
+# Specify command arguments ----------------------------------------------------
+print('Specify arguments')
+
+args <- commandArgs(trailingOnly = TRUE)
+
+if (length(args) == 0) {
+    analysis <- "main"
+} else {
+    analysis <- args[[1]]
+}
+
+# Load active analyses ---------------------------------------------------------
 print('Load active analyses')
 
 active_analyses <- readr::read_rds("lib/active_analyses.rds")
-active_analyses <- active_analyses[
-    active_analyses$cohort %in% c("prevax_extf", "unvax_extf", "vax"),   # remove
-]
 
 # Format active analyses -------------------------------------------------------
 print('Format active analyses')
 
 active_analyses <- active_analyses[
-    active_analyses$analysis == analysis,
-    c("cohort", "outcome", "name")
+    grepl(analysis, active_analyses$analysis),
 ]
 
 active_analyses$outcome <- gsub("out_date_", "", active_analyses$outcome)
@@ -70,12 +69,8 @@ for (i in 1:nrow(active_analyses)) {
     print(paste0("Load data for ", active_analyses$name[i]))
 
     model_input <- read_rds(paste0(
-        "output/model_input-cohort_",
-        active_analyses$cohort[i],
-        "-",
-        analysis,
-        "-",
-        active_analyses$outcome[i],
+        "output/model/model_input-",
+        active_analyses$name[i],
         ".rds"
     ))
     model_input <- model_input[, c(
@@ -85,12 +80,12 @@ for (i in 1:nrow(active_analyses)) {
         "out_date",
         "end_date_exposure",
         "end_date_outcome",
-        "cov_cat_sex", #-----might fail for sub-
-        "cov_num_age" 
+        "cov_cat_sex",
+        "cov_num_age"
     )]
 
     for (sex in c("Female", "Male")) {
-        for (age in c("18_39", "40_59", "60_79", "80_110")) {     #--------------------refer to table 1 (get useful codes)
+        for (age in c("18_39", "40_59", "60_79", "80_110")) {
             ## Identify AER groupings ------------------------------------------------
             print(paste0(
                 "Identify AER groupings for sex: ",
@@ -106,45 +101,44 @@ for (i in 1:nrow(active_analyses)) {
             print("Filter data")
 
             df <- model_input[
-                model_input$cov_cat_sex == sex &          #----------fail for sub-sex
+                model_input$cov_cat_sex == sex &
                     model_input$cov_num_age >= as.numeric(min_age) &
-                    model_input$cov_num_age <
-                        ifelse(max_age == 110, max_age, max_age + 1),
+                    model_input$cov_num_age < as.numeric(max_age),
             ]
 
-            ## Remove exposures and outcomes outside follow-up -----------------------
-            print("Remove exposures and outcomes outside follow-up") #--------------------duplication
+            # ## Remove exposures and outcomes outside follow-up ----------------------- ! we have done this in make_model_input
+            # print("Remove exposures and outcomes outside follow-up")
 
-            df <- df %>%
-                dplyr::mutate(
-                    exposure = replace(
-                        exp_date,
-                        which(
-                            exp_date > end_date_exposure | exp_date < index_date
-                        ),
-                        NA
-                    ),
-                    outcome = replace(
-                        out_date,
-                        which(
-                            out_date > end_date_outcome | out_date < index_date
-                        ),
-                        NA
-                    )
-                )
+            # df <- df %>%
+            #     dplyr::mutate(
+            #         exposure = replace(
+            #             exp_date,
+            #             which(
+            #                 exp_date > end_date_exposure | exp_date < index_date
+            #             ),
+            #             NA
+            #         ),
+            #         outcome = replace(
+            #             out_date,
+            #             which(
+            #                 out_date > end_date_outcome | out_date < index_date
+            #             ),
+            #             NA
+            #         )
+            #     )
 
             ## Make exposed subset ---------------------------------------------------
             print('Make exposed subset')
 
             exposed <- df[
                 !is.na(df$exp_date),
-                c("patient_id", "exp_date", "out_date", "end_date_outcome")
+                c("patient_id", "exp_date", "end_date_outcome")
             ]
 
             exposed <- exposed %>%
                 dplyr::mutate(
                     fup_start = exp_date,
-                    fup_end = min(end_date_outcome, out_date, na.rm = TRUE) #---------it can be called end_date_outcome now
+                    fup_end = end_date_outcome
                 )
 
             exposed <- exposed[exposed$fup_start <= exposed$fup_end, ]
@@ -171,7 +165,6 @@ for (i in 1:nrow(active_analyses)) {
                     fup_end = min(
                         exp_date - 1,
                         end_date_outcome,
-                        out_date,
                         na.rm = TRUE
                     ),
                     out_date = replace(out_date, which(out_date > fup_end), NA)
@@ -190,7 +183,7 @@ for (i in 1:nrow(active_analyses)) {
             input[nrow(input) + 1, ] <- c(
                 aer_sex = sex,
                 aer_age = age,
-                analysis = analysis,
+                analysis = active_analyses$analysis[i],
                 cohort = active_analyses$cohort[i],
                 outcome = active_analyses$outcome[i],
                 unexposed_person_days = sum(unexposed$person_days),
@@ -209,7 +202,7 @@ print('Save AER input')
 
 write.csv(
     input,
-    paste0("output/aer_input-", analysis, ".csv"),
+    paste0(aer_dir, "aer_input-", analysis, ".csv"),
     row.names = FALSE
 )
 
@@ -235,6 +228,6 @@ print('Save rounded AER input')
 
 write.csv(
     input,
-    paste0("output/aer_input-", analysis, "-midpoint6.csv"),
+    paste0(aer_dir, "aer_input-", analysis, "-midpoint6.csv"),
     row.names = FALSE
 )
