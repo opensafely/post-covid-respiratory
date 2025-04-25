@@ -88,8 +88,6 @@ dataset.index_vax = maximum_of(
     date.fromisoformat(delta_date)
 )
 
-# dataset.index_vax = Series(date)
-
 cens_date_dereg_vax = (
     practice_registrations.where(practice_registrations.end_date.is_not_null())
     .where(practice_registrations.end_date.is_on_or_after(dataset.index_vax))

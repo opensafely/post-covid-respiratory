@@ -5,6 +5,7 @@ library(magrittr)
 library(data.table)
 library(stringr)
 library(lubridate)
+
 # Source functions -------------------------------------------------------------
 print("Source functions")
 
@@ -19,14 +20,7 @@ print("Specify arguments")
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  name <- "cohort_prevax-main_preex_TRUE-pf" #Testing main loop + pre-existing as true
-  # name <- "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma" # covidhospital TRUE test
-  # name <- "cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-asthma" # covidhospital FALSE test
-  # name <- "cohort_vax-sub_covidhistory_preex_FALSE-pf" # covidhistory test
-  # name <- "cohort_vax-sub_sex_female_preex_FALSE-asthma" # Testing sex group
-  # name <- "cohort_vax-sub_age_40_59_preex_FALSE-pf" # Testing age group
-  name <- "cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd" # Check that the "asian" ethnicity is processing correctly
-  name <- "cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia" # Check that the smoking subgroup is processing correctly
+  name <- "cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma"
 } else {
   name <- args[[1]]
 }
@@ -72,6 +66,8 @@ if (grepl("preex", name)) {
     analysis
   )
   df <- pmi$input[pmi$input$sup_bin_preex == preex, ]
+} else {
+  df <- pmi$input
 }
 
 ## Perform subgroup-specific manipulation
@@ -79,19 +75,19 @@ print("Perform subgroup-specific manipulation")
 
 print(paste0("Make model input: ", analysis))
 
-check_for_subgroup <- (grepl("main", analysis)) # =1 if subgroup is main, =0 otherwise
+check_for_subgroup <- (grepl("main", analysis)) # TRUE if subgroup is main, FALSE otherwise
 
 # Make model input: main/sub_covidhistory ------------------------------------
 if (grepl("sub_covidhistory", analysis)) {
-  check_for_subgroup <- 1
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
+  check_for_subgroup <- TRUE
+  df <- df[df$sub_bin_covidhistory == TRUE, ] # Only selecting for this subgroup
 } else {
-  df <- pmi$input[pmi$input$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
+  df <- df[df$sub_bin_covidhistory == FALSE, ] # all other subgroups (inc. Main)
 }
 
 # Make model input: sub_covidhospital ----------------------------------------
 if (grepl("sub_covidhospital", analysis)) {
-  check_for_subgroup <- 1
+  check_for_subgroup <- TRUE
   covidhosp <- as.logical(gsub(
     ".*sub_covidhospital_",
     "",
@@ -99,29 +95,38 @@ if (grepl("sub_covidhospital", analysis)) {
   ))
   str_covidhosp_cens <- ifelse(covidhosp, "non_hospitalised", "hospitalised")
   df <- df %>%
-    dplyr::mutate(
-      end_date_outcome = replace(
-        end_date_outcome,
-        which(sub_cat_covidhospital == str_covidhosp_cens),
-        exp_date - 1
+  dplyr::mutate(
+    end_date_outcome = as.Date(
+      ifelse(
+        sub_cat_covidhospital == str_covidhosp_cens,
+        exp_date - 1,
+        end_date_outcome
       ),
-      exp_date = replace(
-        exp_date,
-        which(sub_cat_covidhospital == str_covidhosp_cens),
-        NA
+      origin = .Date(0)
+    ),
+    exp_date = as.Date(
+      ifelse(
+        sub_cat_covidhospital == str_covidhosp_cens,
+        NA_Date_,
+        exp_date
       ),
-      out_date = replace(
-        out_date,
-        which(out_date > end_date_outcome),
-        NA
-      )
+      origin = .Date(0)
+    ),
+    out_date = as.Date(
+      ifelse(
+        out_date > end_date_outcome,
+        NA_Date_,
+        out_date
+      ),
+      origin = .Date(0)
     )
-  df <- df[df$end_date_outcome >= df$index_date, ]
+  ) %>%
+  dplyr::filter(end_date_outcome >= index_date)
 }
 
 # Make model input: sub_sex_* ------------------------------------------------
 if (grepl("sub_sex_", analysis)) {
-  check_for_subgroup <- 1
+  check_for_subgroup <- TRUE
   sex <- str_to_title(gsub(
     ".*sub_sex_",
     "",
@@ -132,7 +137,7 @@ if (grepl("sub_sex_", analysis)) {
 
 # Make model input: sub_age_* ------------------------------------------------
 if (grepl("sub_age_", analysis) == TRUE) {
-  check_for_subgroup <- 1
+  check_for_subgroup <- TRUE
   min_age <- as.numeric(strsplit(
     gsub(".*sub_age_", "", analysis),
     split = "_"
@@ -149,7 +154,7 @@ if (grepl("sub_age_", analysis) == TRUE) {
 
 # Make model input: sub_ethnicity_* ------------------------------------------
 if (grepl("sub_ethnicity_", analysis) == TRUE) {
-  check_for_subgroup <- 1
+  check_for_subgroup <- TRUE
   ethnicity <- str_to_title(gsub(
     "_",
     " ",
@@ -164,7 +169,7 @@ if (grepl("sub_ethnicity_", analysis) == TRUE) {
 
 # Make model input: sub_smoking_* ------------------------------------------
 if (grepl("sub_smoking_", analysis)) {
-  check_for_subgroup <- 1
+  check_for_subgroup <- TRUE
   smoking <- paste(
     str_to_title(gsub(
       ".*sub_smoking_",
@@ -177,7 +182,7 @@ if (grepl("sub_smoking_", analysis)) {
 }
 
 # Stop code if no subgroup/main analysis was correctly selected
-if (!check_for_subgroup) {
+if (isFALSE(check_for_subgroup)) {
   stop(paste0("Input: ", name, " did not undergo any subgroup filtering!"))
 }
 
@@ -201,4 +206,3 @@ print(paste0(
   name,
   ".rds"
 ))
-rm(df)

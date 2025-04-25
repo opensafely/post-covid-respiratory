@@ -16,11 +16,11 @@ prepare_model_input <- function(name) {
   # Load data ------------------------------------------------------------------
   print(paste0("Load data for ", active_analyses$name))
 
-  input <- dplyr::as_tibble(readr::read_rds(paste0(
+  input <- readr::read_rds(paste0(
     "output/dataset_clean/input_",
     active_analyses$cohort,
     "_clean.rds"
-  )))
+  ))
 
   # Restrict to required variables for dataset preparation ---------------------
   print("Restrict to required variables for dataset preparation")

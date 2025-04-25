@@ -69,7 +69,7 @@ input_preprocess <- preprocess(cohort, describe)
 
 saveRDS(
   input_preprocess$venn,
-  file = paste0(dataclean_dir, "venn_", cohort, ".rds"),
+  file = paste0(dataclean_dir, "venn-cohort_", cohort, ".rds"),
   compress = TRUE
 )
 message("Venn diagram data saved successfully")
@@ -122,7 +122,7 @@ flow$removed <- dplyr::lag(flow$N, default = dplyr::first(flow$N)) - flow$N
 
 write.csv(
   flow,
-  file = paste0(dataclean_dir, "flow_", cohort, ".csv"),
+  file = paste0(dataclean_dir, "flow-cohort_", cohort, ".csv"),
   row.names = FALSE
 )
 
@@ -145,7 +145,7 @@ print('Saving rounded flow data after Inclusion criteria')
 
 write.csv(
   flow,
-  file = paste0(dataclean_dir, "flow_", cohort, "_midpoint6.csv"),
+  file = paste0(dataclean_dir, "flow-cohort_", cohort, "-midpoint6.csv"),
   row.names = FALSE
 )
 
