@@ -11,11 +11,6 @@ print("Creating output/table2 output folder")
 table2_dir <- "output/table2/"
 fs::dir_create(here::here(table2_dir))
 
-# Specify redaction threshold --------------------------------------------------
-print('Specify redaction threshold')
-
-threshold <- 6
-
 # Source common functions ------------------------------------------------------
 print('Source common functions')
 
@@ -208,7 +203,7 @@ new_names <- paste0(cols, "_midpoint6")
 
 table2[new_names] <- lapply(
   table2[cols],
-  function(x) roundmid_any(as.numeric(x), threshold)
+  function(x) roundmid_any(x)
 )
 
 table2$total_events_midpoint6_derived <- table2$unexposed_events_midpoint6 +
@@ -236,6 +231,13 @@ print('Save rounded Table 2')
 
 write.csv(
   table2,
-  paste0(table2_dir, "table2-cohort_", cohort, "-sub_", subgroup, "-midpoint6.csv"),
+  paste0(
+    table2_dir,
+    "table2-cohort_",
+    cohort,
+    "-sub_",
+    subgroup,
+    "-midpoint6.csv"
+  ),
   row.names = FALSE
 )

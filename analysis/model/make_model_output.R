@@ -3,11 +3,6 @@ print('Load packages')
 
 library(magrittr)
 
-# Specify redaction threshold --------------------------------------------------
-print('Specify redaction threshold')
-
-threshold <- 6
-
 # Source common functions ------------------------------------------------------
 print('Source common functions')
 
@@ -119,9 +114,9 @@ readr::write_csv(df, paste0(model_dir, "model_output.csv"))
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
 
-df$N_total_midpoint6 <- roundmid_any(as.numeric(df$N_total), to = threshold)
-df$N_exposed_midpoint6 <- roundmid_any(as.numeric(df$N_exposed), to = threshold)
-df$N_events_midpoint6 <- roundmid_any(as.numeric(df$N_events), to = threshold)
+df$N_total_midpoint6 <- roundmid_any(df$N_total)
+df$N_exposed_midpoint6 <- roundmid_any(df$N_exposed)
+df$N_events_midpoint6 <- roundmid_any(df$N_events)
 df[, c("N_total", "N_exposed", "N_events")] <- NULL
 
 # Save model output ------------------------------------------------------------
