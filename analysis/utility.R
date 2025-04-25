@@ -3,7 +3,7 @@
 roundmid_any <- function(x, to = 6) {
   # centers on (integer) midpoint of the rounding points
   x <- as.numeric(x)
-  return(ceiling(x / to) * to - (floor(to / 2) * (x != 0)))
+  ceiling(x / to) * to - (floor(to / 2) * (x != 0))
 }
 
 # Function to make display numbers ----
