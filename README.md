@@ -38,15 +38,74 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
         -   This directory contains a single script:  [`table1.R`](analysis/table1/table1.R). This script works with the output of [`dataset_clean`](./analysis/dataset_clean/) to describe the patient characteristics.
 
     -   Modelling scripts are in the [`model`](./analysis/model/) directory:
-        -   [`make_model_input.R`](analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis.
-        -   [`fn-prepare_model_input.R`](analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R` which handles the interaction with `active_anlayses.rds`.
+        -   [`make_model_input.R`](analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis. Combines each outcome and subgroup in one formatted .rds file.
+        -   [`fn-prepare_model_input.R`](analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R` which handles the interaction with `active_analyses.rds`.
         -   [`cox-ipw`](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
+        -   [`make_model_output.R`](analysis/model/make_model_output.R) combines all the Cox results in one formatted .csv file.
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
 -   The [`project.yaml`](./project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project_actions.R`](analysis/create_project_actions.R) script which generates all the actions.
 
 -   Descriptive and Model outputs, including figures and tables are in the [`released_outputs`](./release_outputs) directory.
+
+## Outputs
+
+Outputs follow OpenSAFELY naming conventions related to suppression rules by adding the suffix "_midpoint6". The suffix "_midpoint6_derived" means that the value(s) are derived from the midpoint6 values. Detailed information regarding naming conventions can be found [here](https://docs.opensafely.org/releasing-files/#naming-convention-for-midpoint-6-rounding).
+
+### output/table1/table1_\*.csv
+
+| Variable                          | Description                                                      |
+|-----------------------------------|------------------------------------------------------------------|
+|     Characteristic                | patient characteristic under consideration                       |
+|     Subcharacteristic             | patient sub characteristic under consideration                   |
+|     N \[midpoint6 derived\]         | number of people with characteristic                             |
+|     (%) \[midpoint6 derived\]       | % of total people with characteristic                            |
+|     COVID-19 \[diagnoses midpoint6\]| number of people with characteristic and COVID-19                |
+
+### output/table2/table2_\*.csv
+
+| Variable                             | Description                                                             |
+|--------------------------------------|-------------------------------------------------------------------------|
+|     name                             | unique identifier for analysis                                          |
+|     cohort                           | cohort used for the analysis                                            |
+|     exposure                         | exposure used for the analysis                                          |
+|     outcome                          | outcome used for the analysis                                           |
+|     analysis                         | string to identify whether this is the ‘main’ analysis or a subgroup    |
+|     unexposed_person_days            | number of person days before or without exposure in the analysis        |
+|     unexposed_events_midpoint6       | number of unexposed people with the outcome in the analysis             |   
+|     exposed_person_days              | number of person days after exposure in the analysis                    |
+|     exposed_events_midpoint6         | number of exposed people with the outcome in the analysis               |  
+|     total_person_days                | number of person days in the analysis                                   |
+|     total_events_midpoint6_derived   | number of people with the outcome in the analysis                       |
+|     day0_events_midpoint6            | number of people with the exposure and outcome on the same day          |
+|     total_exposed_midpoint6          | number of people with the exposure in the analysis                      |
+|     sample_size_midpoint6            | number of people in the analysis                                        |
+
+### output/make_output/model_output.csv
+
+| Variable                   | Description                                                                   |
+|----------------------------|-------------------------------------------------------------------------------|
+|     name                   | unique identifier for analysis                                                |
+|     cohort                 | cohort used for the analysis                                                  |
+|     outcome                | outcome used for the analysis                                                 |
+|     analysis               | string to identify whether this is the ‘main’ analysis or a subgroup          |
+|     error                  | captured error message if analysis did not run                                |
+|     model                  | string to identify whether the model adjustment                               |
+|     term                   | string to identify the term in the analysis                                   |
+|     lnhr                   | log hazard ratio for the analysis                                             |
+|     se_lnhr                | standard error for the log hazard ratio for the analysis                      |
+|     hr                     | hazard ratio for the analysis                                                 |
+|     conf_low               | lower confidence limit for the analysis                                       |
+|     conf_high              | higher confidence limit for the analysis                                      |
+|     N_total_midpoint6      | total number of people in the analysis                                        |
+|     N_exposed_midpoint6    | total number of people with the exposure in the analysis                      |
+|     N_events_midpoint6     | total number of people with the outcome following exposure in the analysis    |
+|     person_time_total      | total person time included in the analysis                                    |
+|     outcome_time_median    | median time to outcome following exposure                                     |
+|     strata_warning         | string to identify strata variables that may cause model faults               |
+|     surv_formula           | survival formula for the analysis                                             |
+|     source                 | language used for cox calculation                                             |
 
 # About the OpenSAFELY framework
 
