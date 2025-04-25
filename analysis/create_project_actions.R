@@ -417,7 +417,7 @@ actions_list <- splice(
     run = "r:latest analysis/make_aer_input.R main",
     needs = as.list(paste0("make_model_input-",active_analyses[grepl("-main",active_analyses$name),]$name)),
     moderately_sensitive = list(
-      aer_input = glue("output/aer_input-main.csv"),
+      aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer_input-main-midpoint6.csv")
     )
   )
