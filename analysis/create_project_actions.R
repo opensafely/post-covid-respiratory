@@ -424,6 +424,20 @@ actions_list <- splice(
         "output/make_output/model_output_midpoint6.csv"
       )
     )
+  ),
+      
+  ## Make absolute excess risk (AER) input
+
+  comment("Make absolute excess risk (AER) input"),
+
+  action(
+    name = "make_aer_input",
+    run = "r:latest analysis/aer/make_aer_input.R main",
+    needs = as.list(paste0("make_model_input-",active_analyses[grepl("-main",active_analyses$name),]$name)),
+    moderately_sensitive = list(
+      aer_input = glue("output/aer/aer_input-main.csv"),
+      aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
+    )
   )
 )
 
