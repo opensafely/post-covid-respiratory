@@ -416,7 +416,7 @@ actions_list <- splice(
 
   action(
     name = "make_model_output",
-    run = "r:latest analysis/model/make_model_output.R",
+    run = "r:latest analysis/make_output/make_model_output.R",
     needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
     moderately_sensitive = list(
       model_output = glue("output/make_output/model_output.csv"),

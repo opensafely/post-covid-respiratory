@@ -7266,7 +7266,7 @@ actions:
         table2_midpoint6: output/table2/table2-cohort_vax-sub_covidhospital-midpoint6.csv
 
   make_model_output:
-    run: r:latest analysis/model/make_model_output.R
+    run: r:latest analysis/make_output/make_model_output.R
     needs:
     - cox_ipw-cohort_prevax-main_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-main_preex_FALSE-copd
