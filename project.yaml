@@ -7588,6 +7588,6 @@ actions:
     - cox_ipw-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/model/model_output.csv
-        model_output_midpoint6: output/model/model_output_midpoint6.csv
+        model_output: output/make_output/model_output.csv
+        model_output_midpoint6: output/make_output/model_output_midpoint6.csv
 
