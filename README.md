@@ -42,11 +42,30 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
         -   [`fn-prepare_model_input.R`](analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R` which handles the interaction with `active_anlayses.rds`.
         -   [`cox-ipw`](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of `make_model_input.R` to fit a Cox model to the data.
 
+    -   Absolute excess risk (AER) input scripts are in the [`aer`](./analysis/aer/) directory:
+        - This directory contains a single script: [`make_aer_input.R`](analysis/aer/make_aer_input.R). This script generates summary statistics by age and sex required for AER estimation for each outcome (using the model input files for the main analysis generated from [`make_model_input`](analysis/model/make_model_input.R)).
+
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
 -   The [`project.yaml`](./project.yaml) defines run-order and dependencies for all the analysis scripts. This file should not be edited directly. To make changes to the yaml, edit and run the [`create_project_actions.R`](analysis/create_project_actions.R) script which generates all the actions.
 
 -   Descriptive and Model outputs, including figures and tables are in the [`released_outputs`](./release_outputs) directory.
+  
+## Output
+
+### aer_input-\*.csv
+
+| Variable                     | Description                                                                    |
+|------------------------------|--------------------------------------------------------------------------------|
+|     aer_sex                  |      sex subgroup under consideration                                          |
+|     aer_age                  |      age subgroup under consideration                                          |
+|     analysis                 |      string to identify whether this is the   ‘main’ analysis or a subgroup    |
+|     cohort                   |      cohort used for the analysis                                              |
+|     outcome                  |      outcome used for the analysis                                             |
+|     unexposed_person_days    |      unexposed person days in the age/sex   grouping                           |
+|     unexposed_events         |      number of events in   unexposed people in the age/sex grouping            |
+|     total_exposed            |      total number of   people with the exposure in the age/sex grouping        |
+|     sample_size              |      total number of   people in the age/sex grouping                          |
 
 # About the OpenSAFELY framework
 
