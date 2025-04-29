@@ -11,11 +11,6 @@ print("Creating output/aer output folder")
 aer_dir <- "output/aer/"
 fs::dir_create(here::here(aer_dir))
 
-# Specify redaction threshold --------------------------------------------------
-print('Specify redaction threshold')
-
-threshold <- 6
-
 # Source common functions ------------------------------------------------------
 print('Source common functions')
 
@@ -113,7 +108,7 @@ for (i in 1:nrow(active_analyses)) {
             df <- model_input[
                 model_input$cov_cat_sex == sex &
                     model_input$cov_num_age >= min_age &
-                    model_input$cov_num_age < (max_age+1),
+                    model_input$cov_num_age < (max_age + 1),
             ]
 
             ## Make exposed subset ---------------------------------------------------
@@ -198,18 +193,9 @@ write.csv(
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
 
-input$unexposed_events_midpoint6 <- roundmid_any(
-    as.numeric(input$unexposed_events),
-    to = threshold
-)
-input$total_exposed_midpoint6 <- roundmid_any(
-    as.numeric(input$total_exposed),
-    to = threshold
-)
-input$sample_size_midpoint6 <- roundmid_any(
-    as.numeric(input$sample_size),
-    to = threshold
-)
+input$unexposed_events_midpoint6 <- roundmid_any(input$unexposed_events)
+input$total_exposed_midpoint6 <- roundmid_any(input$total_exposed)
+input$sample_size_midpoint6 <- roundmid_any(input$sample_size)
 input[, c("unexposed_events", "total_exposed", "sample_size")] <- NULL
 
 # Save rounded AER input -------------------------------------------------------
