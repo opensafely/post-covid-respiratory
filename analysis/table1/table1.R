@@ -11,11 +11,6 @@ print("Creating output/table1 output folder")
 table1_dir <- "output/table1/"
 fs::dir_create(here::here(table1_dir))
 
-# Specify redaction threshold --------------------------------------------------
-print("Specify redaction threshold")
-
-threshold <- 6
-
 # Source common functions ------------------------------------------------------
 print("Source common functions")
 
@@ -172,8 +167,8 @@ print("Perform redaction")
 df <- df[df$subcharacteristic != "Median (IQR)", ] # Remove Median IQR row
 df <- df[df$subcharacteristic != FALSE, ] # Remove False binary data
 
-df$total_midpoint6 <- roundmid_any(as.numeric(df$total), to = threshold)
-df$exposed_midpoint6 <- roundmid_any(as.numeric(df$exposed), to = threshold)
+df$total_midpoint6 <- roundmid_any(df$total)
+df$exposed_midpoint6 <- roundmid_any(df$exposed)
 
 # Calculate column percentages -------------------------------------------------
 

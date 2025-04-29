@@ -192,7 +192,9 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
         arguments = c(c(cohort), c(ages), c(preex)),
         needs = list(glue("generate_input_{cohort}_clean")),
         moderately_sensitive = list(
-          table1 = glue("output/table1/table1-cohort_{cohort}-preex_{preex}.csv"),
+          table1 = glue(
+            "output/table1/table1-cohort_{cohort}-preex_{preex}.csv"
+          ),
           table1_midpoint6 = glue(
             "output/table1/table1-cohort_{cohort}-preex_{preex}-midpoint6.csv"
           )
@@ -201,6 +203,7 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
     }
   )
 }
+
 # Create function to make model input and run a model --------------------------
 
 apply_model_function <- function(
@@ -246,7 +249,6 @@ apply_model_function <- function(
   )
 }
 
-
 # Create function to make Table 2 ----------------------------------------------
 
 table2 <- function(cohort, subgroup) {
@@ -276,7 +278,9 @@ table2 <- function(cohort, subgroup) {
       arguments = c(cohort, subgroup),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
-        table2 = glue("output/table2/table2-cohort_{cohort}-sub_{subgroup}.csv"),
+        table2 = glue(
+          "output/table2/table2-cohort_{cohort}-sub_{subgroup}.csv"
+        ),
         table2_midpoint6 = glue(
           "output/table2/table2-cohort_{cohort}-sub_{subgroup}-midpoint6.csv"
         )
@@ -408,6 +412,20 @@ actions_list <- splice(
     )
   ),
 
+  ## Model output --------------------------------------------------------------
+
+  action(
+    name = "make_model_output",
+    run = "r:latest analysis/make_output/make_model_output.R",
+    needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
+    moderately_sensitive = list(
+      model_output = glue("output/make_output/model_output.csv"),
+      model_output_midpoint6 = glue(
+        "output/make_output/model_output_midpoint6.csv"
+      )
+    )
+  ),
+      
   ## Make absolute excess risk (AER) input
 
   comment("Make absolute excess risk (AER) input"),
