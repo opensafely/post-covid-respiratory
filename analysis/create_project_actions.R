@@ -289,6 +289,52 @@ table2 <- function(cohort, subgroup) {
   )
 }
 
+# Create funtion for making combined table/venn outputs
+
+make_other_output <- function(action_name, cohort, subgroup) {
+  cohort_names <- stringr::str_split(as.vector(cohort), ";")[[1]]
+
+  splice(
+    if (subgroup == "All" | subgroup == "") {
+      comment(glue("Generate make_other_output-{action_name}"))
+    } else {
+      comment(glue("Generate make_other_output-{action_name}_{subgroup}"))
+    },
+
+    if (subgroup == "All" | subgroup == "") {
+      action(
+        name = glue("make_other_output_{action_name}"),
+        run = "r:latest analysis/make_output/make_other_output.R",
+        arguments = c(c(action_name), c(cohort)),
+        needs = c(as.list(paste0(action_name, "-cohort_", cohorts))),
+        moderately_sensitive = list(
+          table1_output_midpoint6 = glue(
+            "output/make_output/{action_name}_output_midpoint6.csv"
+          )
+        )
+      )
+    } else {
+      action(
+        name = glue("make_other_output-{action_name}-{subgroup}"),
+        run = "r:latest analysis/make_output/make_other_output.R",
+        arguments = c(c(action_name), c(cohort), c(subgroup)),
+        needs = c(as.list(paste0(
+          action_name,
+          "-cohort_",
+          cohorts,
+          "-",
+          subgroup
+        ))),
+        moderately_sensitive = list(
+          table1_output_midpoint6 = glue(
+            "output/make_output/{action_name}_{subgroup}_output_midpoint6.csv"
+          )
+        )
+      )
+    }
+  )
+}
+
 # Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
@@ -365,6 +411,21 @@ actions_list <- splice(
     )
   ),
 
+  splice(
+    unlist(
+      lapply(
+        c("preex_TRUE", "preex_FALSE"),
+        function(x)
+          make_other_output(
+            action_name = "table1",
+            cohort = paste0(cohorts, collapse = ";"),
+            subgroup = x
+          )
+      ),
+      recursive = FALSE
+    )
+  ),
+
   ## Run models ----------------------------------------------------------------
   comment("Run models"),
 
@@ -412,6 +473,14 @@ actions_list <- splice(
     )
   ),
 
+  splice(
+    make_other_output(
+      action_name = "table2",
+      cohort = paste0(cohorts, collapse = ";"),
+      subgroup = "sub_covidhospital"
+    )
+  ),
+
   ## Model output --------------------------------------------------------------
 
   action(
@@ -425,15 +494,18 @@ actions_list <- splice(
       )
     )
   ),
-      
-  ## Make absolute excess risk (AER) input
+
+  ## Make absolute excess risk (AER) input -------------------------------------
 
   comment("Make absolute excess risk (AER) input"),
 
   action(
     name = "make_aer_input",
     run = "r:latest analysis/aer/make_aer_input.R main",
-    needs = as.list(paste0("make_model_input-",active_analyses[grepl("-main",active_analyses$name),]$name)),
+    needs = as.list(paste0(
+      "make_model_input-",
+      active_analyses[grepl("-main", active_analyses$name), ]$name
+    )),
     moderately_sensitive = list(
       aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
