@@ -183,9 +183,9 @@ actions:
         table1: output/table1/table1-cohort_vax-preex_FALSE.csv
         table1_midpoint6: output/table1/table1-cohort_vax-preex_FALSE-midpoint6.csv
 
-  ## Generate make_other_output-table1_preex_TRUE 
+  ## Generate make-table1-preex_TRUE-output 
 
-  make_other_output-table1-preex_TRUE:
+  make-table1-preex_TRUE-output:
     run: r:latest analysis/make_output/make_other_output.R table1 prevax;unvax;vax
       preex_TRUE
     needs:
@@ -196,9 +196,9 @@ actions:
       moderately_sensitive:
         table1_output_midpoint6: output/make_output/table1_preex_TRUE_output_midpoint6.csv
 
-  ## Generate make_other_output-table1_preex_FALSE 
+  ## Generate make-table1-preex_FALSE-output 
 
-  make_other_output-table1-preex_FALSE:
+  make-table1-preex_FALSE-output:
     run: r:latest analysis/make_output/make_other_output.R table1 prevax;unvax;vax
       preex_FALSE
     needs:
@@ -7291,9 +7291,9 @@ actions:
         table2: output/table2/table2-cohort_vax-sub_covidhospital.csv
         table2_midpoint6: output/table2/table2-cohort_vax-sub_covidhospital-midpoint6.csv
 
-  ## Generate make_other_output-table2_sub_covidhospital 
+  ## Generate make-table2-sub_covidhospital-output 
 
-  make_other_output-table2-sub_covidhospital:
+  make-table2-sub_covidhospital-output:
     run: r:latest analysis/make_output/make_other_output.R table2 prevax;unvax;vax
       sub_covidhospital
     needs:

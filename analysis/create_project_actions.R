@@ -296,14 +296,14 @@ make_other_output <- function(action_name, cohort, subgroup) {
 
   splice(
     if (subgroup == "All" | subgroup == "") {
-      comment(glue("Generate make_other_output-{action_name}"))
+      comment(glue("Generate make-{action_name}-output"))
     } else {
-      comment(glue("Generate make_other_output-{action_name}_{subgroup}"))
+      comment(glue("Generate make-{action_name}-{subgroup}-output"))
     },
 
     if (subgroup == "All" | subgroup == "") {
       action(
-        name = glue("make_other_output_{action_name}"),
+        name = glue("make-{action_name}-output"),
         run = "r:latest analysis/make_output/make_other_output.R",
         arguments = c(c(action_name), c(cohort)),
         needs = c(as.list(paste0(action_name, "-cohort_", cohorts))),
@@ -315,7 +315,7 @@ make_other_output <- function(action_name, cohort, subgroup) {
       )
     } else {
       action(
-        name = glue("make_other_output-{action_name}-{subgroup}"),
+        name = glue("make-{action_name}-{subgroup}-output"),
         run = "r:latest analysis/make_output/make_other_output.R",
         arguments = c(c(action_name), c(cohort), c(subgroup)),
         needs = c(as.list(paste0(
