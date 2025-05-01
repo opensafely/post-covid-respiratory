@@ -425,7 +425,7 @@ actions_list <- splice(
       )
     )
   ),
-      
+
   ## Make absolute excess risk (AER) input
 
   comment("Make absolute excess risk (AER) input"),
@@ -433,10 +433,55 @@ actions_list <- splice(
   action(
     name = "make_aer_input",
     run = "r:latest analysis/aer/make_aer_input.R main",
-    needs = as.list(paste0("make_model_input-",active_analyses[grepl("-main",active_analyses$name),]$name)),
+    needs = as.list(paste0(
+      "make_model_input-",
+      active_analyses[grepl("-main", active_analyses$name), ]$name
+    )),
     moderately_sensitive = list(
       aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
+    )
+  ),
+
+  ## Diagnosis: cross-tabulate covariates by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
+  comment(
+    "Generate covariate cross-tabulation matrices by survival interval for cohort_vax-main_preex_FALSE-pneumonia"
+  ),
+  action(
+    name = "make_covariates_matrix",
+    run = "r:latest analysis/diagnosis/covariates_matrix.R",
+    needs = list("make_model_input-cohort_vax-main_preex_FALSE-pneumonia"),
+    moderately_sensitive = list(
+      cross_tab_days0_1 = glue(
+        "output/diagnosis/variable_level_cross_counts_days0_1.csv"
+      ),
+      cross_tab_days1_7 = glue(
+        "output/diagnosis/variable_level_cross_counts_days1_7.csv"
+      ),
+      cross_tab_days7_14 = glue(
+        "output/diagnosis/variable_level_cross_counts_days7_14.csv"
+      ),
+      cross_tab_days14_28 = glue(
+        "output/diagnosis/variable_level_cross_counts_days14_28.csv"
+      ),
+      cross_tab_days28_56 = glue(
+        "output/diagnosis/variable_level_cross_counts_days28_56.csv"
+      ),
+      cross_tab_days56_84 = glue(
+        "output/diagnosis/variable_level_cross_counts_days56_84.csv"
+      ),
+      cross_tab_days84_183 = glue(
+        "output/diagnosis/variable_level_cross_counts_days84_183.csv"
+      ),
+      cross_tab_days183_365 = glue(
+        "output/diagnosis/variable_level_cross_counts_days183_365.csv"
+      ),
+      cross_tab_days365_730 = glue(
+        "output/diagnosis/variable_level_cross_counts_days365_730.csv"
+      ),
+      cross_tab_days730_1065 = glue(
+        "output/diagnosis/variable_level_cross_counts_days730_1065.csv"
+      )
     )
   )
 )
