@@ -7,7 +7,7 @@ generate_time_interval_indicators <- function(df) {
   cut_points <- as.numeric(c(1, 7, 14, 28, 56, 84, 183, 365, 730, 1065))
 
   # Rename to generic names for compatibility
-  df <- dplyr::rename(df, exposure = !!df$exp_date, outcome = !!df$out_date)
+  df <- dplyr::rename(df, exposure = exp_date, outcome = out_date)
 
   df$study_start <- study_start
   df$study_stop <- study_stop
