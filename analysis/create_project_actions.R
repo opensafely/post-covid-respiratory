@@ -444,37 +444,47 @@ actions_list <- splice(
   ),
 
   ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
-  comment(
-    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
-  ),
-  action(
-    name = "make_covariates_matrix",
-    run = "r:latest analysis/diagnosis/covariates_matrix.R",
-    needs = list("make_model_input-cohort_vax-main_preex_FALSE-pneumonia"),
-    moderately_sensitive = {
-      cutpoints_str <- active_analyses %>%
-        filter(name == "cohort_vax-main_preex_FALSE-pneumonia") %>%
-        pull(cut_points)
+  splice(
+    unlist(
+      lapply(
+        c("cohort_vax-main_preex_FALSE-pneumonia"), # Add more cohorts to this vector as needed
+        function(analysis_name) {
+          comment(glue("Diagnosis for overflow error in {analysis_name}"))
+          action(
+            name = glue("make_covariates_matrix-{analysis_name}"),
+            run = glue(
+              "r:latest analysis/diagnosis/covariates_matrix.R {analysis_name}"
+            ),
+            needs = list(glue("make_model_input-{analysis_name}")),
+            moderately_sensitive = {
+              cutpoints_str <- active_analyses %>%
+                filter(name == !!analysis_name) %>%
+                pull(cut_points)
 
-      cutpoints_vax_unvax <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
-      intervals <- paste0(
-        "days",
-        c(0, head(cutpoints_vax_unvax, -1)),
-        "_",
-        cutpoints_vax_unvax
-      )
+              cutpoints <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
+              intervals <- paste0(
+                "days",
+                c(0, head(cutpoints, -1)),
+                "_",
+                cutpoints
+              )
 
-      out <- list()
-      for (interval in intervals) {
-        out[[paste0("cross_tab_", interval)]] <- glue(
-          "output/diagnosis/variable_level_cross_counts_{interval}.csv"
-        )
-        out[[paste0("correlation_", interval)]] <- glue(
-          "output/diagnosis/variable_level_correlation_{interval}.csv"
-        )
-      }
-      out
-    }
+              out <- list()
+              for (interval in intervals) {
+                out[[glue("cross_tab_{interval}")]] <- glue(
+                  "output/diagnosis/variable_level_cross_counts_{interval}.csv"
+                )
+                out[[glue("correlation_{interval}")]] <- glue(
+                  "output/diagnosis/variable_level_correlation_{interval}.csv"
+                )
+              }
+              out
+            }
+          )
+        }
+      ),
+      recursive = FALSE
+    )
   )
 )
 

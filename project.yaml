@@ -7619,10 +7619,8 @@ actions:
         aer_input: output/aer/aer_input-main.csv
         aer_input_midpoint6: output/aer/aer_input-main-midpoint6.csv
 
-  ## Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia 
-
-  make_covariates_matrix:
-    run: r:latest analysis/diagnosis/covariates_matrix.R
+  make_covariates_matrix-cohort_vax-main_preex_FALSE-pneumonia:
+    run: r:latest analysis/diagnosis/covariates_matrix.R cohort_vax-main_preex_FALSE-pneumonia
     needs:
     - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
     outputs:

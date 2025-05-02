@@ -3,6 +3,16 @@ library(dplyr)
 library(tidyr)
 library(readr)
 library(survival)
+# Specify arguments ------------------------------------------------------------
+print("Specify arguments")
+
+args <- commandArgs(trailingOnly = TRUE)
+
+if (length(args) == 0) {
+  name <- "cohort_vax-main_preex_FALSE-pneumonia"
+} else {
+  name <- args[[1]]
+}
 
 # Define diagnosis output folder ------------------------------------------
 print("Creating diagnosis output folder")
@@ -12,9 +22,7 @@ fs::dir_create(here::here(diag_dir))
 
 # Load data and interval generator
 source("analysis/diagnosis/fn-generate_time_interval_indicators.R")
-df <- readRDS(
-  "output/model/model_input-cohort_vax-main_preex_FALSE-pneumonia.rds"
-)
+df <- readRDS(paste0("output/model/model_input-", name, ".rds"))
 df_surv <- generate_time_interval_indicators(df)
 
 # Identify covariates and time intervals
