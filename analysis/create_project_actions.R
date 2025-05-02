@@ -443,46 +443,38 @@ actions_list <- splice(
     )
   ),
 
-  ## Diagnosis: cross-tabulate covariates by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
+  ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
   comment(
-    "Generate covariate cross-tabulation matrices by survival interval for cohort_vax-main_preex_FALSE-pneumonia"
+    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
   ),
   action(
     name = "make_covariates_matrix",
     run = "r:latest analysis/diagnosis/covariates_matrix.R",
     needs = list("make_model_input-cohort_vax-main_preex_FALSE-pneumonia"),
-    moderately_sensitive = list(
-      cross_tab_days0_1 = glue(
-        "output/diagnosis/variable_level_cross_counts_days0_1.csv"
-      ),
-      cross_tab_days1_7 = glue(
-        "output/diagnosis/variable_level_cross_counts_days1_7.csv"
-      ),
-      cross_tab_days7_14 = glue(
-        "output/diagnosis/variable_level_cross_counts_days7_14.csv"
-      ),
-      cross_tab_days14_28 = glue(
-        "output/diagnosis/variable_level_cross_counts_days14_28.csv"
-      ),
-      cross_tab_days28_56 = glue(
-        "output/diagnosis/variable_level_cross_counts_days28_56.csv"
-      ),
-      cross_tab_days56_84 = glue(
-        "output/diagnosis/variable_level_cross_counts_days56_84.csv"
-      ),
-      cross_tab_days84_183 = glue(
-        "output/diagnosis/variable_level_cross_counts_days84_183.csv"
-      ),
-      cross_tab_days183_365 = glue(
-        "output/diagnosis/variable_level_cross_counts_days183_365.csv"
-      ),
-      cross_tab_days365_730 = glue(
-        "output/diagnosis/variable_level_cross_counts_days365_730.csv"
-      ),
-      cross_tab_days730_1065 = glue(
-        "output/diagnosis/variable_level_cross_counts_days730_1065.csv"
+    moderately_sensitive = {
+      cutpoints_str <- active_analyses %>%
+        filter(name == "cohort_vax-main_preex_FALSE-pneumonia") %>%
+        pull(cut_points)
+
+      cutpoints_vax_unvax <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
+      intervals <- paste0(
+        "days",
+        c(0, head(cutpoints_vax_unvax, -1)),
+        "_",
+        cutpoints_vax_unvax
       )
-    )
+
+      out <- list()
+      for (interval in intervals) {
+        out[[paste0("cross_tab_", interval)]] <- glue(
+          "output/diagnosis/variable_level_cross_counts_{interval}.csv"
+        )
+        out[[paste0("correlation_", interval)]] <- glue(
+          "output/diagnosis/variable_level_correlation_{interval}.csv"
+        )
+      }
+      out
+    }
   )
 )
 

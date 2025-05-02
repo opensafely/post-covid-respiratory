@@ -28,21 +28,18 @@ df_cov <- df_surv %>%
     df[, c("patient_id", all_of(covariate_vars))],
     by = "patient_id"
   )
+
 # Force all covariates to plain character
 df_cov <- df_cov %>%
   mutate(across(all_of(covariate_vars), ~ as.character(as.vector(.))))
 
-# Function to compute co-occurrence matrix for a given time interval
-compute_co_matrix <- function(interval_name) {
+# Function to compute co-occurrence and correlation matrices
+compute_matrices <- function(interval_name) {
   df_subset <- df_cov %>%
     filter(.data[[interval_name]] == 1) %>%
     select(patient_id, all_of(covariate_vars))
 
-  # Drop factor/ordered classes for all covariates
-  for (v in names(df_subset)[names(df_subset) != "patient_id"]) {
-    df_subset[[v]] <- as.character(df_subset[[v]])
-  }
-
+  # Convert to long then wide dummy matrix
   df_long <- df_subset %>%
     pivot_longer(-patient_id, names_to = "variable", values_to = "value") %>%
     mutate(level = paste0(variable, " = ", value)) %>%
@@ -52,18 +49,24 @@ compute_co_matrix <- function(interval_name) {
     mutate(present = 1L) %>%
     pivot_wider(names_from = level, values_from = present, values_fill = 0)
 
-  mat <- as.matrix(df_wide[, -1])
+  mat <- as.matrix(df_wide[, -1]) # Drop patient_id
+
+  # Co-occurrence matrix
   co_occurrence <- t(mat) %*% mat
 
-  return(co_occurrence)
+  # Correlation matrix (if >1 variable)
+  corr_matrix <- if (ncol(mat) > 1) cor(mat) else NA
+
+  return(list(co = co_occurrence, corr = corr_matrix))
 }
 
-# Generate and save co-occurrence matrix for each interval
+# Loop over time intervals
 for (interval in time_intervals) {
-  co_matrix <- compute_co_matrix(interval)
+  message("Processing: ", interval)
+  mats <- compute_matrices(interval)
 
-  # Optional: sort variable levels
-  ordered_names <- colnames(co_matrix) %>%
+  # Sort row/column order
+  ordered_names <- colnames(mats$co) %>%
     as.data.frame() %>%
     setNames("full_name") %>%
     mutate(
@@ -73,11 +76,19 @@ for (interval in time_intervals) {
     arrange(variable, level) %>%
     pull(full_name)
 
-  co_matrix_ordered <- co_matrix[ordered_names, ordered_names]
-
+  co_matrix_ordered <- mats$co[ordered_names, ordered_names]
   write.csv(
     as.data.frame(co_matrix_ordered),
     paste0(diag_dir, "variable_level_cross_counts_", interval, ".csv"),
     row.names = TRUE
   )
+
+  if (!is.na(mats$corr)[1]) {
+    corr_matrix_ordered <- mats$corr[ordered_names, ordered_names]
+    write.csv(
+      as.data.frame(corr_matrix_ordered),
+      paste0(diag_dir, "variable_level_correlation_", interval, ".csv"),
+      row.names = TRUE
+    )
+  }
 }
