@@ -87,7 +87,7 @@ for (interval in time_intervals) {
   co_matrix_ordered <- mats$co[ordered_names, ordered_names]
   write.csv(
     as.data.frame(co_matrix_ordered),
-    paste0(diag_dir, "variable_level_cross_counts_", interval, ".csv"),
+    paste0(diag_dir, "cov_crosstab-", name, "-", interval, ".csv"),
     row.names = TRUE
   )
 
@@ -95,7 +95,7 @@ for (interval in time_intervals) {
     corr_matrix_ordered <- mats$corr[ordered_names, ordered_names]
     write.csv(
       as.data.frame(corr_matrix_ordered),
-      paste0(diag_dir, "variable_level_correlation_", interval, ".csv"),
+      paste0(diag_dir, "cov_correlation-", name, "-", interval, ".csv"),
       row.names = TRUE
     )
   }

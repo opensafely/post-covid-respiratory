@@ -7619,30 +7619,32 @@ actions:
         aer_input: output/aer/aer_input-main.csv
         aer_input_midpoint6: output/aer/aer_input-main-midpoint6.csv
 
+  ## Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia 
+
   make_covariates_matrix-cohort_vax-main_preex_FALSE-pneumonia:
     run: r:latest analysis/diagnosis/covariates_matrix.R cohort_vax-main_preex_FALSE-pneumonia
     needs:
     - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
     outputs:
       moderately_sensitive:
-        cross_tab_days0_1: output/diagnosis/variable_level_cross_counts_days0_1.csv
-        correlation_days0_1: output/diagnosis/variable_level_correlation_days0_1.csv
-        cross_tab_days1_7: output/diagnosis/variable_level_cross_counts_days1_7.csv
-        correlation_days1_7: output/diagnosis/variable_level_correlation_days1_7.csv
-        cross_tab_days7_14: output/diagnosis/variable_level_cross_counts_days7_14.csv
-        correlation_days7_14: output/diagnosis/variable_level_correlation_days7_14.csv
-        cross_tab_days14_28: output/diagnosis/variable_level_cross_counts_days14_28.csv
-        correlation_days14_28: output/diagnosis/variable_level_correlation_days14_28.csv
-        cross_tab_days28_56: output/diagnosis/variable_level_cross_counts_days28_56.csv
-        correlation_days28_56: output/diagnosis/variable_level_correlation_days28_56.csv
-        cross_tab_days56_84: output/diagnosis/variable_level_cross_counts_days56_84.csv
-        correlation_days56_84: output/diagnosis/variable_level_correlation_days56_84.csv
-        cross_tab_days84_183: output/diagnosis/variable_level_cross_counts_days84_183.csv
-        correlation_days84_183: output/diagnosis/variable_level_correlation_days84_183.csv
-        cross_tab_days183_365: output/diagnosis/variable_level_cross_counts_days183_365.csv
-        correlation_days183_365: output/diagnosis/variable_level_correlation_days183_365.csv
-        cross_tab_days365_730: output/diagnosis/variable_level_cross_counts_days365_730.csv
-        correlation_days365_730: output/diagnosis/variable_level_correlation_days365_730.csv
-        cross_tab_days730_1065: output/diagnosis/variable_level_cross_counts_days730_1065.csv
-        correlation_days730_1065: output/diagnosis/variable_level_correlation_days730_1065.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days0_1: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days0_1.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days0_1: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days0_1.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days1_7: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days1_7.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days1_7: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days1_7.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days7_14: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days7_14.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days7_14: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days7_14.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days14_28: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days14_28.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days14_28: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days14_28.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days28_56: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days28_56.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days28_56: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days28_56.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days56_84: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days56_84.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days56_84: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days56_84.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days84_183: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days84_183.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days84_183: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days84_183.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days183_365: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days183_365.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days183_365: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days183_365.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days365_730: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days365_730.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days365_730: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days365_730.csv
+        crosstab-cohort_vax-main_preex_FALSE-pneumonia-days730_1065: output/diagnosis/cov_crosstab-cohort_vax-main_preex_FALSE-pneumonia-days730_1065.csv
+        correlation-cohort_vax-main_preex_FALSE-pneumonia-days730_1065: output/diagnosis/cov_correlation-cohort_vax-main_preex_FALSE-pneumonia-days730_1065.csv
 

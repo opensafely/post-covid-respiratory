@@ -444,12 +444,16 @@ actions_list <- splice(
   ),
 
   ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
+
+  comment(glue(
+    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
+  )),
+
   splice(
     unlist(
       lapply(
         c("cohort_vax-main_preex_FALSE-pneumonia"), # Add more cohorts to this vector as needed
         function(analysis_name) {
-          comment(glue("Diagnosis for overflow error in {analysis_name}"))
           action(
             name = glue("make_covariates_matrix-{analysis_name}"),
             run = glue(
@@ -471,11 +475,11 @@ actions_list <- splice(
 
               out <- list()
               for (interval in intervals) {
-                out[[glue("cross_tab_{interval}")]] <- glue(
-                  "output/diagnosis/variable_level_cross_counts_{interval}.csv"
+                out[[glue("crosstab-{analysis_name}-{interval}")]] <- glue(
+                  "output/diagnosis/cov_crosstab-{analysis_name}-{interval}.csv"
                 )
-                out[[glue("correlation_{interval}")]] <- glue(
-                  "output/diagnosis/variable_level_correlation_{interval}.csv"
+                out[[glue("correlation-{analysis_name}-{interval}")]] <- glue(
+                  "output/diagnosis/cov_correlation-{analysis_name}-{interval}.csv"
                 )
               }
               out
