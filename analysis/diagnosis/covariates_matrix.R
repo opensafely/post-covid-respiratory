@@ -1,8 +1,8 @@
+library(plyr)
 library(dplyr)
 library(tidyr)
 library(readr)
 library(survival)
-library(plyr)
 
 # Define diagnosis output folder ------------------------------------------
 print("Creating diagnosis output folder")

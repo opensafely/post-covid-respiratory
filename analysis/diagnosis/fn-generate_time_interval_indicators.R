@@ -12,10 +12,10 @@ generate_time_interval_indicators <- function(df) {
   df$study_start <- study_start
   df$study_stop <- study_stop
 
-  df$fup_start <- pmax(df$study_start, df[[df$index_date]], na.rm = TRUE)
+  df$fup_start <- pmax(df$study_start, df$index_date, na.rm = TRUE)
   df$fup_stop <- pmin(
     df$study_stop,
-    df[[df$end_date_outcome]],
+    df$end_date_outcome,
     df$outcome,
     na.rm = TRUE
   )
