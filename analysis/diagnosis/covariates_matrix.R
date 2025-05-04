@@ -61,11 +61,33 @@ compute_matrices <- function(interval_name) {
 
   # Co-occurrence matrix
   co_occurrence <- t(mat) %*% mat
-
+  # Convert to long format, tidy, and drop within-variable pairs
+  df_co <- as.data.frame(co_occurrence)
+  df_co <- tibble::rownames_to_column(df_co, var = "V1")
+  df_co_long <- tidyr::pivot_longer(
+    df_co,
+    cols = setdiff(colnames(df_co), "V1"),
+    names_to = "V2"
+  )
+  df_co_long <- tidyr::separate_wider_delim(
+    df_co_long,
+    cols = c("V1", "V2"),
+    delim = " = ",
+    names_sep = "_"
+  )
+  df_co_long <- df_co_long[df_co_long$V1_1 != df_co_long$V2_1, ]
+  df_co_long <- df_co_long %>%
+    dplyr::rename(
+      cov_1 = V1_1,
+      level1 = V1_2,
+      cov_2 = V2_1,
+      level2 = V2_2,
+      count = value
+    )
   # Correlation matrix (if >1 variable)
   corr_matrix <- if (ncol(mat) > 1) cor(mat) else NA
 
-  return(list(co = co_occurrence, corr = corr_matrix))
+  return(list(co = df_co_long, corr = corr_matrix))
 }
 
 # Loop over time intervals
@@ -73,26 +95,21 @@ for (interval in time_intervals) {
   message("Processing: ", interval)
   mats <- compute_matrices(interval)
 
-  # Sort row/column order
-  ordered_names <- colnames(mats$co) %>%
-    as.data.frame() %>%
-    setNames("full_name") %>%
-    mutate(
-      variable = sub(" = .*", "", full_name),
-      level = sub(".* = ", "", full_name)
-    ) %>%
-    arrange(variable, level) %>%
-    pull(full_name)
+  # Write cleaned co-occurrence long table, sorted
+  co_long_ordered <- mats$co %>%
+    dplyr::arrange(cov_1, level1, cov_2, level2)
 
-  co_matrix_ordered <- mats$co[ordered_names, ordered_names]
   write.csv(
-    as.data.frame(co_matrix_ordered),
+    as.data.frame(co_long_ordered),
     paste0(diag_dir, "cov_crosstab-", name, "-", interval, ".csv"),
     row.names = TRUE
   )
 
   if (!is.na(mats$corr)[1]) {
-    corr_matrix_ordered <- mats$corr[ordered_names, ordered_names]
+    corr_matrix_ordered <- mats$corr[
+      order(rownames(mats$corr)),
+      order(colnames(mats$corr))
+    ]
     write.csv(
       as.data.frame(corr_matrix_ordered),
       paste0(diag_dir, "cov_correlation-", name, "-", interval, ".csv"),
