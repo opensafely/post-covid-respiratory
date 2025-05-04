@@ -425,7 +425,7 @@ actions_list <- splice(
       )
     )
   ),
-      
+
   ## Make absolute excess risk (AER) input
 
   comment("Make absolute excess risk (AER) input"),
@@ -433,10 +433,61 @@ actions_list <- splice(
   action(
     name = "make_aer_input",
     run = "r:latest analysis/aer/make_aer_input.R main",
-    needs = as.list(paste0("make_model_input-",active_analyses[grepl("-main",active_analyses$name),]$name)),
+    needs = as.list(paste0(
+      "make_model_input-",
+      active_analyses[grepl("-main", active_analyses$name), ]$name
+    )),
     moderately_sensitive = list(
       aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
+    )
+  ),
+
+  ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
+
+  comment(glue(
+    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
+  )),
+
+  splice(
+    unlist(
+      lapply(
+        c("cohort_vax-main_preex_FALSE-pneumonia"), # Add more cohorts to this vector as needed
+        function(analysis_name) {
+          action(
+            name = glue("make_covariates_matrix-{analysis_name}"),
+            run = glue(
+              "r:latest analysis/diagnosis/covariates_matrix.R {analysis_name}"
+            ),
+            needs = list(glue("make_model_input-{analysis_name}")),
+            moderately_sensitive = {
+              cutpoints_str <- active_analyses %>%
+                filter(name == !!analysis_name) %>%
+                pull(cut_points)
+
+              cutpoints <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
+              intervals <- paste0(
+                "days",
+                c(0, head(cutpoints, -1)),
+                "_",
+                cutpoints
+              )
+
+              out <- list()
+              for (interval in intervals) {
+                out[[glue("crosstab-{analysis_name}-{interval}")]] <- glue(
+                  "output/diagnosis/cov_crosstab-{analysis_name}-{interval}.csv"
+                )
+                out[[glue("correlation-{analysis_name}-{interval}")]] <- glue(
+                  "output/diagnosis/cov_correlation-{analysis_name}-{interval}.csv"
+                )
+              }
+              out
+            }
+          )
+        }
+      ),
+      recursive = FALSE
     )
   )
 )
