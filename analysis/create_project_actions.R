@@ -452,7 +452,10 @@ actions_list <- splice(
   splice(
     unlist(
       lapply(
-        c("cohort_vax-main_preex_FALSE-pneumonia"), # Add more cohorts to this vector as needed
+        c(
+          "cohort_vax-main_preex_FALSE-pneumonia",
+          "cohort_vax-main_preex_FALSE-pf"
+        ), # Add more cohorts to this vector as needed
         function(analysis_name) {
           action(
             name = glue("make_covariates_matrix-{analysis_name}"),
