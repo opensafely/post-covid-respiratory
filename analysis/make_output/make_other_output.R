@@ -4,11 +4,6 @@ print('Load packages')
 library(magrittr)
 library(data.table)
 
-# Source common functions ------------------------------------------------------
-print("Source common functions")
-
-source("analysis/utility.R")
-
 # Define make_aer_input output folder ------------------------------------------
 print("Creating output/make_output output folder")
 
@@ -21,19 +16,17 @@ print('Specify arguments')
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  output <- "table1"
-  cohorts <- "prevax;vax;unvax"
+  output <- "table1" # the action to apply
+  cohorts <- "prevax;vax;unvax" # The iterative label
 } else {
   output <- args[[1]]
   cohorts <- args[[2]]
 }
-
 if (length(args) < 3) {
-  subgroup <- "preex_TRUE"
+  subgroup <- "preex_FALSE" # an optional subgroup label
 } else {
   subgroup <- args[[3]]
 }
-
 
 # Separate cohorts -------------------------------------------------------------
 print('Separate cohorts')
@@ -48,7 +41,7 @@ df <- NULL
 # Add output from each cohort --------------------------------------------------
 print('Add output from each cohort')
 
-if (subgroup == "") {
+if (subgroup == "All" | subgroup == "") {
   for (i in cohorts) {
     tmp <- readr::read_csv(paste0(
       "output/",
@@ -64,43 +57,22 @@ if (subgroup == "") {
   }
   out_str <- ""
 } else {
-  if (length(subgroup) == 1) {
-    for (i in cohorts) {
-      tmp <- readr::read_csv(paste0(
-        "output/",
-        output,
-        "/",
-        output,
-        "-cohort_",
-        i,
-        "-",
-        subgroup,
-        "-midpoint6.csv"
-      ))
-      tmp$cohort <- i
-      df <- rbind(df, tmp)
-    }
-    out_str <- paste0("_", subgroup)
-  } else {
-    for (i in cohorts) {
-      for (j in subgroup) {
-        tmp <- readr::read_csv(paste0(
-          "output/",
-          output,
-          "/",
-          output,
-          "-cohort_",
-          i,
-          "-",
-          j,
-          "-midpoint6.csv"
-        ))
-        tmp$cohort <- i
-        df <- rbind(df, tmp)
-      }
-    }
-    out_str <- list(glue("_{subgroup}")) ## CHECK
+  for (i in cohorts) {
+    tmp <- readr::read_csv(paste0(
+      "output/",
+      output,
+      "/",
+      output,
+      "-cohort_",
+      i,
+      "-",
+      subgroup,
+      "-midpoint6.csv"
+    ))
+    tmp$cohort <- i
+    df <- rbind(df, tmp)
   }
+  out_str <- paste0("_", subgroup)
 }
 
 # Save output ------------------------------------------------------------------
