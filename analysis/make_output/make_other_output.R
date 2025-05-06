@@ -83,8 +83,8 @@ for (i in cohorts) {
       )
     }
   } else {
-    # table2 processing (I could do this by comparing column 1 of the different columns, but I might be over-coding if I do)
-    df <- rbind(df, tmp)
+    # table2 processing
+    df <- rbind(df, tmp, fill = TRUE)
   }
 }
 
