@@ -209,6 +209,21 @@ actions:
       moderately_sensitive:
         table1_output_midpoint6: output/make_output/table1_preex_FALSE_output_midpoint6.csv
 
+  ## Generate make-table1-output 
+
+  make-table1-output:
+    run: r:latest analysis/make_output/make_other_output.R table1 prevax-preex_FALSE;unvax-preex_FALSE;vax-preex_FALSE;prevax-preex_TRUE;unvax-preex_TRUE;vax-preex_TRUE
+    needs:
+    - table1-cohort_prevax-preex_FALSE
+    - table1-cohort_unvax-preex_FALSE
+    - table1-cohort_vax-preex_FALSE
+    - table1-cohort_prevax-preex_TRUE
+    - table1-cohort_unvax-preex_TRUE
+    - table1-cohort_vax-preex_TRUE
+    outputs:
+      moderately_sensitive:
+        table1_output_midpoint6: output/make_output/table1_output_midpoint6.csv
+
   ## Run models 
 
   make_model_input-cohort_prevax-main_preex_FALSE-asthma:

@@ -306,7 +306,7 @@ make_other_output <- function(action_name, cohort, subgroup) {
         name = glue("make-{action_name}-output"),
         run = "r:latest analysis/make_output/make_other_output.R",
         arguments = c(c(action_name), c(cohort)),
-        needs = c(as.list(paste0(action_name, "-cohort_", cohorts))),
+        needs = c(as.list(paste0(action_name, "-cohort_", cohort_names))),
         moderately_sensitive = list(
           table1_output_midpoint6 = glue(
             "output/make_output/{action_name}_output_midpoint6.csv"
@@ -321,7 +321,7 @@ make_other_output <- function(action_name, cohort, subgroup) {
         needs = c(as.list(paste0(
           action_name,
           "-cohort_",
-          cohorts,
+          cohort_names,
           "-",
           subgroup
         ))),
@@ -423,6 +423,18 @@ actions_list <- splice(
           )
       ),
       recursive = FALSE
+    )
+  ),
+
+  splice(
+    make_other_output(
+      action_name = "table1",
+      cohort = paste0(
+        paste0(cohorts, "-preex_FALSE", collapse = ";"),
+        ";",
+        paste0(cohorts, "-preex_TRUE", collapse = ";")
+      ),
+      subgroup = ""
     )
   ),
 
