@@ -6,10 +6,10 @@ library(dplyr)
 library(magrittr)
 
 # Define make_aer_input output folder ------------------------------------------
-print("Creating output/aer output folder")
+print("Creating output/make_output folder")
 
-aer_dir <- "output/aer/"
-fs::dir_create(here::here(aer_dir))
+makeout_dir <- "output/make_output/"
+fs::dir_create(here::here(makeout_dir))
 
 # Source common functions ------------------------------------------------------
 print('Source common functions')
@@ -186,7 +186,7 @@ print('Save AER input')
 
 write.csv(
     input,
-    paste0(aer_dir, "aer_input-", analysis, ".csv"),
+    paste0(makeout_dir, "aer_input-", analysis, ".csv"),
     row.names = FALSE
 )
 
@@ -203,6 +203,6 @@ print('Save rounded AER input')
 
 write.csv(
     input,
-    paste0(aer_dir, "aer_input-", analysis, "-midpoint6.csv"),
+    paste0(makeout_dir, "aer_input-", analysis, "-midpoint6.csv"),
     row.names = FALSE
 )

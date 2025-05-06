@@ -7648,7 +7648,7 @@ actions:
   ## Make absolute excess risk (AER) input 
 
   make_aer_input:
-    run: r:latest analysis/aer/make_aer_input.R main
+    run: r:latest analysis/make_output/make_aer_input.R main
     needs:
     - make_model_input-cohort_prevax-main_preex_FALSE-asthma
     - make_model_input-cohort_prevax-main_preex_FALSE-copd
@@ -7670,6 +7670,6 @@ actions:
     - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        aer_input: output/aer/aer_input-main.csv
-        aer_input_midpoint6: output/aer/aer_input-main-midpoint6.csv
+        aer_input: output/make_output/aer_input-main.csv
+        aer_input_midpoint6: output/make_output/aer_input-main-midpoint6.csv
 
