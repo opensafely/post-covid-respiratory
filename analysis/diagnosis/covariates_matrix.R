@@ -64,17 +64,22 @@ compute_matrices <- function(interval_name) {
   # Convert to long format, tidy, and drop within-variable pairs
   df_co <- as.data.frame(co_occurrence)
   df_co <- tibble::rownames_to_column(df_co, var = "V1")
+
   df_co_long <- tidyr::pivot_longer(
     df_co,
     cols = setdiff(colnames(df_co), "V1"),
     names_to = "V2"
   )
-  df_co_long <- tidyr::separate_wider_delim(
-    df_co_long,
-    cols = c("V1", "V2"),
-    delim = " = ",
-    names_sep = "_"
-  )
+  
+  df_co_long <- df_co_long %>%
+    tidyr::separate(
+      V1,
+      into = c("V1_1", "V1_2"),
+      sep = " = ",
+      remove = TRUE
+    ) %>%
+    tidyr::separate(V2, into = c("V2_1", "V2_2"), sep = " = ", remove = TRUE)
+
   df_co_long <- df_co_long[df_co_long$V1_1 != df_co_long$V2_1, ]
   df_co_long <- df_co_long %>%
     dplyr::rename(
