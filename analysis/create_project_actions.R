@@ -204,6 +204,12 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
   )
 }
 
+# List of models excluded from Cox regression (cox_ipw), but still included for make_model_input
+excluded_models <- c(
+  "cohort_vax-main_preex_FALSE-pneumonia", 
+  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
+)
+
 # Create function to make model input and run a model --------------------------
 
 apply_model_function <- function(
@@ -226,27 +232,39 @@ apply_model_function <- function(
   covariate_threshold,
   age_spline
 ) {
-  splice(
-    action(
-      name = glue("make_model_input-{name}"),
-      run = glue("r:latest analysis/model/make_model_input.R {name}"),
-      needs = as.list(glue("generate_input_{cohort}_clean")),
-      highly_sensitive = list(
-        model_input = glue("output/model/model_input-{name}.rds")
-      )
-    ),
-
-    action(
-      name = glue("cox_ipw-{name}"),
-      run = glue(
-        "cox-ipw:v0.0.37 --df_input=model/model_input-{name}.rds --ipw={ipw} --exposure=exp_date --outcome=out_date --strata={strata} --covariate_sex={covariate_sex} --covariate_age={covariate_age} --covariate_other={covariate_other} --cox_start={cox_start} --cox_stop={cox_stop} --study_start={study_start} --study_stop={study_stop} --cut_points={cut_points} --controls_per_case={controls_per_case} --total_event_threshold={total_event_threshold} --episode_event_threshold={episode_event_threshold} --covariate_threshold={covariate_threshold} --age_spline={age_spline} --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-{name}.csv"
-      ),
-      needs = list(glue("make_model_input-{name}")),
-      moderately_sensitive = list(
-        model_output = glue("output/model/model_output-{name}.csv")
+  if (name %in% excluded_models) {
+    splice(
+      action(
+        name = glue("make_model_input-{name}"),
+        run = glue("r:latest analysis/model/make_model_input.R {name}"),
+        needs = as.list(glue("generate_input_{cohort}_clean")),
+        highly_sensitive = list(
+          model_input = glue("output/model/model_input-{name}.rds")
+        )
       )
     )
-  )
+  } else {
+    splice(
+      action(
+        name = glue("make_model_input-{name}"),
+        run = glue("r:latest analysis/model/make_model_input.R {name}"),
+        needs = as.list(glue("generate_input_{cohort}_clean")),
+        highly_sensitive = list(
+          model_input = glue("output/model/model_input-{name}.rds")
+        )
+      ),
+      action(
+        name = glue("cox_ipw-{name}"),
+        run = glue(
+          "cox-ipw:v0.0.37 --df_input=model/model_input-{name}.rds --ipw={ipw} --exposure=exp_date --outcome=out_date --strata={strata} --covariate_sex={covariate_sex} --covariate_age={covariate_age} --covariate_other={covariate_other} --cox_start={cox_start} --cox_stop={cox_stop} --study_start={study_start} --study_stop={study_stop} --cut_points={cut_points} --controls_per_case={controls_per_case} --total_event_threshold={total_event_threshold} --episode_event_threshold={episode_event_threshold} --covariate_threshold={covariate_threshold} --age_spline={age_spline} --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-{name}.csv"
+        ),
+        needs = list(glue("make_model_input-{name}")),
+        moderately_sensitive = list(
+          model_output = glue("output/model/model_output-{name}.csv")
+        )
+      )
+    )
+  }
 }
 
 # Create function to make Table 2 ----------------------------------------------
@@ -417,7 +435,12 @@ actions_list <- splice(
   action(
     name = "make_model_output",
     run = "r:latest analysis/make_output/make_model_output.R",
-    needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
+    needs = as.list(c(
+      paste0(
+        "cox_ipw-",
+        active_analyses$name[!(active_analyses$name %in% excluded_models)]
+      )
+    )),
     moderately_sensitive = list(
       model_output = glue("output/make_output/model_output.csv"),
       model_output_midpoint6 = glue(
