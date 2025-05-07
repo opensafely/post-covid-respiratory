@@ -16,14 +16,14 @@ print('Specify arguments')
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
-  output <- "table1" # the action to apply
+  output <- "table2" # the action to apply
   cohorts <- "prevax;vax;unvax" # The iterative label
 } else {
   output <- args[[1]]
   cohorts <- args[[2]]
 }
 if (length(args) < 3) {
-  subgroup <- "" # an optional subgroup label (e.g. preex_FALSE)
+  subgroup <- "sub_covidhospital" #"preex_TRUE" # an optional subgroup label (e.g. preex_FALSE)
 } else {
   subgroup <- args[[3]]
 }
@@ -33,8 +33,8 @@ print('Separate cohorts')
 
 cohorts <- stringr::str_split(as.vector(cohorts), ";")[[1]]
 
-# Generate output saving string ------------------------------------------------
-print('Generate saving')
+# Generate output/saving string ------------------------------------------------
+print('Generate strings')
 
 if (subgroup == "All" | subgroup == "") {
   out_str <- ""
@@ -68,32 +68,53 @@ for (i in cohorts) {
   # create column for cohort
   tmp$cohort <- i
 
-  # combine dataframes
-  if (output == "table1") {
-    # if there's a common column, combine by merging
-    colnames(tmp)[-1:-2] <- paste0(colnames(tmp)[-1:-2], "_", i)
-    if (i == cohorts[1]) {
-      df <- tmp
-    } else {
-      df <- merge(
-        df,
-        tmp,
-        by = c(colnames(df)[1:2]),
-        all = T
-      )
-    }
-  } else {
-    # table2 processing
-    df <- rbind(df, tmp, fill = TRUE)
-  }
+  # # combine dataframes
+  # if (output == "table1") {
+  #   # if there's a common column, combine by merging
+  #   colnames(tmp)[-1:-2] <- paste0(colnames(tmp)[-1:-2], "_", i)
+  #   if (i == cohorts[1]) {
+  #     df <- tmp
+  #   } else {
+  #     df <- merge(
+  #       df,
+  #       tmp,
+  #       by = c(colnames(df)[1:2]),
+  #       all = T
+  #     )
+  #   }
+  # } else {
+  # table2 processing
+  df <- rbind(df, tmp, fill = TRUE)
+  # }
 }
 
-# add subgroup string ----------------------------------------------------------
-print('Add subgroup string')
+df <- df[df["cohort"] != TRUE, ]
+
+# add subgroup column ----------------------------------------------------------
+print('Add subgroup column')
 
 if (out_str != "") {
   df$subgroup <- subgroup
 }
+
+
+# table1-specific processing ---------------------------------------------------
+if (output == "table1") {
+  print("table1 processing")
+  colnames(df) <- gsub(" \\[.*", "", colnames(df))
+  df <- tidyr::pivot_wider(
+    df,
+    names_from = "cohort",
+    values_from = c("N", "(%)", "COVID-19 diagnoses")
+  )
+}
+
+# table2-specific processing ---------------------------------------------------
+if (output == "table2") {
+  print("table2 processing")
+  colnames(df) <- gsub("_midpoint6", "", colnames(df))
+}
+
 
 # Save output ------------------------------------------------------------------
 print('Save output')
