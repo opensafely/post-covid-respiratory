@@ -39,6 +39,12 @@ age_str <- paste0(
 
 describe <- TRUE # This prints descriptive files for each dataset in the pipeline
 
+# List of models excluded from model output generation
+excluded_models <- c(
+  "cohort_vax-main_preex_FALSE-pneumonia",
+  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
+)
+
 # Create generic action function -----------------------------------------------
 
 action <- function(
@@ -204,12 +210,6 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
   )
 }
 
-# List of models excluded from Cox regression (cox_ipw), but still included for make_model_input
-excluded_models <- c(
-  "cohort_vax-main_preex_FALSE-pneumonia", 
-  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
-)
-
 # Create function to make model input and run a model --------------------------
 
 apply_model_function <- function(
@@ -232,39 +232,26 @@ apply_model_function <- function(
   covariate_threshold,
   age_spline
 ) {
-  if (name %in% excluded_models) {
-    splice(
-      action(
-        name = glue("make_model_input-{name}"),
-        run = glue("r:latest analysis/model/make_model_input.R {name}"),
-        needs = as.list(glue("generate_input_{cohort}_clean")),
-        highly_sensitive = list(
-          model_input = glue("output/model/model_input-{name}.rds")
-        )
+  splice(
+    action(
+      name = glue("make_model_input-{name}"),
+      run = glue("r:latest analysis/model/make_model_input.R {name}"),
+      needs = as.list(glue("generate_input_{cohort}_clean")),
+      highly_sensitive = list(
+        model_input = glue("output/model/model_input-{name}.rds")
       )
-    )
-  } else {
-    splice(
-      action(
-        name = glue("make_model_input-{name}"),
-        run = glue("r:latest analysis/model/make_model_input.R {name}"),
-        needs = as.list(glue("generate_input_{cohort}_clean")),
-        highly_sensitive = list(
-          model_input = glue("output/model/model_input-{name}.rds")
-        )
+    ),
+    action(
+      name = glue("cox_ipw-{name}"),
+      run = glue(
+        "cox-ipw:v0.0.37 --df_input=model/model_input-{name}.rds --ipw={ipw} --exposure=exp_date --outcome=out_date --strata={strata} --covariate_sex={covariate_sex} --covariate_age={covariate_age} --covariate_other={covariate_other} --cox_start={cox_start} --cox_stop={cox_stop} --study_start={study_start} --study_stop={study_stop} --cut_points={cut_points} --controls_per_case={controls_per_case} --total_event_threshold={total_event_threshold} --episode_event_threshold={episode_event_threshold} --covariate_threshold={covariate_threshold} --age_spline={age_spline} --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-{name}.csv"
       ),
-      action(
-        name = glue("cox_ipw-{name}"),
-        run = glue(
-          "cox-ipw:v0.0.37 --df_input=model/model_input-{name}.rds --ipw={ipw} --exposure=exp_date --outcome=out_date --strata={strata} --covariate_sex={covariate_sex} --covariate_age={covariate_age} --covariate_other={covariate_other} --cox_start={cox_start} --cox_stop={cox_stop} --study_start={study_start} --study_stop={study_stop} --cut_points={cut_points} --controls_per_case={controls_per_case} --total_event_threshold={total_event_threshold} --episode_event_threshold={episode_event_threshold} --covariate_threshold={covariate_threshold} --age_spline={age_spline} --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-{name}.csv"
-        ),
-        needs = list(glue("make_model_input-{name}")),
-        moderately_sensitive = list(
-          model_output = glue("output/model/model_output-{name}.csv")
-        )
+      needs = list(glue("make_model_input-{name}")),
+      moderately_sensitive = list(
+        model_output = glue("output/model/model_output-{name}.csv")
       )
     )
-  }
+  )
 }
 
 # Create function to make Table 2 ----------------------------------------------
@@ -463,57 +450,6 @@ actions_list <- splice(
     moderately_sensitive = list(
       aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
-    )
-  ),
-
-  ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
-
-  comment(glue(
-    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
-  )),
-
-  splice(
-    unlist(
-      lapply(
-        c(
-          "cohort_vax-main_preex_FALSE-pneumonia",
-          "cohort_vax-main_preex_FALSE-pf"
-        ), # Add more cohorts to this vector as needed
-        function(analysis_name) {
-          action(
-            name = glue("make_covariates_matrix-{analysis_name}"),
-            run = glue(
-              "r:latest analysis/diagnosis/covariates_matrix.R {analysis_name}"
-            ),
-            needs = list(glue("make_model_input-{analysis_name}")),
-            moderately_sensitive = {
-              cutpoints_str <- active_analyses %>%
-                filter(name == !!analysis_name) %>%
-                pull(cut_points)
-
-              cutpoints <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
-              intervals <- paste0(
-                "days",
-                c(0, head(cutpoints, -1)),
-                "_",
-                cutpoints
-              )
-
-              out <- list()
-              for (interval in intervals) {
-                out[[glue("crosstab-{analysis_name}-{interval}")]] <- glue(
-                  "output/diagnosis/cov_crosstab-{analysis_name}-{interval}.csv"
-                )
-                out[[glue("correlation-{analysis_name}-{interval}")]] <- glue(
-                  "output/diagnosis/cov_correlation-{analysis_name}-{interval}.csv"
-                )
-              }
-              out
-            }
-          )
-        }
-      ),
-      recursive = FALSE
     )
   )
 )
