@@ -165,7 +165,6 @@ for (i in preex_groups) {
   }
 }
 
-
 # Add name for each analysis ----
 df$name <- paste0(
   "cohort_",
