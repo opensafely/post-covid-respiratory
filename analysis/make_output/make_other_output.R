@@ -17,16 +17,17 @@ args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
   output <- "table1" # the action to apply
-  cohorts <- "prevax;vax;unvax" # The iterative label
+  cohorts <- "prevax-preex_FALSE;vax-preex_FALSE;unvax-preex_FALSE;prevax-preex_TRUE;vax-preex_TRUE;unvax-preex_TRUE" # The iterative label
 } else {
   output <- args[[1]]
   cohorts <- args[[2]]
+  if (length(args) < 3) {
+    subgroup <- "" # an optional subgroup label (e.g. preex_FALSE)
+  } else {
+    subgroup <- args[[3]]
+  }
 }
-if (length(args) < 3) {
-  subgroup <- "" # an optional subgroup label (e.g. preex_FALSE)
-} else {
-  subgroup <- args[[3]]
-}
+
 
 # Separate cohorts -------------------------------------------------------------
 print('Separate cohorts')
@@ -37,11 +38,9 @@ cohorts <- stringr::str_split(as.vector(cohorts), ";")[[1]]
 print('Generate strings')
 
 if (subgroup == "All" | subgroup == "") {
-  out_str <- ""
-  load_str <- ""
+  sub_str <- ""
 } else {
-  out_str <- paste0("_", subgroup) # trying to match previous make_other_output conventions, but could change to "-" for convenience
-  load_str <- paste0("-", subgroup) # for loading in previous files
+  sub_str <- paste0("-", subgroup)
 }
 
 # Create blank table -----------------------------------------------------------
@@ -61,7 +60,7 @@ for (i in cohorts) {
     output,
     "-cohort_",
     i,
-    load_str,
+    sub_str,
     "-midpoint6.csv"
   ))
 
@@ -74,36 +73,35 @@ for (i in cohorts) {
 
 df <- df[df["cohort"] != TRUE, ]
 
-# add subgroup column ----------------------------------------------------------
-print('Add subgroup column')
+# add source column ----------------------------------------------------------
+print('Add source column')
 
-if (out_str != "") {
-  df$subgroup <- subgroup
+if (sub_str != "") {
+  df$source <- paste0(
+    "output/",
+    output,
+    "/",
+    output,
+    "-cohort_",
+    i,
+    sub_str,
+    "-midpoint6.csv"
+  )
 }
 
 
 # table1-specific processing ---------------------------------------------------
 if (output == "table1") {
   print("table1 processing")
-  colnames(df) <- gsub(" \\[.*", "", colnames(df))
   df <- tidyr::pivot_wider(
     df,
     names_from = "cohort",
-    values_from = c("N", "(%)", "COVID-19 diagnoses")
+    values_from = c(
+      "N [midpoint6_derived]",
+      "(%) [midpoint6_derived]",
+      "COVID-19 diagnoses [midpoint6_derived]"
+    )
   )
-  # df[is.na(df)] <- "-"
-}
-
-# table2-specific processing ---------------------------------------------------
-if (output == "table2") {
-  print("table2 processing")
-  colnames(df) <- gsub("_midpoint6", "", colnames(df))
-}
-
-# Venn-specific processing ---------------------------------------------------
-if (output == "venn") {
-  print("venn processing")
-  colnames(df) <- gsub("_midpoint6", "", colnames(df))
 }
 
 # Save output ------------------------------------------------------------------
@@ -111,6 +109,6 @@ print('Save output')
 
 readr::write_csv(
   df,
-  paste0(makeout_dir, "/", output, out_str, "_output_midpoint6.csv"),
+  paste0(makeout_dir, "/", output, sub_str, "_output_midpoint6.csv"),
   na = "-"
 )

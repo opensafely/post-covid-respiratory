@@ -289,7 +289,7 @@ table2 <- function(cohort, subgroup) {
   )
 }
 
-# Create funtion for making combined table/venn outputs
+# Create funtion for making combined table/venn outputs ------------------------
 
 make_other_output <- function(action_name, cohort, subgroup) {
   cohort_names <- stringr::str_split(as.vector(cohort), ";")[[1]]
@@ -327,7 +327,7 @@ make_other_output <- function(action_name, cohort, subgroup) {
         ))),
         moderately_sensitive = list(
           table1_output_midpoint6 = glue(
-            "output/make_output/{action_name}_{subgroup}_output_midpoint6.csv"
+            "output/make_output/{action_name}-{subgroup}_output_midpoint6.csv"
           )
         )
       )
@@ -406,21 +406,6 @@ actions_list <- splice(
       lapply(
         unique(active_analyses$cohort),
         function(x) table1(cohort = x, ages = age_str, preex = FALSE)
-      ),
-      recursive = FALSE
-    )
-  ),
-
-  splice(
-    unlist(
-      lapply(
-        c("preex_TRUE", "preex_FALSE"),
-        function(x)
-          make_other_output(
-            action_name = "table1",
-            cohort = paste0(cohorts, collapse = ";"),
-            subgroup = x
-          )
       ),
       recursive = FALSE
     )

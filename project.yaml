@@ -183,32 +183,6 @@ actions:
         table1: output/table1/table1-cohort_vax-preex_FALSE.csv
         table1_midpoint6: output/table1/table1-cohort_vax-preex_FALSE-midpoint6.csv
 
-  ## Generate make-table1-preex_TRUE-output 
-
-  make-table1-preex_TRUE-output:
-    run: r:latest analysis/make_output/make_other_output.R table1 prevax;unvax;vax
-      preex_TRUE
-    needs:
-    - table1-cohort_prevax-preex_TRUE
-    - table1-cohort_unvax-preex_TRUE
-    - table1-cohort_vax-preex_TRUE
-    outputs:
-      moderately_sensitive:
-        table1_output_midpoint6: output/make_output/table1_preex_TRUE_output_midpoint6.csv
-
-  ## Generate make-table1-preex_FALSE-output 
-
-  make-table1-preex_FALSE-output:
-    run: r:latest analysis/make_output/make_other_output.R table1 prevax;unvax;vax
-      preex_FALSE
-    needs:
-    - table1-cohort_prevax-preex_FALSE
-    - table1-cohort_unvax-preex_FALSE
-    - table1-cohort_vax-preex_FALSE
-    outputs:
-      moderately_sensitive:
-        table1_output_midpoint6: output/make_output/table1_preex_FALSE_output_midpoint6.csv
-
   ## Generate make-table1-output 
 
   make-table1-output:

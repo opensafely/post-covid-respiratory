@@ -14,11 +14,6 @@ lapply(
   source
 )
 
-# Source common functions ------------------------------------------------------
-print("Source common functions")
-
-source("analysis/utility.R")
-
 # Specify arguments ------------------------------------------------------------
 print("Specify arguments")
 
