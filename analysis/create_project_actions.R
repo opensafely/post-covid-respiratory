@@ -39,6 +39,13 @@ age_str <- paste0(
 
 describe <- TRUE # This prints descriptive files for each dataset in the pipeline
 
+# List of models excluded from model output generation
+
+excluded_models <- c(
+  "cohort_vax-main_preex_FALSE-pneumonia",
+  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
+)
+
 # Create generic action function -----------------------------------------------
 
 action <- function(
@@ -235,7 +242,6 @@ apply_model_function <- function(
         model_input = glue("output/model/model_input-{name}.rds")
       )
     ),
-
     action(
       name = glue("cox_ipw-{name}"),
       run = glue(
@@ -417,7 +423,12 @@ actions_list <- splice(
   action(
     name = "make_model_output",
     run = "r:latest analysis/make_output/make_model_output.R",
-    needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
+    needs = as.list(c(
+      paste0(
+        "cox_ipw-",
+        active_analyses$name[!(active_analyses$name %in% excluded_models)]
+      )
+    )),
     moderately_sensitive = list(
       model_output = glue("output/make_output/model_output.csv"),
       model_output_midpoint6 = glue(
@@ -440,57 +451,6 @@ actions_list <- splice(
     moderately_sensitive = list(
       aer_input = glue("output/aer/aer_input-main.csv"),
       aer_input_midpoint6 = glue("output/aer/aer_input-main-midpoint6.csv")
-    )
-  ),
-
-  ## Diagnosis: cross-tabulate covariates and correlations by survival intervals for cohort_vax-main_preex_FALSE-pneumonia
-
-  comment(glue(
-    "Diagnosis for overflow error in cohort_vax-main_preex_FALSE-pneumonia"
-  )),
-
-  splice(
-    unlist(
-      lapply(
-        c(
-          "cohort_vax-main_preex_FALSE-pneumonia",
-          "cohort_vax-main_preex_FALSE-pf"
-        ), # Add more cohorts to this vector as needed
-        function(analysis_name) {
-          action(
-            name = glue("make_covariates_matrix-{analysis_name}"),
-            run = glue(
-              "r:latest analysis/diagnosis/covariates_matrix.R {analysis_name}"
-            ),
-            needs = list(glue("make_model_input-{analysis_name}")),
-            moderately_sensitive = {
-              cutpoints_str <- active_analyses %>%
-                filter(name == !!analysis_name) %>%
-                pull(cut_points)
-
-              cutpoints <- as.numeric(strsplit(cutpoints_str, ";")[[1]])
-              intervals <- paste0(
-                "days",
-                c(0, head(cutpoints, -1)),
-                "_",
-                cutpoints
-              )
-
-              out <- list()
-              for (interval in intervals) {
-                out[[glue("crosstab-{analysis_name}-{interval}")]] <- glue(
-                  "output/diagnosis/cov_crosstab-{analysis_name}-{interval}.csv"
-                )
-                out[[glue("correlation-{analysis_name}-{interval}")]] <- glue(
-                  "output/diagnosis/cov_correlation-{analysis_name}-{interval}.csv"
-                )
-              }
-              out
-            }
-          )
-        }
-      ),
-      recursive = FALSE
     )
   )
 )
