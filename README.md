@@ -45,9 +45,7 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
     -   Scripts which produce other outputs are in the [`make_output`](./analysis/make_output/) directory:    
         -   [`make_model_output.R`](analysis/model/make_model_output.R) combines all the Cox results in one formatted .csv file.
         -   [`make_other_output.R`](analysis/model/make_other_output.R) combines cohort-specific outputs (e.g. the table1 outputs) into 1 .csv file.
-
-    -   Absolute excess risk (AER) input scripts are in the [`aer`](./analysis/aer/) directory:
-        - This directory contains a single script: [`make_aer_input.R`](analysis/aer/make_aer_input.R). This script generates summary statistics by age and sex required for AER estimation for each outcome (using the model input files for the main analysis generated from [`make_model_input`](analysis/model/make_model_input.R)).
+        -   [`make_aer_input.R`](analysis/aer/make_aer_input.R) generates summary statistics by age and sex required for AER (Absolute Excess Risk) estimation for each outcome (using the model input files for the main analysis generated from [`make_model_input`](analysis/model/make_model_input.R)).
 
 -   The [`active_analyses`](lib/active_analyses.rds) contains a list of active analyses.
 
