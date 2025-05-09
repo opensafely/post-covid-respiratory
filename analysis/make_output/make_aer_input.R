@@ -146,7 +146,7 @@ for (i in 1:nrow(active_analyses)) {
             unexposed <- unexposed %>%
                 dplyr::mutate(
                     fup_start = index_date,
-                    fup_end = min(
+                    fup_end = pmin(
                         exp_date - 1,
                         end_date_outcome,
                         na.rm = TRUE
