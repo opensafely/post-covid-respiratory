@@ -116,7 +116,7 @@ clean_data <- function(cohort, describe = describe) {
       # Action to include describe*.txt files
       action(
         name = glue("generate_input_{cohort}_clean"),
-        run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        run = glue("r:v2 analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
         needs = list(
           "study_dates",
@@ -142,7 +142,7 @@ clean_data <- function(cohort, describe = describe) {
       # Action to exclude describe*.txt files
       action(
         name = glue("generate_input_{cohort}_clean"),
-        run = glue("r:latest analysis/dataset_clean/dataset_clean.R"),
+        run = glue("r:v2 analysis/dataset_clean/dataset_clean.R"),
         arguments = c(c(cohort), c(describe)),
         needs = list(
           "study_dates",
@@ -175,7 +175,7 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
     comment(glue("Generate table1_cohort_{cohort}{preeex_str}")),
     action(
       name = glue("table1-cohort_{cohort}{preeex_str}"),
-      run = "r:latest analysis/table1/table1.R",
+      run = "r:v2 analysis/table1/table1.R",
       arguments = c(c(cohort), c(ages), c(preex)),
       needs = list(glue("generate_input_{cohort}_clean")),
       moderately_sensitive = list(
@@ -215,7 +215,7 @@ apply_model_function <- function(
   splice(
     action(
       name = glue("make_model_input-{name}"),
-      run = glue("r:latest analysis/model/make_model_input.R {name}"),
+      run = glue("r:v2 analysis/model/make_model_input.R {name}"),
       needs = as.list(glue("generate_input_{cohort}_clean")),
       highly_sensitive = list(
         model_input = glue("output/model/model_input-{name}.rds")
@@ -260,7 +260,7 @@ table2 <- function(cohort, subgroup) {
     comment(glue("Generate table2-cohort_{cohort}-sub_{subgroup}")),
     action(
       name = glue("table2-cohort_{cohort}-sub_{subgroup}"),
-      run = "r:latest analysis/table2/table2.R",
+      run = "r:v2 analysis/table2/table2.R",
       arguments = c(cohort, subgroup),
       needs = c(as.list(paste0("make_model_input-", table2_names))),
       moderately_sensitive = list(
@@ -293,7 +293,7 @@ make_other_output <- function(action_name, cohort, subgroup = "") {
     comment(glue("Generate make-{action_name}{sub_str}-output")),
     action(
       name = glue("make-{action_name}{sub_str}-output"),
-      run = "r:latest analysis/make_output/make_other_output.R",
+      run = "r:v2 analysis/make_output/make_other_output.R",
       arguments = c(c(action_name), c(cohort), c(subgroup)),
       needs = c(as.list(paste0(
         action_name,
@@ -328,7 +328,7 @@ actions_list <- splice(
 
   action(
     name = glue("study_dates"),
-    run = "r:latest analysis/study_dates.R",
+    run = "r:v2 analysis/study_dates.R",
     highly_sensitive = list(
       study_dates_json = glue("output/study_dates.json")
     )
@@ -457,7 +457,7 @@ actions_list <- splice(
 
   action(
     name = "make_model_output",
-    run = "r:latest analysis/make_output/make_model_output.R",
+    run = "r:v2 analysis/make_output/make_model_output.R",
     needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
     moderately_sensitive = list(
       model_output = glue("output/make_output/model_output.csv"),
@@ -473,7 +473,7 @@ actions_list <- splice(
 
   action(
     name = "make_aer_input",
-    run = "r:latest analysis/make_output/make_aer_input.R main",
+    run = "r:v2 analysis/make_output/make_aer_input.R main",
     needs = as.list(paste0(
       "make_model_input-",
       active_analyses[grepl("-main", active_analyses$name), ]$name
