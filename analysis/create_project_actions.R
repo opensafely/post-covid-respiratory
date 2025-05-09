@@ -166,41 +166,27 @@ clean_data <- function(cohort, describe = describe) {
 # Create function for table1 --------------------------------------------
 
 table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
+  if (preex == "All" | preex == "") {
+    preex_str <- ""
+  } else {
+    preeex_str <- paste0("-preex_", preex)
+  }
   splice(
-    if (preex == "All") {
-      comment(glue("Generate table1_cohort_{cohort}"))
-    } else {
-      comment(glue("Generate table1_cohort_{cohort}-preex_{preex}"))
-    },
-    if (preex == "All") {
-      action(
-        name = glue("table1-cohort_{cohort}"),
-        run = "r:latest analysis/table1/table1.R",
-        arguments = c(c(cohort), c(ages)),
-        needs = list(glue("generate_input_{cohort}_clean")),
-        moderately_sensitive = list(
-          table1 = glue("output/table1/table1_{cohort}.csv"),
-          table1_midpoint6 = glue(
-            "output/table1/table1_{cohort}_midpoint6.csv"
-          )
+    comment(glue("Generate table1_cohort_{cohort}{preeex_str}")),
+    action(
+      name = glue("table1-cohort_{cohort}{preeex_str}"),
+      run = "r:latest analysis/table1/table1.R",
+      arguments = c(c(cohort), c(ages), c(preex)),
+      needs = list(glue("generate_input_{cohort}_clean")),
+      moderately_sensitive = list(
+        table1 = glue(
+          "output/table1/table1-cohort_{cohort}{preeex_str}.csv"
+        ),
+        table1_midpoint6 = glue(
+          "output/table1/table1-cohort_{cohort}{preeex_str}-midpoint6.csv"
         )
       )
-    } else {
-      action(
-        name = glue("table1-cohort_{cohort}-preex_{preex}"),
-        run = "r:latest analysis/table1/table1.R",
-        arguments = c(c(cohort), c(ages), c(preex)),
-        needs = list(glue("generate_input_{cohort}_clean")),
-        moderately_sensitive = list(
-          table1 = glue(
-            "output/table1/table1-cohort_{cohort}-preex_{preex}.csv"
-          ),
-          table1_midpoint6 = glue(
-            "output/table1/table1-cohort_{cohort}-preex_{preex}-midpoint6.csv"
-          )
-        )
-      )
-    }
+    )
   )
 }
 
@@ -291,47 +277,36 @@ table2 <- function(cohort, subgroup) {
 
 # Create funtion for making combined table/venn outputs ------------------------
 
-make_other_output <- function(action_name, cohort, subgroup) {
+make_other_output <- function(action_name, cohort, subgroup = "") {
   cohort_names <- stringr::str_split(as.vector(cohort), ";")[[1]]
+  if (subgroup == "All" | subgroup == "") {
+    sub_str <- ""
+  } else {
+    if (grepl("preex", subgroup)) {
+      sub_str <- paste0("-", subgroup)
+    } else {
+      sub_str <- paste0("-sub_", subgroup)
+    }
+  }
 
   splice(
-    if (subgroup == "All" | subgroup == "") {
-      comment(glue("Generate make-{action_name}-output"))
-    } else {
-      comment(glue("Generate make-{action_name}-{subgroup}-output"))
-    },
-
-    if (subgroup == "All" | subgroup == "") {
-      action(
-        name = glue("make-{action_name}-output"),
-        run = "r:latest analysis/make_output/make_other_output.R",
-        arguments = c(c(action_name), c(cohort)),
-        needs = c(as.list(paste0(action_name, "-cohort_", cohort_names))),
-        moderately_sensitive = list(
-          table1_output_midpoint6 = glue(
-            "output/make_output/{action_name}_output_midpoint6.csv"
-          )
+    comment(glue("Generate make-{action_name}{sub_str}-output")),
+    action(
+      name = glue("make-{action_name}{sub_str}-output"),
+      run = "r:latest analysis/make_output/make_other_output.R",
+      arguments = c(c(action_name), c(cohort), c(subgroup)),
+      needs = c(as.list(paste0(
+        action_name,
+        "-cohort_",
+        cohort_names,
+        sub_str
+      ))),
+      moderately_sensitive = list(
+        table1_output_midpoint6 = glue(
+          "output/make_output/{action_name}{sub_str}_output_midpoint6.csv"
         )
       )
-    } else {
-      action(
-        name = glue("make-{action_name}-{subgroup}-output"),
-        run = "r:latest analysis/make_output/make_other_output.R",
-        arguments = c(c(action_name), c(cohort), c(subgroup)),
-        needs = c(as.list(paste0(
-          action_name,
-          "-cohort_",
-          cohort_names,
-          "-",
-          subgroup
-        ))),
-        moderately_sensitive = list(
-          table1_output_midpoint6 = glue(
-            "output/make_output/{action_name}-{subgroup}_output_midpoint6.csv"
-          )
-        )
-      )
-    }
+    )
   )
 }
 
@@ -474,7 +449,7 @@ actions_list <- splice(
     make_other_output(
       action_name = "table2",
       cohort = paste0(cohorts, collapse = ";"),
-      subgroup = "sub_covidhospital"
+      subgroup = "covidhospital"
     )
   ),
 

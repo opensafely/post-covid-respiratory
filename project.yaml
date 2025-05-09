@@ -186,7 +186,7 @@ actions:
   ## Generate make-table1-output 
 
   make-table1-output:
-    run: r:latest analysis/make_output/make_other_output.R table1 prevax-preex_FALSE;unvax-preex_FALSE;vax-preex_FALSE;prevax-preex_TRUE;unvax-preex_TRUE;vax-preex_TRUE
+    run: 'r:latest analysis/make_output/make_other_output.R table1 prevax-preex_FALSE;unvax-preex_FALSE;vax-preex_FALSE;prevax-preex_TRUE;unvax-preex_TRUE;vax-preex_TRUE '
     needs:
     - table1-cohort_prevax-preex_FALSE
     - table1-cohort_unvax-preex_FALSE
@@ -7284,14 +7284,14 @@ actions:
 
   make-table2-sub_covidhospital-output:
     run: r:latest analysis/make_output/make_other_output.R table2 prevax;unvax;vax
-      sub_covidhospital
+      covidhospital
     needs:
     - table2-cohort_prevax-sub_covidhospital
     - table2-cohort_unvax-sub_covidhospital
     - table2-cohort_vax-sub_covidhospital
     outputs:
       moderately_sensitive:
-        table1_output_midpoint6: output/make_output/table2_sub_covidhospital_output_midpoint6.csv
+        table1_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
 
   make_model_output:
     run: r:latest analysis/make_output/make_model_output.R
