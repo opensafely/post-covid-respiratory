@@ -18,6 +18,7 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0) {
   output <- "table1" # the action to apply
   cohorts <- "prevax-preex_FALSE;vax-preex_FALSE;unvax-preex_FALSE;prevax-preex_TRUE;vax-preex_TRUE;unvax-preex_TRUE" # The iterative label
+  subgroup <- ""
 } else {
   output <- args[[1]]
   cohorts <- args[[2]]
@@ -27,7 +28,6 @@ if (length(args) == 0) {
     subgroup <- args[[3]]
   }
 }
-
 
 # Separate cohorts -------------------------------------------------------------
 print('Separate cohorts')
@@ -40,7 +40,11 @@ print('Generate strings')
 if (subgroup == "All" | subgroup == "") {
   sub_str <- ""
 } else {
-  sub_str <- paste0("-", subgroup)
+  if (grepl("preex", subgroup)) {
+    sub_str <- paste0("-", subgroup)
+  } else {
+    sub_str <- paste0("-sub_", subgroup)
+  }
 }
 
 # Create blank table -----------------------------------------------------------
@@ -73,23 +77,6 @@ for (i in cohorts) {
 
 df <- df[df["cohort"] != TRUE, ]
 
-# add source column ----------------------------------------------------------
-print('Add source column')
-
-if (sub_str != "") {
-  df$source <- paste0(
-    "output/",
-    output,
-    "/",
-    output,
-    "-cohort_",
-    i,
-    sub_str,
-    "-midpoint6.csv"
-  )
-}
-
-
 # table1-specific processing ---------------------------------------------------
 if (output == "table1") {
   print("table1 processing")
@@ -99,8 +86,9 @@ if (output == "table1") {
     values_from = c(
       "N [midpoint6_derived]",
       "(%) [midpoint6_derived]",
-      "COVID-19 diagnoses [midpoint6_derived]"
-    )
+      "COVID-19 diagnoses [midpoint6]"
+    ),
+    names_vary = "slowest"
   )
 }
 
