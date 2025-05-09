@@ -3,6 +3,7 @@ print('Load packages')
 
 library(magrittr)
 library(data.table)
+library(tidyr)
 
 # Define make_aer_input output folder ------------------------------------------
 print("Creating output/make_output output folder")
@@ -80,7 +81,7 @@ df <- df[df["cohort"] != TRUE, ]
 # table1-specific processing ---------------------------------------------------
 if (output == "table1") {
   print("table1 processing")
-  df <- tidyr::pivot_wider(
+  df <- pivot_wider(
     df,
     names_from = "cohort",
     values_from = c(
