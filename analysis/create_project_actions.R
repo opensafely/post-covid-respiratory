@@ -27,17 +27,24 @@ cohorts <- unique(active_analyses$cohort)
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
 age_str <- paste0(
   paste0(
-    unique(sub(".*_age_([0-9]+)_([0-9]+)_.*", "\\1", active_age)),
+    unique(sub(".*_age_([0-9]+)_([0-9]+).*", "\\1", active_age)),
     collapse = ";"
   ),
   ";",
   max(
-    as.numeric(unique(sub(".*_age_([0-9]+)_([0-9]+)_.*", "\\2", active_age))) +
+    as.numeric(unique(sub(".*_age_([0-9]+)_([0-9]+).*", "\\2", active_age))) +
       1
   )
 ) #create age vector in form "X;XX;XX;XX;XXX"
 
 describe <- TRUE # This prints descriptive files for each dataset in the pipeline
+
+# List of models excluded from model output generation
+
+excluded_models <- c(
+  "cohort_vax-main_preex_FALSE-pneumonia",
+  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
+)
 
 # Create generic action function -----------------------------------------------
 
@@ -221,7 +228,6 @@ apply_model_function <- function(
         model_input = glue("output/model/model_input-{name}.rds")
       )
     ),
-
     action(
       name = glue("cox_ipw-{name}"),
       run = glue(
@@ -458,7 +464,12 @@ actions_list <- splice(
   action(
     name = "make_model_output",
     run = "r:v2 analysis/make_output/make_model_output.R",
-    needs = as.list(c(paste0("cox_ipw-", active_analyses$name))),
+    needs = as.list(c(
+      paste0(
+        "cox_ipw-",
+        active_analyses$name[!(active_analyses$name %in% excluded_models)]
+      )
+    )),
     moderately_sensitive = list(
       model_output = glue("output/make_output/model_output.csv"),
       model_output_midpoint6 = glue(

@@ -13,10 +13,6 @@ lapply(
 # Define cohorts ----
 cohorts <- c("vax", "unvax", "prevax")
 
-# Define outcomes ----
-outcomes_preex <- c("out_date_copd", "out_date_asthma")
-outcomes_all <- c(outcomes_preex, "out_date_pneumonia", "out_date_pf")
-
 # Define subgroups ----
 subgroups <- c(
   "sub_covidhospital_TRUE",
@@ -38,8 +34,12 @@ subgroups <- c(
   "sub_smoking_current"
 )
 
-# Define covariates ----
-core_covars <- c(
+# Define preex groups ----
+# Options are: "" (which means none), "_preex_TRUE", "_preex_FALSE"
+preex_groups <- c("_preex_TRUE", "_preex_FALSE")
+
+# Define general covariates ----
+core_covariates <- c(
   "cov_cat_ethnicity",
   "cov_cat_imd",
   "cov_num_consrate2019",
@@ -58,8 +58,33 @@ core_covars <- c(
   "cov_bin_copd",
   "cov_bin_stroke_isch"
 )
-project_covars <- c("cov_bin_pneumonia", "cov_bin_asthma", "cov_bin_pf")
-all_covars <- c(core_covars, project_covars)
+
+project_covariates <- c("cov_bin_pneumonia", "cov_bin_asthma", "cov_bin_pf")
+
+# Define covariate and outcome combos ----
+
+# For 'all' analyses
+outcomes <- ""
+covariates <- ""
+
+# For preex=TRUE analyses
+outcomes_preex_TRUE <- c(
+  "out_date_pneumonia",
+  "out_date_pf"
+)
+covariates_preex_TRUE <- c(core_covariates, project_covariates)
+
+# For preex=FALSE analyses
+outcomes_preex_FALSE <- c(
+  "out_date_copd",
+  "out_date_asthma",
+  "out_date_pneumonia",
+  "out_date_pf"
+)
+covariates_preex_FALSE <- setdiff(
+  c(core_covariates, project_covariates),
+  c("cov_bin_asthma", "cov_bin_copd")
+)
 
 # Create empty data frame ----
 df <- data.frame(
@@ -86,27 +111,22 @@ df <- data.frame(
 )
 
 # Generate analyses ----
-for (c in cohorts) {
-  for (i in outcomes_all) {
-    preex_groups <- if (i %in% outcomes_preex) "preex_FALSE" else
-      c("preex_FALSE", "preex_TRUE")
+for (i in preex_groups) {
+  for (j in cohorts) {
+    # Retrieve outcomes and covariates for preex group ----
+    out <- get(paste0("outcomes", i))
+    covars <- get(paste0("covariates", i))
 
-    for (p in preex_groups) {
-      covariate_other <- ifelse(
-        p == "preex_FALSE",
-        paste0(
-          setdiff(all_covars, c("cov_bin_asthma", "cov_bin_copd")),
-          collapse = ";"
-        ),
-        paste0(all_covars, collapse = ";")
-      )
+    for (k in out) {
+      # Collapse covariates ----
+
+      covariate_other <- paste0(covars, collapse = ";")
 
       # Add main analysis ----
       df[nrow(df) + 1, ] <- add_analysis(
-        cohort = c,
-        outcome = i,
-        preex = p,
-        analysis_name = "main",
+        cohort = j,
+        outcome = k,
+        analysis_name = paste0("main", i),
         covariate_other = covariate_other,
         age_spline = TRUE
       )
@@ -114,7 +134,7 @@ for (c in cohorts) {
       # Add subgroup analyses ----
       for (sub in subgroups) {
         # Skip sub_covidhistory if cohort is "prevax"
-        if (sub == "sub_covidhistory" && c == "prevax") {
+        if (sub == "sub_covidhistory" && j == "prevax") {
           next
         }
 
@@ -134,10 +154,9 @@ for (c in cohorts) {
 
         # Add analysis for the subgroup
         df[nrow(df) + 1, ] <- add_analysis(
-          cohort = c,
-          outcome = i,
-          preex = p,
-          analysis_name = sub,
+          cohort = j,
+          outcome = k,
+          analysis_name = paste0(sub, i),
           covariate_other = adjusted_covariate_other,
           age_spline = ifelse(grepl("sub_age", sub), FALSE, TRUE)
         )
