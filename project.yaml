@@ -7265,6 +7265,39 @@ actions:
         table2: output/table2/table2-cohort_vax-sub_covidhospital.csv
         table2_midpoint6: output/table2/table2-cohort_vax-sub_covidhospital-midpoint6.csv
 
+  ## Venn - prevax 
+
+  venn_prevax:
+    run: r:latest analysis/venn/venn.R prevax
+    needs:
+    - generate_input_prevax_clean
+    outputs:
+      moderately_sensitive:
+        venn: output/venn_prevax.csv
+        venn_rounded: output/venn_prevax_rounded.csv
+
+  ## Venn - unvax 
+
+  venn_unvax:
+    run: r:latest analysis/venn/venn.R unvax
+    needs:
+    - generate_input_unvax_clean
+    outputs:
+      moderately_sensitive:
+        venn: output/venn_unvax.csv
+        venn_rounded: output/venn_unvax_rounded.csv
+
+  ## Venn - vax 
+
+  venn_vax:
+    run: r:latest analysis/venn/venn.R vax
+    needs:
+    - generate_input_vax_clean
+    outputs:
+      moderately_sensitive:
+        venn: output/venn_vax.csv
+        venn_rounded: output/venn_vax_rounded.csv
+
   make_model_output:
     run: r:latest analysis/make_output/make_model_output.R
     needs:

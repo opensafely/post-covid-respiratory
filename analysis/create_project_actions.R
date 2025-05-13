@@ -24,6 +24,7 @@ active_analyses <- active_analyses[
 ]
 cohorts <- unique(active_analyses$cohort)
 
+
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
 age_str <- paste0(
   paste0(
@@ -295,6 +296,25 @@ table2 <- function(cohort, subgroup) {
   )
 }
 
+# Create function to make Venn data --------------------------------------------
+
+venn <- function(cohort){
+  
+  splice(
+    comment(glue("Venn - {cohort}")),
+    action(
+      name = glue("venn_{cohort}"),
+      run = "r:latest analysis/venn/venn.R",
+      arguments = c(cohort),
+      needs = c(as.list(glue("generate_input_{cohort}_clean"))),
+      moderately_sensitive = list(
+        venn = glue("output/venn_{cohort}.csv"),
+        venn_rounded =  glue("output/venn_{cohort}_rounded.csv")
+      )
+    )
+  )
+}
+
 # Define and combine all actions into a list of actions ------------------------
 
 actions_list <- splice(
@@ -418,6 +438,15 @@ actions_list <- splice(
     )
   ),
 
+  ## Venn data -----------------------------------------------------------------
+  
+  splice(
+    unlist(lapply(unique(active_analyses$cohort), 
+                  function(x) venn(cohort = x)), 
+           recursive = FALSE
+    )
+  ),
+  
   ## Model output --------------------------------------------------------------
 
   action(
