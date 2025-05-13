@@ -30,9 +30,11 @@ print('Identify outcomes')
 
 active_analyses <- readr::read_rds("lib/active_analyses.rds")
 
+analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
+
 outcomes <- gsub("out_date_","",
                  unique(active_analyses[active_analyses$cohort==cohort &
-                                          active_analyses$analysis=="main",]$outcome))
+                                          active_analyses$analysis==analyses,]$outcome))
 
 # Load Venn data ---------------------------------------------------------------
 print('Load Venn data')
@@ -57,120 +59,122 @@ df <- data.frame(outcome = character(),
                  stringsAsFactors = FALSE)
 
 # Populate Venn table for each outcome -----------------------------------------
-print('Populate Venn table for each outcome')
+print('Populate Venn table for each outcome and each pre-ex group')
 
-for (outcome in outcomes) {
-  
-  print(paste0("Outcome: ", outcome))
-  
-  # Load model input data ------------------------------------------------------
-  print('Load model input data')
-  
-  model_input <- readr::read_rds(paste0("output/model_input-cohort_",cohort,"-main-",outcome,".rds"))  
-  model_input <- model_input[!is.na(model_input$out_date),c("patient_id","out_date")]
-  
-  # Filter Venn data based on model input --------------------------------------
-  print('Filter Venn data based on model input')
-  
-  tmp <- venn[venn$patient_id %in% model_input$patient_id,
-              c("patient_id",colnames(venn)[grepl(outcome,colnames(venn))])]
-  
-  colnames(tmp) <- gsub(paste0("tmp_out_date_",outcome,"_"),"",colnames(tmp))
-  
-  # Identify and add missing columns -------------------------------------------
-  print('Identify and add missing columns')
-  
-  complete <- data.frame(patient_id = tmp$patient_id,
-                         snomed = as.Date(NA),
-                         hes = as.Date(NA),
-                         death = as.Date(NA))
-  
-  complete[,setdiff(colnames(tmp),"patient_id")] <- NULL
-  notused <- NULL
-  
-  if (ncol(complete)>1) {
-    tmp <- merge(tmp, complete, by = c("patient_id"))
-    notused <- setdiff(colnames(complete),"patient_id")
-  }
-  
-  # Calculate the number contributing to each source combination ---------------
-  print('Calculate the number contributing to each source combination')
-  
-  tmp$snomed_contributing <- !is.na(tmp$snomed) & 
-    is.na(tmp$hes) & 
-    is.na(tmp$death)
-  
-  tmp$hes_contributing <- is.na(tmp$snomed) & 
-    !is.na(tmp$hes) & 
-    is.na(tmp$death)
-  
-  tmp$death_contributing <- is.na(tmp$snomed) & 
-    is.na(tmp$hes) & 
-    !is.na(tmp$death)
-  
-  tmp$snomed_hes_contributing <- !is.na(tmp$snomed) & 
-    !is.na(tmp$hes) & 
-    is.na(tmp$death)
-  
-  tmp$hes_death_contributing <- is.na(tmp$snomed) & 
-    !is.na(tmp$hes) & 
-    !is.na(tmp$death)
-  
-  tmp$snomed_death_contributing <- !is.na(tmp$snomed) & 
-    is.na(tmp$hes) & 
-    !is.na(tmp$death)
-  
-  tmp$snomed_hes_death_contributing <- !is.na(tmp$snomed) & 
-    !is.na(tmp$hes) & 
-    !is.na(tmp$death)
-  
-  # Record the number contributing to each source combination ------------------
-  print('Record the number contributing to each source combination')
-  
-  df[nrow(df)+1,] <- c(outcome,
-                       only_snomed = nrow(tmp %>% filter(snomed_contributing==T)),
-                       only_hes = nrow(tmp %>% filter(hes_contributing==T)),
-                       only_death = nrow(tmp %>% filter(death_contributing==T)),
-                       snomed_hes = nrow(tmp %>% filter(snomed_hes_contributing==T)),
-                       snomed_death = nrow(tmp %>% filter(snomed_death_contributing==T)),
-                       hes_death = nrow(tmp %>% filter(hes_death_contributing==T)),
-                       snomed_hes_death = nrow(tmp %>% filter(snomed_hes_death_contributing==T)),
-                       total_snomed = nrow(tmp %>% filter(!is.na(snomed))),
-                       total_hes = nrow(tmp %>% filter(!is.na(hes))),
-                       total_death = nrow(tmp %>% filter(!is.na(death))),
-                       total = nrow(tmp))
-  
-  # Replace source combinations with NA if not in study definition -------------
-  print('Replace source combinations with NA if not in study definition')
-  
-  source_combos <- c("only_snomed","only_hes","only_death","snomed_hes","snomed_death","hes_death","snomed_hes_death","total_snomed","total_hes","total_death")
-  source_consid <- source_combos
-  
-  if (!is.null(notused)) {
-    for (i in notused) {
-      
-      # Add variables to consider for Venn plot to vector
-      source_consid <- source_combos[!grepl(i,source_combos)]
-      
-      # Replace unused sources with NA in summary table
-      for (j in setdiff(source_combos,source_consid)) {
-        df[df$outcome==outcome,j] <- NA
-      }
-      
+for (pre-ex in analyses) {
+  for (outcome in outcomes) {
+    
+    print(paste0("Outcome: ", outcome))
+    
+    # Load model input data ------------------------------------------------------
+    print('Load model input data')
+    
+    model_input <- readr::read_rds(paste0("output/model_input-cohort_",cohort,"-",pre-ex,"-",outcome,".rds"))  
+    model_input <- model_input[!is.na(model_input$out_date),c("patient_id","out_date")]
+    
+    # Filter Venn data based on model input --------------------------------------
+    print('Filter Venn data based on model input')
+    
+    tmp <- venn[venn$patient_id %in% model_input$patient_id,
+                c("patient_id",colnames(venn)[grepl(outcome,colnames(venn))])]
+    
+    colnames(tmp) <- gsub(paste0("tmp_out_date_",outcome,"_"),"",colnames(tmp))
+    
+    # Identify and add missing columns -------------------------------------------
+    print('Identify and add missing columns')
+    
+    complete <- data.frame(patient_id = tmp$patient_id,
+                           snomed = as.Date(NA),
+                           hes = as.Date(NA),
+                           death = as.Date(NA))
+    
+    complete[,setdiff(colnames(tmp),"patient_id")] <- NULL
+    notused <- NULL
+    
+    if (ncol(complete)>1) {
+      tmp <- merge(tmp, complete, by = c("patient_id"))
+      notused <- setdiff(colnames(complete),"patient_id")
     }
+    
+    # Calculate the number contributing to each source combination ---------------
+    print('Calculate the number contributing to each source combination')
+    
+    tmp$snomed_contributing <- !is.na(tmp$snomed) & 
+      is.na(tmp$hes) & 
+      is.na(tmp$death)
+    
+    tmp$hes_contributing <- is.na(tmp$snomed) & 
+      !is.na(tmp$hes) & 
+      is.na(tmp$death)
+    
+    tmp$death_contributing <- is.na(tmp$snomed) & 
+      is.na(tmp$hes) & 
+      !is.na(tmp$death)
+    
+    tmp$snomed_hes_contributing <- !is.na(tmp$snomed) & 
+      !is.na(tmp$hes) & 
+      is.na(tmp$death)
+    
+    tmp$hes_death_contributing <- is.na(tmp$snomed) & 
+      !is.na(tmp$hes) & 
+      !is.na(tmp$death)
+    
+    tmp$snomed_death_contributing <- !is.na(tmp$snomed) & 
+      is.na(tmp$hes) & 
+      !is.na(tmp$death)
+    
+    tmp$snomed_hes_death_contributing <- !is.na(tmp$snomed) & 
+      !is.na(tmp$hes) & 
+      !is.na(tmp$death)
+    
+    # Record the number contributing to each source combination ------------------
+    print('Record the number contributing to each source combination')
+    
+    df[nrow(df)+1,] <- c(outcome,
+                         only_snomed = nrow(tmp %>% filter(snomed_contributing==T)),
+                         only_hes = nrow(tmp %>% filter(hes_contributing==T)),
+                         only_death = nrow(tmp %>% filter(death_contributing==T)),
+                         snomed_hes = nrow(tmp %>% filter(snomed_hes_contributing==T)),
+                         snomed_death = nrow(tmp %>% filter(snomed_death_contributing==T)),
+                         hes_death = nrow(tmp %>% filter(hes_death_contributing==T)),
+                         snomed_hes_death = nrow(tmp %>% filter(snomed_hes_death_contributing==T)),
+                         total_snomed = nrow(tmp %>% filter(!is.na(snomed))),
+                         total_hes = nrow(tmp %>% filter(!is.na(hes))),
+                         total_death = nrow(tmp %>% filter(!is.na(death))),
+                         total = nrow(tmp))
+    
+    # Replace source combinations with NA if not in study definition -------------
+    print('Replace source combinations with NA if not in study definition')
+    
+    source_combos <- c("only_snomed","only_hes","only_death","snomed_hes","snomed_death","hes_death","snomed_hes_death","total_snomed","total_hes","total_death")
+    source_consid <- source_combos
+    
+    if (!is.null(notused)) {
+      for (i in notused) {
+        
+        # Add variables to consider for Venn plot to vector
+        source_consid <- source_combos[!grepl(i,source_combos)]
+        
+        # Replace unused sources with NA in summary table
+        for (j in setdiff(source_combos,source_consid)) {
+          df[df$outcome==outcome,j] <- NA
+        }
+        
+      }
+    }
+    
   }
-  
-}
 
 # Record cohort ----------------------------------------------------------------
-print('Record cohort')
+print('Record cohort and pre-ex group')
 
 df$cohort <- cohort
+df$analyses <- analyses
 
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
 
-write.csv(df, paste0("output/venn_",cohort,".csv"))
+write.csv(df, paste0("output/venn_",cohort,analyses,".csv"))
 
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
@@ -181,4 +185,4 @@ df[,setdiff(colnames(df),c("outcome"))] <- lapply(df[,setdiff(colnames(df),c("ou
 # Save rounded Venn data -------------------------------------------------------
 print('Save rounded Venn data')
 
-write.csv(df, paste0("output/venn_",cohort,"_rounded.csv"))
+write.csv(df, paste0("output/venn_",cohort,analyses,"_rounded.csv"))

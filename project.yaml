@@ -7271,6 +7271,10 @@ actions:
     run: r:latest analysis/venn/venn.R prevax
     needs:
     - generate_input_prevax_clean
+    - make_model_input-cohort_prevax-main_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-main_preex_TRUE-copd
+    - make_model_input-cohort_prevax-main_preex_FALSE-pf
+    - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
         venn: output/venn_prevax.csv
@@ -7282,6 +7286,10 @@ actions:
     run: r:latest analysis/venn/venn.R unvax
     needs:
     - generate_input_unvax_clean
+    - make_model_input-cohort_unvax-main_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-main_preex_TRUE-copd
+    - make_model_input-cohort_unvax-main_preex_FALSE-pf
+    - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
         venn: output/venn_unvax.csv
@@ -7293,6 +7301,10 @@ actions:
     run: r:latest analysis/venn/venn.R vax
     needs:
     - generate_input_vax_clean
+    - make_model_input-cohort_vax-main_preex_FALSE-asthma
+    - make_model_input-cohort_vax-main_preex_TRUE-copd
+    - make_model_input-cohort_vax-main_preex_FALSE-pf
+    - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
         venn: output/venn_vax.csv

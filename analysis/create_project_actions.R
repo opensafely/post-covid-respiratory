@@ -23,7 +23,7 @@ active_analyses <- active_analyses[
   ),
 ]
 cohorts <- unique(active_analyses$cohort)
-
+analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
 
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
 age_str <- paste0(
@@ -300,16 +300,20 @@ table2 <- function(cohort, subgroup) {
 
 venn <- function(cohort){
   
+  venn_outcomes <- gsub("out_date_","",unique(active_analyses[active_analyses$cohort=={cohort},]$outcome))
+  venn_analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
+  
   splice(
-    comment(glue("Venn - {cohort}")),
+    comment(glue("Venn - {cohort} - ",venn_analyses)),
     action(
-      name = glue("venn_{cohort}"),
+      name = glue("venn_{cohort}_",venn_analyses),
       run = "r:latest analysis/venn/venn.R",
       arguments = c(cohort),
-      needs = c(as.list(glue("generate_input_{cohort}_clean"))),
+      needs = c(as.list(glue("generate_input_{cohort}_clean")),
+                as.list(paste0(glue("make_model_input-cohort_{cohort}-"),venn_analyses,"-",venn_outcomes))),
       moderately_sensitive = list(
-        venn = glue("output/venn_{cohort}.csv"),
-        venn_rounded =  glue("output/venn_{cohort}_rounded.csv")
+        venn = glue("output/venn_{cohort}-",venn_analyses,".csv"),
+        venn_rounded =  glue("output/venn_{cohort}",venn_analyses,"_rounded.csv")
       )
     )
   )
