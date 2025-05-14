@@ -119,7 +119,7 @@ for (i in 1:nrow(active_analyses)) {
                 c("patient_id", "exp_date", "end_date_outcome")
             ]
 
-            exposed <- exposed[exposed$fup_start <= exposed$end_date_outcome, ]
+            exposed <- exposed[exposed$exp_date <= exposed$end_date_outcome, ]
 
             exposed <- exposed %>%
                 dplyr::mutate(
