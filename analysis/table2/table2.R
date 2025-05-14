@@ -100,17 +100,11 @@ for (i in 1:nrow(active_analyses)) {
     c("patient_id", "exp_date", "out_date", "end_date_outcome")
   ]
 
-  exposed <- exposed %>%
-    dplyr::mutate(
-      fup_start = exp_date,
-      fup_end = end_date_outcome
-    )
-
-  exposed <- exposed[exposed$fup_start <= exposed$fup_end, ]
+  exposed <- exposed[exposed$exp_date <= exposed$end_date_outcome, ]
 
   exposed <- exposed %>%
     dplyr::mutate(
-      person_days = as.numeric((fup_end - fup_start)) + 1
+      person_days = as.numeric((end_date_outcome - exp_date)) + 1
     )
 
   ## Make unexposed subset -----------------------------------------------------
