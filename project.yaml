@@ -7316,8 +7316,6 @@ actions:
     run: r:latest analysis/venn/venn.R prevax main_preex_TRUE
     needs:
     - generate_input_prevax_clean
-    - make_model_input-cohort_prevax-main_preex_TRUE-asthma
-    - make_model_input-cohort_prevax-main_preex_TRUE-copd
     - make_model_input-cohort_prevax-main_preex_TRUE-pf
     - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
@@ -7331,8 +7329,6 @@ actions:
     run: r:latest analysis/venn/venn.R unvax main_preex_TRUE
     needs:
     - generate_input_unvax_clean
-    - make_model_input-cohort_unvax-main_preex_TRUE-asthma
-    - make_model_input-cohort_unvax-main_preex_TRUE-copd
     - make_model_input-cohort_unvax-main_preex_TRUE-pf
     - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
     outputs:
@@ -7346,8 +7342,6 @@ actions:
     run: r:latest analysis/venn/venn.R vax main_preex_TRUE
     needs:
     - generate_input_vax_clean
-    - make_model_input-cohort_vax-main_preex_TRUE-asthma
-    - make_model_input-cohort_vax-main_preex_TRUE-copd
     - make_model_input-cohort_vax-main_preex_TRUE-pf
     - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
     outputs:

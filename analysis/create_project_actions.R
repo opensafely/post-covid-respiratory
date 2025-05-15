@@ -301,9 +301,9 @@ table2 <- function(cohort, subgroup) {
 
 venn <- function(cohort, analyses = analyses){
   
-  venn_outcomes <- gsub("out_date_","",unique(active_analyses[active_analyses$cohort=={cohort},]$outcome))
-
-
+  outcomes_filter<-filter(active_analyses, analysis==analyses)
+  venn_outcomes <-gsub("out_date_","",unique(outcomes_filter[outcomes_filter$cohort=={cohort},]$outcome))
+ 
   splice(
     comment(glue("Venn - {cohort} - {analyses}")),
     action(
