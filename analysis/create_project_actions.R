@@ -25,6 +25,7 @@ active_analyses <- active_analyses[
 cohorts <- unique(active_analyses$cohort)
 analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
 
+
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
 age_str <- paste0(
   paste0(
@@ -298,22 +299,22 @@ table2 <- function(cohort, subgroup) {
 
 # Create function to make Venn data --------------------------------------------
 
-venn <- function(cohort){
+venn <- function(cohort, analyses = analyses){
   
   venn_outcomes <- gsub("out_date_","",unique(active_analyses[active_analyses$cohort=={cohort},]$outcome))
-  venn_analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
-  
+
+
   splice(
-    comment(glue("Venn - {cohort} - ",venn_analyses)),
+    comment(glue("Venn - {cohort} - {analyses}")),
     action(
-      name = glue("venn_{cohort}_",venn_analyses),
+      name = glue("venn_{cohort}_{analyses}"),
       run = "r:latest analysis/venn/venn.R",
-      arguments = c(cohort),
+      arguments = c(cohort, analyses),
       needs = c(as.list(glue("generate_input_{cohort}_clean")),
-                as.list(paste0(glue("make_model_input-cohort_{cohort}-"),venn_analyses,"-",venn_outcomes))),
+                as.list(paste0(glue("make_model_input-cohort_{cohort}-{analyses}-"),venn_outcomes))),
       moderately_sensitive = list(
-        venn = glue("output/venn_{cohort}-",venn_analyses,".csv"),
-        venn_rounded =  glue("output/venn_{cohort}",venn_analyses,"_rounded.csv")
+        venn = glue("output/venn_{cohort}-{analyses}.csv"),
+        venn_rounded = glue("output/venn_{cohort}-{analyses}_rounded.csv")
       )
     )
   )
@@ -446,11 +447,20 @@ actions_list <- splice(
   
   splice(
     unlist(lapply(unique(active_analyses$cohort), 
-                  function(x) venn(cohort = x)), 
+                  function(x) venn(cohort = x, analyses = "main_preex_FALSE"), 
            recursive = FALSE
     )
+   )
   ),
   
+  
+  splice(
+    unlist(lapply(unique(active_analyses$cohort), 
+                  function(x) venn(cohort = x, analyses = "main_preex_TRUE"), 
+                  recursive = FALSE
+    )
+    )
+  ),
   ## Model output --------------------------------------------------------------
 
   action(
