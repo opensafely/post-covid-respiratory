@@ -217,19 +217,42 @@ df$analyses <- analyses
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
 
-write.csv(df, paste0(venn_dir, "venn_", cohort, "-", analyses, ".csv"))
+write.csv(
+  df,
+  paste0(venn_dir, "venn-cohort_", cohort, "-", analyses, ".csv"),
+  row.names = FALSE
+)
 
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
 
-df[, setdiff(colnames(df), c("outcome"))] <- lapply(
-  df[, setdiff(colnames(df), c("outcome"))],
-  FUN = function(y) {
-    roundmid_any(y)
-  }
+df[, paste0(
+  setdiff(colnames(df), c("outcome", "cohort", "analyses")),
+  "_midpoint6"
+)] <- lapply(
+  df[, setdiff(colnames(df), c("outcome", "cohort", "analyses"))],
+  roundmid_any
 )
+
+df <- df[, c(
+  "outcome",
+  colnames(df)[grepl("_midpoint6", colnames(df))],
+  "cohort",
+  "analyses"
+)]
 
 # Save rounded Venn data -------------------------------------------------------
 print('Save rounded Venn data')
 
-write.csv(df, paste0(venn_dir, "venn_", cohort, "-", analyses, "_rounded.csv"))
+write.csv(
+  df,
+  paste0(
+    venn_dir,
+    "venn-cohort_",
+    cohort,
+    "-",
+    analyses,
+    "-midpoint6.csv"
+  ),
+  row.names = FALSE
+)
