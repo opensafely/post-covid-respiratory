@@ -7277,8 +7277,8 @@ actions:
     - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_prevax-main_preex_FALSE.csv
-        venn_rounded: output/venn_prevax-main_preex_FALSE_rounded.csv
+        venn: output/venn/venn_prevax-main_preex_FALSE.csv
+        venn_rounded: output/venn/venn_prevax-main_preex_FALSE_rounded.csv
 
   ## Venn - unvax - main_preex_FALSE 
 
@@ -7292,8 +7292,8 @@ actions:
     - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_unvax-main_preex_FALSE.csv
-        venn_rounded: output/venn_unvax-main_preex_FALSE_rounded.csv
+        venn: output/venn/venn_unvax-main_preex_FALSE.csv
+        venn_rounded: output/venn/venn_unvax-main_preex_FALSE_rounded.csv
 
   ## Venn - vax - main_preex_FALSE 
 
@@ -7307,8 +7307,8 @@ actions:
     - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_vax-main_preex_FALSE.csv
-        venn_rounded: output/venn_vax-main_preex_FALSE_rounded.csv
+        venn: output/venn/venn_vax-main_preex_FALSE.csv
+        venn_rounded: output/venn/venn_vax-main_preex_FALSE_rounded.csv
 
   ## Venn - prevax - main_preex_TRUE 
 
@@ -7320,8 +7320,8 @@ actions:
     - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_prevax-main_preex_TRUE.csv
-        venn_rounded: output/venn_prevax-main_preex_TRUE_rounded.csv
+        venn: output/venn/venn_prevax-main_preex_TRUE.csv
+        venn_rounded: output/venn/venn_prevax-main_preex_TRUE_rounded.csv
 
   ## Venn - unvax - main_preex_TRUE 
 
@@ -7333,8 +7333,8 @@ actions:
     - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_unvax-main_preex_TRUE.csv
-        venn_rounded: output/venn_unvax-main_preex_TRUE_rounded.csv
+        venn: output/venn/venn_unvax-main_preex_TRUE.csv
+        venn_rounded: output/venn/venn_unvax-main_preex_TRUE_rounded.csv
 
   ## Venn - vax - main_preex_TRUE 
 
@@ -7346,8 +7346,8 @@ actions:
     - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        venn: output/venn_vax-main_preex_TRUE.csv
-        venn_rounded: output/venn_vax-main_preex_TRUE_rounded.csv
+        venn: output/venn/venn_vax-main_preex_TRUE.csv
+        venn_rounded: output/venn/venn_vax-main_preex_TRUE_rounded.csv
 
   make_model_output:
     run: r:latest analysis/make_output/make_model_output.R

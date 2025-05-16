@@ -313,8 +313,8 @@ venn <- function(cohort, analyses = analyses){
       needs = c(as.list(glue("generate_input_{cohort}_clean")),
                 as.list(paste0(glue("make_model_input-cohort_{cohort}-{analyses}-"),venn_outcomes))),
       moderately_sensitive = list(
-        venn = glue("output/venn_{cohort}-{analyses}.csv"),
-        venn_rounded = glue("output/venn_{cohort}-{analyses}_rounded.csv")
+        venn = glue("output/venn/venn_{cohort}-{analyses}.csv"),
+        venn_rounded = glue("output/venn/venn_{cohort}-{analyses}_rounded.csv")
       )
     )
   )
