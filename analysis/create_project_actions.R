@@ -23,7 +23,7 @@ active_analyses <- active_analyses[
   ),
 ]
 cohorts <- unique(active_analyses$cohort)
-analyses <- unique(grep("^main", active_analyses$analysis, value= TRUE))
+analyses <- unique(grep("^main", active_analyses$analysis, value = TRUE))
 
 
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
@@ -285,25 +285,45 @@ table2 <- function(cohort, subgroup) {
 
 # Create function to make Venn data --------------------------------------------
 
-venn <- function(cohort, analyses = analyses){
-  
-  outcomes_filter<-filter(active_analyses, analysis==analyses)
-  venn_outcomes <-gsub("out_date_","",unique(outcomes_filter[outcomes_filter$cohort=={cohort},]$outcome))
- 
+venn <- function(cohort, analyses = analyses) {
+  outcomes_filter <- filter(active_analyses, analysis == analyses)
+  venn_outcomes <- gsub(
+    "out_date_",
+    "",
+    unique(
+      outcomes_filter[
+        outcomes_filter$cohort ==
+          {
+            cohort
+          },
+      ]$outcome
+    )
+  )
+
   splice(
-    comment(glue("Venn - {cohort} - {analyses}")),
+    comment(glue("Generate venn-cohort_{cohort}-{analyses}")),
     action(
-      name = glue("venn_{cohort}_{analyses}"),
-      run = "r:latest analysis/venn/venn.R",
+      name = glue("venn-cohort_{cohort}-{analyses}"),
+      run = "r:v2 analysis/venn/venn.R",
       arguments = c(cohort, analyses),
-      needs = c(as.list(glue("generate_input_{cohort}_clean")),
-                as.list(paste0(glue("make_model_input-cohort_{cohort}-{analyses}-"),venn_outcomes))),
+      needs = c(
+        as.list(glue("generate_input_{cohort}_clean")),
+        as.list(paste0(
+          glue("make_model_input-cohort_{cohort}-{analyses}-"),
+          venn_outcomes
+        ))
+      ),
       moderately_sensitive = list(
-        venn = glue("output/venn/venn_{cohort}-{analyses}.csv"),
-        venn_rounded = glue("output/venn/venn_{cohort}-{analyses}_rounded.csv")
-  )    )  )  }
-        
-# Create funtion for making combined table/venn outputs ------------------------
+        venn = glue("output/venn/venn-cohort_{cohort}-{analyses}.csv"),
+        venn_rounded = glue(
+          "output/venn/venn-cohort_{cohort}-{analyses}-midpoint6.csv"
+        )
+      )
+    )
+  )
+}
+
+# Create function for making combined table/venn outputs ------------------------
 
 make_other_output <- function(action_name, cohort, subgroup = "") {
   cohort_names <- stringr::str_split(as.vector(cohort), ";")[[1]]
@@ -482,24 +502,36 @@ actions_list <- splice(
   ),
 
   ## Venn data -----------------------------------------------------------------
-  
+
   splice(
     unlist(
       lapply(
-        unique(active_analyses$cohort), 
-           function(x) venn(cohort = x, analyses = "main_preex_FALSE")
-           ), 
-           recursive = FALSE
+        unique(active_analyses$cohort),
+        function(x) venn(cohort = x, analyses = "main_preex_FALSE")
+      ),
+      recursive = FALSE
     )
   ),
-  
+
   splice(
     unlist(
       lapply(
-        unique(active_analyses$cohort), 
+        unique(active_analyses$cohort),
         function(x) venn(cohort = x, analyses = "main_preex_TRUE")
-      ), 
+      ),
       recursive = FALSE
+    )
+  ),
+
+  splice(
+    make_other_output(
+      action_name = "venn",
+      cohort = paste0(
+        paste0(cohorts, "-main_preex_FALSE", collapse = ";"),
+        ";",
+        paste0(cohorts, "-main_preex_TRUE", collapse = ";")
+      ),
+      subgroup = ""
     )
   ),
 
