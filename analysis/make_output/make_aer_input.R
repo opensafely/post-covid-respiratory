@@ -6,10 +6,10 @@ library(dplyr)
 library(magrittr)
 
 # Define make_aer_input output folder ------------------------------------------
-print("Creating output/aer output folder")
+print("Creating output/make_output folder")
 
-aer_dir <- "output/aer/"
-fs::dir_create(here::here(aer_dir))
+makeout_dir <- "output/make_output/"
+fs::dir_create(here::here(makeout_dir))
 
 # Source common functions ------------------------------------------------------
 print('Source common functions')
@@ -119,17 +119,11 @@ for (i in 1:nrow(active_analyses)) {
                 c("patient_id", "exp_date", "end_date_outcome")
             ]
 
-            exposed <- exposed %>%
-                dplyr::mutate(
-                    fup_start = exp_date,
-                    fup_end = end_date_outcome
-                )
-
-            exposed <- exposed[exposed$fup_start <= exposed$fup_end, ]
+            exposed <- exposed[exposed$exp_date <= exposed$end_date_outcome, ]
 
             exposed <- exposed %>%
                 dplyr::mutate(
-                    person_days = as.numeric((fup_end - fup_start)) + 1
+                    person_days = as.numeric((end_date_outcome - exp_date)) + 1
                 )
 
             ## Make unexposed subset -------------------------------------------------
@@ -146,7 +140,7 @@ for (i in 1:nrow(active_analyses)) {
             unexposed <- unexposed %>%
                 dplyr::mutate(
                     fup_start = index_date,
-                    fup_end = min(
+                    fup_end = pmin(
                         exp_date - 1,
                         end_date_outcome,
                         na.rm = TRUE
@@ -186,7 +180,7 @@ print('Save AER input')
 
 write.csv(
     input,
-    paste0(aer_dir, "aer_input-", analysis, ".csv"),
+    paste0(makeout_dir, "aer_input-", analysis, ".csv"),
     row.names = FALSE
 )
 
@@ -203,6 +197,6 @@ print('Save rounded AER input')
 
 write.csv(
     input,
-    paste0(aer_dir, "aer_input-", analysis, "-midpoint6.csv"),
+    paste0(makeout_dir, "aer_input-", analysis, "-midpoint6.csv"),
     row.names = FALSE
 )
