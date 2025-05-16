@@ -7280,6 +7280,18 @@ actions:
         table2: output/table2/table2-cohort_vax-sub_covidhospital.csv
         table2_midpoint6: output/table2/table2-cohort_vax-sub_covidhospital-midpoint6.csv
 
+  ## Generate make-table2-sub_covidhospital-output 
+
+  make-table2-sub_covidhospital-output:
+    run: r:v2 analysis/make_output/make_other_output.R table2 prevax;unvax;vax covidhospital
+    needs:
+    - table2-cohort_prevax-sub_covidhospital
+    - table2-cohort_unvax-sub_covidhospital
+    - table2-cohort_vax-sub_covidhospital
+    outputs:
+      moderately_sensitive:
+        table1_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
+
   ## Venn - prevax - main_preex_FALSE 
 
   venn_prevax_main_preex_FALSE:
@@ -7363,18 +7375,6 @@ actions:
       moderately_sensitive:
         venn: output/venn/venn_vax-main_preex_TRUE.csv
         venn_rounded: output/venn/venn_vax-main_preex_TRUE_rounded.csv
-
-  ## Generate make-table2-sub_covidhospital-output 
-
-  make-table2-sub_covidhospital-output:
-    run: r:v2 analysis/make_output/make_other_output.R table2 prevax;unvax;vax covidhospital
-    needs:
-    - table2-cohort_prevax-sub_covidhospital
-    - table2-cohort_unvax-sub_covidhospital
-    - table2-cohort_vax-sub_covidhospital
-    outputs:
-      moderately_sensitive:
-        table1_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
 
   make_model_output:
     run: r:v2 analysis/make_output/make_model_output.R

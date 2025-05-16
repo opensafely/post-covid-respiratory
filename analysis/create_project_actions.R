@@ -283,7 +283,6 @@ table2 <- function(cohort, subgroup) {
   )
 }
 
-
 # Create function to make Venn data --------------------------------------------
 
 venn <- function(cohort, analyses = analyses){
@@ -474,6 +473,13 @@ actions_list <- splice(
     )
   ),
 
+  splice(
+    make_other_output(
+      action_name = "table2",
+      cohort = paste0(cohorts, collapse = ";"),
+      subgroup = "covidhospital"
+    )
+  ),
 
   ## Venn data -----------------------------------------------------------------
   
@@ -496,16 +502,6 @@ actions_list <- splice(
       recursive = FALSE
     )
   ),
-  
-
-  splice(
-    make_other_output(
-      action_name = "table2",
-      cohort = paste0(cohorts, collapse = ";"),
-      subgroup = "covidhospital"
-    )
-  ),
-
 
   ## Model output --------------------------------------------------------------
 
