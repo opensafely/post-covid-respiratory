@@ -67,10 +67,6 @@ df <- data.frame(
   gp_death = numeric(),
   apc_death = numeric(),
   gp_apc_death = numeric(),
-  total_gp = numeric(),
-  total_apc = numeric(),
-  total_death = numeric(),
-  total = numeric(),
   stringsAsFactors = FALSE
 )
 
@@ -171,11 +167,7 @@ for (outcome in outcomes) {
     gp_apc = nrow(tmp %>% filter(gp_apc_contributing == T)),
     gp_death = nrow(tmp %>% filter(gp_death_contributing == T)),
     apc_death = nrow(tmp %>% filter(apc_death_contributing == T)),
-    gp_apc_death = nrow(tmp %>% filter(gp_apc_death_contributing == T)),
-    total_gp = nrow(tmp %>% filter(!is.na(gp))),
-    total_apc = nrow(tmp %>% filter(!is.na(apc))),
-    total_death = nrow(tmp %>% filter(!is.na(death))),
-    total = nrow(tmp)
+    gp_apc_death = nrow(tmp %>% filter(gp_apc_death_contributing == T))
   )
 
   # Replace source combinations with NA if not in study definition -------------
@@ -188,10 +180,7 @@ for (outcome in outcomes) {
     "gp_apc",
     "gp_death",
     "apc_death",
-    "gp_apc_death",
-    "total_gp",
-    "total_apc",
-    "total_death"
+    "gp_apc_death"
   )
   source_consid <- source_combos
 
