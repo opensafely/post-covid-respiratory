@@ -513,17 +513,7 @@ actions_list <- splice(
     unlist(
       lapply(
         unique(active_analyses$cohort),
-        function(x) venn(cohort = x, analyses = "main_preex_FALSE")
-      ),
-      recursive = FALSE
-    )
-  ),
-
-  splice(
-    unlist(
-      lapply(
-        unique(active_analyses$cohort),
-        function(x) venn(cohort = x, analyses = "main_preex_TRUE")
+        function(x) venn(cohort = x)
       ),
       recursive = FALSE
     )
@@ -532,11 +522,7 @@ actions_list <- splice(
   splice(
     make_other_output(
       action_name = "venn",
-      cohort = paste0(
-        paste0(cohorts, "-main_preex_FALSE", collapse = ";"),
-        ";",
-        paste0(cohorts, "-main_preex_TRUE", collapse = ";")
-      ),
+      cohort = paste0(cohorts, collapse = ";"),
       subgroup = ""
     )
   ),
