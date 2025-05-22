@@ -26,7 +26,11 @@ if (length(args) == 0) {
   analyses <- "main_preex_FALSE"
 } else {
   cohort <- args[[1]]
-  analyses <- args[[2]]
+  if (length(args) < 2) {
+    analyses <- "main"
+  } else {
+    analyses <- args[[2]]
+  }
 }
 
 # Identify outcomes ------------------------------------------------------------
@@ -40,9 +44,16 @@ outcomes <- gsub(
   unique(
     active_analyses[
       active_analyses$cohort == cohort &
-        active_analyses$analysis == analyses,
+        analyses %in% active_analyses$analysis,
     ]$outcome
   )
+)
+
+names <- unique(
+  active_analyses[
+    active_analyses$cohort == cohort &
+      grepl(analyses, active_analyses$analysis),
+  ]$name
 )
 
 # Load Venn data ---------------------------------------------------------------
