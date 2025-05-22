@@ -23,7 +23,7 @@ args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
   cohort <- "prevax"
-  analyses <- "main_preex_FALSE"
+  analyses <- "main"
 } else {
   cohort <- args[[1]]
   if (length(args) < 2) {
@@ -37,17 +37,6 @@ if (length(args) == 0) {
 print('Identify outcomes')
 
 active_analyses <- readr::read_rds("lib/active_analyses.rds")
-
-outcomes <- gsub(
-  "out_date_",
-  "",
-  unique(
-    active_analyses[
-      active_analyses$cohort == cohort &
-        analyses %in% active_analyses$analysis,
-    ]$outcome
-  )
-)
 
 names <- unique(
   active_analyses[
@@ -84,8 +73,8 @@ df <- data.frame(
 # Populate Venn table for each outcome -----------------------------------------
 print('Populate Venn table for each outcome')
 
-for (outcome in outcomes) {
-  print(paste0("Outcome: ", outcome))
+for (NAME in names) {
+  print(paste0("Name: ", NAME))
 
   # Load model input data ------------------------------------------------------
   print('Load model input data')
@@ -94,9 +83,13 @@ for (outcome in outcomes) {
     "output/model/model_input-cohort_",
     cohort,
     "-",
-    analyses,
+    active_analyses[active_analyses$name == NAME, ]$analysis,
     "-",
-    outcome,
+    gsub(
+      "out_date_",
+      "",
+      active_analyses[active_analyses$name == NAME, ]$outcome
+    ),
     ".rds"
   ))
   model_input <- model_input[
@@ -109,11 +102,25 @@ for (outcome in outcomes) {
 
   tmp <- venn[
     venn$patient_id %in% model_input$patient_id,
-    c("patient_id", colnames(venn)[grepl(outcome, colnames(venn))])
+    c(
+      "patient_id",
+      colnames(venn)[grepl(
+        gsub(
+          "out_date_",
+          "",
+          active_analyses[active_analyses$name == NAME, ]$outcome
+        ),
+        colnames(venn)
+      )]
+    )
   ]
 
   colnames(tmp) <- gsub(
-    paste0("tmp_out_date_", outcome, "_"),
+    paste0(
+      "tmp_",
+      active_analyses[active_analyses$name == NAME, ]$outcome,
+      "_"
+    ),
     "",
     colnames(tmp)
   )
@@ -171,7 +178,11 @@ for (outcome in outcomes) {
   print('Record the number contributing to each source combination')
 
   df[nrow(df) + 1, ] <- c(
-    outcome,
+    gsub(
+      "out_date_",
+      "",
+      active_analyses[active_analyses$name == NAME, ]$outcome
+    ),
     only_gp = nrow(tmp %>% filter(gp_contributing == T)),
     only_apc = nrow(tmp %>% filter(apc_contributing == T)),
     only_death = nrow(tmp %>% filter(death_contributing == T)),
@@ -202,7 +213,15 @@ for (outcome in outcomes) {
 
       # Replace unused sources with NA in summary table
       for (j in setdiff(source_combos, source_consid)) {
-        df[df$outcome == outcome, j] <- NA
+        df[
+          df$outcome ==
+            gsub(
+              "out_date_",
+              "",
+              active_analyses[active_analyses$name == NAME, ]$outcome
+            ),
+          j
+        ] <- NA
       }
     }
   }
@@ -211,15 +230,20 @@ for (outcome in outcomes) {
 # Record cohort ----------------------------------------------------------------
 print('Record cohort and pre-ex group')
 
-df$cohort <- cohort
-df$analyses <- analyses
+df$cohort <- gsub("cohort_(.*-.*)-.*", "\\1", names)
 
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
 
+if (length(args) < 2) {
+  analyses_str <- ""
+} else {
+  analyses_str <- paste0("-", analyses)
+}
+
 write.csv(
   df,
-  paste0(venn_dir, "venn-cohort_", cohort, "-", analyses, ".csv"),
+  paste0(venn_dir, "venn-cohort_", cohort, analyses_str, ".csv"),
   row.names = FALSE
 )
 
@@ -250,8 +274,7 @@ write.csv(
     venn_dir,
     "venn-cohort_",
     cohort,
-    "-",
-    analyses,
+    analyses_str,
     "-midpoint6.csv"
   ),
   row.names = FALSE
