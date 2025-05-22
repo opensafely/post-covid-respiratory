@@ -285,38 +285,44 @@ table2 <- function(cohort, subgroup) {
 
 # Create function to make Venn data --------------------------------------------
 
-venn <- function(cohort, analyses = analyses) {
-  outcomes_filter <- filter(active_analyses, analysis == analyses)
+venn <- function(cohort, analyses = "") {
+  if (analyses == "") {
+    analyses_str <- ""
+    analyses <- "main"
+    analyses_input <- ""
+  } else {
+    analyses_str <- paste0("-", analyses)
+    analyses_input <- analyses
+  }
+
   venn_outcomes <- gsub(
-    "out_date_",
+    "cohort_",
     "",
     unique(
-      outcomes_filter[
-        outcomes_filter$cohort ==
-          {
-            cohort
-          },
-      ]$outcome
+      active_analyses[
+        active_analyses$cohort == cohort &
+          grepl(analyses, active_analyses$analysis),
+      ]$name
     )
   )
 
   splice(
-    comment(glue("Generate venn-cohort_{cohort}-{analyses}")),
+    comment(glue("Generate venn-cohort_{cohort}{analyses_str}")),
     action(
-      name = glue("venn-cohort_{cohort}-{analyses}"),
+      name = glue("venn-cohort_{cohort}{analyses_str}"),
       run = "r:v2 analysis/venn/venn.R",
-      arguments = c(cohort, analyses),
+      arguments = c(cohort, analyses_input),
       needs = c(
         as.list(glue("generate_input_{cohort}_clean")),
         as.list(paste0(
-          glue("make_model_input-cohort_{cohort}-{analyses}-"),
+          glue("make_model_input-cohort_"),
           venn_outcomes
         ))
       ),
       moderately_sensitive = list(
-        venn = glue("output/venn/venn-cohort_{cohort}-{analyses}.csv"),
+        venn = glue("output/venn/venn-cohort_{cohort}{analyses_str}.csv"),
         venn_rounded = glue(
-          "output/venn/venn-cohort_{cohort}-{analyses}-midpoint6.csv"
+          "output/venn/venn-cohort_{cohort}{analyses_str}-midpoint6.csv"
         )
       )
     )
