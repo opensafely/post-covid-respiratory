@@ -26,7 +26,7 @@ if (length(args) == 0) {
   analyses <- "main"
 } else {
   cohort <- args[[1]]
-  if (length(args) < 2) {
+  if (length(args) < 2 || args[[2]] == "") {
     analyses <- "main"
   } else {
     analyses <- args[[2]]
@@ -235,7 +235,7 @@ df$cohort <- gsub("cohort_(.*-.*)-.*", "\\1", names)
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
 
-if (length(args) < 2) {
+if (length(args) < 2 || args[[2]] == "") {
   analyses_str <- ""
 } else {
   analyses_str <- paste0("-", analyses)
@@ -261,8 +261,7 @@ df[, paste0(
 df <- df[, c(
   "outcome",
   colnames(df)[grepl("_midpoint6", colnames(df))],
-  "cohort",
-  "analyses"
+  "cohort"
 )]
 
 # Save rounded Venn data -------------------------------------------------------
