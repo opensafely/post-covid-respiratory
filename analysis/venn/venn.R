@@ -230,7 +230,7 @@ for (NAME in names) {
 # Record cohort ----------------------------------------------------------------
 print('Record cohort and pre-ex group')
 
-df$cohort <- gsub("cohort_(.*-.*)-.*", "\\1", names)
+df$analyses <- gsub("cohort_(.*-.*)-.*", "\\1", names)
 
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
@@ -251,17 +251,17 @@ write.csv(
 print('Perform redaction')
 
 df[, paste0(
-  setdiff(colnames(df), c("outcome", "cohort", "analyses")),
+  setdiff(colnames(df), c("outcome", "analyses")),
   "_midpoint6"
 )] <- lapply(
-  df[, setdiff(colnames(df), c("outcome", "cohort", "analyses"))],
+  df[, setdiff(colnames(df), c("outcome", "analyses"))],
   roundmid_any
 )
 
 df <- df[, c(
   "outcome",
   colnames(df)[grepl("_midpoint6", colnames(df))],
-  "cohort"
+  "analyses"
 )]
 
 # Save rounded Venn data -------------------------------------------------------
