@@ -7355,8 +7355,10 @@ actions:
       moderately_sensitive:
         table1_output_midpoint6: output/make_output/venn_output_midpoint6.csv
 
-  make_model_output:
-    run: r:v2 analysis/make_output/make_model_output.R
+  ## Generate model_output-main 
+
+  make_model_output-main:
+    run: r:v2 analysis/make_output/make_model_output.R main
     needs:
     - cox_ipw-cohort_prevax-main_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-main_preex_FALSE-copd
@@ -7375,6 +7377,16 @@ actions:
     - cox_ipw-cohort_unvax-main_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-main_preex_TRUE-pf
     - cox_ipw-cohort_vax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_main.csv
+        model_output_midpoint6: output/make_output/model_output_main_midpoint6.csv
+
+  ## Generate model_output-sub_age 
+
+  make_model_output-sub_age:
+    run: r:v2 analysis/make_output/make_model_output.R sub_age
+    needs:
     - cox_ipw-cohort_prevax-sub_age_18_39_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-sub_age_18_39_preex_FALSE-copd
     - cox_ipw-cohort_prevax-sub_age_18_39_preex_FALSE-pf
@@ -7446,6 +7458,16 @@ actions:
     - cox_ipw-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-sub_age_80_110_preex_TRUE-pf
     - cox_ipw-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_sub_age.csv
+        model_output_midpoint6: output/make_output/model_output_sub_age_midpoint6.csv
+
+  ## Generate model_output-sub_covidhistory 
+
+  make_model_output-sub_covidhistory:
+    run: r:v2 analysis/make_output/make_model_output.R sub_covidhistory
+    needs:
     - cox_ipw-cohort_unvax-sub_covidhistory_preex_FALSE-asthma
     - cox_ipw-cohort_unvax-sub_covidhistory_preex_FALSE-copd
     - cox_ipw-cohort_unvax-sub_covidhistory_preex_FALSE-pf
@@ -7458,6 +7480,16 @@ actions:
     - cox_ipw-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-sub_covidhistory_preex_TRUE-pf
     - cox_ipw-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_sub_covidhistory.csv
+        model_output_midpoint6: output/make_output/model_output_sub_covidhistory_midpoint6.csv
+
+  ## Generate model_output-sub_covidhospital 
+
+  make_model_output-sub_covidhospital:
+    run: r:v2 analysis/make_output/make_model_output.R sub_covidhospital
+    needs:
     - cox_ipw-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-copd
     - cox_ipw-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pf
@@ -7494,6 +7526,16 @@ actions:
     - cox_ipw-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pf
     - cox_ipw-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_sub_covidhospital.csv
+        model_output_midpoint6: output/make_output/model_output_sub_covidhospital_midpoint6.csv
+
+  ## Generate model_output-sub_ethnicity 
+
+  make_model_output-sub_ethnicity:
+    run: r:v2 analysis/make_output/make_model_output.R sub_ethnicity
+    needs:
     - cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd
     - cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf
@@ -7584,6 +7626,16 @@ actions:
     - cox_ipw-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-sub_ethnicity_white_preex_TRUE-pf
     - cox_ipw-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_sub_ethnicity.csv
+        model_output_midpoint6: output/make_output/model_output_sub_ethnicity_midpoint6.csv
+
+  ## Generate model_output-sub_sex 
+
+  make_model_output-sub_sex:
+    run: r:v2 analysis/make_output/make_model_output.R sub_sex
+    needs:
     - cox_ipw-cohort_prevax-sub_sex_female_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-sub_sex_female_preex_FALSE-copd
     - cox_ipw-cohort_prevax-sub_sex_female_preex_FALSE-pf
@@ -7620,6 +7672,16 @@ actions:
     - cox_ipw-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia
     - cox_ipw-cohort_vax-sub_sex_male_preex_TRUE-pf
     - cox_ipw-cohort_vax-sub_sex_male_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        model_output: output/make_output/model_output_sub_sex.csv
+        model_output_midpoint6: output/make_output/model_output_sub_sex_midpoint6.csv
+
+  ## Generate model_output-sub_smoking 
+
+  make_model_output-sub_smoking:
+    run: r:v2 analysis/make_output/make_model_output.R sub_smoking
+    needs:
     - cox_ipw-cohort_prevax-sub_smoking_current_preex_FALSE-asthma
     - cox_ipw-cohort_prevax-sub_smoking_current_preex_FALSE-copd
     - cox_ipw-cohort_prevax-sub_smoking_current_preex_FALSE-pf
@@ -7676,8 +7738,8 @@ actions:
     - cox_ipw-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output.csv
-        model_output_midpoint6: output/make_output/model_output_midpoint6.csv
+        model_output: output/make_output/model_output_sub_smoking.csv
+        model_output_midpoint6: output/make_output/model_output_sub_smoking_midpoint6.csv
 
   ## Make absolute excess risk (AER) input 
 
