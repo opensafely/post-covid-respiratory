@@ -59,7 +59,7 @@ venn <- readr::read_rds(paste0(
 print('Create empty output table')
 
 df <- data.frame(
-  names = character(),
+  name = character(),
   only_gp = numeric(),
   only_apc = numeric(),
   only_death = numeric(),
@@ -242,15 +242,15 @@ write.csv(
 print('Perform redaction')
 
 df[, paste0(
-  setdiff(colnames(df), c("names")),
+  setdiff(colnames(df), c("name")),
   "_midpoint6"
 )] <- lapply(
-  df[, setdiff(colnames(df), c("names"))],
+  df[, setdiff(colnames(df), c("name"))],
   roundmid_any
 )
 
 df <- df[, c(
-  "names",
+  "name",
   colnames(df)[grepl("_midpoint6", colnames(df))]
 )]
 
