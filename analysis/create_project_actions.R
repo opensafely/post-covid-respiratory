@@ -351,9 +351,9 @@ make_model_output <- function(subgroup) {
         )
       )),
       moderately_sensitive = list(
-        model_output = glue("output/make_output/model_output_{subgroup}.csv"),
+        model_output = glue("output/make_output/model_output-{subgroup}.csv"),
         model_output_midpoint6 = glue(
-          "output/make_output/model_output_{subgroup}_midpoint6.csv"
+          "output/make_output/model_output-{subgroup}-midpoint6.csv"
         )
       )
     )

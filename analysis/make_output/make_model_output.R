@@ -124,7 +124,7 @@ df <- df[, c(
   "source"
 )]
 
-readr::write_csv(df, paste0(makeout_dir, "model_output_", subgroup, ".csv"))
+readr::write_csv(df, paste0(makeout_dir, "model_output-", subgroup, ".csv"))
 
 # Perform redaction ------------------------------------------------------------
 print('Perform redaction')
@@ -139,5 +139,5 @@ print('Save model output')
 
 readr::write_csv(
   df,
-  paste0(makeout_dir, "model_output_", subgroup, "_midpoint6.csv")
+  paste0(makeout_dir, "model_output-", subgroup, "-midpoint6.csv")
 )

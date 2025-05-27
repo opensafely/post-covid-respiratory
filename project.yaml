@@ -7379,8 +7379,8 @@ actions:
     - cox_ipw-cohort_vax-main_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_main.csv
-        model_output_midpoint6: output/make_output/model_output_main_midpoint6.csv
+        model_output: output/make_output/model_output-main.csv
+        model_output_midpoint6: output/make_output/model_output-main-midpoint6.csv
 
   ## Generate model_output-sub_age 
 
@@ -7460,8 +7460,8 @@ actions:
     - cox_ipw-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_age.csv
-        model_output_midpoint6: output/make_output/model_output_sub_age_midpoint6.csv
+        model_output: output/make_output/model_output-sub_age.csv
+        model_output_midpoint6: output/make_output/model_output-sub_age-midpoint6.csv
 
   ## Generate model_output-sub_covidhistory 
 
@@ -7482,8 +7482,8 @@ actions:
     - cox_ipw-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_covidhistory.csv
-        model_output_midpoint6: output/make_output/model_output_sub_covidhistory_midpoint6.csv
+        model_output: output/make_output/model_output-sub_covidhistory.csv
+        model_output_midpoint6: output/make_output/model_output-sub_covidhistory-midpoint6.csv
 
   ## Generate model_output-sub_covidhospital 
 
@@ -7528,8 +7528,8 @@ actions:
     - cox_ipw-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_covidhospital.csv
-        model_output_midpoint6: output/make_output/model_output_sub_covidhospital_midpoint6.csv
+        model_output: output/make_output/model_output-sub_covidhospital.csv
+        model_output_midpoint6: output/make_output/model_output-sub_covidhospital-midpoint6.csv
 
   ## Generate model_output-sub_ethnicity 
 
@@ -7628,8 +7628,8 @@ actions:
     - cox_ipw-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_ethnicity.csv
-        model_output_midpoint6: output/make_output/model_output_sub_ethnicity_midpoint6.csv
+        model_output: output/make_output/model_output-sub_ethnicity.csv
+        model_output_midpoint6: output/make_output/model_output-sub_ethnicity-midpoint6.csv
 
   ## Generate model_output-sub_sex 
 
@@ -7674,8 +7674,8 @@ actions:
     - cox_ipw-cohort_vax-sub_sex_male_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_sex.csv
-        model_output_midpoint6: output/make_output/model_output_sub_sex_midpoint6.csv
+        model_output: output/make_output/model_output-sub_sex.csv
+        model_output_midpoint6: output/make_output/model_output-sub_sex-midpoint6.csv
 
   ## Generate model_output-sub_smoking 
 
@@ -7738,8 +7738,8 @@ actions:
     - cox_ipw-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
       moderately_sensitive:
-        model_output: output/make_output/model_output_sub_smoking.csv
-        model_output_midpoint6: output/make_output/model_output_sub_smoking_midpoint6.csv
+        model_output: output/make_output/model_output-sub_smoking.csv
+        model_output_midpoint6: output/make_output/model_output-sub_smoking-midpoint6.csv
 
   ## Make absolute excess risk (AER) input 
 
