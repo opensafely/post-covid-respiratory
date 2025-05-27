@@ -311,7 +311,9 @@ venn <- function(cohort, analyses = "") {
     action(
       name = glue("venn-cohort_{cohort}{analyses_str}"),
       run = "r:v2 analysis/venn/venn.R",
-      arguments = c(cohort, analyses_input),
+      arguments = lapply(list(c(cohort, analyses_input)), function(x) {
+        x[x != ""]
+      }),
       needs = c(
         as.list(glue("generate_input_{cohort}_clean")),
         as.list(paste0(
@@ -321,7 +323,7 @@ venn <- function(cohort, analyses = "") {
       ),
       moderately_sensitive = list(
         venn = glue("output/venn/venn-cohort_{cohort}{analyses_str}.csv"),
-        venn_rounded = glue(
+        venn_midpoint6 = glue(
           "output/venn/venn-cohort_{cohort}{analyses_str}-midpoint6.csv"
         )
       )

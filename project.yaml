@@ -7295,7 +7295,7 @@ actions:
   ## Generate venn-cohort_prevax 
 
   venn-cohort_prevax:
-    run: 'r:v2 analysis/venn/venn.R prevax '
+    run: r:v2 analysis/venn/venn.R prevax
     needs:
     - generate_input_prevax_clean
     - make_model_input-cohort_prevax-main_preex_FALSE-asthma
@@ -7307,12 +7307,12 @@ actions:
     outputs:
       moderately_sensitive:
         venn: output/venn/venn-cohort_prevax.csv
-        venn_rounded: output/venn/venn-cohort_prevax-midpoint6.csv
+        venn_midpoint6: output/venn/venn-cohort_prevax-midpoint6.csv
 
   ## Generate venn-cohort_unvax 
 
   venn-cohort_unvax:
-    run: 'r:v2 analysis/venn/venn.R unvax '
+    run: r:v2 analysis/venn/venn.R unvax
     needs:
     - generate_input_unvax_clean
     - make_model_input-cohort_unvax-main_preex_FALSE-asthma
@@ -7324,12 +7324,12 @@ actions:
     outputs:
       moderately_sensitive:
         venn: output/venn/venn-cohort_unvax.csv
-        venn_rounded: output/venn/venn-cohort_unvax-midpoint6.csv
+        venn_midpoint6: output/venn/venn-cohort_unvax-midpoint6.csv
 
   ## Generate venn-cohort_vax 
 
   venn-cohort_vax:
-    run: 'r:v2 analysis/venn/venn.R vax '
+    run: r:v2 analysis/venn/venn.R vax
     needs:
     - generate_input_vax_clean
     - make_model_input-cohort_vax-main_preex_FALSE-asthma
@@ -7341,7 +7341,7 @@ actions:
     outputs:
       moderately_sensitive:
         venn: output/venn/venn-cohort_vax.csv
-        venn_rounded: output/venn/venn-cohort_vax-midpoint6.csv
+        venn_midpoint6: output/venn/venn-cohort_vax-midpoint6.csv
 
   ## Generate make-venn-output 
 
