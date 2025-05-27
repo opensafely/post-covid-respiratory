@@ -59,7 +59,7 @@ venn <- readr::read_rds(paste0(
 print('Create empty output table')
 
 df <- data.frame(
-  outcome = character(),
+  names = character(),
   only_gp = numeric(),
   only_apc = numeric(),
   only_death = numeric(),
@@ -178,11 +178,7 @@ for (NAME in names) {
   print('Record the number contributing to each source combination')
 
   df[nrow(df) + 1, ] <- c(
-    gsub(
-      "out_date_",
-      "",
-      active_analyses[active_analyses$name == NAME, ]$outcome
-    ),
+    NAME,
     only_gp = nrow(tmp %>% filter(gp_contributing == T)),
     only_apc = nrow(tmp %>% filter(apc_contributing == T)),
     only_death = nrow(tmp %>% filter(death_contributing == T)),
@@ -227,11 +223,6 @@ for (NAME in names) {
   }
 }
 
-# Record cohort ----------------------------------------------------------------
-print('Record cohort and pre-ex group')
-
-df$analyses <- gsub("cohort_(.*-.*)-.*", "\\1", names)
-
 # Save Venn data -----------------------------------------------------------------
 print('Save Venn data')
 
@@ -251,17 +242,16 @@ write.csv(
 print('Perform redaction')
 
 df[, paste0(
-  setdiff(colnames(df), c("outcome", "analyses")),
+  setdiff(colnames(df), c("names")),
   "_midpoint6"
 )] <- lapply(
-  df[, setdiff(colnames(df), c("outcome", "analyses"))],
+  df[, setdiff(colnames(df), c("names"))],
   roundmid_any
 )
 
 df <- df[, c(
-  "outcome",
-  colnames(df)[grepl("_midpoint6", colnames(df))],
-  "analyses"
+  "names",
+  colnames(df)[grepl("_midpoint6", colnames(df))]
 )]
 
 # Save rounded Venn data -------------------------------------------------------
