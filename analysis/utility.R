@@ -8,7 +8,7 @@ roundmid_any <- function(x, to = 6) {
 
 # Function to make display numbers ----
 
-display <- function(x, to = 1) {
+display <- function(x) {
   ifelse(
     x >= 100,
     sprintf("%.0f", x),

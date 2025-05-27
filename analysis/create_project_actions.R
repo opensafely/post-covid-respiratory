@@ -23,6 +23,8 @@ active_analyses <- active_analyses[
   ),
 ]
 cohorts <- unique(active_analyses$cohort)
+analyses <- unique(grep("^main", active_analyses$analysis, value = TRUE))
+
 
 active_age <- active_analyses[grepl("_age_", active_analyses$name), ]$name
 age_str <- paste0(
@@ -281,7 +283,55 @@ table2 <- function(cohort, subgroup) {
   )
 }
 
-# Create funtion for making combined table/venn outputs ------------------------
+# Create function to make Venn data --------------------------------------------
+
+venn <- function(cohort, analyses = "") {
+  if (analyses == "") {
+    analyses_str <- ""
+    analyses <- "main"
+    analyses_input <- ""
+  } else {
+    analyses_str <- paste0("-", analyses)
+    analyses_input <- analyses
+  }
+
+  venn_outcomes <- gsub(
+    "cohort_",
+    "",
+    unique(
+      active_analyses[
+        active_analyses$cohort == cohort &
+          grepl(analyses, active_analyses$analysis),
+      ]$name
+    )
+  )
+
+  splice(
+    comment(glue("Generate venn-cohort_{cohort}{analyses_str}")),
+    action(
+      name = glue("venn-cohort_{cohort}{analyses_str}"),
+      run = "r:v2 analysis/venn/venn.R",
+      arguments = lapply(list(c(cohort, analyses_input)), function(x) {
+        x[x != ""]
+      }),
+      needs = c(
+        as.list(glue("generate_input_{cohort}_clean")),
+        as.list(paste0(
+          glue("make_model_input-cohort_"),
+          venn_outcomes
+        ))
+      ),
+      moderately_sensitive = list(
+        venn = glue("output/venn/venn-cohort_{cohort}{analyses_str}.csv"),
+        venn_midpoint6 = glue(
+          "output/venn/venn-cohort_{cohort}{analyses_str}-midpoint6.csv"
+        )
+      )
+    )
+  )
+}
+
+# Create function for making combined table/venn outputs ------------------------
 
 make_other_output <- function(action_name, cohort, subgroup = "") {
   cohort_names <- stringr::str_split(as.vector(cohort), ";")[[1]]
@@ -456,6 +506,26 @@ actions_list <- splice(
       action_name = "table2",
       cohort = paste0(cohorts, collapse = ";"),
       subgroup = "covidhospital"
+    )
+  ),
+
+  ## Venn data -----------------------------------------------------------------
+
+  splice(
+    unlist(
+      lapply(
+        unique(active_analyses$cohort),
+        function(x) venn(cohort = x)
+      ),
+      recursive = FALSE
+    )
+  ),
+
+  splice(
+    make_other_output(
+      action_name = "venn",
+      cohort = paste0(cohorts, collapse = ";"),
+      subgroup = ""
     )
   ),
 

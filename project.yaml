@@ -7292,6 +7292,69 @@ actions:
       moderately_sensitive:
         table1_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
 
+  ## Generate venn-cohort_prevax 
+
+  venn-cohort_prevax:
+    run: r:v2 analysis/venn/venn.R prevax
+    needs:
+    - generate_input_prevax_clean
+    - make_model_input-cohort_prevax-main_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-main_preex_FALSE-copd
+    - make_model_input-cohort_prevax-main_preex_FALSE-pf
+    - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-main_preex_TRUE-pf
+    - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        venn: output/venn/venn-cohort_prevax.csv
+        venn_midpoint6: output/venn/venn-cohort_prevax-midpoint6.csv
+
+  ## Generate venn-cohort_unvax 
+
+  venn-cohort_unvax:
+    run: r:v2 analysis/venn/venn.R unvax
+    needs:
+    - generate_input_unvax_clean
+    - make_model_input-cohort_unvax-main_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-main_preex_FALSE-copd
+    - make_model_input-cohort_unvax-main_preex_FALSE-pf
+    - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-main_preex_TRUE-pf
+    - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        venn: output/venn/venn-cohort_unvax.csv
+        venn_midpoint6: output/venn/venn-cohort_unvax-midpoint6.csv
+
+  ## Generate venn-cohort_vax 
+
+  venn-cohort_vax:
+    run: r:v2 analysis/venn/venn.R vax
+    needs:
+    - generate_input_vax_clean
+    - make_model_input-cohort_vax-main_preex_FALSE-asthma
+    - make_model_input-cohort_vax-main_preex_FALSE-copd
+    - make_model_input-cohort_vax-main_preex_FALSE-pf
+    - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-main_preex_TRUE-pf
+    - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        venn: output/venn/venn-cohort_vax.csv
+        venn_midpoint6: output/venn/venn-cohort_vax-midpoint6.csv
+
+  ## Generate make-venn-output 
+
+  make-venn-output:
+    run: 'r:v2 analysis/make_output/make_other_output.R venn prevax;unvax;vax '
+    needs:
+    - venn-cohort_prevax
+    - venn-cohort_unvax
+    - venn-cohort_vax
+    outputs:
+      moderately_sensitive:
+        table1_output_midpoint6: output/make_output/venn_output_midpoint6.csv
+
   make_model_output:
     run: r:v2 analysis/make_output/make_model_output.R
     needs:
