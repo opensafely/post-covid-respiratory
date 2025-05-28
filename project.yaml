@@ -7290,7 +7290,7 @@ actions:
     - table2-cohort_vax-sub_covidhospital
     outputs:
       moderately_sensitive:
-        table1_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
+        table2_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
 
   ## Generate venn-cohort_prevax 
 
@@ -7353,7 +7353,7 @@ actions:
     - venn-cohort_vax
     outputs:
       moderately_sensitive:
-        table1_output_midpoint6: output/make_output/venn_output_midpoint6.csv
+        venn_output_midpoint6: output/make_output/venn_output_midpoint6.csv
 
   ## Generate model_output-main 
 

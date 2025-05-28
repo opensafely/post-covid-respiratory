@@ -386,10 +386,11 @@ make_other_output <- function(action_name, cohort, subgroup = "") {
         cohort_names,
         sub_str
       ))),
-      moderately_sensitive = list(
-        table1_output_midpoint6 = glue(
+      moderately_sensitive = setNames(
+        list(glue(
           "output/make_output/{action_name}{sub_str}_output_midpoint6.csv"
-        )
+        )),
+        glue("{action_name}_output_midpoint6")
       )
     )
   )
