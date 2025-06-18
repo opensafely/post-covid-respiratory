@@ -186,7 +186,7 @@ actions:
   ## Generate make-table1-output 
 
   make-table1-output:
-    run: 'r:v2 analysis/make_output/make_other_output.R table1 prevax-preex_FALSE;unvax-preex_FALSE;vax-preex_FALSE;prevax-preex_TRUE;unvax-preex_TRUE;vax-preex_TRUE '
+    run: r:v2 analysis/make_output/make_other_output.R table1 prevax-preex_FALSE;unvax-preex_FALSE;vax-preex_FALSE;prevax-preex_TRUE;unvax-preex_TRUE;vax-preex_TRUE
     needs:
     - table1-cohort_prevax-preex_FALSE
     - table1-cohort_unvax-preex_FALSE
@@ -7346,7 +7346,7 @@ actions:
   ## Generate make-venn-output 
 
   make-venn-output:
-    run: 'r:v2 analysis/make_output/make_other_output.R venn prevax;unvax;vax '
+    run: r:v2 analysis/make_output/make_other_output.R venn prevax;unvax;vax
     needs:
     - venn-cohort_prevax
     - venn-cohort_unvax
