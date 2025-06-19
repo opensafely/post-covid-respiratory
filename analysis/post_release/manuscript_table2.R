@@ -15,38 +15,48 @@ df <- readr::read_csv(
 )
 
 colnames(df) <- gsub("_midpoint6", "", colnames(df))
-df$analysis <- gsub("day0_", "", df$analysis)
 
 # Keep totals ------------------------------------------------------------------
 print("Keep totals")
 
-totals <- unique(df[df$analysis == "main", c("cohort", "sample_size")])
+totals <- df %>%
+    filter(grepl("main", analysis)) %>%
+    distinct(cohort, analysis, sample_size) %>%
+    pivot_wider(names_from = cohort, values_from = sample_size) %>%
+    rename_with(~ paste0("event_personyears_", .x), .cols = -analysis) %>%
+    mutate(
+        analysis = gsub("main_", "", analysis),
+        outcome_label = "N"
+    )
+# Convert all event_personyears_* columns in totals to character
+cols_to_convert <- grep("^event_personyears_", colnames(totals), value = TRUE)
 
-totals <- tidyr::pivot_wider(
-    totals,
-    names_from = "cohort",
-    values_from = c("sample_size")
-)
-
-colnames(totals) <- paste0("event_personyears_", colnames(totals))
-
-totals$outcome_label <- "N"
+totals[cols_to_convert] <- lapply(totals[cols_to_convert], as.character)
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
 
 df <- df[
-    df$analysis %in%
-        c("main", "sub_covid_hospitalised", "sub_covid_nonhospitalised"),
+    grepl("main|sub_covidhospital", df$analysis),
+    c(
+        "cohort",
+        "analysis",
+        "outcome",
+        "sample_size",
+        "unexposed_events",
+        "exposed_events",
+        "unexposed_person_days",
+        "exposed_person_days"
+    )
 ]
 
 df$events <- ifelse(
-    df$analysis == "main",
+    grepl("main", df$analysis),
     df$unexposed_events,
     df$exposed_events
 )
 df$person_days <- ifelse(
-    df$analysis == "main",
+    grepl("main", df$analysis),
     df$unexposed_person_days,
     df$exposed_person_days
 )
@@ -76,19 +86,6 @@ df <- merge(
     all.x = TRUE
 )
 df <- dplyr::rename(df, "covid19_severity" = "label")
-df$covid19_severity <- ifelse(
-    df$covid19_severity == "All COVID-19",
-    "No COVID-19",
-    df$covid19_severity
-)
-df$covid19_severity <- factor(
-    df$covid19_severity,
-    levels = c(
-        "No COVID-19",
-        "Hospitalised COVID-19",
-        "Non-hospitalised COVID-19"
-    )
-)
 
 # Add other columns ------------------------------------------------------------
 print("Add other columns")
@@ -100,6 +97,7 @@ df$incidencerate <- round(df$events / ((df$person_days / 365.25) / 100000))
 print("Pivot table")
 
 df <- df[, c(
+    "analysis",
     "cohort",
     "outcome_label",
     "covid19_severity",
@@ -107,48 +105,77 @@ df <- df[, c(
     "incidencerate"
 )]
 
+df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
+
+# Define factor levels for sorting
+df$analysis <- factor(df$analysis, levels = c("preex_FALSE", "preex_TRUE"))
+
+df$covid19_severity <- factor(
+    df$covid19_severity,
+    levels = c(
+        "No COVID-19",
+        "Hospitalised COVID-19",
+        "Non-hospitalised COVID-19"
+    )
+)
+
+# Order the rows
+df <- df[order(df$analysis, df$outcome_label, df$covid19_severity), ]
+
 df <- tidyr::pivot_wider(
     df,
     names_from = "cohort",
     values_from = c("event_personyears", "incidencerate")
 )
 
+# Reorder columns
+column_order <- c(
+    "analysis",
+    "outcome_label",
+    "covid19_severity",
+    "event_personyears_prevax",
+    "incidencerate_prevax",
+    "event_personyears_vax",
+    "incidencerate_vax",
+    "event_personyears_unvax",
+    "incidencerate_unvax"
+)
+
+df <- df[, column_order]
+
 # Add totals to table ----------------------------------------------------------
 print("Add totals to table")
 
-df <- plyr::rbind.fill(totals, df)
+# Step 1: Define a function to insert a total row before the first match
+insert_total_row <- function(df, total_row) {
+    analysis_value <- total_row$analysis
+    first_idx <- which(df$analysis == analysis_value)[1]
 
-# Order outcomes ---------------------------------------------------------------
-print("Order outcomes")
+    # If no match, append
+    if (is.na(first_idx)) {
+        out <- dplyr::bind_rows(df, total_row)
+    } else if (first_idx == 1) {
+        out <- dplyr::bind_rows(total_row, df)
+    } else {
+        out <- dplyr::bind_rows(
+            df[1:(first_idx - 1), ],
+            total_row,
+            df[first_idx:nrow(df), ]
+        )
+    }
 
-df$outcome_label <- factor(
-    df$outcome_label,
-    levels = c(
-        "N",
-        "Depression",
-        "Serious mental illness",
-        "General anxiety",
-        "Post-traumatic stress disorder",
-        "Eating disorders",
-        "Addiction",
-        "Self-harm",
-        "Suicide"
-    )
-)
+    # Force original column order
+    out <- out[, colnames(df)]
+
+    return(out)
+}
+
+for (i in seq_len(nrow(totals))) {
+    df <- insert_total_row(df, totals[i, ])
+}
 
 # Tidy table -------------------------------------------------------------------
 print("Tidy table")
-
-df <- df[
-    order(df$outcome_label, df$covid19_severity),
-    c(
-        "outcome_label",
-        "covid19_severity",
-        paste0(c("event_personyears", "incidencerate"), "_prevax_extf"),
-        paste0(c("event_personyears", "incidencerate"), "_vax"),
-        paste0(c("event_personyears", "incidencerate"), "_unvax_extf")
-    )
-]
 
 df <- dplyr::rename(
     df,
