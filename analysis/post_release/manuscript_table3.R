@@ -2,6 +2,10 @@
 print("Load packages")
 
 library(dplyr)
+library(readr)
+
+# Define the directory containing the CSV files
+input_dir <- "output/make_output"
 
 # Define post_release output folder ------------------------------------------
 output_folder <- "output/post_release" # Folder to save the transformed datasets
@@ -14,10 +18,17 @@ if (!dir.exists(output_folder)) {
 # Load data --------------------------------------------------------------------
 print("Load data")
 
-df <- readr::read_csv(
-    "output/make_output/model_output-main-midpoint6.csv",
-    show_col_types = FALSE
+# List all CSV files matching the pattern
+file_list <- list.files(
+    path = input_dir,
+    pattern = "^model_output-.*-midpoint6\\.csv$",
+    full.names = TRUE
 )
+
+# Read and combine all CSV files into one data frame
+df <- file_list %>%
+    lapply(read_csv, show_col_types = FALSE) %>%
+    bind_rows()
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
@@ -102,6 +113,7 @@ weeks_levels <- c(
 df$weeks <- factor(df$weeks, levels = weeks_levels)
 
 # Can change this bit for sub-group analyses
+df$subgroup <- sub("_preex.*", "", df$analysis)
 df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
 
 # Define factor levels for sorting
@@ -113,7 +125,14 @@ df <- df[order(df$analysis, df$outcome_label, df$weeks), ]
 # Pivot table ------------------------------------------------------------------
 print("Pivot table")
 
-df <- df[, c("analysis", "cohort", "outcome_label", "weeks", "estimate")]
+df <- df[, c(
+    "subgroup",
+    "analysis",
+    "cohort",
+    "outcome_label",
+    "weeks",
+    "estimate"
+)]
 
 df <- tidyr::pivot_wider(
     df,
@@ -123,7 +142,7 @@ df <- tidyr::pivot_wider(
 
 # Tidy table ------------------------------------------------------------------
 df <- df %>%
-    arrange(analysis, outcome_label, weeks)
+    arrange(subgroup, analysis, outcome_label, weeks)
 
 df <- dplyr::rename(
     df,
