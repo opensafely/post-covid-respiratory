@@ -1,5 +1,5 @@
 # Define post_release output folder ------------------------------------------
-output_folder <- "output/post_release" # Folder to save the transformed datasets
+output_folder <- "output/post_release"
 
 # Ensure output folder exists
 if (!dir.exists(output_folder)) {
@@ -9,10 +9,7 @@ if (!dir.exists(output_folder)) {
 # Load data --------------------------------------------------------------------
 print("Load data")
 
-df <- readr::read_csv(
-    "output/make_output/table1_output_midpoint6.csv",
-    show_col_types = FALSE
-)
+df <- readr::read_csv(path_table1, show_col_types = FALSE)
 
 # Clean column names: remove brackets
 colnames(df) <- gsub(" \\[.*?\\]", "", colnames(df))
@@ -90,7 +87,11 @@ print("Save tables")
 
 readr::write_csv(
     df_false,
-    "output/post_release/table1_preex_false.csv",
+    paste0(output_folder, "/table1_preex_false.csv"),
     na = "-"
 )
-readr::write_csv(df_true, "output/post_release/table1_preex_true.csv", na = "-")
+readr::write_csv(
+    df_true,
+    paste0(output_folder, "/table1_preex_true.csv"),
+    na = "-"
+)

@@ -4,9 +4,6 @@ print("Load packages")
 library(dplyr)
 library(readr)
 
-# Define the directory containing the CSV files
-input_dir <- "output/make_output"
-
 # Define post_release output folder ------------------------------------------
 output_folder <- "output/post_release" # Folder to save the transformed datasets
 
@@ -18,17 +15,7 @@ if (!dir.exists(output_folder)) {
 # Load data --------------------------------------------------------------------
 print("Load data")
 
-# List all CSV files matching the pattern
-file_list <- list.files(
-    path = input_dir,
-    pattern = "^model_output-.*-midpoint6\\.csv$",
-    full.names = TRUE
-)
-
-# Read and combine all CSV files into one data frame
-df <- file_list %>%
-    lapply(read_csv, show_col_types = FALSE) %>%
-    bind_rows()
+df <- read_csv("output/plot_model_output.csv")
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
@@ -60,15 +47,35 @@ df <- dplyr::rename(df, "outcome_label" = "label")
 # Tidy estimate ----------------------------------------------------------------
 print("Tidy estimate")
 
+clean_format <- function(x) {
+    x_clean <- suppressWarnings(as.numeric(gsub("<", "", x)))
+
+    formatted <- ifelse(
+        is.na(x_clean),
+        NA_character_,
+        ifelse(
+            x_clean < 0.0001,
+            "0.000",
+            ifelse(
+                x_clean > 1e4,
+                formatC(x_clean, format = "e", digits = 2),
+                formatC(x_clean, format = "f", digits = 2)
+            )
+        )
+    )
+
+    return(formatted)
+}
+
 df$estimate <- ifelse(
     df$hr == "X",
     "X",
     paste0(
-        formatC(as.numeric(df$hr), format = "f", digits = 2),
+        clean_format(df$hr),
         " (",
-        formatC(as.numeric(df$conf_low), format = "f", digits = 2),
+        clean_format(df$conf_low),
         "-",
-        formatC(as.numeric(df$conf_high), format = "f", digits = 2),
+        clean_format(df$conf_high),
         ")"
     )
 )
@@ -119,6 +126,16 @@ df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
 # Define factor levels for sorting
 df$analysis <- factor(df$analysis, levels = c("preex_FALSE", "preex_TRUE"))
 
+df$outcome_label <- factor(
+    df$outcome_label,
+    levels = c(
+        "Pneumonia",
+        "Asthma",
+        "Chronic obstructive pulmonary disease",
+        "Pulmonary fibrosis"
+    )
+)
+
 # Order the rows
 df <- df[order(df$analysis, df$outcome_label, df$weeks), ]
 
@@ -142,7 +159,7 @@ df <- tidyr::pivot_wider(
 
 # Tidy table ------------------------------------------------------------------
 df <- df %>%
-    arrange(subgroup, analysis, outcome_label, weeks)
+    arrange(subgroup, outcome_label, analysis, weeks)
 
 df <- dplyr::rename(
     df,
@@ -157,4 +174,4 @@ df <- dplyr::rename(
 # Save table -------------------------------------------------------------------
 print("Save table")
 
-readr::write_csv(df, "output/post_release/table3.csv", na = "-")
+readr::write_csv(df, paste0(output_folder, "/table3.csv"), na = "-")
