@@ -3,7 +3,7 @@ asthma,Asthma,,
 copd,Chronic obstructive pulmonary disease,,
 pf,Pulmonary fibrosis,,
 pneumonia,Pneumonia,,
-prevax,Pre-vaccine availability (Jan 1 2020 - Jun 18 2021),,
+prevax,Pre-vaccination availability (Jan 1 2020 - Jun 18 2021),,
 vax,Vaccinated (Jun 1 2021 - Dec 14 2021),,
 unvax,Unvaccinated (Jun 1 2021 - Dec 14 2021),,
 main_preex_TRUE,No COVID-19,main_preex_TRUE,1

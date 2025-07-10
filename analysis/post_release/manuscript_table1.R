@@ -1,9 +1,10 @@
+source("analysis/specify_paths.R")
 # Define post_release output folder ------------------------------------------
 output_folder <- "output/post_release"
 
 # Ensure output folder exists
 if (!dir.exists(output_folder)) {
-    dir.create(output_folder)
+  dir.create(output_folder)
 }
 
 # Load data --------------------------------------------------------------------
@@ -28,8 +29,8 @@ df_true <- df[, c(id_vars, preex_true_cols)]
 
 # Clean column names to standard form ------------------------------------------
 clean_names <- function(df, preex_flag) {
-    names(df) <- gsub(paste0("-", preex_flag, "$"), "", names(df)) # Remove suffix
-    return(df)
+  names(df) <- gsub(paste0("-", preex_flag, "$"), "", names(df)) # Remove suffix
+  return(df)
 }
 
 df_false <- clean_names(df_false, "preex_FALSE")
@@ -37,29 +38,29 @@ df_true <- clean_names(df_true, "preex_TRUE")
 
 # Combine N and % columns ------------------------------------------------------
 combine_n_pct <- function(df) {
-    for (group in c("prevax", "vax", "unvax")) {
-        n_col <- paste0("N_", group)
-        pct_col <- paste0("(%)_", group)
-        combined_col <- paste0("N (%)_", group)
+  for (group in c("prevax", "vax", "unvax")) {
+    n_col <- paste0("N_", group)
+    pct_col <- paste0("(%)_", group)
+    combined_col <- paste0("N (%)_", group)
 
-        if (all(c(n_col, pct_col) %in% names(df))) {
-            df[[combined_col]] <- ifelse(
-                tolower(df$Subcharacteristic) %in% c("all", "median (iqr)"),
-                df[[n_col]], # show only N
-                paste0(df[[n_col]], " ", df[[pct_col]]) # combine N and (%)
-            )
-        }
+    if (all(c(n_col, pct_col) %in% names(df))) {
+      df[[combined_col]] <- ifelse(
+        tolower(df$Subcharacteristic) %in% c("all", "median (iqr)"),
+        df[[n_col]], # show only N
+        paste0(df[[n_col]], " ", df[[pct_col]]) # combine N and (%)
+      )
     }
+  }
 
-    # Drop original N and (%) columns
-    df <- df[,
-        !names(df) %in%
-            c(
-                paste0("N_", c("prevax", "vax", "unvax")),
-                paste0("(%)_", c("prevax", "vax", "unvax"))
-            )
-    ]
-    return(df)
+  # Drop original N and (%) columns
+  df <- df[,
+    !names(df) %in%
+      c(
+        paste0("N_", c("prevax", "vax", "unvax")),
+        paste0("(%)_", c("prevax", "vax", "unvax"))
+      )
+  ]
+  return(df)
 }
 
 df_false <- combine_n_pct(df_false)
@@ -67,16 +68,16 @@ df_true <- combine_n_pct(df_true)
 
 # Reorder columns to match: N (%), Diagnoses per cohort ------------------------
 reorder_cols <- function(df) {
-    df[, c(
-        "Characteristic",
-        "Subcharacteristic",
-        "N (%)_prevax",
-        "COVID-19 diagnoses_prevax",
-        "N (%)_vax",
-        "COVID-19 diagnoses_vax",
-        "N (%)_unvax",
-        "COVID-19 diagnoses_unvax"
-    )]
+  df[, c(
+    "Characteristic",
+    "Subcharacteristic",
+    "N (%)_prevax",
+    "COVID-19 diagnoses_prevax",
+    "N (%)_vax",
+    "COVID-19 diagnoses_vax",
+    "N (%)_unvax",
+    "COVID-19 diagnoses_unvax"
+  )]
 }
 
 df_false <- reorder_cols(df_false)
@@ -86,12 +87,12 @@ df_true <- reorder_cols(df_true)
 print("Save tables")
 
 readr::write_csv(
-    df_false,
-    paste0(output_folder, "/table1_preex_false.csv"),
-    na = "-"
+  df_false,
+  paste0(output_folder, "/table1_preex_false.csv"),
+  na = "-"
 )
 readr::write_csv(
-    df_true,
-    paste0(output_folder, "/table1_preex_true.csv"),
-    na = "-"
+  df_true,
+  paste0(output_folder, "/table1_preex_true.csv"),
+  na = "-"
 )
