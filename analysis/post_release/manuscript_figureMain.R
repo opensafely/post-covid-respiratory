@@ -183,7 +183,7 @@ plot_outcomes <- function(outcomes, outcome_group) {
           fill = "white",
           colour = "white"
         ),
-        axis.text.x = ggplot2::element_text(angle = 60, vjust = 1, hjust = 1)
+        axis.text.x = ggplot2::element_text(angle = 50, vjust = 1, hjust = 1)
       )
 
     if (grepl("history_exposure", i)) {
