@@ -1,17 +1,39 @@
-﻿term,label,analysis_group,ref
+term,label,analysis_group,ref
 asthma,Asthma,,
 copd,Chronic obstructive pulmonary disease,,
 pf,Pulmonary fibrosis,,
 pneumonia,Pneumonia,,
+asthma-preex_FALSE,Asthma,,3
+copd-preex_FALSE,Chronic obstructive pulmonary disease,,4
+pf-preex_TRUE,Pulmonary fibrosis in people WITH pre-existing respiratory conditions,,5
+pf-preex_FALSE,Pulmonary fibrosis in people WITHOUT pre-existing respiratory conditions,,6
+pneumonia-preex_TRUE,Pneumonia in people WITH pre-existing respiratory conditions,,1
+pneumonia-preex_FALSE,Pneumonia in people WITHOUT pre-existing respiratory conditions,,2
 prevax,Pre-vaccination availability (Jan 1 2020 - Jun 18 2021),,
 vax,Vaccinated (Jun 1 2021 - Dec 14 2021),,
 unvax,Unvaccinated (Jun 1 2021 - Dec 14 2021),,
-main_preex_TRUE,No COVID-19,main_preex_TRUE,1
-main_preex_FALSE,No COVID-19,main_preex_FALSE,2
 sub_covidhospital_TRUE_preex_TRUE,Hospitalised COVID-19,,1
 sub_covidhospital_TRUE_preex_FALSE,Hospitalised COVID-19,,2
 sub_covidhospital_FALSE_preex_TRUE,Non-hospitalised COVID-19,,1
 sub_covidhospital_FALSE_preex_FALSE,Non-hospitalised COVID-19,,2
+main,All COVID-19,main,1
+sub_age_18_39,Age group: 18-39,age,1
+sub_age_40_59,Age group: 40-59,age,2
+sub_age_60_79,Age group: 60-79,age,3
+sub_age_80_110,Age group: 80-110,age,4
+sub_covidhospital_TRUE,Hospitalised COVID-19,main,2
+sub_covidhospital_FALSE,Non-hospitalised COVID-19,main,3
+sub_ethnicity_asian,Ethnicity: Asian or Asian British,ethnicity,2
+sub_ethnicity_black,Ethnicity: Black or Black British,ethnicity,3
+sub_ethnicity_mixed,Ethnicity: Mixed,ethnicity,4
+sub_ethnicity_other,Ethnicity: Chinese or Other,ethnicity,5
+sub_ethnicity_white,Ethnicity: White,ethnicity,1
+sub_sex_female,Sex: Female,sex,1
+sub_sex_male,Sex: Male,sex,2
+sub_covidhistory,History of COVID-19,history_exposure,1
+sub_smoking_never,Non-smoker,smoke,1
+sub_smoking_ever,Former smoker,smoke,2
+sub_smoking_current,Current smoker,smoke,3
 cov_bin_ami,Acute myocardial infarction,,
 cov_bin_asthma,Asthma,,
 cov_bin_cancer,Cancer,,
@@ -34,6 +56,6 @@ cov_cat_imd,IMD quintile,,
 cov_cat_sex,Sex,,
 cov_cat_smoking,Smoking,,
 strat_cat_region,Region,,
-preex_TRUE, Pre-existing respiratory condition,,
-preex_FALSE, No pre-existing respiratory condition,,
+preex_TRUE,With pre-existing respiratory condition,,
+preex_FALSE,Without pre-existing respiratory condition,,
 All,All,,
