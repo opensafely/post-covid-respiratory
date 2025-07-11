@@ -1,6 +1,3 @@
-library(VennDiagram)
-library(grid)
-library(gridExtra)
 # Create directory -------------------------------------------------------------
 print("Create directory")
 
