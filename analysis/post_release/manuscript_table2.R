@@ -1,19 +1,3 @@
-# Load libraries ---------------------------------------------------------------
-print('Load libraries')
-
-library(magrittr)
-library(tidyverse)
-library(purrr)
-library(data.table)
-library(tidyverse)
-# Define post_release output folder ------------------------------------------
-output_folder <- "output/post_release" # Folder to save the transformed datasets
-
-# Ensure output folder exists
-if (!dir.exists(output_folder)) {
-    dir.create(output_folder)
-}
-
 # Load data --------------------------------------------------------------------
 print("Load data")
 

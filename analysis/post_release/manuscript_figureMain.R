@@ -1,5 +1,5 @@
 # Define the plotting function --------------------------------------------------
-plot_outcomes <- function(outcomes, outcome_group) {
+plot_hr <- function(outcomes, outcome_group) {
   # Load data --------------------------------------------------------------------
   print("Load data")
 
@@ -262,6 +262,6 @@ plot_outcomes <- function(outcomes, outcome_group) {
   }
 }
 
-plot_outcomes("pneumonia", "pneumonia")
-plot_outcomes(c("asthma", "copd"), "asthma_copd")
-plot_outcomes("pf", "pf")
+plot_hr("pneumonia", "pneumonia")
+plot_hr(c("asthma", "copd"), "asthma_copd")
+plot_hr("pf", "pf")

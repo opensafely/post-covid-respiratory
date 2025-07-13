@@ -1,12 +1,3 @@
-source("analysis/specify_paths.R")
-# Define post_release output folder ------------------------------------------
-output_folder <- "output/post_release"
-
-# Ensure output folder exists
-if (!dir.exists(output_folder)) {
-  dir.create(output_folder)
-}
-
 # Load data --------------------------------------------------------------------
 print("Load data")
 
