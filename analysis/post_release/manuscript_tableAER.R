@@ -6,13 +6,9 @@ perpeople <- 100000 # per X people
 # Load data --------------------------------------------------------------------
 print('Load data')
 
-df_preex_TRUE <- read.csv(
-  "output/post_release/lifetables_compiled_preex_TRUE.csv"
+df <- read.csv(
+  "output/post_release/lifetables_compiled.csv"
 )
-df_preex_FALSE <- read.csv(
-  "output/post_release/lifetables_compiled_preex_FALSE.csv"
-)
-df <- dplyr::bind_rows(df_preex_FALSE, df_preex_TRUE)
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
@@ -42,10 +38,15 @@ print("Format data")
 
 df$excess_risk <- df$cumulative_difference_absolute_excess_risk * perpeople
 
-df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
+if (length(unique(df$analysis)) > 1) {
+  print(
+    "Multiple analysis groups found: appliable for projects considering pre-existing conditions"
+  )
+  df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
 
-# Define factor levels for sorting
-df$analysis <- factor(df$analysis, levels = c("preex_FALSE", "preex_TRUE"))
+  # Define factor levels for sorting
+  df$analysis <- factor(df$analysis, levels = c("preex_FALSE", "preex_TRUE"))
+}
 
 df$outcome_label <- factor(
   df$outcome_label,
@@ -98,6 +99,7 @@ df <- df[
   order(df$outcome_label),
   c(
     "outcome_label",
+    "analysis",
     "prevax_day0TRUE",
     "prevax_day0FALSE",
     "prevax_day0diff",

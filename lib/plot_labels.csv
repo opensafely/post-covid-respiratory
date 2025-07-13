@@ -1,4 +1,4 @@
-term,label,analysis_group,ref
+﻿term,label,analysis_group,ref
 asthma,Asthma,,
 copd,Chronic obstructive pulmonary disease,,
 pf,Pulmonary fibrosis,,
@@ -9,7 +9,7 @@ pf-preex_TRUE,Pulmonary fibrosis in people WITH pre-existing respiratory conditi
 pf-preex_FALSE,Pulmonary fibrosis in people WITHOUT pre-existing respiratory conditions,,6
 pneumonia-preex_TRUE,Pneumonia in people WITH pre-existing respiratory conditions,,1
 pneumonia-preex_FALSE,Pneumonia in people WITHOUT pre-existing respiratory conditions,,2
-prevax,Pre-vaccination availability (Jan 1 2020 - Jun 18 2021),,
+prevax,Pre-vaccination (Jan 1 2020 - Jun 18 2021),,
 vax,Vaccinated (Jun 1 2021 - Dec 14 2021),,
 unvax,Unvaccinated (Jun 1 2021 - Dec 14 2021),,
 sub_covidhospital_TRUE_preex_TRUE,Hospitalised COVID-19,,1
