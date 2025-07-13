@@ -1,17 +1,3 @@
-# Load packages ----------------------------------------------------------------
-print("Load packages")
-
-library(dplyr)
-library(readr)
-
-# Define post_release output folder --------------------------------------------
-output_folder <- "output/post_release" # Folder to save the transformed datasets
-
-# Ensure output folder exists
-if (!dir.exists(output_folder)) {
-  dir.create(output_folder)
-}
-
 # Load data --------------------------------------------------------------------
 print("Load data")
 
@@ -161,12 +147,24 @@ df <- tidyr::pivot_wider(
 df <- df %>%
   arrange(subgroup, outcome_label, analysis, weeks)
 
+# Reorder columns -------------------------------------------------------------
+df <- df %>%
+  dplyr::select(
+    subgroup,
+    outcome_label,
+    analysis,
+    weeks,
+    prevax,
+    vax,
+    unvax
+  )
+
 df <- dplyr::rename(
   df,
   "Analysis" = "analysis",
   "Outcome" = "outcome_label",
   "Time since COVID-19" = "weeks",
-  "Pre-vaccination availability cohort" = "prevax",
+  "Pre-vaccination cohort" = "prevax",
   "Vaccinated cohort" = "vax",
   "Unvaccinated cohort" = "unvax"
 )
