@@ -99,21 +99,27 @@ plot_aer <- function(outcomes, outcome_group) {
   ]
   facet_info$facet_order <- 1:nrow(facet_info)
 
-  facet_info$facet_label <- ""
-  for (j in 1:nrow(facet_info)) {
-    facet_info[j, ]$facet_label <- paste0(
-      ifelse(
-        facet_info[j, ]$cohort_label ==
-          "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
-        facet_info[j, ]$outcome_label,
-        paste0(rep(" ", j), collapse = "")
-      ),
-      "\n\n",
-      facet_info[j, ]$cohort_label,
-      "\n\n",
-      facet_info[j, ]$preex_label
-    )
+facet_info$facet_label <- ""
+for (j in 1:nrow(facet_info)) {
+  # Determine whether to include preex_label
+  preex_part <- if (facet_info$outcome_label[j] %in% c("Asthma", "Chronic obstructive pulmonary disease")) {
+    ""
+  } else {
+    paste0("\n\n", facet_info$preex_label[j])
   }
+
+  # Set the facet_label
+  facet_info$facet_label[j] <- paste0(
+    ifelse(
+      facet_info$cohort_label[j] == "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
+      facet_info$outcome_label[j],
+      paste0(rep(" ", j), collapse = "")
+    ),
+    "\n\n",
+    facet_info$cohort_label[j],
+    preex_part
+  )
+}
 
   facet_info$facet_label <- factor(
     facet_info$facet_label,
