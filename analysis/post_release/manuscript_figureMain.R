@@ -77,7 +77,17 @@ plot_hr <- function(outcomes, outcome_group) {
 
   df$facet_label <- ifelse(
     df$ref == 1,
-    paste0(df$outcome_label, "\n\n", df$preex_label, "\n\n", df$analysis_label),
+    ifelse(
+      (df$outcome %in% c("asthma", "copd")),
+      paste0(df$outcome_label, "\n\n", df$analysis_label),
+      paste0(
+        df$outcome_label,
+        "\n\n",
+        df$preex_label,
+        "\n\n",
+        df$analysis_label
+      )
+    ),
     df$analysis_label
   )
 
@@ -182,8 +192,7 @@ plot_hr <- function(outcomes, outcome_group) {
         plot.background = ggplot2::element_rect(
           fill = "white",
           colour = "white"
-        ),
-        axis.text.x = ggplot2::element_text(angle = 50, vjust = 1, hjust = 1)
+        )
       )
 
     if (grepl("history_exposure", i)) {
@@ -209,9 +218,9 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          lim = c(0, 1162),
-          breaks = seq(0, 1162, 112),
-          labels = seq(0, 1162, 112) / 7
+          limits = c(0, 1456),
+          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
+          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
@@ -224,9 +233,9 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          lim = c(0, 1162),
-          breaks = seq(0, 1162, 112),
-          labels = seq(0, 1162, 112) / 7
+          limits = c(0, 1456),
+          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
+          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(ncol = 1, byrow = TRUE))
@@ -239,9 +248,9 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          lim = c(0, 1162),
-          breaks = seq(0, 1162, 112),
-          labels = seq(0, 1162, 112) / 7
+          limits = c(0, 1456),
+          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
+          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
