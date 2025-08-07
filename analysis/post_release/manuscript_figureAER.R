@@ -132,7 +132,7 @@ for (j in 1:nrow(facet_info)) {
   print("Plot data")
 
   ggplot2::ggplot(
-    data = df[df$days < 197, ],
+    data = df[df$days < 365, ],
     mapping = ggplot2::aes(
       x = days / 7,
       y = cumulative_difference_absolute_excess_risk * 100,
@@ -142,9 +142,9 @@ for (j in 1:nrow(facet_info)) {
   ) +
     ggplot2::geom_line() +
     ggplot2::scale_x_continuous(
-      lim = c(0, 28),
-      breaks = seq(0, 28, 4),
-      labels = seq(0, 28, 4)
+      lim = c(0, 52),
+      breaks = seq(0, 52, 4),
+      labels = seq(0, 52, 4)
     ) +
     ggplot2::scale_y_continuous(
       lim = c(0, 2),
