@@ -412,10 +412,14 @@ make_model_output <- function(subgroup) {
       needs = as.list(c(
         paste0(
           "cox_ipw-",
-          active_analyses$name[
-            !(active_analyses$name %in% excluded_models) &
-              str_detect(active_analyses$analysis, subgroup)
-          ]
+          setdiff(
+            active_analyses$name[str_detect(active_analyses$analysis, subgroup)],
+            stata$name
+          )
+        ),
+        paste0(
+          "stata_cox_ipw-",
+          stata$name[str_detect(stata$analysis, subgroup)]
         )
       )),
       moderately_sensitive = list(
