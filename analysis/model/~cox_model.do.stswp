@@ -8,15 +8,9 @@ local name "`1'"
 * Set Ado file path
 
 adopath + "analysis/extra_ados"
-* Load Arrow dataset
-*di ">>> Loading Arrow dataset"
-*arrowload "./output/model/ready-`name'.arrow"
 
-* Describe imported data
-*describe
+* Read and describe data
 
-* Import and describe data
-*import delimited using "./output/model/ready-`name'.csv.gz", clear
 use "./output/model/ready-`name'.dta", clear
 describe
 
