@@ -7204,7 +7204,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_FALSE-copd.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-copd.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-copd.csv
     needs:
     - make_model_input-cohort_prevax-main_preex_FALSE-copd
     outputs:
@@ -7228,7 +7228,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
     outputs:
@@ -7252,7 +7252,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-main_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-main_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-main_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
     outputs:
@@ -7276,7 +7276,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-main_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-main_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-main_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
     outputs:
@@ -7300,7 +7300,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
@@ -7324,7 +7324,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-main_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-main_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-main_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
     outputs:
@@ -7348,7 +7348,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-main_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-main_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-main_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
     outputs:
@@ -7372,7 +7372,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia
     outputs:
@@ -7396,7 +7396,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_18_39_preex_FALSE-pneumonia
     outputs:
@@ -7420,7 +7420,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_18_39_preex_FALSE-pneumonia
     outputs:
@@ -7444,7 +7444,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_TRUE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pf
     outputs:
@@ -7468,7 +7468,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia
     outputs:
@@ -7492,7 +7492,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_18_39_preex_TRUE-pneumonia
     outputs:
@@ -7516,7 +7516,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_18_39_preex_TRUE-pneumonia
     outputs:
@@ -7540,7 +7540,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_FALSE-copd.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-copd.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-copd.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-copd
     outputs:
@@ -7564,7 +7564,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia
     outputs:
@@ -7588,7 +7588,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_40_59_preex_FALSE-pneumonia
     outputs:
@@ -7612,7 +7612,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_40_59_preex_FALSE-pneumonia
     outputs:
@@ -7636,7 +7636,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia
     outputs:
@@ -7660,7 +7660,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_40_59_preex_TRUE-pneumonia
     outputs:
@@ -7684,7 +7684,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_40_59_preex_TRUE-pneumonia
     outputs:
@@ -7708,7 +7708,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-copd.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-copd.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-copd.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-copd
     outputs:
@@ -7732,7 +7732,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pf
     outputs:
@@ -7756,7 +7756,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia
     outputs:
@@ -7780,7 +7780,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_60_79_preex_FALSE-pneumonia
     outputs:
@@ -7804,7 +7804,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_60_79_preex_FALSE-pneumonia
     outputs:
@@ -7828,7 +7828,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia
     outputs:
@@ -7852,7 +7852,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_60_79_preex_TRUE-pneumonia
     outputs:
@@ -7876,7 +7876,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_60_79_preex_TRUE-pneumonia
     outputs:
@@ -7900,7 +7900,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia
     outputs:
@@ -7924,7 +7924,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_80_110_preex_FALSE-pneumonia
     outputs:
@@ -7948,7 +7948,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_80_110_preex_FALSE-pneumonia
     outputs:
@@ -7972,7 +7972,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia
     outputs:
@@ -7996,7 +7996,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_age_80_110_preex_TRUE-pneumonia
     outputs:
@@ -8020,7 +8020,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_age_80_110_preex_TRUE-pneumonia
     outputs:
@@ -8044,7 +8044,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhistory_preex_FALSE-pneumonia
     outputs:
@@ -8068,7 +8068,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhistory_preex_FALSE-pneumonia
     outputs:
@@ -8092,7 +8092,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhistory_preex_TRUE-pneumonia
     outputs:
@@ -8116,7 +8116,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhistory_preex_TRUE-pneumonia
     outputs:
@@ -8140,7 +8140,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     outputs:
@@ -8164,7 +8164,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     outputs:
@@ -8188,7 +8188,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     outputs:
@@ -8212,7 +8212,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     outputs:
@@ -8236,7 +8236,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     outputs:
@@ -8260,7 +8260,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     outputs:
@@ -8284,7 +8284,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pf
     outputs:
@@ -8308,7 +8308,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     outputs:
@@ -8332,7 +8332,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pf
     outputs:
@@ -8356,7 +8356,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     outputs:
@@ -8380,7 +8380,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pf
     outputs:
@@ -8404,7 +8404,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     outputs:
@@ -8428,7 +8428,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pf
     outputs:
@@ -8452,7 +8452,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
@@ -8476,7 +8476,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
@@ -8500,7 +8500,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
@@ -8524,7 +8524,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pf
     outputs:
@@ -8548,7 +8548,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia
     outputs:
@@ -8572,7 +8572,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_FALSE-pneumonia
     outputs:
@@ -8596,7 +8596,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_asian_preex_FALSE-pneumonia
     outputs:
@@ -8620,7 +8620,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pf
     outputs:
@@ -8644,7 +8644,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia
     outputs:
@@ -8668,7 +8668,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_asian_preex_TRUE-pneumonia
     outputs:
@@ -8692,7 +8692,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_asian_preex_TRUE-pneumonia
     outputs:
@@ -8716,7 +8716,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd
     outputs:
@@ -8740,7 +8740,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pf
     outputs:
@@ -8764,7 +8764,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia
     outputs:
@@ -8788,7 +8788,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_black_preex_FALSE-pneumonia
     outputs:
@@ -8812,7 +8812,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_black_preex_FALSE-pneumonia
     outputs:
@@ -8836,7 +8836,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia
     outputs:
@@ -8860,7 +8860,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_black_preex_TRUE-pneumonia
     outputs:
@@ -8884,7 +8884,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_black_preex_TRUE-pneumonia
     outputs:
@@ -8908,7 +8908,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     outputs:
@@ -8932,7 +8932,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     outputs:
@@ -8956,7 +8956,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     outputs:
@@ -8980,7 +8980,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     outputs:
@@ -9004,7 +9004,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     outputs:
@@ -9028,7 +9028,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     outputs:
@@ -9052,7 +9052,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia
     outputs:
@@ -9076,7 +9076,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_other_preex_FALSE-pneumonia
     outputs:
@@ -9100,7 +9100,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_other_preex_FALSE-pneumonia
     outputs:
@@ -9124,7 +9124,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia
     outputs:
@@ -9148,7 +9148,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia
     outputs:
@@ -9172,7 +9172,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia
     outputs:
@@ -9196,7 +9196,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia
     outputs:
@@ -9220,7 +9220,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-copd
     outputs:
@@ -9244,7 +9244,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_white_preex_FALSE-pneumonia
     outputs:
@@ -9268,7 +9268,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_white_preex_FALSE-pneumonia
     outputs:
@@ -9292,7 +9292,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia
     outputs:
@@ -9316,7 +9316,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_ethnicity_white_preex_TRUE-pneumonia
     outputs:
@@ -9340,7 +9340,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_ethnicity_white_preex_TRUE-pneumonia
     outputs:
@@ -9364,7 +9364,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia
     outputs:
@@ -9388,7 +9388,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia
     outputs:
@@ -9412,7 +9412,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia
     outputs:
@@ -9436,7 +9436,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia
     outputs:
@@ -9460,7 +9460,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_sex_female_preex_TRUE-pneumonia
     outputs:
@@ -9484,7 +9484,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_sex_female_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_sex_female_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_sex_female_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_sex_female_preex_TRUE-pneumonia
     outputs:
@@ -9508,7 +9508,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia
     outputs:
@@ -9532,7 +9532,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_sex_male_preex_FALSE-pneumonia
     outputs:
@@ -9556,7 +9556,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_sex_male_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_sex_male_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_sex_male_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_sex_male_preex_FALSE-pneumonia
     outputs:
@@ -9580,7 +9580,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia
     outputs:
@@ -9604,7 +9604,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_sex_male_preex_TRUE-pneumonia
     outputs:
@@ -9628,7 +9628,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_sex_male_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_sex_male_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_sex_male_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_sex_male_preex_TRUE-pneumonia
     outputs:
@@ -9652,7 +9652,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia
     outputs:
@@ -9676,7 +9676,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia
     outputs:
@@ -9700,7 +9700,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia
     outputs:
@@ -9724,7 +9724,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia
     outputs:
@@ -9748,7 +9748,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia
     outputs:
@@ -9772,7 +9772,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_current_preex_TRUE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_TRUE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_TRUE-pf.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-pf
     outputs:
@@ -9796,7 +9796,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia
     outputs:
@@ -9820,7 +9820,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia
     outputs:
@@ -9844,7 +9844,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_ever_preex_FALSE-pf.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_FALSE-pf.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_FALSE-pf.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pf
     outputs:
@@ -9868,7 +9868,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia
     outputs:
@@ -9892,7 +9892,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia
     outputs:
@@ -9916,7 +9916,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
     outputs:
@@ -9940,7 +9940,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia
     outputs:
@@ -9964,7 +9964,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia
     outputs:
@@ -9988,7 +9988,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia
     outputs:
@@ -10012,7 +10012,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia
     outputs:
@@ -10036,7 +10036,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia
     outputs:
@@ -10060,7 +10060,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065;1582 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
@@ -10084,7 +10084,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
@@ -10108,7 +10108,7 @@ actions:
       --study_stop=2024-04-30 --cut_points=1;28;183;365;730;1065 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.dta
-      --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.csv
+      --run_analysis=FALSE --df_output=model/model_output-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia.csv
     needs:
     - make_model_input-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
