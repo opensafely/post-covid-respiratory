@@ -3,7 +3,7 @@
 local name "`1'"
 
 // For local testing:
-*local name "cohort_prevax-main_preex_FALSE-asthma"
+*local name "cohort_prevax-main_preex_FALSE-pneumonia"
 
 * Set Ado file path
 
