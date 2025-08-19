@@ -42,7 +42,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## Inclusion/exclusion criteria------------------------------------------------------------------------
 
     ### Registered for a minimum of 6 months prior to index date
-    inex_bin_6m_reg = (practice_registrations.spanning(
+    inex_bin_6m_reg = (practice_registrations.spanning_with_systmone(
         index_date - days(180), index_date
         )).exists_for_patient()
 
@@ -204,27 +204,27 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_out_date_copd_death
     )
 
-    ### Pulmonary Fibrosis
-    tmp_out_date_pf_gp = (
+    ### ILD (Interstitial Lung Disease)
+    tmp_out_date_ild_gp = (
         first_matching_event_clinical_snomed_between(
-            pulmonary_fibrosis_snomed, index_date, end_date_out
+            ild_snomed, index_date, end_date_out
             ).date
     )
-    tmp_out_date_pf_apc = (
+    tmp_out_date_ild_apc = (
         first_matching_event_apc_between(
-            pulmonary_fibrosis_icd10, index_date, end_date_out
+            ild_icd10, index_date, end_date_out
             ).admission_date
     )
-    tmp_out_date_pf_death = case(
+    tmp_out_date_ild_death = case(
         when(
-            matching_death_between(pulmonary_fibrosis_icd10, index_date, end_date_out)
+            matching_death_between(ild_icd10, index_date, end_date_out)
             ).then(ons_deaths.date)
     )
 
-    out_date_pf = minimum_of(
-        tmp_out_date_pf_gp,
-        tmp_out_date_pf_apc,
-        tmp_out_date_pf_death
+    out_date_ild = minimum_of(
+        tmp_out_date_ild_gp,
+        tmp_out_date_ild_apc,
+        tmp_out_date_ild_death
     )
 
     ## Strata----------------------------------------------------------------------------------------------
@@ -447,13 +447,13 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ).exists_for_patient())
     )
 
-    ### Pulmonary Fibrosis (PF)
-    cov_bin_pf = (
+    ### Interstitial Lung Disease (ILD)
+    cov_bin_ild = (
         (last_matching_event_clinical_snomed_before(
-            pulmonary_fibrosis_snomed, index_date
+            ild_snomed, index_date
         ).exists_for_patient()) |
         (last_matching_event_apc_before(
-            pulmonary_fibrosis_icd10, index_date
+            ild_icd10, index_date
         ).exists_for_patient())
     )
 
@@ -553,10 +553,10 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         tmp_out_date_copd_apc = tmp_out_date_copd_apc,
         tmp_out_date_copd_death = tmp_out_date_copd_death,
         out_date_copd = out_date_copd,
-        tmp_out_date_pf_gp = tmp_out_date_pf_gp,
-        tmp_out_date_pf_apc = tmp_out_date_pf_apc,
-        tmp_out_date_pf_death = tmp_out_date_pf_death,
-        out_date_pf = out_date_pf,
+        tmp_out_date_ild_gp = tmp_out_date_ild_gp,
+        tmp_out_date_ild_apc = tmp_out_date_ild_apc,
+        tmp_out_date_ild_death = tmp_out_date_ild_death,
+        out_date_ild = out_date_ild,
         ### Strata
         strat_cat_region = strat_cat_region,
         ### Core covariates
@@ -582,7 +582,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
         ### Project specific covariates
         cov_bin_pneumonia = cov_bin_pneumonia,
         cov_bin_asthma = cov_bin_asthma,
-        cov_bin_pf = cov_bin_pf,
+        cov_bin_ild = cov_bin_ild,
         ### Subgroups
         sub_bin_covidhistory = sub_bin_covidhistory,
         sub_cat_covidhospital = sub_cat_covidhospital,
