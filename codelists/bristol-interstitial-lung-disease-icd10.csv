@@ -1,0 +1,34 @@
+code,term
+B221,HIV disease resulting in lymphoid interstitial pneumonitis
+B440,Invasive pulmonary aspergillosis
+B447,Disseminated aspergillosis
+B449,"Aspergillosis, unspecified"
+J60,Coalworker pneumoconiosis
+J630,Aluminosis (of lung)
+J631,Bauxite fibrosis (of lung)
+J632,Berylliosis
+J633,Graphite fibrosis (of lung)
+J66,Airway disease due to specific organic dust
+J660,Byssinosis
+J661,Flax-dresser disease
+J662,Cannabinosis
+J668,Airway disease due to other specific organic dusts
+J670,Farmer lung
+J671,Bagassosis
+J672,Bird fancier lung
+J677,Air-conditioner and humidifier lung
+J678,Hypersensitivity pneumonitis due to other organic dusts
+J679,Hypersensitivity pneumonitis due to unspecified organic dust
+J680,"Bronchitis and pneumonitis due to chemicals, gases, fumes and vapours"
+J684,"Chronic respiratory conditions due to chemicals, gases, fumes and vapours"
+J701,Chronic and other pulmonary manifestations due to radiation
+J702,Acute drug-induced interstitial lung disorders
+J703,Chronic drug-induced interstitial lung disorders
+J704,"Drug-induced interstitial lung disorders, unspecified"
+J840,Alveolar and parietoalveolar conditions
+J841,Other interstitial pulmonary diseases with fibrosis
+J849,"Interstitial pulmonary disease, unspecified"
+J982,Interstitial emphysema
+M320,Drug-induced systemic lupus erythematosus
+M600,Infective myositis
+M601,Interstitial myositis
