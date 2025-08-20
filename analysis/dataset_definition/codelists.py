@@ -442,7 +442,7 @@ pneumonia_snomed = codelist_from_csv(
 )
 
 pneumonia_icd10 = codelist_from_csv(
-    "codelists/bristol-pneumonia-secondary-care.csv",
+    "codelists/opensafely-pneumonia-secondary-care.csv",
     column="code"
 )
 

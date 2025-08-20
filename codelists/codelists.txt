@@ -45,7 +45,7 @@ primis-covid19-vacc-uptake/sev_obesity/v1.2
 bristol/breathlessness/5ab57799
 bristol/cough/41a60464
 bristol/urti/7677aac4
-bristol/pneumonia-secondary-care/50c59f7f
+opensafely/pneumonia-secondary-care/6c87d2aa
 opensafely/asthma-diagnosis-snomed/2020-04-15
 bristol/asthma/3a558edf
 opensafely/current-copd/2020-05-06

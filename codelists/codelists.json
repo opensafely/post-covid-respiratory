@@ -234,11 +234,11 @@
       "downloaded_at": "2024-10-15 22:00:27.806249Z",
       "sha": "2d730ca56ccb2710a47c2b3d12e1a872fc754363"
     },
-    "bristol-pneumonia-secondary-care.csv": {
-      "id": "bristol/pneumonia-secondary-care/50c59f7f",
-      "url": "https://www.opencodelists.org/codelist/bristol/pneumonia-secondary-care/50c59f7f/",
-      "downloaded_at": "2025-08-19 21:04:19.622355Z",
-      "sha": "962217e4ed0286fd93f860deaa2c7e0b52d9e137"
+    "opensafely-pneumonia-secondary-care.csv": {
+      "id": "opensafely/pneumonia-secondary-care/6c87d2aa",
+      "url": "https://www.opencodelists.org/codelist/opensafely/pneumonia-secondary-care/6c87d2aa/",
+      "downloaded_at": "2025-08-20 10:41:22.723875Z",
+      "sha": "4a276e3618ecfb431ad85a464ba5d4c646079072"
     },
     "opensafely-asthma-diagnosis-snomed.csv": {
       "id": "opensafely/asthma-diagnosis-snomed/2020-04-15",
