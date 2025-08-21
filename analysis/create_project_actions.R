@@ -44,7 +44,7 @@ describe <- TRUE # This prints descriptive files for each dataset in the pipelin
 
 excluded_models <- c(
   "cohort_vax-main_preex_FALSE-pneumonia",
-  "cohort_prevax-sub_age_18_39_preex_TRUE-pf"
+  "cohort_prevax-sub_age_18_39_preex_TRUE-ild"
 )
 
 # Create generic action function -----------------------------------------------
@@ -177,21 +177,21 @@ table1 <- function(cohort, ages = "18;40;60;80", preex = "All") {
   if (preex == "All" | preex == "") {
     preex_str <- ""
   } else {
-    preeex_str <- paste0("-preex_", preex)
+    preex_str <- paste0("-preex_", preex)
   }
   splice(
-    comment(glue("Generate table1_cohort_{cohort}{preeex_str}")),
+    comment(glue("Generate table1_cohort_{cohort}{preex_str}")),
     action(
-      name = glue("table1-cohort_{cohort}{preeex_str}"),
+      name = glue("table1-cohort_{cohort}{preex_str}"),
       run = "r:v2 analysis/table1/table1.R",
       arguments = c(c(cohort), c(ages), c(preex)),
       needs = list(glue("generate_input_{cohort}_clean")),
       moderately_sensitive = list(
         table1 = glue(
-          "output/table1/table1-cohort_{cohort}{preeex_str}.csv"
+          "output/table1/table1-cohort_{cohort}{preex_str}.csv"
         ),
         table1_midpoint6 = glue(
-          "output/table1/table1-cohort_{cohort}{preeex_str}-midpoint6.csv"
+          "output/table1/table1-cohort_{cohort}{preex_str}-midpoint6.csv"
         )
       )
     )
@@ -379,12 +379,22 @@ make_other_output <- function(action_name, cohort, subgroup = "") {
     action(
       name = glue("make-{action_name}{sub_str}-output"),
       run = "r:v2 analysis/make_output/make_other_output.R",
-      arguments = c(c(action_name), c(cohort), c(subgroup)),
+      arguments = unlist(lapply(
+        list(
+          c(action_name, cohort, subgroup)
+        ),
+        function(x) {
+          x[x != ""]
+        }
+      )),
       needs = c(as.list(paste0(
-        action_name,
-        "-cohort_",
+        ifelse(
+          action_name == "flow",
+          "generate_input_",
+          paste0(action_name, "-cohort_")
+        ),
         cohort_names,
-        sub_str
+        ifelse(action_name == "flow", "_clean", sub_str)
       ))),
       moderately_sensitive = setNames(
         list(glue(
@@ -491,7 +501,7 @@ actions_list <- splice(
     unlist(
       lapply(
         1:nrow(active_analyses),
-        function(x)
+        function(x) {
           apply_model_function(
             name = active_analyses$name[x],
             cohort = active_analyses$cohort[x],
@@ -514,8 +524,18 @@ actions_list <- splice(
             covariate_threshold = active_analyses$covariate_threshold[x],
             age_spline = active_analyses$age_spline[x]
           )
+        }
       ),
       recursive = FALSE
+    )
+  ),
+
+  ## Flow ----------------------------------------------------------------------
+
+  splice(
+    make_other_output(
+      action_name = "flow",
+      cohort = paste0(cohorts, collapse = ";")
     )
   ),
 

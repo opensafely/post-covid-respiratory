@@ -216,23 +216,11 @@
       "downloaded_at": "2024-10-15 22:00:25.775989Z",
       "sha": "dfe3662bed703c590d1449e604e892cdd7a360c1"
     },
-    "bristol-asthma-exacerbations.csv": {
-      "id": "bristol/asthma-exacerbations/73c4eace",
-      "url": "https://www.opencodelists.org/codelist/bristol/asthma-exacerbations/73c4eace/",
-      "downloaded_at": "2024-10-15 22:00:26.158769Z",
-      "sha": "87bca086d1463f66bac93ea3a0b8ab1a192fccb5"
-    },
     "bristol-breathlessness.csv": {
       "id": "bristol/breathlessness/5ab57799",
       "url": "https://www.opencodelists.org/codelist/bristol/breathlessness/5ab57799/",
       "downloaded_at": "2024-10-15 22:00:26.572806Z",
       "sha": "90b9cdd3823161af9bbf0678635415fdfa649311"
-    },
-    "bristol-copd-exacerbations.csv": {
-      "id": "bristol/copd-exacerbations/2896912f",
-      "url": "https://www.opencodelists.org/codelist/bristol/copd-exacerbations/2896912f/",
-      "downloaded_at": "2024-10-15 22:00:26.970541Z",
-      "sha": "cd99911a547ee5a18220f62d36579af015f3b793"
     },
     "bristol-cough.csv": {
       "id": "bristol/cough/41a60464",
@@ -246,17 +234,11 @@
       "downloaded_at": "2024-10-15 22:00:27.806249Z",
       "sha": "2d730ca56ccb2710a47c2b3d12e1a872fc754363"
     },
-    "bristol-pneumonia_v2.csv": {
-      "id": "bristol/pneumonia_v2/0f871dfa",
-      "url": "https://www.opencodelists.org/codelist/bristol/pneumonia_v2/0f871dfa/",
-      "downloaded_at": "2024-10-15 22:00:28.211059Z",
-      "sha": "605f08243a9a014083df78205dec5c176dc1b31f"
-    },
     "opensafely-pneumonia-secondary-care.csv": {
-      "id": "opensafely/pneumonia-secondary-care/2020-10-05",
-      "url": "https://www.opencodelists.org/codelist/opensafely/pneumonia-secondary-care/2020-10-05/",
-      "downloaded_at": "2024-12-10 12:27:54.681386Z",
-      "sha": "866ab4f0ff144330c1a0ea28116c9d2073cf379a"
+      "id": "opensafely/pneumonia-secondary-care/6c87d2aa",
+      "url": "https://www.opencodelists.org/codelist/opensafely/pneumonia-secondary-care/6c87d2aa/",
+      "downloaded_at": "2025-08-20 10:41:22.723875Z",
+      "sha": "4a276e3618ecfb431ad85a464ba5d4c646079072"
     },
     "opensafely-asthma-diagnosis-snomed.csv": {
       "id": "opensafely/asthma-diagnosis-snomed/2020-04-15",
@@ -264,11 +246,11 @@
       "downloaded_at": "2024-10-15 22:00:28.603248Z",
       "sha": "884477b8c56a7e29ef1684d5a7ea3cfd6f75b566"
     },
-    "opensafely-asthma-exacerbation-secondary-care.csv": {
-      "id": "opensafely/asthma-exacerbation-secondary-care/229001a8",
-      "url": "https://www.opencodelists.org/codelist/opensafely/asthma-exacerbation-secondary-care/229001a8/",
-      "downloaded_at": "2025-01-07 16:42:00.028040Z",
-      "sha": "4539261c8a45b1c365f436400026d5859c9a7896"
+    "bristol-asthma.csv": {
+      "id": "bristol/asthma/3a558edf",
+      "url": "https://www.opencodelists.org/codelist/bristol/asthma/3a558edf/",
+      "downloaded_at": "2025-08-19 21:04:22.471303Z",
+      "sha": "d71d9a3f40d36c4da740031d80a47d450cd50e5e"
     },
     "opensafely-current-copd.csv": {
       "id": "opensafely/current-copd/2020-05-06",
@@ -276,11 +258,11 @@
       "downloaded_at": "2024-10-15 22:00:28.978700Z",
       "sha": "bab838b50e256ceef8b9d2f6ca1132491e522bda"
     },
-    "opensafely-copd-secondary-care.csv": {
-      "id": "opensafely/copd-secondary-care/35734162",
-      "url": "https://www.opencodelists.org/codelist/opensafely/copd-secondary-care/35734162/",
-      "downloaded_at": "2024-12-10 12:27:55.858826Z",
-      "sha": "83bc1fc962ce3c09248be11d58cd22b3128ddc51"
+    "bristol-copd.csv": {
+      "id": "bristol/copd/0031c5f4",
+      "url": "https://www.opencodelists.org/codelist/bristol/copd/0031c5f4/",
+      "downloaded_at": "2025-08-19 21:04:25.436650Z",
+      "sha": "a22188470aba78989a9b8133adc5b9b89a5df090"
     },
     "user-RochelleKnight-prostate_cancer_snomed.csv": {
       "id": "user/RochelleKnight/prostate_cancer_snomed/0437497e",
@@ -528,12 +510,6 @@
       "downloaded_at": "2024-10-15 22:00:45.317991Z",
       "sha": "a52da34bd7178717df884211fca799db460a6b43"
     },
-    "bristol-interstitial-lung-disease-pulmonary-fibrosis.csv": {
-      "id": "bristol/interstitial-lung-disease-pulmonary-fibrosis/5d71a08c",
-      "url": "https://www.opencodelists.org/codelist/bristol/interstitial-lung-disease-pulmonary-fibrosis/5d71a08c/",
-      "downloaded_at": "2024-10-15 22:00:45.746018Z",
-      "sha": "556e6e1e189d97b7e10c9997a3d8f618a6ddddf0"
-    },
     "user-elsie_horne-cocp_dmd.csv": {
       "id": "user/elsie_horne/cocp_dmd/1666a7a3",
       "url": "https://www.opencodelists.org/codelist/user/elsie_horne/cocp_dmd/1666a7a3/",
@@ -558,11 +534,11 @@
       "downloaded_at": "2024-10-15 22:00:47.298839Z",
       "sha": "9e2de5190c0081e01bffef1a56aa4431885da94e"
     },
-    "bristol-pulmonary-fibrosis-interstitial-lung-disease.csv": {
-      "id": "bristol/pulmonary-fibrosis-interstitial-lung-disease/6c747549",
-      "url": "https://www.opencodelists.org/codelist/bristol/pulmonary-fibrosis-interstitial-lung-disease/6c747549/",
-      "downloaded_at": "2025-01-07 16:42:19.618571Z",
-      "sha": "5a7efa48dc60e30860ec4e09df86e2c83f4fdeb5"
+    "bristol-interstitial-lung-disease-icd10.csv": {
+      "id": "bristol/interstitial-lung-disease-icd10/69d512b4",
+      "url": "https://www.opencodelists.org/codelist/bristol/interstitial-lung-disease-icd10/69d512b4/",
+      "downloaded_at": "2025-08-19 21:05:35.576885Z",
+      "sha": "2c47f9006c7daac680bb6928e28b601335d74e3f"
     }
   }
 }

@@ -59,7 +59,7 @@ core_covariates <- c(
   "cov_bin_stroke_isch"
 )
 
-project_covariates <- c("cov_bin_pneumonia", "cov_bin_asthma", "cov_bin_pf")
+project_covariates <- c("cov_bin_pneumonia", "cov_bin_asthma", "cov_bin_ild")
 
 # Define covariate and outcome combos ----
 
@@ -70,7 +70,7 @@ covariates <- ""
 # For preex=TRUE analyses
 outcomes_preex_TRUE <- c(
   "out_date_pneumonia",
-  "out_date_pf"
+  "out_date_ild"
 )
 covariates_preex_TRUE <- c(core_covariates, project_covariates)
 
@@ -79,7 +79,7 @@ outcomes_preex_FALSE <- c(
   "out_date_copd",
   "out_date_asthma",
   "out_date_pneumonia",
-  "out_date_pf"
+  "out_date_ild"
 )
 covariates_preex_FALSE <- setdiff(
   c(core_covariates, project_covariates),

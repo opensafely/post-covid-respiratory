@@ -420,7 +420,7 @@ copd_ctv3 = codelist_from_csv(
 )
 
 copd_icd10 = codelist_from_csv(
-    "codelists/opensafely-copd-secondary-care.csv",
+    "codelists/bristol-copd.csv",
     column="code"
 )
 
@@ -430,7 +430,7 @@ asthma_snomed = codelist_from_csv(
 )
 
 asthma_icd10 = codelist_from_csv(
-    "codelists/opensafely-asthma-exacerbation-secondary-care.csv",
+    "codelists/bristol-asthma.csv",
     column="code"
 )
 
@@ -443,16 +443,16 @@ pneumonia_snomed = codelist_from_csv(
 
 pneumonia_icd10 = codelist_from_csv(
     "codelists/opensafely-pneumonia-secondary-care.csv",
-    column="ICD code"
+    column="code"
 )
 
-pulmonary_fibrosis_snomed = codelist_from_csv(
+ild_snomed = codelist_from_csv(
     "codelists/bristol-ild-snomed.csv",
     column="code"
 )
 
-pulmonary_fibrosis_icd10 = codelist_from_csv(
-    "codelists/bristol-pulmonary-fibrosis-interstitial-lung-disease.csv",
+ild_icd10 = codelist_from_csv(
+    "codelists/bristol-interstitial-lung-disease-icd10.csv",
     column="code"
 )
 
