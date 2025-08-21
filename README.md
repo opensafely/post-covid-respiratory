@@ -45,7 +45,7 @@ No clinical, policy or safety conclusions must be drawn from the contents of thi
 
     -   Modelling scripts are in the [`model`](./analysis/model/) directory:
         -   [`make_model_input.R`](./analysis/model/make_model_input.R) works with the output of [`dataset_clean`](./analysis/dataset_clean/) to prepare suitable data subsets for Cox analysis. Combines each outcome and subgroup in one formatted .rds file
-        -   [`fn-prepare_model_input.R`](./analysis/model/fn-prepare_model_input.R) is a companion function to `make_model_input.R`(./analysis/model/make_model_input.R) which handles the interaction with `active_analyses.rds`(lib/active_analyses.rds)
+        -   [`fn-prepare_model_input.R`](./analysis/model/fn-prepare_model_input.R) is a companion function to [`make_model_input.R`](./analysis/model/make_model_input.R) which handles the interaction with [`active_analyses.rds`](lib/active_analyses.rds)
         -   [`fn-check_vitals.R`](./analysis/model/fn-check_vitals.R) is a companion function that checks the input dataset for [`make_model_input.R`](./analysis/model/make_model_input.R) is formatted correctly
         -   [`cox-ipw`](https://github.com/opensafely-actions/cox-ipw/) is a reusable action which uses the output of [`make_model_input.R`](./analysis/model/make_model_input.R) to fit a Cox model to the data. (NB: It is not a file in the server)
 
@@ -105,10 +105,10 @@ Outputs follow OpenSAFELY naming conventions related to suppression rules by add
 
 ### output/table1/table1_\*.csv
 
-| Variable                          | Description                                                      |
-|-----------------------------------|------------------------------------------------------------------|
-|     Characteristic                | patient characteristic under consideration                       |
-|     Subcharacteristic             | patient sub characteristic under consideration                   |
+| Variable                            | Description                                                      |
+|-------------------------------------|------------------------------------------------------------------|
+|     Characteristic                  | patient characteristic under consideration                       |
+|     Subcharacteristic               | patient sub characteristic under consideration                   |
 |     N \[midpoint6 derived\]         | number of people with characteristic                             |
 |     (%) \[midpoint6 derived\]       | % of total people with characteristic                            |
 |     COVID-19 \[diagnoses midpoint6\]| number of people with characteristic and COVID-19                |
