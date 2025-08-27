@@ -38,7 +38,7 @@ age_str <- paste0(
   )
 ) #create age vector in form "X;XX;XX;XX;XXX"
 
-describe <- TRUE # This prints descriptive files for each dataset in the pipeline
+describe <- FALSE # This prints descriptive files for each dataset in the pipeline
 
 # List of models excluded from model output generation
 
