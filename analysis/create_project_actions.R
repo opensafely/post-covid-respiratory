@@ -42,7 +42,7 @@ describe <- FALSE # This prints descriptive files for each dataset in the pipeli
 
 # List of models excluded from model output generation
 
-excluded_models <- c("cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia")
+excluded_models <- c("cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia")
 
 # List of models that should run in Stata due to convergence issues
 
@@ -425,7 +425,7 @@ make_model_output <- function(subgroup) {
               active_analyses$analysis,
               subgroup
             )],
-            stata$name
+            c(stata$name, excluded_models)
           )
         ),
         if (

@@ -7877,7 +7877,6 @@ actions:
     - cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-asthma
     - cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-copd
     - cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-ild
-    - cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia
     - cox_ipw-cohort_prevax-sub_smoking_ever_preex_TRUE-ild
     - cox_ipw-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
     - cox_ipw-cohort_unvax-sub_smoking_ever_preex_TRUE-ild
