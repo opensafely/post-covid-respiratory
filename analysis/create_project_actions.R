@@ -42,7 +42,7 @@ describe <- FALSE # This prints descriptive files for each dataset in the pipeli
 
 # List of models excluded from model output generation
 
-excluded_models <- c()
+excluded_models <- c("cox_ipw-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia")
 
 # List of models that should run in Stata due to convergence issues
 
@@ -68,7 +68,16 @@ additional_models <- c(
   "cohort_vax-sub_smoking_current_preex_TRUE-ild",
   "cohort_unvax-sub_smoking_ever_preex_FALSE-ild"
 )
-run_stata <- c(pneumonia_models, additional_models)
+#run_stata <- c(pneumonia_models, additional_models)
+run_stata <- c(
+  "cohort_prevax-main_preex_FALSE-asthma",
+  "cohort_prevax-main_preex_FALSE-ild",
+  "cohort_prevax-main_preex_FALSE-pneumonia",
+  "cohort_prevax-main_preex_TRUE-ild",
+  "cohort_prevax-main_preex_TRUE-pneumonia",
+  "cohort_unvax-main_preex_TRUE-ild",
+  "cohort_unvax-main_preex_TRUE-pneumonia"
+) # These are currently based on extream HR in dummy data for testing codes, leave empty if no models need Stata
 stata <- active_analyses[active_analyses$name %in% run_stata, ]
 
 # Create generic action function -----------------------------------------------
@@ -303,8 +312,7 @@ apply_stata_model_function <- function(
       arguments = c(name),
       needs = c(as.list(glue("ready-{name}"))),
       moderately_sensitive = list(
-        stata_fup = glue("output/model/stata_fup-{name}.csv"),
-        stata_model_output = glue("output/model/stata_model_output-{name}.txt")
+        model_output = glue("output/model/stata_model_output-{name}.csv")
       )
     )
   )
@@ -413,14 +421,24 @@ make_model_output <- function(subgroup) {
         paste0(
           "cox_ipw-",
           setdiff(
-            active_analyses$name[str_detect(active_analyses$analysis, subgroup)],
+            active_analyses$name[str_detect(
+              active_analyses$analysis,
+              subgroup
+            )],
             stata$name
           )
         ),
-        paste0(
-          "stata_cox_ipw-",
-          stata$name[str_detect(stata$analysis, subgroup)]
-        )
+        if (
+          length(run_stata) > 0 &&
+            any(str_detect(stata$analysis, subgroup))
+        ) {
+          paste0(
+            "stata_cox_ipw-",
+            stata$name[str_detect(stata$analysis, subgroup)]
+          )
+        } else {
+          character(0)
+        }
       )),
       moderately_sensitive = list(
         model_output = glue("output/make_output/model_output-{subgroup}.csv"),
@@ -602,37 +620,41 @@ actions_list <- splice(
     )
   ),
 
-  splice(
-    unlist(
-      lapply(
-        1:nrow(stata),
-        function(x) {
-          apply_stata_model_function(
-            name = stata$name[x],
-            cohort = stata$cohort[x],
-            analysis = stata$analysis[x],
-            ipw = stata$ipw[x],
-            strata = stata$strata[x],
-            covariate_sex = stata$covariate_sex[x],
-            covariate_age = stata$covariate_age[x],
-            covariate_other = stata$covariate_other[x],
-            cox_start = stata$cox_start[x],
-            cox_stop = stata$cox_stop[x],
-            study_start = stata$study_start[x],
-            study_stop = stata$study_stop[x],
-            cut_points = stata$cut_points[x],
-            controls_per_case = stata$controls_per_case[x],
-            total_event_threshold = stata$total_event_threshold[x],
-            episode_event_threshold = stata$episode_event_threshold[x],
-            covariate_threshold = stata$covariate_threshold[x],
-            age_spline = stata$age_spline[x]
-          )
-        }
-      ),
-      recursive = FALSE
+  # Stata models (only if run_stata not empty)
+  if (length(run_stata) > 0) {
+    splice(
+      unlist(
+        lapply(
+          1:nrow(stata),
+          function(x) {
+            apply_stata_model_function(
+              name = stata$name[x],
+              cohort = stata$cohort[x],
+              analysis = stata$analysis[x],
+              ipw = stata$ipw[x],
+              strata = stata$strata[x],
+              covariate_sex = stata$covariate_sex[x],
+              covariate_age = stata$covariate_age[x],
+              covariate_other = stata$covariate_other[x],
+              cox_start = stata$cox_start[x],
+              cox_stop = stata$cox_stop[x],
+              study_start = stata$study_start[x],
+              study_stop = stata$study_stop[x],
+              cut_points = stata$cut_points[x],
+              controls_per_case = stata$controls_per_case[x],
+              total_event_threshold = stata$total_event_threshold[x],
+              episode_event_threshold = stata$episode_event_threshold[x],
+              covariate_threshold = stata$covariate_threshold[x],
+              age_spline = stata$age_spline[x]
+            )
+          }
+        ),
+        recursive = FALSE
+      )
     )
-  ),
-
+  } else {
+    list()
+  },
   ## Flow ----------------------------------------------------------------------
 
   splice(
@@ -707,6 +729,20 @@ actions_list <- splice(
       aer_input_midpoint6 = glue(
         "output/make_output/aer_input-main-midpoint6.csv"
       )
+    )
+  ),
+
+  ## Look for unconverged models -------------------------------------
+
+  comment("Look for unconverged models"),
+
+  action(
+    name = "find_unconverged_models",
+    run = "r:v2 analysis/make_output/find_unconverged_models.R",
+    needs = as.list(paste0("make_model_output-", subgroups)),
+    moderately_sensitive = list(
+      describe_unconverged_models = "output/describe/unconverged_models.txt",
+      unconverged_models_details = "output/describe/unconverged_models.csv"
     )
   )
 )
