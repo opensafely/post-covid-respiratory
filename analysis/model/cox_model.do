@@ -5,10 +5,16 @@
 * Specify parameters
 
 local name "`1'"
+local cutpoints "`2'"
+local study_start "`3'"
 
-// For local testing:
+/*
+* Specify parameters locally
 
-*local name "cohort_prevax-main_preex_FALSE-asthma"
+local name "cohort_prevax-main_preex_FALSE-asthma"
+local cutpoints "1;28;183;365;730;1095;1460;1825;1979"
+local study_start "2020-01-01"
+*/
 
 * Set Ado file path
 
@@ -18,6 +24,16 @@ adopath + "analysis/extra_ados"
 
 use "./output/model/ready-`name'.dta", clear
 describe
+
+* ==============================================================================
+*  Convert args for use by Stata
+* ==============================================================================
+
+local cutpoints = subinstr("0;`cutpoints'", ";", " ", .)
+di "`cutpoints'"
+
+local cutpoints_last = word("`cutpoints'", wordcount("`cutpoints'"))
+di "`cutpoints_last'"
 
 * ==============================================================================
 *  Data preparation (matches R preprocessing)
@@ -105,20 +121,11 @@ egen N_exposed = total(!missing(exposure))
 
 * Apply stset including IPW here as unsampled datasets will be provided with cox_weights set to 1
 
-if `prevax_cohort'==1 {
-    stset fup_stop [pweight=cox_weight], failure(outcome_status) ///
-        id(patient_id) enter(fup_start) origin(time mdy(01,01,2020))
-    stsplit time, after(exposure) at(0 1 28 183 365 730 1095 1460 1825 1979)
-    replace time = 1979 if time==-1
-}
-else {
-    stset fup_stop [pweight=cox_weight], failure(outcome_status) ///
-        id(patient_id) enter(fup_start) origin(time mdy(06,01,2021))
-* check whether the date is 1 June 2021, as the codes was mdy(01,06,2021)
-    stsplit time, after(exposure) at(0 1 28 183 365 730 1095 1460)
-    replace time = 1460 if time==-1
-}
-
+gen origin_date = daily("`study_start'", "YMD")
+stset fup_stop [pweight=cox_weight], failure(outcome_status) id(patient_id) enter(fup_start) origin(origin_date)
+stsplit time, after(exposure) at(`cutpoints')
+replace time = `cutpoints_last' if time==-1
+	
 * ==============================================================================
 *  Person-time and events (matches R collapse step)
 * ==============================================================================
@@ -136,85 +143,59 @@ egen N_events = total(outcome_status), by(time)
 * ==============================================================================
 
 gen tte = fup if outcome_status==1
-egen outcome_time_median = median(tte), by(time)
+egen outcome_time_median_in_term = median(tte), by(time)
 
+* ==============================================================================
 *  Define indicator variables for each time period
+* ==============================================================================
 
-* 0–1 days
-gen days0_1 = (time == 0)
-tab days0_1
+* Count the number of breakpoints
+local n : word count `cutpoints'
 
-* 1–28 days
-gen days1_28 = (time == 1)
-tab days1_28
-
-* 28–183 days
-gen days28_183 = (time == 28)
-tab days28_183
-
-* 183–365 days
-gen days183_365 = (time == 183)
-tab days183_365
-
-* 365–730 days
-gen days365_730 = (time == 365)
-tab days365_730
-
-* 730–1095 days
-gen days730_1095 = (time == 730)
-tab days730_1095
-
-* 1095–1460 days
-gen days1095_1460 = (time == 1095)
-tab days1095_1460
-
-* Additional category for prevax cohort only
-if `prevax_cohort' == 1 {
-* 1460–1825 days
-    gen days1460_1825 = (time == 1460)
-    tab days1460_1825
-
-    gen days1825_1979 = (time == 1825)
-    tab days1825_1979
+* Loop over the breakpoints to generate interval variables
+forvalues i = 1/`=`n'-1' {
+    local start = word("`cutpoints'", `i')
+    local end   = word("`cutpoints'", `=`i'+1')
+    
+    * Generate variable name dynamically
+    local varname = "days`start'_`end'"
+    
+    * Generate the variable: 1 if time == start (or adjust to range if desired)
+    gen `varname' = (time == `start')
+    tab `varname'
 }
 
 * ==============================================================================
-*  Adjust median times to cumulative scale
+*  Create term variable that indicates which days* the row refers to
+* ==============================================================================
+
+* Identify day variables
+ds days*, has(type numeric)
+local dayvars `r(varlist)'
+	
+* Generate empty variable
+gen str20 term = ""
+
+* Loop over each variable
+foreach var of local dayvars {
+    replace term = "`var'" if `var' == 1
+}
+
+* If all are 0, you can set "days_pre"
+replace term = "days_pre" if term == ""
+
+* ==============================================================================
+*  Based on term, add outcome time that has already passed
 * ==============================================================================
 preserve
 
-gen term = ""
+gen start_term = .
+gen match = regexs(1) if regexm(term, "days([0-9]+)_")
+replace start_term = real(match)
+drop match
 
-if `prevax_cohort'==1 {
-    replace term = "days_pre"       if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days0_1"        if days0_1==1 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days1_28"       if days0_1==0 & days1_28==1 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days28_183"     if days0_1==0 & days1_28==0 & days28_183==1 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days183_365"    if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==1 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days365_730"    if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==1 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days730_1095"   if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==1 & days1095_1460==0 & days1460_1825==0 & days1825_1979==0
-    replace term = "days1095_1460"  if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==1 & days1460_1825==0 & days1825_1979==0
-    replace term = "days1460_1825"  if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==1 & days1825_1979==0
-    replace term = "days1825_1979"  if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0 & days1460_1825==0 & days1825_1979==1
-}
-else {
-    replace term = "days_pre"       if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0
-    replace term = "days0_1"        if days0_1==1 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0
-    replace term = "days1_28"       if days0_1==0 & days1_28==1 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0
-    replace term = "days28_183"     if days0_1==0 & days1_28==0 & days28_183==1 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==0
-    replace term = "days183_365"    if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==1 & days365_730==0 & days730_1095==0 & days1095_1460==0
-    replace term = "days365_730"    if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==1 & days730_1095==0 & days1095_1460==0
-    replace term = "days730_1095"   if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==1 & days1095_1460==0
-    replace term = "days1095_1460"  if days0_1==0 & days1_28==0 & days28_183==0 & days183_365==0 & days365_730==0 & days730_1095==0 & days1095_1460==1
-}
-
-replace outcome_time_median = outcome_time_median + 28   if term == "days28_183"
-replace outcome_time_median = outcome_time_median + 183  if term == "days183_365"
-replace outcome_time_median = outcome_time_median + 365  if term == "days365_730"
-replace outcome_time_median = outcome_time_median + 730  if term == "days730_1095"
-replace outcome_time_median = outcome_time_median + 1095 if term == "days1095_1460"
-replace outcome_time_median = outcome_time_median + 1460 if term == "days1460_1825"
-replace outcome_time_median = outcome_time_median + 1825 if term == "days1825_1979"
+gen outcome_time_median = outcome_time_median_in_term
+replace outcome_time_median = outcome_time_median_in_term + start_term if term!="days_pre"
 
 order term N_total N_exposed N_events person_time_total outcome_time_median   
 keep term N_total N_exposed N_events person_time_total outcome_time_median 

@@ -7204,6 +7204,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_FALSE-asthma:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_FALSE-asthma
+      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_FALSE-asthma
     outputs:
@@ -7227,6 +7228,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_FALSE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_FALSE-ild
+      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_FALSE-ild
     outputs:
@@ -7250,6 +7252,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_FALSE-pneumonia
+      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_FALSE-pneumonia
     outputs:
@@ -7273,6 +7276,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_TRUE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_TRUE-ild
+      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_TRUE-ild
     outputs:
@@ -7296,6 +7300,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_TRUE-pneumonia
+      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
@@ -7319,6 +7324,7 @@ actions:
 
   stata_cox_ipw-cohort_unvax-main_preex_TRUE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_unvax-main_preex_TRUE-ild
+      1;28;183;365;730;1095;1460 2021-06-01
     needs:
     - ready-cohort_unvax-main_preex_TRUE-ild
     outputs:
@@ -7342,6 +7348,7 @@ actions:
 
   stata_cox_ipw-cohort_unvax-main_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_unvax-main_preex_TRUE-pneumonia
+      1;28;183;365;730;1095;1460 2021-06-01
     needs:
     - ready-cohort_unvax-main_preex_TRUE-pneumonia
     outputs:
