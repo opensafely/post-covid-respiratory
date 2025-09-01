@@ -46,11 +46,8 @@ excluded_models <- c()
 
 # List of models that should run in Stata due to convergence issues
 
-pneumonia_models <- active_analyses$name[grepl(
-  "pneumonia",
-  active_analyses$name
-)]
-other_unconverged_models <- c(
+stata_models <- c(
+  active_analyses$name[grepl("pneumonia", active_analyses$name)],
   "cohort_prevax-main_preex_FALSE-copd",
   "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
@@ -68,10 +65,9 @@ other_unconverged_models <- c(
   "cohort_vax-sub_smoking_current_preex_TRUE-ild",
   "cohort_unvax-sub_smoking_ever_preex_FALSE-ild"
 )
-run_stata <- c(pneumonia_models, other_unconverged_models)
 # These are currently based on manual check from outputs released on 2025-06-26, leave empty if no models need Stata
 
-stata <- active_analyses[active_analyses$name %in% run_stata, ]
+stata <- active_analyses[active_analyses$name %in% stata_models, ]
 
 # Create generic action function -----------------------------------------------
 
@@ -422,7 +418,7 @@ make_model_output <- function(subgroup) {
           )
         ),
         if (
-          length(run_stata) > 0 &&
+          length(stata_models) > 0 &&
             any(str_detect(stata$analysis, subgroup))
         ) {
           paste0(
@@ -613,8 +609,8 @@ actions_list <- splice(
     )
   ),
 
-  # Stata models (only if run_stata not empty)
-  if (length(run_stata) > 0) {
+  # Stata models (only if stata_models not empty)
+  if (length(stata_models) > 0) {
     splice(
       unlist(
         lapply(
