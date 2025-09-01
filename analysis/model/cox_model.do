@@ -50,9 +50,6 @@ duplicates drop
 rename cov_num_age age
 rename strat_cat_region region
 
-* Generate pre vaccination cohort indicators
-
-
 * Generate sex indicator
 
 local sub_sex = regexm("`name'", "sub_sex")
