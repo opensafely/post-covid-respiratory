@@ -42,10 +42,32 @@ describe <- FALSE # This prints descriptive files for each dataset in the pipeli
 
 # List of models excluded from model output generation
 
-excluded_models <- c(
-  "cohort_vax-main_preex_FALSE-pneumonia",
-  "cohort_prevax-sub_age_18_39_preex_TRUE-ild"
+excluded_models <- c()
+
+# List of models that should run in Stata due to convergence issues
+
+stata_models <- c(
+  active_analyses$name[grepl("pneumonia", active_analyses$name)],
+  "cohort_prevax-main_preex_FALSE-copd",
+  "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
+  "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
+  "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-ild",
+  "cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild",
+  "cohort_prevax-sub_age_18_39_preex_TRUE-ild",
+  "cohort_prevax-sub_age_40_59_preex_FALSE-copd",
+  "cohort_prevax-sub_age_60_79_preex_FALSE-copd",
+  "cohort_prevax-sub_age_60_79_preex_FALSE-ild",
+  "cohort_unvax-sub_ethnicity_white_preex_FALSE-copd",
+  "cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild",
+  "cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild",
+  "cohort_prevax-sub_ethnicity_black_preex_FALSE-copd",
+  "cohort_prevax-sub_ethnicity_black_preex_FALSE-ild",
+  "cohort_vax-sub_smoking_current_preex_TRUE-ild",
+  "cohort_unvax-sub_smoking_ever_preex_FALSE-ild"
 )
+# These are currently based on manual check from outputs released on 2025-06-26, leave empty if no models need Stata
+
+stata <- active_analyses[active_analyses$name %in% stata_models, ]
 
 # Create generic action function -----------------------------------------------
 
@@ -242,6 +264,49 @@ apply_model_function <- function(
   )
 }
 
+# Create function to make Stata models -----------------------------------------
+
+apply_stata_model_function <- function(
+  name,
+  cohort,
+  analysis,
+  ipw,
+  strata,
+  covariate_sex,
+  covariate_age,
+  covariate_other,
+  cox_start,
+  cox_stop,
+  study_start,
+  study_stop,
+  cut_points,
+  controls_per_case,
+  total_event_threshold,
+  episode_event_threshold,
+  covariate_threshold,
+  age_spline
+) {
+  splice(
+    action(
+      name = glue("ready-{name}"),
+      run = glue(
+        "cox-ipw:v0.0.37 --df_input=model/model_input-{name}.rds --ipw={ipw} --exposure=exp_date --outcome=out_date --strata={strata} --covariate_sex={covariate_sex} --covariate_age={covariate_age} --covariate_other={covariate_other} --cox_start={cox_start} --cox_stop={cox_stop} --study_start={study_start} --study_stop={study_stop} --cut_points={cut_points} --controls_per_case={controls_per_case} --total_event_threshold={total_event_threshold} --episode_event_threshold={episode_event_threshold} --covariate_threshold={covariate_threshold} --age_spline={age_spline} --save_analysis_ready=model/ready-{name}.dta --run_analysis=FALSE --df_output=model/model_output-{name}.csv"
+      ),
+      needs = list(glue("make_model_input-{name}")),
+      highly_sensitive = list(ready = glue("output/model/ready-{name}.dta"))
+    ),
+    action(
+      name = glue("stata_cox_ipw-{name}"),
+      run = "stata-mp:latest analysis/model/cox_model.do",
+      arguments = c(name, cut_points, study_start),
+      needs = c(as.list(glue("ready-{name}"))),
+      moderately_sensitive = list(
+        model_output = glue("output/model/stata_model_output-{name}.csv")
+      )
+    )
+  )
+}
+
 # Create function to make Table 2 ----------------------------------------------
 
 table2 <- function(cohort, subgroup) {
@@ -344,11 +409,25 @@ make_model_output <- function(subgroup) {
       needs = as.list(c(
         paste0(
           "cox_ipw-",
-          active_analyses$name[
-            !(active_analyses$name %in% excluded_models) &
-              str_detect(active_analyses$analysis, subgroup)
-          ]
-        )
+          setdiff(
+            active_analyses$name[str_detect(
+              active_analyses$analysis,
+              subgroup
+            )],
+            c(stata$name, excluded_models)
+          )
+        ),
+        if (
+          length(stata_models) > 0 &&
+            any(str_detect(stata$analysis, subgroup))
+        ) {
+          paste0(
+            "stata_cox_ipw-",
+            stata$name[str_detect(stata$analysis, subgroup)]
+          )
+        } else {
+          character(0)
+        }
       )),
       moderately_sensitive = list(
         model_output = glue("output/make_output/model_output-{subgroup}.csv"),
@@ -530,6 +609,41 @@ actions_list <- splice(
     )
   ),
 
+  # Stata models (only if stata_models not empty)
+  if (length(stata_models) > 0) {
+    splice(
+      unlist(
+        lapply(
+          1:nrow(stata),
+          function(x) {
+            apply_stata_model_function(
+              name = stata$name[x],
+              cohort = stata$cohort[x],
+              analysis = stata$analysis[x],
+              ipw = stata$ipw[x],
+              strata = stata$strata[x],
+              covariate_sex = stata$covariate_sex[x],
+              covariate_age = stata$covariate_age[x],
+              covariate_other = stata$covariate_other[x],
+              cox_start = stata$cox_start[x],
+              cox_stop = stata$cox_stop[x],
+              study_start = stata$study_start[x],
+              study_stop = stata$study_stop[x],
+              cut_points = stata$cut_points[x],
+              controls_per_case = stata$controls_per_case[x],
+              total_event_threshold = stata$total_event_threshold[x],
+              episode_event_threshold = stata$episode_event_threshold[x],
+              covariate_threshold = stata$covariate_threshold[x],
+              age_spline = stata$age_spline[x]
+            )
+          }
+        ),
+        recursive = FALSE
+      )
+    )
+  } else {
+    list()
+  },
   ## Flow ----------------------------------------------------------------------
 
   splice(
