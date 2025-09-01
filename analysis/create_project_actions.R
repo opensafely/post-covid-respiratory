@@ -42,7 +42,7 @@ describe <- FALSE # This prints descriptive files for each dataset in the pipeli
 
 # List of models excluded from model output generation
 
-excluded_models <- c("cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia")
+excluded_models <- c()
 
 # List of models that should run in Stata due to convergence issues
 
@@ -50,7 +50,7 @@ pneumonia_models <- active_analyses$name[grepl(
   "pneumonia",
   active_analyses$name
 )]
-additional_models <- c(
+other_unconverged_models <- c(
   "cohort_prevax-main_preex_FALSE-copd",
   "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
@@ -68,16 +68,9 @@ additional_models <- c(
   "cohort_vax-sub_smoking_current_preex_TRUE-ild",
   "cohort_unvax-sub_smoking_ever_preex_FALSE-ild"
 )
-#run_stata <- c(pneumonia_models, additional_models)
-run_stata <- c(
-  "cohort_prevax-main_preex_FALSE-asthma",
-  "cohort_prevax-main_preex_FALSE-ild",
-  "cohort_prevax-main_preex_FALSE-pneumonia",
-  "cohort_prevax-main_preex_TRUE-ild",
-  "cohort_prevax-main_preex_TRUE-pneumonia",
-  "cohort_unvax-main_preex_TRUE-ild",
-  "cohort_unvax-main_preex_TRUE-pneumonia"
-) # These are currently based on extream HR in dummy data for testing codes, leave empty if no models need Stata
+run_stata <- c(pneumonia_models, other_unconverged_models)
+# These are currently based on manual check from outputs released on 2025-06-26, leave empty if no models need Stata
+
 stata <- active_analyses[active_analyses$name %in% run_stata, ]
 
 # Create generic action function -----------------------------------------------
@@ -729,20 +722,6 @@ actions_list <- splice(
       aer_input_midpoint6 = glue(
         "output/make_output/aer_input-main-midpoint6.csv"
       )
-    )
-  ),
-
-  ## Look for unconverged models -------------------------------------
-
-  comment("Look for unconverged models"),
-
-  action(
-    name = "find_unconverged_models",
-    run = "r:v2 analysis/make_output/find_unconverged_models.R",
-    needs = as.list(paste0("make_model_output-", subgroups)),
-    moderately_sensitive = list(
-      describe_unconverged_models = "output/describe/unconverged_models.txt",
-      unconverged_models_details = "output/describe/unconverged_models.csv"
     )
   )
 )
