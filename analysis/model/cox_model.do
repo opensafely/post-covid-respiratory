@@ -52,8 +52,6 @@ rename strat_cat_region region
 
 * Generate pre vaccination cohort indicators
 
-local prevax_cohort = regexm("`name'", "_prevax")
-display "`prevax_cohort'"
 
 * Generate sex indicator
 
