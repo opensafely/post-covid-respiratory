@@ -47,7 +47,16 @@ excluded_models <- c()
 # List of models that should run in Stata due to convergence issues
 
 stata_models <- c(
-  active_analyses$name[grepl("pneumonia", active_analyses$name)],
+  active_analyses$name[
+    grepl("pneumonia", active_analyses$name) &
+      !active_analyses$name %in%
+        c(
+          "cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia",
+          "cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia",
+          "cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia",
+          "cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia"
+        )
+  ],
   "cohort_prevax-main_preex_FALSE-copd",
   "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
