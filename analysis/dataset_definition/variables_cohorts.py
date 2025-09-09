@@ -42,7 +42,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     ## Inclusion/exclusion criteria------------------------------------------------------------------------
 
     ### Registered for a minimum of 6 months prior to index date
-    inex_bin_6m_reg = (practice_registrations.spanning_with_systmone(
+    inex_bin_6m_reg = (practice_registrations.spanning(
         index_date - days(180), index_date
         )).exists_for_patient()
 
