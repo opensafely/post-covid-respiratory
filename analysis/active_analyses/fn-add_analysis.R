@@ -22,7 +22,7 @@ add_analysis <- function(
   # Define cut points ----
 
   cut_points <- list(
-    prevax = "1;28;183;365;730;1095;1460;1825;1979",
+    prevax = "1;28;183;365;730;1095;1460;1979",
     vax_unvax = "1;28;183;365;730;1095;1460"
   )
   cut_points_used <- ifelse(

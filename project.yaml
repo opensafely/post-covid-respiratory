@@ -204,7 +204,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-asthma.csv
     needs:
@@ -226,7 +226,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-copd.csv
     needs:
@@ -248,7 +248,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-ild.csv
     needs:
@@ -270,7 +270,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-pneumonia.csv
     needs:
@@ -468,7 +468,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_TRUE-ild.csv
     needs:
@@ -490,7 +490,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-main_preex_TRUE-pneumonia.csv
     needs:
@@ -600,7 +600,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-asthma.csv
     needs:
@@ -622,7 +622,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-copd.csv
     needs:
@@ -644,7 +644,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-ild.csv
     needs:
@@ -666,7 +666,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.csv
     needs:
@@ -864,7 +864,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-ild.csv
     needs:
@@ -886,7 +886,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.csv
     needs:
@@ -996,7 +996,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-asthma.csv
     needs:
@@ -1018,7 +1018,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-copd.csv
     needs:
@@ -1040,7 +1040,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-ild.csv
     needs:
@@ -1062,7 +1062,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.csv
     needs:
@@ -1260,7 +1260,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_TRUE-ild.csv
     needs:
@@ -1282,7 +1282,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.csv
     needs:
@@ -1392,7 +1392,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-asthma.csv
     needs:
@@ -1414,7 +1414,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-copd.csv
     needs:
@@ -1436,7 +1436,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-ild.csv
     needs:
@@ -1458,7 +1458,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.csv
     needs:
@@ -1656,7 +1656,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_TRUE-ild.csv
     needs:
@@ -1678,7 +1678,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.csv
     needs:
@@ -1788,7 +1788,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-asthma.csv
     needs:
@@ -1810,7 +1810,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-copd.csv
     needs:
@@ -1832,7 +1832,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-ild.csv
     needs:
@@ -1854,7 +1854,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.csv
     needs:
@@ -2052,7 +2052,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_TRUE-ild.csv
     needs:
@@ -2074,7 +2074,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.csv
     needs:
@@ -2448,7 +2448,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-asthma.csv
     needs:
@@ -2470,7 +2470,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-copd.csv
     needs:
@@ -2492,7 +2492,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-ild.csv
     needs:
@@ -2514,7 +2514,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
     needs:
@@ -2712,7 +2712,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-ild.csv
     needs:
@@ -2734,7 +2734,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
     needs:
@@ -2844,7 +2844,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-asthma.csv
     needs:
@@ -2866,7 +2866,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-copd.csv
     needs:
@@ -2888,7 +2888,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild.csv
     needs:
@@ -2910,7 +2910,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
     needs:
@@ -3108,7 +3108,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild.csv
     needs:
@@ -3130,7 +3130,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
     needs:
@@ -3240,7 +3240,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-asthma.csv
     needs:
@@ -3262,7 +3262,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd.csv
     needs:
@@ -3284,7 +3284,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild.csv
     needs:
@@ -3306,7 +3306,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
     needs:
@@ -3504,7 +3504,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild.csv
     needs:
@@ -3526,7 +3526,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
     needs:
@@ -3636,7 +3636,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma.csv
     needs:
@@ -3658,7 +3658,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.csv
     needs:
@@ -3680,7 +3680,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-ild.csv
     needs:
@@ -3702,7 +3702,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
     needs:
@@ -3900,7 +3900,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_TRUE-ild.csv
     needs:
@@ -3922,7 +3922,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
     needs:
@@ -4032,7 +4032,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-asthma.csv
     needs:
@@ -4054,7 +4054,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-copd.csv
     needs:
@@ -4076,7 +4076,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-ild.csv
     needs:
@@ -4098,7 +4098,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
     needs:
@@ -4296,7 +4296,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-ild.csv
     needs:
@@ -4318,7 +4318,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
     needs:
@@ -4428,7 +4428,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-asthma.csv
     needs:
@@ -4450,7 +4450,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-copd.csv
     needs:
@@ -4472,7 +4472,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-ild.csv
     needs:
@@ -4494,7 +4494,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
     needs:
@@ -4692,7 +4692,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_TRUE-ild.csv
     needs:
@@ -4714,7 +4714,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
     needs:
@@ -4824,7 +4824,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-asthma.csv
     needs:
@@ -4846,7 +4846,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-copd.csv
     needs:
@@ -4868,7 +4868,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-ild.csv
     needs:
@@ -4890,7 +4890,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
     needs:
@@ -5088,7 +5088,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_TRUE-ild.csv
     needs:
@@ -5110,7 +5110,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
     needs:
@@ -5220,7 +5220,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-asthma.csv
     needs:
@@ -5242,7 +5242,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-copd.csv
     needs:
@@ -5264,7 +5264,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-ild.csv
     needs:
@@ -5286,7 +5286,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.csv
     needs:
@@ -5484,7 +5484,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_TRUE-ild.csv
     needs:
@@ -5506,7 +5506,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.csv
     needs:
@@ -5616,7 +5616,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-asthma.csv
     needs:
@@ -5638,7 +5638,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-copd.csv
     needs:
@@ -5660,7 +5660,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-ild.csv
     needs:
@@ -5682,7 +5682,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.csv
     needs:
@@ -5880,7 +5880,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_TRUE-ild.csv
     needs:
@@ -5902,7 +5902,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.csv
     needs:
@@ -6012,7 +6012,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-asthma.csv
     needs:
@@ -6034,7 +6034,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-copd.csv
     needs:
@@ -6056,7 +6056,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-ild.csv
     needs:
@@ -6078,7 +6078,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.csv
     needs:
@@ -6276,7 +6276,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_TRUE-ild.csv
     needs:
@@ -6298,7 +6298,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.csv
     needs:
@@ -6408,7 +6408,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-asthma.csv
     needs:
@@ -6430,7 +6430,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-copd.csv
     needs:
@@ -6452,7 +6452,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-ild.csv
     needs:
@@ -6474,7 +6474,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.csv
     needs:
@@ -6672,7 +6672,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_TRUE-ild.csv
     needs:
@@ -6694,7 +6694,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.csv
     needs:
@@ -6804,7 +6804,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-asthma.csv
     needs:
@@ -6826,7 +6826,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-copd.csv
     needs:
@@ -6848,7 +6848,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-ild.csv
     needs:
@@ -6870,7 +6870,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.csv
     needs:
@@ -7068,7 +7068,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_TRUE-ild.csv
     needs:
@@ -7090,7 +7090,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.csv
     needs:
@@ -7192,7 +7192,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_FALSE-copd.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-copd.csv
@@ -7204,7 +7204,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_FALSE-copd:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_FALSE-copd
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_FALSE-copd
     outputs:
@@ -7216,7 +7216,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_FALSE-pneumonia.csv
@@ -7228,7 +7228,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_FALSE-pneumonia
     outputs:
@@ -7288,7 +7288,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-main_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-main_preex_TRUE-pneumonia.csv
@@ -7300,7 +7300,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-main_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-main_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-main_preex_TRUE-pneumonia
     outputs:
@@ -7360,7 +7360,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia.csv
@@ -7372,7 +7372,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_18_39_preex_FALSE-pneumonia
     outputs:
@@ -7432,7 +7432,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_TRUE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-ild.csv
@@ -7444,7 +7444,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_18_39_preex_TRUE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_18_39_preex_TRUE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_18_39_preex_TRUE-ild
     outputs:
@@ -7456,7 +7456,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia.csv
@@ -7468,7 +7468,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_18_39_preex_TRUE-pneumonia
     outputs:
@@ -7528,7 +7528,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_FALSE-copd.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-copd.csv
@@ -7540,7 +7540,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_40_59_preex_FALSE-copd:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_40_59_preex_FALSE-copd
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_40_59_preex_FALSE-copd
     outputs:
@@ -7552,7 +7552,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia.csv
@@ -7564,7 +7564,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_40_59_preex_FALSE-pneumonia
     outputs:
@@ -7624,7 +7624,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia.csv
@@ -7636,7 +7636,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_40_59_preex_TRUE-pneumonia
     outputs:
@@ -7696,7 +7696,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-copd.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-copd.csv
@@ -7708,7 +7708,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_60_79_preex_FALSE-copd:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_60_79_preex_FALSE-copd
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_60_79_preex_FALSE-copd
     outputs:
@@ -7720,7 +7720,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-ild.csv
@@ -7732,7 +7732,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_60_79_preex_FALSE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_60_79_preex_FALSE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_60_79_preex_FALSE-ild
     outputs:
@@ -7744,7 +7744,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia.csv
@@ -7756,7 +7756,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_60_79_preex_FALSE-pneumonia
     outputs:
@@ -7816,7 +7816,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia.csv
@@ -7828,7 +7828,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_60_79_preex_TRUE-pneumonia
     outputs:
@@ -7888,7 +7888,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia.csv
@@ -7900,7 +7900,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_80_110_preex_FALSE-pneumonia
     outputs:
@@ -7960,7 +7960,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=FALSE --save_analysis_ready=model/ready-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia.csv
@@ -7972,7 +7972,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_age_80_110_preex_TRUE-pneumonia
     outputs:
@@ -8128,7 +8128,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia.csv
@@ -8140,7 +8140,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-pneumonia
     outputs:
@@ -8200,7 +8200,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia.csv
@@ -8212,7 +8212,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-pneumonia
     outputs:
@@ -8272,7 +8272,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild.csv
@@ -8284,7 +8284,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild
     outputs:
@@ -8296,7 +8296,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia.csv
@@ -8308,7 +8308,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-pneumonia
     outputs:
@@ -8416,7 +8416,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild.csv
@@ -8428,7 +8428,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-ild
     outputs:
@@ -8440,7 +8440,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia.csv
@@ -8452,7 +8452,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_covidhospital_TRUE_preex_TRUE-pneumonia
     outputs:
@@ -8512,7 +8512,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild.csv
@@ -8524,7 +8524,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-ild
     outputs:
@@ -8536,7 +8536,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia.csv
@@ -8548,7 +8548,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_asian_preex_FALSE-pneumonia
     outputs:
@@ -8608,7 +8608,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild.csv
@@ -8620,7 +8620,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-ild
     outputs:
@@ -8632,7 +8632,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia.csv
@@ -8644,7 +8644,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_asian_preex_TRUE-pneumonia
     outputs:
@@ -8704,7 +8704,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd.csv
@@ -8716,7 +8716,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_black_preex_FALSE-copd
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-copd
     outputs:
@@ -8728,7 +8728,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-ild.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-ild.csv
@@ -8740,7 +8740,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_black_preex_FALSE-ild:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_black_preex_FALSE-ild
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-ild
     outputs:
@@ -8752,7 +8752,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia.csv
@@ -8764,7 +8764,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_black_preex_FALSE-pneumonia
     outputs:
@@ -8824,7 +8824,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia.csv
@@ -8836,7 +8836,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_black_preex_TRUE-pneumonia
     outputs:
@@ -8896,7 +8896,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia.csv
@@ -8908,7 +8908,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_mixed_preex_FALSE-pneumonia
     outputs:
@@ -8968,7 +8968,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia.csv
@@ -8980,7 +8980,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_mixed_preex_TRUE-pneumonia
     outputs:
@@ -8992,7 +8992,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia.csv
@@ -9004,7 +9004,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_other_preex_FALSE-pneumonia
     outputs:
@@ -9064,7 +9064,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia.csv
@@ -9076,7 +9076,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_other_preex_TRUE-pneumonia
     outputs:
@@ -9088,7 +9088,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia.csv
@@ -9100,7 +9100,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_white_preex_FALSE-pneumonia
     outputs:
@@ -9184,7 +9184,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia.csv
@@ -9196,7 +9196,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_ethnicity_white_preex_TRUE-pneumonia
     outputs:
@@ -9256,7 +9256,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia.csv
@@ -9268,7 +9268,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_sex_female_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia
     outputs:
@@ -9328,7 +9328,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia.csv
@@ -9340,7 +9340,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_sex_female_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia
     outputs:
@@ -9400,7 +9400,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia.csv
@@ -9412,7 +9412,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_sex_male_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_sex_male_preex_FALSE-pneumonia
     outputs:
@@ -9472,7 +9472,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia.csv
@@ -9484,7 +9484,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_sex_male_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_sex_male_preex_TRUE-pneumonia
     outputs:
@@ -9544,7 +9544,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia.csv
@@ -9556,7 +9556,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia
     outputs:
@@ -9616,7 +9616,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia.csv
@@ -9628,7 +9628,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia
     outputs:
@@ -9712,7 +9712,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia.csv
@@ -9724,7 +9724,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia
     outputs:
@@ -9808,7 +9808,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia.csv
@@ -9820,7 +9820,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
     outputs:
@@ -9880,7 +9880,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia.csv
@@ -9892,7 +9892,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia
     outputs:
@@ -9952,7 +9952,7 @@ actions:
       --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
       --covariate_sex=cov_cat_sex --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_copd;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_asthma;cov_bin_ild
       --cox_start=index_date --cox_stop=end_date_outcome --study_start=2020-01-01
-      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1825;1979 --controls_per_case=20
+      --study_stop=2025-05-31 --cut_points=1;28;183;365;730;1095;1460;1979 --controls_per_case=20
       --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
       --age_spline=TRUE --save_analysis_ready=model/ready-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.dta
       --run_analysis=FALSE --df_output=model/model_output-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia.csv
@@ -9964,7 +9964,7 @@ actions:
 
   stata_cox_ipw-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia:
     run: stata-mp:latest analysis/model/cox_model.do cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia
-      1;28;183;365;730;1095;1460;1825;1979 2020-01-01
+      1;28;183;365;730;1095;1460;1979 2020-01-01
     needs:
     - ready-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia
     outputs:
