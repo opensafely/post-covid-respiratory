@@ -200,4 +200,4 @@ for (j in 1:nrow(facet_info)) {
 }
 plot_aer("pneumonia", "pneumonia")
 plot_aer(c("asthma", "copd"), "asthma_copd")
-plot_aer("pf", "pf")
+plot_aer("ild", "ild")

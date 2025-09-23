@@ -54,7 +54,7 @@ df$outcome_label <- factor(
     "Pneumonia",
     "Asthma",
     "Chronic obstructive pulmonary disease",
-    "Pulmonary fibrosis"
+    "Interstitial lung disease"
   )
 )
 
