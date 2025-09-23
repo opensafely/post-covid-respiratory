@@ -13,4 +13,4 @@ df <- file_list %>%
   lapply(read_csv, show_col_types = FALSE) %>%
   bind_rows()
 
-  readr::write_csv(df, "output/plot_model_output.csv")
+readr::write_csv(df, "output/post_release/plot_model_output.csv")

@@ -3,7 +3,10 @@ plot_hr <- function(outcomes, outcome_group) {
   # Load data --------------------------------------------------------------------
   print("Load data")
 
-  df <- readr::read_csv("output/plot_model_output.csv", show_col_types = FALSE)
+  df <- readr::read_csv(
+    "output/post_release/plot_model_output.csv",
+    show_col_types = FALSE
+  )
 
   df <- df[!is.na(df$hr), ]
 
