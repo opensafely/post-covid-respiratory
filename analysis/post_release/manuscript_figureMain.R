@@ -178,7 +178,7 @@ plot_hr <- function(outcomes, outcome_group) {
       ggplot2::scale_color_manual(
         breaks = c("prevax", "vax", "unvax"),
         labels = c(
-          "Pre-vaccination (Jan 1 2020 - Dec 14 2021)",
+          "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
           "Vaccinated (Jun 1 2021 - Dec 14 2021)",
           "Unvaccinated (Jun 1 2021 - Dec 14 2021)"
         ),
@@ -282,4 +282,4 @@ plot_hr <- function(outcomes, outcome_group) {
 
 plot_hr("pneumonia", "pneumonia")
 plot_hr(c("asthma", "copd"), "asthma_copd")
-plot_hr("pf", "pf")
+plot_hr("ild", "ild")
