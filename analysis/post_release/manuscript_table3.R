@@ -1,7 +1,7 @@
 # Load data --------------------------------------------------------------------
 print("Load data")
 
-df <- read_csv("output/plot_model_output.csv")
+df <- read_csv("output/post_release/plot_model_output.csv")
 
 # Filter data ------------------------------------------------------------------
 print("Filter data")
