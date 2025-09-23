@@ -73,16 +73,13 @@ df <- df %>%
   mutate(
     weeks = case_when(
       term == "days0_1" ~ "Day 0",
-      term == "days1_7" ~ "Week 1, without day 0",
-      term == "days7_14" ~ "Week 2",
-      term == "days14_28" ~ "Weeks 3-4",
-      term == "days28_56" ~ "Weeks 5-8",
-      term == "days56_84" ~ "Weeks 9-12",
-      term == "days84_183" ~ "Weeks 13-26",
+      term == "days1_28" ~ "Weeks 1-4, without day 0",
+      term == "days28_183" ~ "Weeks 5-26",
       term == "days183_365" ~ "Weeks 27-52",
-      term == "days365_730" ~ "Weeks 53-104",
-      term == "days730_1065" ~ "Weeks 105-152",
-      term == "days1065_1582" ~ "Weeks 153-226",
+      term == "days365_730" ~ "Years 1-2",
+      term == "days730_1095" ~ "Years 2-3",
+      term == "days1095_1460" ~ "Years 3-4",
+      term == "days1460_1979" ~ "Years 4-5.5",
       TRUE ~ NA_character_
     )
   )
@@ -90,16 +87,13 @@ df <- df %>%
 # Define the desired order for the 'weeks' factor
 weeks_levels <- c(
   "Day 0",
-  "Week 1, without day 0",
-  "Week 2",
-  "Weeks 3-4",
-  "Weeks 5-8",
-  "Weeks 9-12",
-  "Weeks 13-26",
+  "Weeks 1-4, without day 0",
+  "Weeks 5-26",
   "Weeks 27-52",
-  "Weeks 53-104",
-  "Weeks 105-152",
-  "Weeks 153-226"
+  "Years 1-2",
+  "Years 2-3",
+  "Years 3-4",
+  "Years 4-5.5"
 )
 
 # Convert 'weeks' to a factor with specified levels
@@ -118,7 +112,7 @@ df$outcome_label <- factor(
     "Pneumonia",
     "Asthma",
     "Chronic obstructive pulmonary disease",
-    "Pulmonary fibrosis"
+    "Interstitial lung disease"
   )
 )
 
