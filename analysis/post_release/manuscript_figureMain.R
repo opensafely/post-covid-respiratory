@@ -10,6 +10,11 @@ plot_hr <- function(outcomes, outcome_group) {
 
   df <- df[!is.na(df$hr), ]
 
+  # Set Upper Bound and Lower Bound limits -------------------------------------
+
+  ub <- 16
+  lb <- 0.25
+
   # Filter data ------------------------------------------------------------------
   print("Filter data")
 
@@ -43,6 +48,30 @@ plot_hr <- function(outcomes, outcome_group) {
       as.numeric
     )
 
+  # High/low value checks ------------------------------------------------------
+
+  df$conf_low <- ifelse(
+    df$conf_low >= lb,
+    df$conf_low,
+    lb - 0.001
+  )
+
+  df$conf_high <- ifelse(
+    df$conf_high <= ub,
+    df$conf_high,
+    ub + 0.1
+  )
+  df$hr <- ifelse(
+    df$hr >= lb,
+    df$hr,
+    lb
+  )
+  df$hr <- ifelse(
+    df$hr <= ub,
+    df$hr,
+    ub
+  )
+
   # Add plot labels ---------------------------------------------------------
   print("Add plot labels")
 
@@ -74,6 +103,16 @@ plot_hr <- function(outcomes, outcome_group) {
     all.x = TRUE
   )
   df <- dplyr::rename(df, "analysis_label" = "label")
+
+  # Calculate maximum value for x axis
+  if (nrow(df) == 0 || all(is.na(df$outcome_time_median))) {
+    warning(
+      "No valid outcome_time_median values found after filtering. Skipping plot."
+    )
+    return(NULL)
+  } else {
+    max_time <- max(df$outcome_time_median, na.rm = TRUE)
+  }
 
   # Find which plot the facet label should be on ---------------------------------
   df <- df %>%
@@ -158,6 +197,11 @@ plot_hr <- function(outcomes, outcome_group) {
 
     df_plot <- merge(df_plot, facet_info)
 
+    # Find Error bars at edge of graph -----------------------------------------
+
+    df_ub <- df_plot[df_plot$conf_high == ub + 0.1, ] # find confidence intervals at limits (set by code above)
+    df_lb <- df_plot[df_plot$conf_low == lb - 0.001, ] # find confidence intervals at limits (set by code above)
+
     # Plot data ------------------------------------------------------------------
     print("Plot data")
 
@@ -178,14 +222,14 @@ plot_hr <- function(outcomes, outcome_group) {
       ggplot2::scale_color_manual(
         breaks = c("prevax", "vax", "unvax"),
         labels = c(
-          "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
-          "Vaccinated (Jun 1 2021 - Dec 14 2021)",
-          "Unvaccinated (Jun 1 2021 - Dec 14 2021)"
+          "Pre-vaccination (Jan 1 2020 - May 31 2025)",
+          "Vaccinated (Jun 1 2021 - May 31 2025)",
+          "Unvaccinated (Jun 1 2021 - May 31 2025)"
         ),
         values = c("#d2ac47", "#58764c", "#0018a8")
       ) +
       ggplot2::labs(
-        x = "\nWeeks since COVID-19 diagnosis",
+        x = "\nYears since COVID-19 diagnosis",
         y = "Hazard ratio and 95% confidence interval\n"
       ) +
       ggplot2::theme_minimal() +
@@ -203,6 +247,37 @@ plot_hr <- function(outcomes, outcome_group) {
           colour = "white"
         )
       )
+    if (nrow(df_ub) > 0) {
+      p <- p +
+        ggplot2::geom_point(
+          data = df_ub,
+          mapping = ggplot2::aes(
+            x = outcome_time_median,
+            y = conf_high - 0.1,
+            color = cohort
+          ),
+          shape = 13,
+          size = 2,
+          show.legend = FALSE,
+          position = ggplot2::position_dodge(width = 0)
+        )
+    }
+
+    if (nrow(df_lb) > 0) {
+      p <- p +
+        ggplot2::geom_point(
+          data = df_lb,
+          mapping = ggplot2::aes(
+            x = outcome_time_median,
+            y = conf_low + 0.001,
+            color = cohort
+          ),
+          shape = 13,
+          size = 2,
+          show.legend = FALSE,
+          position = ggplot2::position_dodge(width = 0)
+        )
+    }
 
     if (grepl("history_exposure", i)) {
       p +
@@ -212,9 +287,8 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          lim = c(0, 84),
-          breaks = seq(0, 84, 14),
-          labels = seq(0, 84, 14) / 7
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(ncol = 1, byrow = TRUE))
@@ -227,9 +301,8 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          limits = c(0, 1456),
-          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
-          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
@@ -242,9 +315,8 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          limits = c(0, 1456),
-          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
-          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(ncol = 1, byrow = TRUE))
@@ -257,9 +329,8 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          limits = c(0, 1456),
-          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
-          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
