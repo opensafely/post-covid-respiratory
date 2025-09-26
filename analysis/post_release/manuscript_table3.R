@@ -7,13 +7,11 @@ df <- read_csv("output/post_release/plot_model_output.csv")
 print("Filter data")
 
 df <- df[grepl("days", df$term), ]
-
+df <- df[df$term != "days_pre", ]
 df <- df[
   df$model == "mdl_max_adj",
   c("analysis", "cohort", "outcome", "term", "hr", "conf_low", "conf_high")
 ]
-
-df <- df[df$term != "days_pre", ]
 
 # Add plot labels --------------------------------------------------------------
 print("Add plot labels")
