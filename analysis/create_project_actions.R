@@ -46,7 +46,7 @@ excluded_models <- c()
 
 # List of models that should run in Stata due to convergence issues
 
-stata_models <- c(
+stata_models <- unique(c(
   active_analyses$name[
     grepl("pneumonia", active_analyses$name) &
       !active_analyses$name %in%
@@ -72,8 +72,82 @@ stata_models <- c(
   "cohort_prevax-sub_ethnicity_black_preex_FALSE-copd",
   "cohort_prevax-sub_ethnicity_black_preex_FALSE-ild",
   "cohort_vax-sub_smoking_current_preex_TRUE-ild",
-  "cohort_unvax-sub_smoking_ever_preex_FALSE-ild"
-)
+  "cohort_unvax-sub_smoking_ever_preex_FALSE-ild",
+  "cohort_unvax-main_preex_TRUE-ild",
+  "cohort_unvax-main_preex_FALSE-ild",
+  "cohort_vax-main_preex_FALSE-ild",
+  "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-asthma",
+  "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-asthma",
+  "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-asthma",
+  "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-copd",
+  "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-copd",
+  "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-copd",
+  "cohort_vax-sub_covidhospital_TRUE_preex_TRUE-ild",
+  "cohort_unvax-sub_covidhospital_TRUE_preex_TRUE-ild",
+  "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-ild",
+  "cohort_prevax-sub_covidhospital_FALSE_preex_TRUE-ild",
+  "cohort_vax-sub_covidhospital_FALSE_preex_TRUE-ild",
+  "cohort_prevax-sub_covidhospital_FALSE_preex_FALSE-ild",
+  "cohort_vax-sub_covidhospital_FALSE_preex_FALSE-ild",
+  "cohort_unvax-sub_covidhospital_FALSE_preex_FALSE-ild",
+  "cohort_vax-sub_covidhistory_preex_FALSE-copd",
+  "cohort_vax-sub_covidhistory_preex_FALSE-ild",
+  "cohort_vax-sub_covidhistory_preex_TRUE-ild",
+  "cohort_prevax-sub_age_18_39_preex_FALSE-ild",
+  "cohort_unvax-sub_age_18_39_preex_FALSE-ild",
+  "cohort_vax-sub_age_18_39_preex_FALSE-copd",
+  "cohort_unvax-sub_age_40_59_preex_FALSE-ild",
+  "cohort_unvax-sub_age_60_79_preex_TRUE-ild",
+  "cohort_unvax-sub_age_60_79_preex_FALSE-ild",
+  "cohort_vax-sub_age_60_79_preex_TRUE-ild",
+  "cohort_vax-sub_age_60_79_preex_FALSE-ild",
+  "cohort_prevax-sub_age_60_79_preex_TRUE-ild",
+  "cohort_prevax-sub_age_60_79_preex_FALSE-ild",
+  "cohort_unvax-sub_age_60_79_preex_FALSE-copd",
+  "cohort_prevax-sub_age_80_110_preex_TRUE-ild",
+  "cohort_prevax-sub_age_80_110_preex_FALSE-ild",
+  "cohort_prevax-sub_age_80_110_preex_FALSE-copd",
+  "cohort_unvax-sub_sex_female_preex_FALSE-ild",
+  "cohort_unvax-sub_sex_female_preex_TRUE-ild",
+  "cohort_prevax-sub_sex_female_preex_FALSE-ild",
+  "cohort_prevax-sub_sex_female_preex_TRUE-ild",
+  "cohort_unvax-sub_sex_male_preex_FALSE-ild",
+  "cohort_unvax-sub_sex_male_preex_TRUE-ild",
+  "cohort_prevax-sub_sex_male_preex_FALSE-copd",
+  "cohort_vax-sub_sex_male_preex_FALSE-copd",
+  "cohort_unvax-sub_sex_male_preex_FALSE-copd",
+  "cohort_prevax-sub_sex_male_preex_FALSE-ild",
+  "cohort_prevax-sub_sex_male_preex_TRUE-ild",
+  "cohort_prevax-sub_ethnicity_white_preex_FALSE-copd",
+  "cohort_vax-sub_ethnicity_white_preex_FALSE-copd",
+  "cohort_prevax-sub_ethnicity_white_preex_TRUE-ild",
+  "cohort_unvax-sub_ethnicity_white_preex_TRUE-ild",
+  "cohort_unvax-sub_ethnicity_white_preex_FALSE-ild",
+  "cohort_vax-sub_ethnicity_asian_preex_FALSE-copd",
+  "cohort_prevax-sub_ethnicity_asian_preex_FALSE-copd",
+  "cohort_unvax-sub_ethnicity_asian_preex_FALSE-ild",
+  "cohort_prevax-sub_ethnicity_black_preex_FALSE-asthma",
+  "cohort_vax-sub_ethnicity_black_preex_FALSE-asthma",
+  "cohort_unvax-sub_ethnicity_black_preex_FALSE-asthma",
+  "cohort_prevax-sub_ethnicity_other_preex_FALSE-copd",
+  "cohort_prevax-sub_smoking_current_preex_FALSE-copd",
+  "cohort_vax-sub_smoking_current_preex_FALSE-copd",
+  "cohort_unvax-sub_smoking_current_preex_FALSE-copd",
+  "cohort_vax-sub_smoking_current_preex_FALSE-ild",
+  "cohort_prevax-sub_smoking_current_preex_FALSE-ild",
+  "cohort_unvax-sub_smoking_current_preex_FALSE-ild",
+  "cohort_unvax-sub_smoking_ever_preex_TRUE-ild",
+  "cohort_prevax-sub_smoking_ever_preex_FALSE-copd",
+  "cohort_vax-sub_smoking_ever_preex_FALSE-copd",
+  "cohort_unvax-sub_smoking_ever_preex_FALSE-copd",
+  "cohort_unvax-sub_smoking_never_preex_FALSE-copd",
+  "cohort_vax-sub_smoking_never_preex_TRUE-ild",
+  "cohort_prevax-sub_smoking_never_preex_TRUE-ild",
+  "cohort_prevax-sub_smoking_never_preex_FALSE-ild",
+  "cohort_unvax-sub_smoking_never_preex_FALSE-ild",
+  "cohort_vax-sub_smoking_never_preex_FALSE-ild"
+))
+
 # These are currently based on manual check from outputs released on 2025-06-26, leave empty if no models need Stata
 
 stata <- active_analyses[active_analyses$name %in% stata_models, ]
