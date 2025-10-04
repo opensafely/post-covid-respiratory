@@ -54,7 +54,8 @@ stata_models <- unique(c(
           "cohort_unvax-sub_ethnicity_mixed_preex_TRUE-pneumonia",
           "cohort_unvax-sub_ethnicity_other_preex_TRUE-pneumonia",
           "cohort_vax-sub_ethnicity_mixed_preex_TRUE-pneumonia",
-          "cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia"
+          "cohort_vax-sub_ethnicity_other_preex_TRUE-pneumonia",
+          "cohort_vax-sub_sex_female_preex_FALSE-pneumonia"
         )
   ],
   "cohort_prevax-main_preex_FALSE-copd",
