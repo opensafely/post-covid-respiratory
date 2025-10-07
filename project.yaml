@@ -12194,7 +12194,6 @@ actions:
     - stata_cox_ipw-cohort_prevax-sub_sex_female_preex_FALSE-pneumonia
     - stata_cox_ipw-cohort_unvax-sub_sex_female_preex_FALSE-ild
     - stata_cox_ipw-cohort_unvax-sub_sex_female_preex_FALSE-pneumonia
-    - stata_cox_ipw-cohort_vax-sub_sex_female_preex_FALSE-pneumonia
     - stata_cox_ipw-cohort_prevax-sub_sex_female_preex_TRUE-ild
     - stata_cox_ipw-cohort_prevax-sub_sex_female_preex_TRUE-pneumonia
     - stata_cox_ipw-cohort_unvax-sub_sex_female_preex_TRUE-ild
