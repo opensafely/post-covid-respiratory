@@ -31,11 +31,17 @@ add_analysis <- function(
     cut_points$vax_unvax
   )
 
+  ipw_used <- ifelse(
+    cohort == "unvax",
+    FALSE,
+    TRUE
+  )
+
   new_analysis <- c(
     cohort = cohort,
     exposure = "exp_date_covid",
     outcome = outcome,
-    ipw = TRUE,
+    ipw = ipw_used,
     strata = "strat_cat_region",
     covariate_sex = ifelse(
       grepl("sex", analysis_name),
