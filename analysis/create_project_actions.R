@@ -75,6 +75,8 @@ stata_models <- unique(c(
         )
   ],
   "cohort_prevax-main_preex_FALSE-copd",
+  "cohort_vax-main_preex_FALSE-copd",
+  "cohort_unvax-main_preex_FALSE-copd",
   "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-ild",
