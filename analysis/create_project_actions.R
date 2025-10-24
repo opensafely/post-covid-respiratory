@@ -15,6 +15,7 @@ defaults_list <- list(
 )
 
 active_analyses <- read_rds("lib/active_analyses.rds")
+
 active_analyses <- active_analyses[
   order(
     active_analyses$analysis,
@@ -58,6 +59,8 @@ stata_models <- unique(c(
         )
   ],
   "cohort_prevax-main_preex_FALSE-copd",
+  "cohort_vax-main_preex_FALSE-copd",
+  "cohort_unvax-main_preex_FALSE-copd",
   "cohort_prevax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_vax-sub_covidhospital_TRUE_preex_FALSE-ild",
   "cohort_unvax-sub_covidhospital_TRUE_preex_FALSE-ild",
@@ -478,7 +481,7 @@ venn <- function(cohort, analyses = "") {
   )
 }
 
-# Create funtion for making model outputs --------------------------------------
+# Create function for making model outputs --------------------------------------
 
 make_model_output <- function(subgroup) {
   splice(

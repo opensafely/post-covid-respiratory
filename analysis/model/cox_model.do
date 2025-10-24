@@ -39,6 +39,17 @@ di "`cutpoints_last'"
 *  Data preparation (matches R preprocessing)
 * ==============================================================================
 
+* Generate cox_weight = 1 if sampling was turned off
+
+capture confirm variable cox_weight
+if _rc {
+    di "Variable cox_weight not found: generating with value 1"
+    gen cox_weight = 1
+}
+else {
+    di "Variable cox_weight already exists: keeping existing values"
+}
+
 * Filter data
 
 keep patient_id exposure outcome fup_start fup_stop cox_weight cov_cat* strat* cov_num* cov_bin* 
