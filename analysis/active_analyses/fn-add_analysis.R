@@ -31,7 +31,7 @@ add_analysis <- function(
     cut_points$vax_unvax
   )
 
-  ipw_used <- ifelse(
+  ipw <- ifelse(
     cohort == "unvax",
     FALSE,
     TRUE
