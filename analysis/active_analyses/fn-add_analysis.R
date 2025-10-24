@@ -21,16 +21,29 @@ add_analysis <- function(
 
   # Define cut points ----
 
-  cut_points <- list(
+  cut_points_list <- list(
     prevax = "1;28;183;365;730;1095;1460;1979",
-    vax_unvax = "1;28;183;365;730;1095;1460"
-  )
-  cut_points_used <- ifelse(
-    cohort == "prevax",
-    cut_points$prevax,
-    cut_points$vax_unvax
+    vax_unvax = "1;28;183;365;730;1095;1460",
+    vax_unvax_day0_FALSE = "28;183;365;730;1095;1460"
   )
 
+  cut_points <- ifelse(
+    cohort == "prevax",
+    cut_points_list$prevax,
+    cut_points_list$vax_unvax
+  )
+
+  # The model needs to collaspse day0 to the first interval
+
+  if (
+    cohort == "vax" &&
+    outcome == "out_date_copd" &&
+    analysis_name == "sub_age_18_39_preex_FALSE"
+  ) {
+    cut_points <- cut_points_list$vax_unvax_day0_FALSE
+  }
+
+  # Define sampling ----
   ipw <- ifelse(
     cohort == "unvax",
     FALSE,
@@ -41,7 +54,7 @@ add_analysis <- function(
     cohort = cohort,
     exposure = "exp_date_covid",
     outcome = outcome,
-    ipw = ipw_used,
+    ipw = ipw,
     strata = "strat_cat_region",
     covariate_sex = ifelse(
       grepl("sex", analysis_name),
@@ -54,7 +67,7 @@ add_analysis <- function(
     cox_stop = "end_date_outcome",
     study_start = study_start,
     study_stop = dates$study_stop,
-    cut_points = cut_points_used,
+    cut_points = cut_points,
     controls_per_case = 20L,
     total_event_threshold = 50L,
     episode_event_threshold = 5L,

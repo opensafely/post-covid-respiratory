@@ -16,22 +16,6 @@ defaults_list <- list(
 
 active_analyses <- read_rds("lib/active_analyses.rds")
 
-# List of models collapsing day0 into days1-28
-
-day0_FALSE_models <- c(
-  "cohort_vax-sub_age_18_39_preex_FALSE-copd"
-)
-
-active_analyses <- active_analyses %>%
-  mutate(
-    cut_points = if_else(
-      name %in% day0_FALSE_models,
-      sub("^1;", "", cut_points),
-      cut_points
-    )
-  )
-
-
 active_analyses <- active_analyses[
   order(
     active_analyses$analysis,
