@@ -40,7 +40,7 @@ add_analysis <- function(
     outcome == "out_date_copd" &&
     analysis_name == "sub_age_18_39_preex_FALSE"
   ) {
-    cut_points <- cut_points_list$vax_unvax_day0_FALSE
+    cut_points <-  gsub("1;", "", cut_points_list$vax_unvax)
   }
 
   # Define sampling ----
