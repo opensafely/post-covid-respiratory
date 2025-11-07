@@ -49,10 +49,10 @@ add_analysis <- function(
       (grepl("preex_FALSE", analysis_name) &
         (grepl("age_60_79|age_80_110", analysis_name) |
           grepl(
-            "ethnicity_asian|ethnicity_mixed|ethnicity_other",
+            "ethnicity_asian|ethnicity_black|ethnicity_mixed|ethnicity_other",
             analysis_name
           ) |
-          grepl("smoke_Current", analysis_name))) |
+          grepl("smoking_current", analysis_name))) |
       (grepl("preex_FALSE", analysis_name) &
         cohort == "vax" &
         (grepl("age_18_39", analysis_name) |
