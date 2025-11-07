@@ -22,8 +22,8 @@ add_analysis <- function(
   # Define cut points ----
 
   cut_points_list <- list(
-    prevax = "1;28;183;365;730;1095;1460;1979",
-    vax_unvax = "1;28;183;365;730;1095;1460"
+    prevax = "1;28;365;730;1095;1460;1979",
+    vax_unvax = "1;28;365;730;1095;1460"
   )
 
   cut_points <- ifelse(
@@ -36,15 +36,27 @@ add_analysis <- function(
 
   if (
     cohort == "vax" &&
-    outcome == "out_date_copd" &&
-    analysis_name == "sub_age_18_39_preex_FALSE"
+      outcome == "out_date_copd" &&
+      analysis_name == "sub_age_18_39_preex_FALSE"
   ) {
-    cut_points <-  gsub("1;", "", cut_points_list$vax_unvax)
+    cut_points <- gsub("1;", "", cut_points_list$vax_unvax)
   }
 
   # Define sampling ----
   ipw <- ifelse(
-    cohort == "unvax",
+    cohort == "unvax" |
+      grepl("preex_TRUE", analysis_name) |
+      (grepl("preex_FALSE", analysis_name) &
+        (grepl("age_60_79|age_80_110", analysis_name) |
+          grepl(
+            "ethnicity_asian|ethnicity_mixed|ethnicity_other",
+            analysis_name
+          ) |
+          grepl("smoke_Current", analysis_name))) |
+      (grepl("preex_FALSE", analysis_name) &
+        cohort == "vax" &
+        (grepl("age_18_39", analysis_name) |
+          grepl("covidhistory_TRUE", analysis_name))),
     FALSE,
     TRUE
   )
