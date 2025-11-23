@@ -72,8 +72,7 @@ df <- df %>%
     weeks = case_when(
       term == "days0_1" ~ "Day 0",
       term == "days1_28" ~ "Weeks 1-4, without day 0",
-      term == "days28_183" ~ "Weeks 5-26",
-      term == "days183_365" ~ "Weeks 27-52",
+      term == "days28_365" ~ "Weeks 5-52",
       term == "days365_730" ~ "Years 1-2",
       term == "days730_1095" ~ "Years 2-3",
       term == "days1095_1460" ~ "Years 3-4",
@@ -86,8 +85,7 @@ df <- df %>%
 weeks_levels <- c(
   "Day 0",
   "Weeks 1-4, without day 0",
-  "Weeks 5-26",
-  "Weeks 27-52",
+  "Weeks 5-52",
   "Years 1-2",
   "Years 2-3",
   "Years 3-4",
