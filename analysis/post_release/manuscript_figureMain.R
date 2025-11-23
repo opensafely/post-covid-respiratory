@@ -282,8 +282,8 @@ plot_hr <- function(outcomes, outcome_group) {
     if (grepl("history_exposure", i)) {
       p +
         ggplot2::scale_y_continuous(
-          lim = c(0.25, 20),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          lim = c(lb - 0.001, ub + 0.1),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -296,8 +296,8 @@ plot_hr <- function(outcomes, outcome_group) {
     } else if (facet_cols == 1) {
       p +
         ggplot2::scale_y_continuous(
-          lim = c(0.25, 20),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          lim = c(lb - 0.001, ub + 0.1),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -310,8 +310,8 @@ plot_hr <- function(outcomes, outcome_group) {
     } else if (facet_cols == 2) {
       p +
         ggplot2::scale_y_continuous(
-          lim = c(0.25, 20),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          lim = c(lb - 0.001, ub + 0.1),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -324,8 +324,8 @@ plot_hr <- function(outcomes, outcome_group) {
     } else {
       p +
         ggplot2::scale_y_continuous(
-          lim = c(0.25, 20),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          lim = c(lb - 0.001, ub + 0.1),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
