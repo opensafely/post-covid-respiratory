@@ -34,7 +34,7 @@ plot_aer <- function(outcomes, outcome_group) {
   df$aer_sex <- factor(
     df$aer_sex,
     levels = c("Female", "Male", "overall"),
-    labels = c("Sex: Female", "Sex: Male", "Combined")
+    labels = c("Sex: Female", "Sex: Male      ", "Combined")
   )
 
   # Add plot labels --------------------------------------------------------------
@@ -99,27 +99,31 @@ plot_aer <- function(outcomes, outcome_group) {
   ]
   facet_info$facet_order <- 1:nrow(facet_info)
 
-facet_info$facet_label <- ""
-for (j in 1:nrow(facet_info)) {
-  # Determine whether to include preex_label
-  preex_part <- if (facet_info$outcome_label[j] %in% c("Asthma", "Chronic obstructive pulmonary disease")) {
-    ""
-  } else {
-    paste0("\n\n", facet_info$preex_label[j])
-  }
+  facet_info$facet_label <- ""
+  for (j in 1:nrow(facet_info)) {
+    # Determine whether to include preex_label
+    preex_part <- if (
+      facet_info$outcome_label[j] %in%
+        c("Asthma", "Chronic obstructive pulmonary disease")
+    ) {
+      ""
+    } else {
+      paste0("\n\n", facet_info$preex_label[j])
+    }
 
-  # Set the facet_label
-  facet_info$facet_label[j] <- paste0(
-    ifelse(
-      facet_info$cohort_label[j] == "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
-      facet_info$outcome_label[j],
-      paste0(rep(" ", j), collapse = "")
-    ),
-    "\n\n",
-    facet_info$cohort_label[j],
-    preex_part
-  )
-}
+    # Set the facet_label
+    facet_info$facet_label[j] <- paste0(
+      ifelse(
+        facet_info$cohort_label[j] ==
+          "Pre-vaccination (Jan 1 2020 - Jun 18 2021)",
+        facet_info$outcome_label[j],
+        paste0(rep(" ", j), collapse = "")
+      ),
+      "\n\n",
+      facet_info$cohort_label[j],
+      preex_part
+    )
+  }
 
   facet_info$facet_label <- factor(
     facet_info$facet_label,
@@ -127,6 +131,24 @@ for (j in 1:nrow(facet_info)) {
   )
 
   df <- merge(df, facet_info)
+
+  # Determine dynamic y-axis limit -----------------------------------------------
+  ymax_raw <- max(
+    df$cumulative_difference_absolute_excess_risk[df$days < 365],
+    na.rm = TRUE
+  ) *
+    100
+
+  # Round up to a nice number: nearest 0.5 or 1 unit
+  if (ymax_raw <= 2) {
+    ymax <- ceiling(ymax_raw / 0.5) * 0.5
+  } else if (ymax_raw <= 5) {
+    ymax <- ceiling(ymax_raw / 1) * 1
+  } else {
+    ymax <- ceiling(ymax_raw / 2) * 2
+  }
+
+  print(paste("Auto y-axis max =", ymax))
 
   # Plot data --------------------------------------------------------------------
   print("Plot data")
@@ -137,7 +159,8 @@ for (j in 1:nrow(facet_info)) {
       x = days / 7,
       y = cumulative_difference_absolute_excess_risk * 100,
       color = aer_age,
-      linetype = aer_sex
+      linetype = aer_sex,
+      size = aer_sex
     )
   ) +
     ggplot2::geom_line() +
@@ -147,17 +170,23 @@ for (j in 1:nrow(facet_info)) {
       labels = seq(0, 52, 4)
     ) +
     ggplot2::scale_y_continuous(
-      lim = c(0, 2),
-      breaks = seq(0, 2, 0.5),
-      labels = seq(0, 2, 0.5)
+      limits = c(0, ymax),
+      breaks = seq(0, ymax, by = ymax / 10)
     ) +
     ggplot2::scale_color_manual(
       values = c("#006d2c", "#31a354", "#74c476", "#bae4b3", "#000000"),
-      labels = levels(df$aer_age)
+      labels = levels(df$aer_age)[1:4],
+      breaks = levels(df$aer_age)[1:4]
     ) +
     ggplot2::scale_linetype_manual(
-      values = c("solid", "longdash", "solid"),
-      labels = levels(df$aer_sex)
+      values = c("solid", "42", "11"),
+      labels = levels(df$aer_sex),
+      breaks = levels(df$aer_sex)
+    ) +
+    ggplot2::scale_size_manual(
+      values = c(0.7, 0.8, 1.5), # Make the third element (dotted) thicker
+      labels = levels(df$aer_sex),
+      breaks = levels(df$aer_sex)
     ) +
     ggplot2::labs(
       x = "Weeks since COVID-19 diagnosis",
@@ -194,7 +223,7 @@ for (j in 1:nrow(facet_info)) {
     height = 210,
     width = 297,
     unit = "mm",
-    dpi = 300,
+    dpi = 1000,
     scale = 1
   )
 }
