@@ -327,6 +327,7 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
+          lim = c(0, max_time),
           breaks = seq(0, max_time, (365 / 2)),
           labels = seq(0, max_time, (365 / 2)) / 365
         ) +
@@ -341,6 +342,7 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
+          lim = c(0, max_time),
           breaks = seq(0, max_time, (365 / 2)),
           labels = seq(0, max_time, (365 / 2)) / 365
         ) +
@@ -355,6 +357,7 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
+          lim = c(0, max_time),
           breaks = seq(0, max_time, (365 / 2)),
           labels = seq(0, max_time, (365 / 2)) / 365
         ) +
@@ -369,6 +372,7 @@ plot_hr <- function(outcomes, outcome_group) {
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
+          lim = c(0, max_time),
           breaks = seq(0, max_time, (365 / 2)),
           labels = seq(0, max_time, (365 / 2)) / 365
         ) +
