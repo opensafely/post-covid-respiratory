@@ -39,6 +39,46 @@ plot_hr <- function(outcomes, outcome_group) {
   df$preex <- sub(".*?(?=preex_)", "", df$analysis, perl = TRUE)
   df$analysis <- sub("_preex_.*", "", df$analysis, perl = TRUE)
 
+  # Respiratory-specific catch
+  if ("ild" %in% outcomes) {
+    # Define missing combinations
+    missing_rows <- list(
+      list("preex_FALSE", c("sub_ethnicity_mixed", "sub_ethnicity_other")),
+      list(
+        "preex_TRUE",
+        c("sub_ethnicity_black", "sub_ethnicity_mixed", "sub_ethnicity_other")
+      )
+    )
+
+    for (mr in missing_rows) {
+      preex_value <- mr[[1]]
+      analyses <- mr[[2]]
+
+      for (an in analyses) {
+        # Only add row if missing
+        exists_row <- nrow(df[
+          df$outcome == "ild" &
+            df$preex == preex_value &
+            df$analysis == an,
+        ]) >
+          0
+
+        if (!exists_row) {
+          df[nrow(df) + 1, ] <- list(
+            cohort = "prevax",
+            analysis = an,
+            outcome = "ild",
+            outcome_time_median = -1,
+            term = "days_1",
+            hr = 1,
+            conf_low = 1,
+            conf_high = 1,
+            preex = preex_value
+          )
+        }
+      }
+    }
+  }
   # Make columns numeric ---------------------------------------------------------
   print("Make columns numeric")
 
