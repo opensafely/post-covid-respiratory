@@ -145,7 +145,7 @@ plot_aer <- function(outcomes, outcome_group) {
   } else if (ymax_raw <= 5) {
     ymax <- ceiling(ymax_raw / 1) * 1
   } else {
-    ymax <- ceiling(ymax_raw / 2) * 2
+    ymax <- ceiling(ymax_raw / 10) * 10 # round UP to nearest 10
   }
 
   print(paste("Auto y-axis max =", ymax))
@@ -171,7 +171,11 @@ plot_aer <- function(outcomes, outcome_group) {
     ) +
     ggplot2::scale_y_continuous(
       limits = c(0, ymax),
-      breaks = seq(0, ymax, by = ymax / 10)
+      breaks = if (ymax <= 5) {
+        seq(0, ymax, by = ymax / 10)
+      } else {
+        seq(0, ymax, by = ymax / 8)
+      }
     ) +
     ggplot2::scale_color_manual(
       values = c("#006d2c", "#31a354", "#74c476", "#bae4b3", "#000000"),

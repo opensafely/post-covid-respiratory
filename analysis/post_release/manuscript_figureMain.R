@@ -12,7 +12,7 @@ plot_hr <- function(outcomes, outcome_group) {
 
   # Set Upper Bound and Lower Bound limits -------------------------------------
 
-  ub <- 16
+  ub <- 128
   lb <- 0.25
 
   # Filter data ------------------------------------------------------------------
@@ -323,7 +323,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -338,7 +338,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -353,7 +353,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -368,7 +368,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16),
+          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
