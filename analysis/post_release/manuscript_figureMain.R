@@ -70,7 +70,7 @@ plot_hr <- function(outcomes, outcome_group) {
     missing_rows <- list(
       list(
         "preex_FALSE",
-        c("sub_ethnicity_mixed", "sub_ethnicity_other", "sub_age_18_39")
+        c("sub_ethnicity_mixed", "sub_ethnicity_other")
       ),
       list(
         "preex_TRUE",
@@ -78,7 +78,8 @@ plot_hr <- function(outcomes, outcome_group) {
           "sub_ethnicity_asian",
           "sub_ethnicity_black",
           "sub_ethnicity_mixed",
-          "sub_ethnicity_other"
+          "sub_ethnicity_other",
+          "sub_age_18_39"
         )
       )
     )
