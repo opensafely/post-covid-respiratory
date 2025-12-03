@@ -10,9 +10,15 @@ plot_hr <- function(outcomes, outcome_group) {
 
   df <- df[!is.na(df$hr), ]
 
-  # Set Upper Bound and Lower Bound limits -------------------------------------
+  # Set outcome-specific upper Bound and Lower Bound limits -------------------------------------
 
-  ub <- 128
+  if (outcome_group == "asthma_copd") {
+    ub <- 64
+    y_breaks <- c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64)
+  } else {
+    ub <- 128
+    y_breaks <- c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128)
+  }
   lb <- 0.25
 
   # Filter data ------------------------------------------------------------------
@@ -31,11 +37,30 @@ plot_hr <- function(outcomes, outcome_group) {
       "term",
       "hr",
       "conf_low",
-      "conf_high"
+      "conf_high",
+      "N_events_midpoint6"
     )
   ]
-
   df <- df[!(df$term %in% c("days_pre", "days0_1")), ]
+
+  ## Create wide table of N_events_midpoint6 to identify models with any interval having <=6 events
+  df_wide <- df %>%
+    select(cohort, analysis, outcome, term, N_events_midpoint6) %>%
+    tidyr::pivot_wider(
+      names_from = term,
+      values_from = N_events_midpoint6
+    )
+
+  models_low_events <- df_wide %>%
+    mutate(has_low_events = if_any(where(is.numeric), ~ .x <= 6)) %>%
+    filter(has_low_events) %>%
+    select(cohort, analysis, outcome)
+
+  df <- df %>%
+    anti_join(models_low_events, by = c("cohort", "analysis", "outcome"))
+
+  df <- df %>% select(-N_events_midpoint6)
+
   df$preex <- sub(".*?(?=preex_)", "", df$analysis, perl = TRUE)
   df$analysis <- sub("_preex_.*", "", df$analysis, perl = TRUE)
 
@@ -43,10 +68,18 @@ plot_hr <- function(outcomes, outcome_group) {
   if ("ild" %in% outcomes) {
     # Define missing combinations
     missing_rows <- list(
-      list("preex_FALSE", c("sub_ethnicity_mixed", "sub_ethnicity_other")),
+      list(
+        "preex_FALSE",
+        c("sub_ethnicity_mixed", "sub_ethnicity_other", "sub_age_18_39")
+      ),
       list(
         "preex_TRUE",
-        c("sub_ethnicity_black", "sub_ethnicity_mixed", "sub_ethnicity_other")
+        c(
+          "sub_ethnicity_asian",
+          "sub_ethnicity_black",
+          "sub_ethnicity_mixed",
+          "sub_ethnicity_other"
+        )
       )
     )
 
@@ -79,6 +112,85 @@ plot_hr <- function(outcomes, outcome_group) {
       }
     }
   }
+
+  if ("copd" %in% outcomes) {
+    # Define missing combinations
+    missing_rows <- list(
+      list(
+        "preex_FALSE",
+        c("sub_ethnicity_mixed", "sub_ethnicity_other")
+      )
+    )
+
+    for (mr in missing_rows) {
+      preex_value <- mr[[1]]
+      analyses <- mr[[2]]
+
+      for (an in analyses) {
+        # Only add row if missing
+        exists_row <- nrow(df[
+          df$outcome == "copd" &
+            df$preex == preex_value &
+            df$analysis == an,
+        ]) >
+          0
+
+        if (!exists_row) {
+          df[nrow(df) + 1, ] <- list(
+            cohort = "prevax",
+            analysis = an,
+            outcome = "copd",
+            outcome_time_median = -1,
+            term = "days_1",
+            hr = 1,
+            conf_low = 1,
+            conf_high = 1,
+            preex = preex_value
+          )
+        }
+      }
+    }
+  }
+
+  if ("pneumonia" %in% outcomes) {
+    # Define missing combinations
+    missing_rows <- list(
+      list(
+        "preex_TRUE",
+        c("sub_ethnicity_black", "sub_ethnicity_mixed", "sub_ethnicity_other")
+      )
+    )
+
+    for (mr in missing_rows) {
+      preex_value <- mr[[1]]
+      analyses <- mr[[2]]
+
+      for (an in analyses) {
+        # Only add row if missing
+        exists_row <- nrow(df[
+          df$outcome == "pneumonia" &
+            df$preex == preex_value &
+            df$analysis == an,
+        ]) >
+          0
+
+        if (!exists_row) {
+          df[nrow(df) + 1, ] <- list(
+            cohort = "prevax",
+            analysis = an,
+            outcome = "pneumonia",
+            outcome_time_median = -1,
+            term = "days_1",
+            hr = 1,
+            conf_low = 1,
+            conf_high = 1,
+            preex = preex_value
+          )
+        }
+      }
+    }
+  }
+
   # Make columns numeric ---------------------------------------------------------
   print("Make columns numeric")
 
@@ -323,7 +435,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -338,7 +450,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -353,7 +465,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
@@ -368,7 +480,7 @@ plot_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32, 64, 128),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
