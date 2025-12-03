@@ -49,8 +49,7 @@ df$term <- factor(
   levels = c(
     "days0_1",
     "days1_28",
-    "days28_183",
-    "days183_365",
+    "days28_365",
     "days365_730",
     "days730_1095",
     "days1095_1460",
@@ -71,6 +70,8 @@ df_wide <- df %>%
     outcome,
     all_of(levels(df$term))
   )
+
+readr::write_csv(df_wide, "output/post_release/events_per_interval_wide.csv")
 
 # Identify columns that start with "days"
 #day_cols <- grep("^days", names(df_wide), value = TRUE)
