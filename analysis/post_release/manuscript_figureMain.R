@@ -56,6 +56,15 @@ plot_hr <- function(outcomes, outcome_group) {
     filter(has_low_events) %>%
     select(cohort, analysis, outcome)
 
+  # Manually add models (not have low events but not comparable due to insufficient data in other subgroups)
+  manual_rows <- tibble::tribble(
+    ~cohort  , ~analysis                        , ~outcome ,
+    "prevax" , "sub_ethnicity_white_preex_TRUE" , "ild"    ,
+    "vax"    , "sub_ethnicity_white_preex_TRUE" , "ild"
+  )
+
+  models_low_events <- dplyr::bind_rows(models_low_events, manual_rows)
+
   df <- df %>%
     anti_join(models_low_events, by = c("cohort", "analysis", "outcome"))
 
@@ -75,10 +84,6 @@ plot_hr <- function(outcomes, outcome_group) {
       list(
         "preex_TRUE",
         c(
-          "sub_ethnicity_asian",
-          "sub_ethnicity_black",
-          "sub_ethnicity_mixed",
-          "sub_ethnicity_other",
           "sub_age_18_39"
         )
       )
@@ -497,9 +502,17 @@ plot_hr <- function(outcomes, outcome_group) {
     # Save plot ------------------------------------------------------------------
     print("Save plot")
 
+    # Default plot height
+    plot_height <- 210
+
+    # If ILD + ethnicity, halve it
+    if (outcome_group == "ild" && grepl("ethnicity", i)) {
+      plot_height <- plot_height * 0.6
+    }
+
     ggplot2::ggsave(
       paste0("output/post_release/figure_", i, "_", outcome_group, ".png"),
-      height = 210,
+      height = plot_height,
       width = plot_width,
       unit = "mm",
       dpi = 300,
