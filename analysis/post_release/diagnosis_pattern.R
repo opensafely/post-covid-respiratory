@@ -1,3 +1,5 @@
+library(dplyr)
+library(tidyr)
 # Load data --------------------------------------------------------------------
 print("Load data")
 
@@ -28,21 +30,6 @@ df <- df[
     "N_events_midpoint6"
   )
 ]
-library(dplyr)
-library(tidyr)
-
-df_filtered <- df %>%
-  filter(
-    source == "R",
-    N_total_midpoint6 < 4000000
-  ) %>%
-  distinct(cohort, analysis)
-
-# View the result
-print(df_filtered)
-
-df_filtered %>%
-  arrange(cohort, analysis)
 
 df$term <- factor(
   df$term,
@@ -72,6 +59,20 @@ df_wide <- df %>%
   )
 
 readr::write_csv(df_wide, "output/post_release/events_per_interval_wide.csv")
+
+# Identify cohorts and analyses with N_total_midpoint6 < 4,000,000 ----
+df_filtered <- df %>%
+  filter(
+    source == "R",
+    N_total_midpoint6 < 4000000
+  ) %>%
+  distinct(cohort, analysis)
+
+# View the result
+print(df_filtered)
+
+df_filtered %>%
+  arrange(cohort, analysis)
 
 # Identify columns that start with "days"
 #day_cols <- grep("^days", names(df_wide), value = TRUE)
