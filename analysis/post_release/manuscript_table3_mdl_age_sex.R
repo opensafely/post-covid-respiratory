@@ -1,0 +1,165 @@
+# Load data --------------------------------------------------------------------
+print("Load data")
+
+df <- read_csv("output/post_release/plot_model_output.csv")
+
+# Filter data ------------------------------------------------------------------
+print("Filter data")
+
+df <- df[grepl("days", df$term), ]
+df <- df[df$term != "days_pre", ]
+df <- df[
+  df$model == "mdl_age_sex",
+  c("analysis", "cohort", "outcome", "term", "hr", "conf_low", "conf_high")
+]
+
+# Add plot labels --------------------------------------------------------------
+print("Add plot labels")
+
+plot_labels <- readr::read_csv("lib/plot_labels.csv", show_col_types = FALSE)
+
+df$outcome <- gsub("out_date_", "", df$outcome)
+df <- merge(
+  df,
+  plot_labels[, c("term", "label")],
+  by.x = "outcome",
+  by.y = "term",
+  all.x = TRUE
+)
+df <- dplyr::rename(df, "outcome_label" = "label")
+
+# Tidy estimate ----------------------------------------------------------------
+print("Tidy estimate")
+
+clean_format <- function(x) {
+  x_clean <- suppressWarnings(as.numeric(gsub("<", "", x)))
+
+  formatted <- ifelse(
+    is.na(x_clean),
+    NA_character_,
+    ifelse(
+      x_clean < 0.0001,
+      "0.000",
+      ifelse(
+        x_clean > 1e4,
+        formatC(x_clean, format = "e", digits = 2),
+        formatC(x_clean, format = "f", digits = 2)
+      )
+    )
+  )
+
+  return(formatted)
+}
+
+df$estimate <- ifelse(
+  df$hr == "X",
+  "X",
+  paste0(
+    clean_format(df$hr),
+    " (",
+    clean_format(df$conf_low),
+    "-",
+    clean_format(df$conf_high),
+    ")"
+  )
+)
+
+# Tidy term --------------------------------------------------------------------
+print("Tidy term")
+
+df <- df %>%
+  mutate(
+    weeks = case_when(
+      term == "days0_1" ~ "Day 0",
+      term == "days1_28" ~ "Weeks 1-4, without day 0",
+      term == "days28_365" ~ "Weeks 5-52",
+      term == "days365_730" ~ "Years 1-2",
+      term == "days730_1095" ~ "Years 2-3",
+      term == "days1095_1460" ~ "Years 3-4",
+      term == "days1460_1979" ~ "Years 4-5.5",
+      TRUE ~ NA_character_
+    )
+  )
+
+# Define the desired order for the 'weeks' factor
+weeks_levels <- c(
+  "Day 0",
+  "Weeks 1-4, without day 0",
+  "Weeks 5-52",
+  "Years 1-2",
+  "Years 2-3",
+  "Years 3-4",
+  "Years 4-5.5"
+)
+
+# Convert 'weeks' to a factor with specified levels
+df$weeks <- factor(df$weeks, levels = weeks_levels)
+
+# Can change this bit for sub-group analyses
+df$subgroup <- sub("_preex.*", "", df$analysis)
+df$analysis <- gsub(".*(?=preex)", "", df$analysis, perl = TRUE)
+
+# Define factor levels for sorting
+df$analysis <- factor(df$analysis, levels = c("preex_FALSE", "preex_TRUE"))
+
+df$outcome_label <- factor(
+  df$outcome_label,
+  levels = c(
+    "Pneumonia",
+    "Asthma",
+    "Chronic obstructive pulmonary disease",
+    "Interstitial lung disease"
+  )
+)
+
+# Order the rows
+df <- df[order(df$analysis, df$outcome_label, df$weeks), ]
+
+# Pivot table ------------------------------------------------------------------
+print("Pivot table")
+
+df <- df[, c(
+  "subgroup",
+  "analysis",
+  "cohort",
+  "outcome_label",
+  "weeks",
+  "estimate"
+)]
+
+df <- tidyr::pivot_wider(
+  df,
+  names_from = "cohort",
+  values_from = "estimate"
+)
+
+# Tidy table -------------------------------------------------------------------
+df <- df %>%
+  arrange(subgroup, outcome_label, analysis, weeks)
+
+# Reorder columns -------------------------------------------------------------
+df <- df %>%
+  dplyr::select(
+    subgroup,
+    outcome_label,
+    analysis,
+    weeks,
+    prevax,
+    vax,
+    unvax
+  )
+
+df <- dplyr::rename(
+  df,
+  "Analysis" = "analysis",
+  "Outcome" = "outcome_label",
+  "Time since COVID-19" = "weeks",
+  "Pre-vaccination cohort" = "prevax",
+  "Vaccinated cohort" = "vax",
+  "Unvaccinated cohort" = "unvax"
+)
+
+# Save table -------------------------------------------------------------------
+print("Save table")
+
+readr::write_csv(df, paste0(output_folder, "/table3_mdl_age_sex.csv"), na = "-")
