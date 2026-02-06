@@ -1,4 +1,5 @@
 import operator
+from ehrql import when, case
 from functools import reduce # for function building, e.g. any_of
 from ehrql.tables.tpp import (
     addresses,
