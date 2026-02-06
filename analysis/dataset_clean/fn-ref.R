@@ -56,9 +56,34 @@ ref <- function(input) {
   if ("cov_cat_ethnicity" %in% names(input)) {
     print('Handle missing values in cov_cat_ethnicity')
     input$cov_cat_ethnicity <- if_else(
-      input$cov_cat_ethnicity %in% c("1", "2", "3", "4", "5"),
+      input$cov_cat_ethnicity %in%
+        c(
+          # 6 category labels
+          "White",
+          "Mixed",
+          "Asian",
+          "Black",
+          "Other",
+          # 16 category labels
+          "Other White",
+          "White and African",
+          "All other ethnic groups",
+          "African",
+          "White Irish",
+          "Other Mixed",
+          "White British",
+          "Caribbean",
+          "Other Black",
+          "White and Caribbean",
+          "Other Asian",
+          "Chinese",
+          "Pakistani",
+          "White and Asian",
+          "Indian",
+          "Bangladeshi"
+        ),
       input$cov_cat_ethnicity,
-      "0"
+      "Missing"
     )
   }
 
