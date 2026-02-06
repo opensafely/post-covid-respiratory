@@ -13,7 +13,6 @@ from ehrql.tables.tpp import (
     appointments, 
     occupation_on_covid_vaccine_record,
     sgss_covid_all_tests,
-    ethnicity_from_sus,
     apcs, 
     clinical_events, 
     ons_deaths,
@@ -36,6 +35,7 @@ from variable_helper_functions import (
     matching_death_before,
     filter_codes_by_category,
     get_imd,
+    get_latest_ethnicity,
 )
 
 # Define generate variables function
@@ -243,25 +243,7 @@ def generate_variables(index_date, end_date_exp, end_date_out):
     cov_cat_sex = patients.sex
 
     ### Ethnicity
-    tmp_cov_cat_ethnicity_snomed = (
-        clinical_events.where(clinical_events.snomedct_code.is_in(ethnicity_snomed))
-        .where(clinical_events.date.is_on_or_before(index_date))
-        .sort_by(clinical_events.date)
-        .last_for_patient()
-        .snomedct_code.to_category(
-        ethnicity_snomed, default="Missing")
-    )
-
-    tmp_cov_cat_ethnicity_sus = ethnicity_from_sus.code
-
-    cov_cat_ethnicity = case(
-        when((tmp_cov_cat_ethnicity_snomed == "1") | ((tmp_cov_cat_ethnicity_snomed == "Missing") & (tmp_cov_cat_ethnicity_sus.is_in(["A", "B", "C"])))).then("White"),
-        when((tmp_cov_cat_ethnicity_snomed == "2") | ((tmp_cov_cat_ethnicity_snomed == "Missing") & (tmp_cov_cat_ethnicity_sus.is_in(["D", "E", "F", "G"])))).then("Mixed"),
-        when((tmp_cov_cat_ethnicity_snomed == "3") | ((tmp_cov_cat_ethnicity_snomed == "Missing") & (tmp_cov_cat_ethnicity_sus.is_in(["H", "J", "K", "L"])))).then("Asian"),
-        when((tmp_cov_cat_ethnicity_snomed == "4") | ((tmp_cov_cat_ethnicity_snomed == "Missing") & (tmp_cov_cat_ethnicity_sus.is_in(["M", "N", "P"])))).then("Black"),
-        when((tmp_cov_cat_ethnicity_snomed == "5") | ((tmp_cov_cat_ethnicity_snomed == "Missing") & (tmp_cov_cat_ethnicity_sus.is_in(["R", "S"])))).then("Other"),
-        otherwise="Unknown", 
-    )
+    cov_cat_ethnicity = get_latest_ethnicity(index_date,ethnicity_snomed, grouping=6)
 
     ### Deprivation
     cov_cat_imd = get_imd(index_date, groups=10, max_imd=32844)
