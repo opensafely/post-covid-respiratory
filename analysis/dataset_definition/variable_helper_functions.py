@@ -154,7 +154,7 @@ def matching_death_between(codelist, start_date, end_date, where=True):
 def filter_codes_by_category(codelist, include):
     return {k:v for k,v in codelist.items() if v in include}
 
-# get the latest ethnicity code from primary care records, categorise it, and combine it with
+# get the latest ethnicity code from primary care records, categorise it, and combine it with SUS secondary care records
 def get_latest_ethnicity(
         index_date, codelist, grouping=6
     ):
