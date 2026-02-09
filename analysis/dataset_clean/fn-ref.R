@@ -30,9 +30,19 @@ ref <- function(input) {
   print('Handle missing values in cov_cat_imd')
 
   if ("cov_cat_imd" %in% names(input)) {
+    imd_max <- max(
+      as.integer(sub(" .*", "", unique(input$cov_cat_imd))),
+      na.rm = TRUE
+    )
+    imd_levels <- c(
+      "1 (most deprived)",
+      as.character(seq(2, imd_max)),
+      sprintf("%i (least deprived)", imd_max)
+    )
+
     input$cov_cat_imd <- if_else(
       input$cov_cat_imd %in%
-        c("1 (most deprived)", "2", "3", "4", "5 (least deprived)"),
+        imd_levels,
       input$cov_cat_imd,
       "missing"
     )
@@ -46,9 +56,34 @@ ref <- function(input) {
   if ("cov_cat_ethnicity" %in% names(input)) {
     print('Handle missing values in cov_cat_ethnicity')
     input$cov_cat_ethnicity <- if_else(
-      input$cov_cat_ethnicity %in% c("1", "2", "3", "4", "5"),
+      input$cov_cat_ethnicity %in%
+        c(
+          # 6 category labels
+          "White",
+          "Mixed",
+          "Asian",
+          "Black",
+          "Other",
+          # 16 category labels
+          "Other White",
+          "White and African",
+          "All other ethnic groups",
+          "African",
+          "White Irish",
+          "Other Mixed",
+          "White British",
+          "Caribbean",
+          "Other Black",
+          "White and Caribbean",
+          "Other Asian",
+          "Chinese",
+          "Pakistani",
+          "White and Asian",
+          "Indian",
+          "Bangladeshi"
+        ),
       input$cov_cat_ethnicity,
-      "0"
+      "Missing"
     )
   }
 
@@ -109,9 +144,20 @@ ref <- function(input) {
 
   if ("cov_cat_imd" %in% names(input)) {
     print('Set reference level for variable: cov_cat_imd')
+
+    imd_max <- max(
+      as.integer(sub(" .*", "", unique(input$cov_cat_imd))),
+      na.rm = TRUE
+    )
+    imd_levels <- c(
+      "1 (most deprived)",
+      as.character(seq(2, imd_max)),
+      sprintf("%i (least deprived)", imd_max)
+    )
+
     input$cov_cat_imd <- ordered(
       input$cov_cat_imd,
-      levels = c("1 (most deprived)", "2", "3", "4", "5 (least deprived)")
+      levels = imd_levels
     )
   }
 
