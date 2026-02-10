@@ -22,9 +22,9 @@ print("Filter data")
 
 df_filtered <- df %>%
   filter(
-    grepl("days", term),        # keep terms containing "days"
-    term == "days_pre",         # then keep only days_pre
-    is.na(model) | model == "mdl_age_sex"      # drop this model
+    grepl("days", term), # keep terms containing "days"
+    term == "days_pre", # then keep only days_pre
+    is.na(model) | model == "mdl_age_sex" # drop this model
   ) %>%
   select(
     analysis,
@@ -40,8 +40,12 @@ print("Add incidence rate")
 df_filtered <- df_filtered %>%
   mutate(
     event_personyears = paste0(
-      N_events_midpoint6, "/", round((person_time_total/365.25))
+      N_events_midpoint6,
+      "/",
+      round((person_time_total / 365.25))
     ),
     incidencerate = round(
-      N_events_midpoint6 / ((person_time_total/365.25) / 100000))
+      N_events_midpoint6 / ((person_time_total / 365.25) / 100000)
     )
+  ) %>%
+  filter(grepl("^sub_smoking", analysis)) #filter to the subgroup of interest
