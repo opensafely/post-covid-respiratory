@@ -45,8 +45,12 @@ table2_names <-
   )
 
 table2_names <- table2_names[
-  grepl("-main", table2_names) |
+  if (subgroup == "covidhospital") {
+    grepl("-main", table2_names) |
+      grepl(paste0("-sub_", subgroup), table2_names)
+  } else {
     grepl(paste0("-sub_", subgroup), table2_names)
+  }
 ]
 
 active_analyses <- active_analyses[active_analyses$name %in% table2_names, ]
