@@ -33,7 +33,7 @@ sub_ethnicity_other,Chinese or Other,ethnicity,5
 sub_sex_female,Female,sex,1
 sub_sex_male,Male,sex,2
 sub_covidhistory,History of COVID-19,history_exposure,1
-sub_smoking_never,Non-smoker,smoke,1
+sub_smoking_never,Never smoker,smoke,1
 sub_smoking_ever,Former smoker,smoke,2
 sub_smoking_current,Current smoker,smoke,3
 cov_bin_ami,Acute myocardial infarction,,
