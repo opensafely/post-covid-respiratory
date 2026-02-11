@@ -410,8 +410,12 @@ table2 <- function(cohort, subgroup) {
   )
 
   table2_names <- table2_names[
-    grepl("-main", table2_names) |
+    if (subgroup == "covidhospital") {
+      grepl("-main", table2_names) |
+        grepl(paste0("-sub_", subgroup), table2_names)
+    } else {
       grepl(paste0("-sub_", subgroup), table2_names)
+    }
   ]
 
   splice(
@@ -765,6 +769,26 @@ actions_list <- splice(
     )
   ),
 
+  ## Table 2 (sub_smoking) -------------------------------------------------------------------
+
+  splice(
+    unlist(
+      lapply(
+        cohorts,
+        function(x) table2(cohort = x, subgroup = "smoking")
+      ),
+      recursive = FALSE
+    )
+  ),
+
+  splice(
+    make_other_output(
+      action_name = "table2",
+      cohort = paste0(cohorts, collapse = ";"),
+      subgroup = "smoking"
+    )
+  ),
+
   ## Venn data -----------------------------------------------------------------
 
   splice(
@@ -813,6 +837,14 @@ actions_list <- splice(
     )
   )
 )
+
+# Remove cox_ipw actions for excluded models -------------------------------
+
+excluded_cox_actions <- paste0("cox_ipw-", excluded_models)
+
+actions_list <- actions_list[
+  !names(actions_list) %in% excluded_cox_actions
+]
 
 # Combine actions into project list --------------------------------------------
 
