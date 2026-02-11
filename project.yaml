@@ -5457,20 +5457,6 @@ actions:
       highly_sensitive:
         model_input: output/model/model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.rds
 
-  cox_ipw-cohort_vax-sub_sex_female_preex_FALSE-pneumonia:
-    run: cox-ipw:v0.0.37 --df_input=model/model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.rds
-      --ipw=TRUE --exposure=exp_date --outcome=out_date --strata=strat_cat_region
-      --covariate_sex=NULL --covariate_age=cov_num_age --covariate_other=cov_cat_ethnicity;cov_cat_imd;cov_num_consrate2019;cov_bin_hcworker;cov_cat_smoking;cov_bin_carehome;cov_bin_obesity;cov_bin_ami;cov_bin_dementia;cov_bin_liver_disease;cov_bin_ckd;cov_bin_cancer;cov_bin_hypertension;cov_bin_diabetes;cov_bin_depression;cov_bin_stroke_isch;cov_bin_pneumonia;cov_bin_ild
-      --cox_start=index_date --cox_stop=end_date_outcome --study_start=2021-06-01
-      --study_stop=2025-05-31 --cut_points=1;28;365;730;1095;1460 --controls_per_case=20
-      --total_event_threshold=50 --episode_event_threshold=5 --covariate_threshold=5
-      --age_spline=TRUE --save_analysis_ready=FALSE --run_analysis=TRUE --df_output=model/model_output-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.csv
-    needs:
-    - make_model_input-cohort_vax-sub_sex_female_preex_FALSE-pneumonia
-    outputs:
-      moderately_sensitive:
-        model_output: output/model/model_output-cohort_vax-sub_sex_female_preex_FALSE-pneumonia.csv
-
   make_model_input-cohort_prevax-sub_sex_female_preex_TRUE-ild:
     run: r:v2 analysis/model/make_model_input.R cohort_prevax-sub_sex_female_preex_TRUE-ild
     needs:
@@ -11878,6 +11864,120 @@ actions:
     outputs:
       moderately_sensitive:
         table2_output_midpoint6: output/make_output/table2-sub_covidhospital_output_midpoint6.csv
+
+  ## Generate table2-cohort_prevax-sub_smoking 
+
+  table2-cohort_prevax-sub_smoking:
+    run: r:v2 analysis/table2/table2.R prevax smoking
+    needs:
+    - make_model_input-cohort_prevax-main_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-main_preex_FALSE-copd
+    - make_model_input-cohort_prevax-main_preex_FALSE-ild
+    - make_model_input-cohort_prevax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-main_preex_TRUE-ild
+    - make_model_input-cohort_prevax-main_preex_TRUE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-copd
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-ild
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_TRUE-ild
+    - make_model_input-cohort_prevax-sub_smoking_current_preex_TRUE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-copd
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-ild
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-ild
+    - make_model_input-cohort_prevax-sub_smoking_ever_preex_TRUE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-asthma
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-copd
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-ild
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_FALSE-pneumonia
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_TRUE-ild
+    - make_model_input-cohort_prevax-sub_smoking_never_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2-cohort_prevax-sub_smoking.csv
+        table2_midpoint6: output/table2/table2-cohort_prevax-sub_smoking-midpoint6.csv
+
+  ## Generate table2-cohort_unvax-sub_smoking 
+
+  table2-cohort_unvax-sub_smoking:
+    run: r:v2 analysis/table2/table2.R unvax smoking
+    needs:
+    - make_model_input-cohort_unvax-main_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-main_preex_FALSE-copd
+    - make_model_input-cohort_unvax-main_preex_FALSE-ild
+    - make_model_input-cohort_unvax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-main_preex_TRUE-ild
+    - make_model_input-cohort_unvax-main_preex_TRUE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-copd
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-ild
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_TRUE-ild
+    - make_model_input-cohort_unvax-sub_smoking_current_preex_TRUE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-copd
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-ild
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-ild
+    - make_model_input-cohort_unvax-sub_smoking_ever_preex_TRUE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-asthma
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-copd
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-ild
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_FALSE-pneumonia
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_TRUE-ild
+    - make_model_input-cohort_unvax-sub_smoking_never_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2-cohort_unvax-sub_smoking.csv
+        table2_midpoint6: output/table2/table2-cohort_unvax-sub_smoking-midpoint6.csv
+
+  ## Generate table2-cohort_vax-sub_smoking 
+
+  table2-cohort_vax-sub_smoking:
+    run: r:v2 analysis/table2/table2.R vax smoking
+    needs:
+    - make_model_input-cohort_vax-main_preex_FALSE-asthma
+    - make_model_input-cohort_vax-main_preex_FALSE-copd
+    - make_model_input-cohort_vax-main_preex_FALSE-ild
+    - make_model_input-cohort_vax-main_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-main_preex_TRUE-ild
+    - make_model_input-cohort_vax-main_preex_TRUE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-asthma
+    - make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-copd
+    - make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-ild
+    - make_model_input-cohort_vax-sub_smoking_current_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-ild
+    - make_model_input-cohort_vax-sub_smoking_current_preex_TRUE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-asthma
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-copd
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-ild
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_TRUE-ild
+    - make_model_input-cohort_vax-sub_smoking_ever_preex_TRUE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-asthma
+    - make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-copd
+    - make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-ild
+    - make_model_input-cohort_vax-sub_smoking_never_preex_FALSE-pneumonia
+    - make_model_input-cohort_vax-sub_smoking_never_preex_TRUE-ild
+    - make_model_input-cohort_vax-sub_smoking_never_preex_TRUE-pneumonia
+    outputs:
+      moderately_sensitive:
+        table2: output/table2/table2-cohort_vax-sub_smoking.csv
+        table2_midpoint6: output/table2/table2-cohort_vax-sub_smoking-midpoint6.csv
+
+  ## Generate make-table2-sub_smoking-output 
+
+  make-table2-sub_smoking-output:
+    run: r:v2 analysis/make_output/make_other_output.R table2 prevax;unvax;vax smoking
+    needs:
+    - table2-cohort_prevax-sub_smoking
+    - table2-cohort_unvax-sub_smoking
+    - table2-cohort_vax-sub_smoking
+    outputs:
+      moderately_sensitive:
+        table2_output_midpoint6: output/make_output/table2-sub_smoking_output_midpoint6.csv
 
   ## Generate venn-cohort_prevax 
 
