@@ -15,7 +15,7 @@ df <- file_list %>%
 
 df <- df %>%
   filter(
-    !name %in% "cohort_vax-sub_sex_male_preex_FALSE-copd"
+    !name %in% c("cohort_vax-sub_covidhistory_preex_FALSE-copd", "cohort_vax-sub_sex_male_preex_FALSE-copd")
   ) 
 
 readr::write_csv(df, "output/post_release/plot_model_output.csv")
