@@ -78,10 +78,6 @@ plot_hr <- function(outcomes, outcome_group) {
     # Define missing combinations
     missing_rows <- list(
       list(
-        "preex_FALSE",
-        c("sub_ethnicity_mixed", "sub_ethnicity_other")
-      ),
-      list(
         "preex_TRUE",
         c(
           "sub_age_18_39"
@@ -360,6 +356,21 @@ plot_hr <- function(outcomes, outcome_group) {
     df_ub <- df_plot[df_plot$conf_high == ub + 0.1, ] # find confidence intervals at limits (set by code above)
     df_lb <- df_plot[df_plot$conf_low == lb - 0.001, ] # find confidence intervals at limits (set by code above)
 
+    # Create caption text (remove this if all estimates are presented)
+    if (i == "sex") {
+      caption_text <- stringr::str_wrap(
+        "Some estimates were not presented due to insufficient events (either ≤6 events in one or more follow-up intervals or ≤50 total events).",
+        width = 100
+      ) #remove this if do not want line breaks in caption
+    } else if (i == "history_exposure") {
+      caption_text <- stringr::str_wrap(
+        "Some estimates were not presented due to insufficient events (either ≤6 events in one or more follow-up intervals or ≤50 total events)",
+        width = 70
+      )
+    } else {
+      caption_text <- "Some estimates were not presented due to insufficient events (either ≤6 events in one or more follow-up intervals or ≤50 total events)."
+    }
+
     # Plot data ------------------------------------------------------------------
     print("Plot data")
 
@@ -388,7 +399,8 @@ plot_hr <- function(outcomes, outcome_group) {
       ) +
       ggplot2::labs(
         x = "\nYears since COVID-19 diagnosis",
-        y = "Hazard ratio and 95% confidence interval\n"
+        y = "Hazard ratio and 95% confidence interval\n",
+        caption = caption_text
       ) +
       ggplot2::theme_minimal() +
       ggplot2::theme(
@@ -403,7 +415,8 @@ plot_hr <- function(outcomes, outcome_group) {
         plot.background = ggplot2::element_rect(
           fill = "white",
           colour = "white"
-        )
+        ),
+        plot.caption = ggplot2::element_text(hjust = 0)
       )
     if (nrow(df_ub) > 0) {
       p <- p +
@@ -508,6 +521,11 @@ plot_hr <- function(outcomes, outcome_group) {
     # If ILD + ethnicity, halve it
     if (outcome_group == "ild" && grepl("ethnicity", i)) {
       plot_height <- plot_height * 0.6
+    }
+
+    # If asthma/COPD history figure, reduce height
+    if (outcome_group == "asthma_copd" && grepl("history_exposure", i)) {
+      plot_height <- plot_height * 0.65
     }
 
     ggplot2::ggsave(
