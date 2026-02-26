@@ -2,7 +2,8 @@ from ehrql import (
     days,
     case,
     when,
-    minimum_of
+    minimum_of,
+    claim_permissions
 )
 
 # Bring table definitions from the TPP backend 
@@ -37,6 +38,9 @@ from variable_helper_functions import (
     get_imd,
     get_latest_ethnicity,
 )
+
+# Claim permissions to allow dataset definition to import tables in dummy data
+claim_permissions("sgss_covid_all_tests", "occupation_on_covid_vaccine_record")
 
 # Define generate variables function
 def generate_variables(index_date, end_date_exp, end_date_out):  
