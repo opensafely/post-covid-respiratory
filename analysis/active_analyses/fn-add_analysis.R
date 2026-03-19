@@ -24,7 +24,7 @@ add_analysis <- function(
   cut_points_list <- list(
     prevax = "1;28;365;730;1095;1460;1979",
     vax_unvax = "1;28;365;730;1095;1460",
-    unvax_peumonia_sub_covidhospital_TRUE = "1;28;365;1460"
+    unvax_sub_covidhospital_TRUE = "1;28;365;1460"
   )
 
   cut_points <- ifelse(
@@ -38,7 +38,15 @@ add_analysis <- function(
       outcome == "out_date_pneumonia" &&
       grepl("^sub_covidhospital_TRUE", analysis_name)
   ) {
-    cut_points <- cut_points_list$unvax_peumonia_sub_covidhospital_TRUE
+    cut_points <- cut_points_list$unvax_sub_covidhospital_TRUE
+  }
+
+  if (
+    cohort == "unvax" &&
+      outcome == "out_date_ild" &&
+      grepl("^sub_covidhospital_TRUE_preex_TRUE", analysis_name)
+  ) {
+    cut_points <- cut_points_list$unvax_sub_covidhospital_TRUE
   }
 
   # The model needs to collaspse day0 to the first interval
