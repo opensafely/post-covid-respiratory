@@ -17,26 +17,12 @@ df <- df[
         "cohort",
         "analysis",
         "outcome",
-        "sample_size",
         "unexposed_events",
         "exposed_events",
         "unexposed_person_days",
         "exposed_person_days"
     )
 ]
-
-df$events <- ifelse(
-    grepl("main", df$analysis),
-    df$unexposed_events,
-    df$exposed_events
-)
-df$person_days <- ifelse(
-    grepl("main", df$analysis),
-    df$unexposed_person_days,
-    df$exposed_person_days
-)
-
-df <- df[, c("cohort", "analysis", "outcome", "events", "person_days")]
 
 # Add plot labels --------------------------------------------------------------
 print("Add plot labels")
@@ -65,8 +51,46 @@ df <- dplyr::rename(df, "smoking_status" = "label")
 # Add other columns ------------------------------------------------------------
 print("Add other columns")
 
-df$event_personyears <- paste0(df$events, "/", round((df$person_days / 365.25)))
-df$incidencerate <- round(df$events / ((df$person_days / 365.25) / 100000))
+df$event_personyears_unexposed <- paste0(
+    df$unexposed_events,
+    "/",
+    round(df$unexposed_person_days / 365.25)
+)
+
+df$event_personyears_exposed <- paste0(
+    df$exposed_events,
+    "/",
+    round(df$exposed_person_days / 365.25)
+)
+
+df$incidencerate_unexposed <- round(
+    df$unexposed_events / ((df$unexposed_person_days / 365.25) / 100000)
+)
+
+df$incidencerate_exposed <- round(
+    df$exposed_events / ((df$exposed_person_days / 365.25) / 100000)
+)
+
+# Pivot exposure groups --------------------------------------------------------
+print("Pivot exposure groups")
+
+df <- tidyr::pivot_longer(
+    df,
+    cols = c(
+        event_personyears_unexposed,
+        event_personyears_exposed,
+        incidencerate_unexposed,
+        incidencerate_exposed
+    ),
+    names_to = c(".value", "exposure_group"),
+    names_pattern = "(.*)_(unexposed|exposed)"
+)
+
+df$exposure_group <- dplyr::recode(
+    df$exposure_group,
+    "unexposed" = "No COVID-19",
+    "exposed" = "COVID-19"
+)
 
 # Pivot table ------------------------------------------------------------------
 print("Pivot table")
@@ -76,6 +100,7 @@ df <- df[, c(
     "cohort",
     "outcome_label",
     "smoking_status",
+    "exposure_group",
     "event_personyears",
     "incidencerate"
 )]
@@ -118,6 +143,7 @@ column_order <- c(
     "analysis",
     "outcome_label",
     "smoking_status",
+    "exposure_group",
     "event_personyears_prevax",
     "incidencerate_prevax",
     "event_personyears_vax",
@@ -134,7 +160,8 @@ print("Tidy table")
 df <- dplyr::rename(
     df,
     "Outcome" = "outcome_label",
-    "Smoking status" = "smoking_status"
+    "Smoking status" = "smoking_status",
+    "COVID-19" = "exposure_group"
 )
 
 
@@ -142,4 +169,3 @@ df <- dplyr::rename(
 print("Save table")
 
 readr::write_csv(df, paste0(output_folder, "/table2_smoking.csv"), na = "-")
-
