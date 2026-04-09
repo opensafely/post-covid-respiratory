@@ -364,7 +364,7 @@ plot_hr <- function(outcomes, outcome_group) {
       ) #remove this if do not want line breaks in caption
     } else if (i == "history_exposure") {
       caption_text <- stringr::str_wrap(
-        "Some estimates were not presented due to insufficient events (either ≤6 events in one or more follow-up intervals or ≤50 total events)",
+        "Some estimates were not presented due to insufficient events (either ≤6 events in one or more follow-up intervals or ≤50 total events).",
         width = 70
       )
     } else {
