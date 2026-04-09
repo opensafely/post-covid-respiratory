@@ -41,7 +41,7 @@ lifetable <- function(model_output, aer_input, day0) {
     print('Step 1. Average daily incidence of the outcome in the unexposed')
 
     lifetable$incidence_unexp <- aer_input$unexposed_events_midpoint6 /
-        aer_input$unexposed_person_days
+        aer_input$unexposed_person_days_midpoint6
 
     # Step 2. Cumulative risk over time in the unexposed -------------------------
     print('Step 2. Cumulative risk over time in the unexposed')
