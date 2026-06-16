@@ -1,5 +1,5 @@
 # Load libraries ---------------------------------------------------------------
-print('Load libraries')
+print("Load libraries")
 
 library(magrittr)
 library(tidyverse)
@@ -12,7 +12,7 @@ library(grid)
 library(gridExtra)
 
 # Specify paths ----------------------------------------------------------------
-print('Specify paths')
+print("Specify paths")
 
 # NOTE:
 # This file is used to specify paths and is in the .gitignore to keep your information secret.
@@ -44,6 +44,7 @@ plot_poster_hr <- function(outcomes, outcome_group) {
   # Set Upper Bound and Lower Bound limits -------------------------------------
 
   ub <- 16
+  y_breaks <- c(0.25, 0.5, 1, 2, 4, 8, 16)
   lb <- 0.25
 
   # Filter data ----------------------------------------------------------------
@@ -70,29 +71,29 @@ plot_poster_hr <- function(outcomes, outcome_group) {
   df$preex <- sub(".*?(?=preex_)", "", df$analysis, perl = TRUE)
   df$analysis <- sub("_preex_.*", "", df$analysis, perl = TRUE)
 
-  # removing a specific unconverged result
-  df[
-    df$outcome == "copd" &
-      df$analysis == "main" &
-      df$cohort == "prevax",
-  ] <- list(
-    "prevax",
-    "main",
-    "copd",
-    -1,
-    "days_1",
-    1,
-    1,
-    1,
-    "preex_FALSE"
-  )
+  # # removing a specific unconverged result
+  # df[
+  #   df$outcome == "copd" &
+  #     df$analysis == "main" &
+  #     df$cohort == "prevax",
+  # ] <- list(
+  #   "prevax",
+  #   "main",
+  #   "copd",
+  #   -1,
+  #   "days_1",
+  #   1,
+  #   1,
+  #   1,
+  #   "preex_FALSE"
+  # )
 
   # removing all 18-39 and 40-64 subgroups (counteracts first catch, but allows easy pivot if we do want it)
-  if (outcome_group %in% c("asthma_copd")) {
-    df <- df[!(df$analysis == "sub_age_18_39"), ]
-    df <- df[!(df$analysis == "sub_age_80_110"), ]
-    df <- df[!(df$analysis == "sub_smoking_ever"), ]
-  }
+  # if (outcome_group %in% c("asthma_copd")) {
+  #   df <- df[!(df$analysis == "sub_age_18_39"), ]
+  #   df <- df[!(df$analysis == "sub_age_80_110"), ]
+  #   df <- df[!(df$analysis == "sub_smoking_ever"), ]
+  # }
 
   # Make columns numeric -------------------------------------------------------
   print("Make columns numeric")
@@ -159,6 +160,16 @@ plot_poster_hr <- function(outcomes, outcome_group) {
   )
   df <- dplyr::rename(df, "analysis_label" = "label")
 
+  # Calculate maximum value for x axis
+  if (nrow(df) == 0 || all(is.na(df$outcome_time_median))) {
+    warning(
+      "No valid outcome_time_median values found after filtering. Skipping plot."
+    )
+    return(NULL)
+  } else {
+    max_time <- max(df$outcome_time_median, na.rm = TRUE)
+  }
+
   # Find which plot the facet label should be on -------------------------------
   df <- df %>%
     group_by(outcome, analysis_group) %>%
@@ -170,7 +181,17 @@ plot_poster_hr <- function(outcomes, outcome_group) {
 
   df$facet_label <- ifelse(
     df$is_min_ref,
-    paste0(df$outcome_label, "\n\n", df$analysis_label), # "\n\n", df$preex_label,
+    ifelse(
+      (df$outcome %in% c("asthma", "copd")),
+      paste0(df$outcome_label, "\n\n", df$analysis_label),
+      paste0(
+        df$outcome_label,
+        "\n\n",
+        df$preex_label,
+        "\n\n",
+        df$analysis_label
+      )
+    ),
     df$analysis_label
   )
 
@@ -209,11 +230,11 @@ plot_poster_hr <- function(outcomes, outcome_group) {
       "outcome",
       "analysis",
       "ref",
-      # "preex",
+      "preex",
       "facet_label"
     )])
     facet_info <- facet_info[
-      order(facet_info$outcome, facet_info$ref), # facet_info$preex,
+      order(facet_info$outcome, facet_info$preex, facet_info$ref),
     ]
     facet_info$facet_order <- 1:nrow(facet_info)
 
@@ -268,7 +289,7 @@ plot_poster_hr <- function(outcomes, outcome_group) {
         values = c("#d2ac47", "#58764c", "#0018a8")
       ) +
       ggplot2::labs(
-        x = "\nWeeks since COVID-19 diagnosis",
+        x = "\nYears since COVID-19 diagnosis",
         y = "Hazard ratio and 95% confidence interval\n"
       )
 
@@ -323,13 +344,13 @@ plot_poster_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          limits = c(0, 1456),
-          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
-          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
+          limits = c(0, max_time),
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) +
         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
@@ -338,13 +359,13 @@ plot_poster_hr <- function(outcomes, outcome_group) {
       p +
         ggplot2::scale_y_continuous(
           lim = c(lb - 0.001, ub + 0.1),
-          breaks = c(0.25, 0.5, 1, 2, 4, 8, 16, 32),
+          breaks = y_breaks,
           trans = "log"
         ) +
         ggplot2::scale_x_continuous(
-          limits = c(0, 1456),
-          breaks = c(0, 182, 364, 546, 728, 910, 1092, 1274, 1456),
-          labels = c("0", "26", "52", "78", "104", "130", "156", "182", "208")
+          limits = c(0, max_time),
+          breaks = seq(0, max_time, (365 / 2)),
+          labels = seq(0, max_time, (365 / 2)) / 365
         ) +
         ggplot2::facet_wrap(~ factor(facet_label2), ncol = facet_cols) #+
       ggplot2::guides(color = ggplot2::guide_legend(nrow = 1, byrow = TRUE))
@@ -353,6 +374,9 @@ plot_poster_hr <- function(outcomes, outcome_group) {
 
     # Save plot ----------------------------------------------------------------
     print("Save plot")
+
+    # Define plot height
+    plot_height <- 180
 
     if (grepl("main", i)) {
       ggplot2::ggsave(
@@ -363,7 +387,7 @@ plot_poster_hr <- function(outcomes, outcome_group) {
           outcome_group,
           ".png"
         ),
-        height = 120,
+        height = plot_height,
         width = plot_width,
         unit = "mm",
         dpi = 1000,
@@ -378,7 +402,7 @@ plot_poster_hr <- function(outcomes, outcome_group) {
           outcome_group,
           ".png"
         ),
-        height = 180,
+        height = plot_height,
         width = plot_width,
         unit = "mm",
         dpi = 1000,
@@ -390,6 +414,8 @@ plot_poster_hr <- function(outcomes, outcome_group) {
 
 # Outcome Groupings to plot ----------------------------------------------------
 plot_poster_hr(c("asthma", "copd"), "asthma_copd")
+plot_poster_hr("ild", "ild")
+plot_poster_hr("pneumonia", "pneumonia")
 
 # Here for testing
 outcomes <- c("asthma", "copd")
